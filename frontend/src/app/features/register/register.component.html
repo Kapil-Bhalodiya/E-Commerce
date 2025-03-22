@@ -1,0 +1,84 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+        <h2 class="text-2xl font-semibold text-center mb-4">Sign Up</h2>
+        <form [formGroup]="formGroup" (ngSubmit)="registraionHandle()">
+            <div class="mb-4">
+                <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                <input id="firstName" type="text" formControlName="firstName"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="e.g. John" />
+                <div *ngIf="formGroup.get('firstName')?.invalid && formGroup.get('firstName')?.touched"
+                    class="text-red-600 text-sm">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                <input id="lastName" type="text" formControlName="lastName"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="e.g. Doe" />
+                <div *ngIf="formGroup.get('lastName')?.invalid && formGroup.get('lastName')?.touched"
+                    class="text-red-600 text-sm">
+                    This field is required
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="emailAddress" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input id="email" type="email" formControlName="email"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="e.g. johndoe@gmail.com" />
+                <div *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched"
+                    class="text-red-600 text-sm">
+                    This field is required
+                </div>
+                <div *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched"
+                    class="text-red-600 text-sm">
+                    Please enter a valid email address
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input id="password" type="password" formControlName="password"
+                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="*********" />
+                <div *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched"
+                    class="text-red-600 text-sm">
+                    This field is required
+                </div>
+                <div *ngIf="formGroup.get('password')?.hasError('pattern') && formGroup.get('password')?.touched"
+                    class="text-red-600 text-sm">
+                    Please enter a valid password
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label for="contactNumber" class="block text-sm font-medium text-gray-700">Contact Number</label>
+                <div class="flex items-center">
+                    <span class="text-gray-700 text-lg mr-2">+27</span>
+                    <input id="contact" type="tel" formControlName="contact"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="82 123 1234" />
+                </div>
+                <div *ngIf="formGroup.get('contact')?.hasError('required') && formGroup.get('contact')?.touched"
+                    class="text-red-600 text-sm">
+                    This field is required
+                </div>
+                <div *ngIf="formGroup.get('contact')?.hasError('pattern') && formGroup.get('contact')?.touched"
+                    class="text-red-600 text-sm">
+                    Please enter a valid mobile number
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <app-primary-button label="Sign In" />
+            </div>
+
+            <div class="mt-4 text-center">
+                <p>Already account? <a routerLink="/login" class="text-purple-600 hover:cursor-pointer">Sign In</a></p>
+            </div>
+        </form>
+    </div>
+</div>

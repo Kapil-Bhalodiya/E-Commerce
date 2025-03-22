@@ -1,0 +1,13 @@
+<div class="bg-slate-100 px-4 py-3 shadow-md flex justify-between items-center">
+    <span class="text-xl" routerLink="/">{{ title() }}</span>
+    <div class="flex">
+        <app-primary-button [label]="'Cart('+ cartService.cartProducts().length + ')'"
+            routerLink="/cart" />
+        <app-primary-button *ngIf="!authService.isAuthenticated()" 
+            [label]="'Login'" 
+            routerLink="/login" />
+        <app-primary-button *ngIf="authService.isAuthenticated()" 
+            [label]="'Logout'" 
+            (btnClicked)="handleLogout()" />
+    </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="p-6 flex flex-col gap-4">
+    <h2 class="text-2xl">Shopping Cart</h2>
+    @for(item of cartService.cartProducts(); track item.id){
+        <app-cart-item  [product]="item">
+        </app-cart-item>
+    }
+    <app-order-summary></app-order-summary>
+</div>
