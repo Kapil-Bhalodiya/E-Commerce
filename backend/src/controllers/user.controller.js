@@ -5,8 +5,9 @@ const { asyncHandler } = require("../utils/asyncHandler");
 
 
 const registerUser = asyncHandler(async (req,res) => {
-    const {fullName, email, contact, password} = req.body
-    if([fullName, email, contact, password].some((feild) => feild.trim())  === '') 
+    const {firstName, lastName, email, contact, password} = req.body
+    const fullName = `${firstName} ${lastName}`;
+    if([firstName, lastName, email, contact, password].some((feild) => feild)  === '') 
         throw new ApiError(400, message= "All Feilds are Required..!")
 
     const existingUser = await User.findOne({
