@@ -1,0 +1,13 @@
+<div class="bg-white shadow-md border rounded-xl p-6 flex flex-col gap-6 relative h-full">
+    <div class="flex flex-col justify-between flex-grow">
+        <img class="w-[200px] h-[100px] object-contain mx-auto" [src]="product().image" />
+        <div class="flex flex-col mt-3">
+            <h5 class="text-md font-bold">{{ product().title }}</h5>
+            <span class="text-sm font-bold" >{{'$' + product().price }}</span>
+            <app-primary-button label="Add to Cart" (btnClicked)="cartService.addToCart(product())"/>
+        </div>
+    </div>
+    <span class="absolute top-2 right-3 text-sm font-bold" [class]="product().stock ? 'text-green-500' : 'text-red-500'">
+       {{ product().stock ? product().stock + ' left' : 'Out of Stock' }}
+    </span>
+</div>

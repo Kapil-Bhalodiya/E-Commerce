@@ -1,0 +1,5 @@
+<div class="p-8 grid grid-cols-4 gap-4 grid-rows-auto">
+    <div *ngFor="let item of products()" value="item.id" class="flex flex-col h-full">
+       <app-product-card [product]="item" class="flex-1"/>
+    </div>
+</div>
