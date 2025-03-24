@@ -4,6 +4,11 @@ const { ApiResponse } = require("../utils/ApiResponse");
 const { asyncHandler } = require("../utils/asyncHandler");
 
 
+const testingApi = (req,res) => {
+    res.send("Api working..")
+    console.log("Api Working..")
+}
+
 const registerUser = asyncHandler(async (req,res) => {
     const {firstName, lastName, email, contact, password} = req.body
     const fullName = `${firstName} ${lastName}`;
@@ -91,4 +96,4 @@ const generateAccessAndRefreshTokens = async (userId) => {
     }
 }
 
-module.exports = {registerUser, loginHandler, logoutUser}
+module.exports = {testingApi, registerUser, loginHandler, logoutUser}
