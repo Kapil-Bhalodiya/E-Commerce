@@ -1,0 +1,6 @@
+apiVersion: v1
+name: e-commerce
+description: A Helm chart for Kubernetes E-Commerce
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
