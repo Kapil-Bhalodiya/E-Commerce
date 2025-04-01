@@ -23,3 +23,4 @@ ingress:
   paths:
     frontend: "/"
     backend: "/api"
+  ingressClass: "nginx"
