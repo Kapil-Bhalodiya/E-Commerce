@@ -4,7 +4,6 @@ metadata:
   name: {{ .Release.Name }}-ingress
   namespace: {{ .Values.namespace }}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Set this to "true" if you want SSL support
     kubernetes.io/ingress.class: {{ .Values.ingress.ingressClass}}
 spec:
@@ -12,13 +11,6 @@ spec:
   - host: {{ .Values.ingress.host }} 
     http:
       paths:
-      - path: {{ .Values.ingress.paths.frontend }}
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend
-            port:
-              number: 80
       - path: {{ .Values.ingress.paths.backend }}
         pathType: Prefix
         backend:
@@ -26,3 +18,11 @@ spec:
             name: backend
             port:
               number: 8000
+      - path: {{ .Values.ingress.paths.frontend }}
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80
+      
