@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { apiUrl } from "../../environment/environemt.common";
+import { environment } from "../../environment/environment.dev";
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +12,12 @@ export class AuthService {
   ) { }
 
   onRegister(registerData: any): Observable<any> {
-    return this.http.post(`${apiUrl}/user/register`, registerData)
+    return this.http.post(`${environment.apiUrl}/user/register`, registerData)
   }
   
   onLogin(email: string, password: string): Observable<any> {
     const body = { email, password }
-    return this.http.post(`${apiUrl}/user/login`, body)
+    return this.http.post(`${environment.apiUrl}/user/login`, body)
   }
 
   isAuthenticated(): boolean {
@@ -26,6 +26,6 @@ export class AuthService {
 
   logout(): Observable<any> {
     localStorage.removeItem('token');
-    return this.http.post(`${apiUrl}/user/logout`,null)
+    return this.http.post(`${environment.apiUrl}/user/logout`,null)
   }
 }
