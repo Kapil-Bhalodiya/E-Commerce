@@ -1,0 +1,45 @@
+.product__view--select {
+    border: 1px solid var(--border-color, #ccc);
+    cursor: pointer;
+    background: var(--white-color, #fff);
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+}
+
+/* Size variations */
+.product__view--select.small {
+    padding: 0.4rem 1.5rem 0.4rem 0.8rem; /* Reduced right padding */
+    font-size: 0.875rem; /* 14px */
+    border-radius: 0.3rem;
+}
+
+.product__view--select.medium {
+    padding: 0.6rem 1.8rem 0.6rem 1rem; /* Balanced padding */
+    font-size: 1rem; /* 16px */
+    border-radius: 0.5rem;
+}
+
+.product__view--select.large {
+    padding: 0.8rem 2rem 0.8rem 1.2rem; /* Reduced right padding */
+    font-size: 1.125rem; /* 18px */
+    border-radius: 0.7rem;
+}
+.header--select .product__view--select {
+    font-size: inherit; /* Prevent global override */
+}
+
+/* Size control buttons */
+.size-controls button {
+    margin: 0.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    border-radius: 0.3rem;
+}
+
+// .size-controls button:hover {
+//     background: #e0e0e0;
+// }

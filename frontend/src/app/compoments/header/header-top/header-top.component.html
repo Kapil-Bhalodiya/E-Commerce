@@ -13,9 +13,8 @@
     <div class="search-bar">
         <select name="category">
             <option value="">All Categories</option>
-        </select>
-        <input type="text" placeholder="Keyword here..." />
-        <button><i class="bi bi-search"></i></button>
+        </select>   
+        <app-search-box [placeholder]="'Keyword Here..'" [size]="'medium'" (search)="onSearch($event)"></app-search-box>
     </div>
 
     <div class="header__account header__sticky--none">

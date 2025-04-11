@@ -1,0 +1,8 @@
+<div class="widget__form--check__list" *ngFor="let item of checkboxItems; let i = index">
+    <label class="widget__form--check__label" [for]="'check' + i">
+        {{ item.label }}
+        <input class="widget__form--check__input hidden-checkbox" type="checkbox" [id]="'check' + i"
+            [checked]="item.checked" (change)="onCheckboxChange(item, $event)" />
+        <span class="widget__form--checkmark"></span>
+    </label>
+</div>
