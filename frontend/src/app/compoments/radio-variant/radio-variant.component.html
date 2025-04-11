@@ -1,0 +1,10 @@
+<fieldset class="variant__input--fieldset weight">
+    <legend class="product__variant--title mb-8">{{name}}</legend>
+    <ng-container *ngFor="let option of options; let i = index">
+        <input [id]="'radio' + name + (i + 1)" [name]="name" type="radio" [value]="option"
+            [checked]="option === selectedValue" (change)="onValueChange(option)">
+        <label [for]="'radio' + name + (i + 1)" class="variant__size--value"
+            [style.background-color]="isColor ? option : 'transparent'" [style.color]="isColor ? '#fff' : '#000'">{{
+            isColor ? '' : option }}</label>
+    </ng-container>
+</fieldset>

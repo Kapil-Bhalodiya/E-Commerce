@@ -1,0 +1,51 @@
+
+.variant__input--fieldset {
+	margin-right: 10px
+}
+
+.variant__input--fieldset input[type=radio] {
+	clip: rect(0, 0, 0, 0);
+	overflow: hidden;
+	position: absolute;
+	height: 1px;
+	width: 1px
+}
+
+.variant__size--value[for*='Color'] {
+	padding: 0;
+	border-radius: 15%;
+	overflow: hidden;
+}
+
+.variant__input--fieldset input[type=radio]:checked+label {
+	border: 1px solid var(--secondary-color);
+	color: var(--secondary-color)
+}
+
+.variant__input--fieldset:last-child {
+	margin-right: 0
+}
+
+.product__variant--title {
+	font-size: 1.5rem;
+	font-weight: 700;
+	margin-right: 1rem
+}
+
+.variant__size--value {
+	width: 4.7rem;
+	height: 3.2rem;
+	line-height: 2.8rem;
+	display: inline-block;
+	border-radius: 5px;
+	text-align: center;
+	font-size: 1.5rem;
+	cursor: pointer;
+	-webkit-transition: var(--transition);
+	transition: var(--transition);
+	margin-right: 7px
+}
+
+.variant__size--value:last-child {
+	margin-right: 0
+}

@@ -1,0 +1,59 @@
+.quantity__box {
+	text-align: center;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex
+}
+
+.quantity__value {
+	display: inline-block;
+	border: 1px solid var(--border-color2);
+	margin: 0;
+	width: 3.3rem;
+	height: 3rem;
+	text-align: center;
+	padding: 0;
+	background: var(--gray-color2);
+	cursor: pointer;
+	font-size: 2rem;
+	font-weight: 500
+}
+
+.quantity__value.decrease {
+	margin-right: -4px;
+	border-radius: 13px 0 0 13px
+}
+
+.quantity__value.increase {
+	margin-left: -4px;
+	border-radius: 0 13px 13px 0
+}
+
+.quickview__value--quantity {
+	width: 3.5rem;
+	height: 3.5rem;
+	font-size: 2.2rem;
+	line-height: 3.3rem
+}
+
+
+input.quantity__number {
+	text-align: center;
+	border: none;
+	border-top: 1px solid var(--border-color2);
+	border-bottom: 1px solid var(--border-color2);
+	margin: 0;
+	width: 3.3rem;
+	height: 3rem
+}
+
+input.quickview__value--number {
+	height: 3.5rem;
+	font-size: 1.7rem
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0
+}
