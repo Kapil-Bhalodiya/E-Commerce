@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-ingress
   namespace: {{ .Values.namespace }}
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Set this to "true" if you want SSL support
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     kubernetes.io/ingress.class: {{ .Values.ingress.ingressClass}}
 spec:
   rules:
