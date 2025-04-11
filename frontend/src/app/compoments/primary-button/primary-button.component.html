@@ -1,4 +1,4 @@
-<button class="bg-purple-500 text-white w-full border px-5 py-2 rounded-xl shadow-md hover:opacity-90" 
-    (click)="btnClicked.emit()" [disabled]="disabled">
+<button class="primary__btn" 
+    (click)="btnClicked.emit()" [disabled]="disabled" [ngClass]="'primary__btn--'+ size">
     {{ label() }}
 </button>

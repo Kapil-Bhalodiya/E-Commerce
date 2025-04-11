@@ -1,0 +1,18 @@
+.widget__tagcloud--list {
+	display: inline-block;
+	margin: 0 8px 8px 0
+}
+
+.widget__tagcloud--link {
+	border: 1px solid var(--border-color2);
+	background: var(--white-color);
+	padding: .5rem 1.2rem;
+	line-height: 2.5rem;
+	border-radius: .3rem
+}
+
+.widget__tagcloud--link:hover {
+	background: var(--secondary-color);
+	border-color: var(--secondary-color);
+	color: var(--white-color)
+}

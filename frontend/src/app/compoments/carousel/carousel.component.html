@@ -1,0 +1,47 @@
+<div class="product__media--preview  swiper">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide">
+      <div class="product__media--preview">
+        <div class="product__media--preview__items">
+          <a class="product__media--preview__items--link glightbox" data-gallery="product-media-preview"
+            href="big-product2.jpg">
+            <img class="product__media--preview__items--img" [src]="selectedImage" alt="product-media-img">
+          </a>
+          <div class="product__media--view__icon">
+            <a class="product__media--view__icon--link glightbox" href="big-product2.jpg"
+              data-gallery="product-media-preview">
+              <i class="bi bi-search"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="product__media--nav">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide">
+      <div class="product__media--nav__items">
+        <owl-carousel-o [options]="carouselOptions">
+          <ng-container *ngFor="let slide of productImages">
+            <ng-template carouselSlide [id]="slide.id" class="owl-item" style="height: 400px;">
+              <img [src]="slide.src" class="product__media--nav__items--img"
+                [class.active]="slide.src === selectedImage" (click)="onThumbnailClick(slide.src)" />
+            </ng-template>
+          </ng-container>
+        </owl-carousel-o>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <owl-carousel-o [options]="customOptions">
+
+  <ng-container *ngFor="let slide of productImages">
+    <ng-template carouselSlide [id]="slide.id">
+      <img [src]="slide.src">
+    </ng-template>
+  </ng-container>
+
+</owl-carousel-o> -->
