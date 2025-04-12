@@ -1,0 +1,52 @@
+.search-bar {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 4px;
+  overflow: hidden;
+
+  input {
+    flex: 1;
+    border: none;
+    padding: 8px;
+    font-size: 1.8rem;
+    outline: none;
+
+    &:focus {
+      border: none;
+      outline: none;
+    }
+  }
+
+  button {
+    background-color: #ff3366;
+    border: none;
+    color: white;
+    padding: 7px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: darken(#ff3366, 10%);
+    }
+
+    i {
+      font-size: 1.2rem;
+    }
+  }
+
+  // Size variations
+  &.small {
+    width: 100px;
+    max-width: 200px;
+  }
+
+  &.medium {
+    max-width: 400px;
+  }
+
+  &.large {
+    width: 400px;
+    max-width: 600px;
+  }
+}

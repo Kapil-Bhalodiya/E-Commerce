@@ -1,0 +1,39 @@
+.price__filter--group {
+	width: 46%
+}
+
+.price__filter--label {
+	font-weight: 600;
+	margin-bottom: .6rem;
+	display: inline-block
+}
+
+@media only screen and (min-width:992px) {
+	.price__filter--label {
+		font-size: 1.5rem
+	}
+}
+
+.price__filter--input {
+	border: 1px solid var(--border-color2);
+	padding: .7rem 1rem
+}
+
+.price__filter--input__field {
+	width: 100%
+}
+
+.price__filter--currency {
+	font-weight: 700;
+	margin-right: .6rem
+}
+
+.price__filter--btn {
+	height: 4rem;
+	line-height: 4rem
+}
+
+.price__divider {
+	font-size: 2rem;
+	padding: 2.5rem 1rem 0
+}
