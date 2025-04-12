@@ -1,0 +1,6 @@
+<div class="search-bar" [ngClass]="size">
+    <input type="text" [placeholder]="placeholder" (keyup.enter)="onSearch($event)" />
+    <button (click)="onSearch($event)">
+        <i class="bi bi-search"></i>
+    </button>
+</div>

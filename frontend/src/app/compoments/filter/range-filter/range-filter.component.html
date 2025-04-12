@@ -1,0 +1,36 @@
+<form class="price__filter--form" (ngSubmit)="onFilter()">
+    <div class="price__filter--form__inner mb-15 d-flex align-items-center">
+      <div class="price__filter--group">
+        <label class="price__filter--label" for="Filter-Price-GTE">From</label>
+        <div class="price__filter--input border-radius-5 d-flex align-items-center">
+          <span class="price__filter--currency">$</span>
+          <input
+            class="price__filter--input__field border-0"
+            type="number"
+            placeholder="0"
+            [min]="minValue"
+            [max]="maxValue"
+            formControlName="from"
+          />
+        </div>
+      </div>
+      <div class="price__divider">
+        <span>-</span>
+      </div>
+      <div class="price__filter--group">
+        <label class="price__filter--label" for="Filter-Price-LTE">To</label>
+        <div class="price__filter--input border-radius-5 d-flex align-items-center">
+          <span class="price__filter--currency">$</span>
+          <input
+            class="price__filter--input__field border-0"
+            type="number"
+            [min]="minValue"
+            [max]="maxValue"
+            placeholder="250.00"
+            formControlName="to"
+          />
+        </div>
+      </div>
+    </div>
+    <app-primary-button [label]="'Filter'" (click)="onFilter()" />
+  </form>
