@@ -1,43 +1,18 @@
 const mongoose = require('mongoose')
 const productSchema = new mongoose.Schema(
     {
-        name: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        description: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        brand: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        subcategory: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'SubCategory',
-            required: true,
-        },
-        base_price: {
-            type: Number,
-            required: true,
-        },
-        tags: {
+        name: { type: String, required: true, trim: true, minlength: 2, maxlength: 100 },
+        description: { type: String, required: true, trim: true, minlength: 10, maxlength: 1000 },
+        brand: { type: String, required: true, trim: true, minlength: 2, maxlength: 50 },
+        subcategory: { type: mongoose.Schema.Types.ObjectId, ref: 'SubCategory', required: true, index: true },
+        base_price: { type: Number, required: true, min: 0 },
+        tags: { type: [String], default: [] },
+        image_urls: {
             type: [String],
             default: [],
+            validate: { validator: arr => arr.length <= 10, message: 'Maximum 10 images per product' }
         },
-        image_url: {
-            type: String,
-            trim: true,
-            default: null,
-        },
-        variant_ids: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'ProductVariant',
-        }],
+        variant_ids: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ProductVariation' }], default: [] }
     },
     {
         timestamps: true
