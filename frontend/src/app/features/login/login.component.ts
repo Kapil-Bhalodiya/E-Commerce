@@ -7,7 +7,6 @@ import { PrimaryButtonComponent } from "../../compoments/primary-button/primary-
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule, PrimaryButtonComponent, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
