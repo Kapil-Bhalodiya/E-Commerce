@@ -1,4 +1,4 @@
-<div class="flex items-center justify-center min-h-screen bg-gray-100">
+<!-- <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 class="text-2xl font-semibold text-center mb-4">Sign in</h2>
         <form [formGroup]="formGroup" (ngSubmit)="loginHandle()">
@@ -37,8 +37,57 @@
             <app-primary-button label="Log In" />
 
             <div class="mt-4 text-center">
-                <p>Don't have an account? <a routerLink="/register" class="text-purple-600 hover:cursor-pointer">Sign Up</a></p>
+                <p>Don't have an account? <a routerLink="/register" class="text-purple-600 hover:cursor-pointer">Sign
+                        Up</a></p>
             </div>
         </form>
     </div>
-</div>
+</div> -->
+<section class="contact__section section--padding">
+    <div class="container">
+        <div class="contact__form">
+            <div class="main__contact--area position__relative">
+                <h3 class="contact__form--title mb-40">Sign In</h3>
+                <form [formGroup]="formGroup" (ngSubmit)="loginHandle()" class="contact__form--inner">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <label for="email" class="contact__form--label" for="input4">Email <span
+                                    class="contact__form--label__star">*</span></label>
+                            <input id="email" type="email" formControlName="email" class="contact__form--input"
+                                type="email" placeholder="e.g. johndoe@gmail.com" />
+                            <div *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched"
+                                class="text-red-600 text-sm">
+                                This field is required
+                            </div>
+                            <div *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched"
+                                class="text-red-600 text-sm">
+                                Please enter a valid email address
+                            </div>
+                            <label for="password" class="contact__form--label" for="input4">Password <span
+                                    class="contact__form--label__star">*</span></label>
+                            <input id="password" type="password" formControlName="password" class="contact__form--input"
+                                placeholder="*********" />
+                            <div *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched"
+                                class="text-red-600 text-sm">
+                                This field is required
+                            </div>
+                            <div *ngIf="formGroup.get('password')?.hasError('pattern') && formGroup.get('password')?.touched"
+                                class="text-red-600 text-sm">
+                                Please enter a valid password
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6">
+
+                        </div>
+                    </div>
+                    <app-primary-button [label]="'Login'" [size]="'lg'" class="mt-2" />
+                    <div class="mt-4 text-center">
+                        <p>Don't have an account? <a routerLink="/register" class="text-purple-600 hover:cursor-pointer">Sign
+                                Up</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

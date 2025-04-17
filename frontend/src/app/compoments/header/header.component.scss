@@ -1,0 +1,31 @@
+// .header__topbar {
+// 	padding: 1rem 0
+// }
+
+// @media only screen and (min-width:992px) {
+// 	.header__topbar {
+// 		padding: 1.2rem 0
+// 	}
+// }
+
+// @media only screen and (min-width:1600px) {
+// 	.header__topbar {
+// 		padding: 1.7rem 0
+// 	}
+// }
+
+// @media only screen and (max-width:991px) {
+// 	.header__topbar--inner {
+// 		-webkit-box-pack: center !important;
+// 		-ms-flex-pack: center !important;
+// 		justify-content: center !important
+// 	}
+// }
+
+
+/* header.component.css */
+.header {
+    position: relative;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }

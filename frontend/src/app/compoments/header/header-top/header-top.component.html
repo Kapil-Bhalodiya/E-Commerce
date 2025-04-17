@@ -34,10 +34,10 @@
                     </a>
                 </li>
                 <li class="header__account--items">
-                    <a class="header__account--btn" href="my-account.html">
+                    <a class="header__account--btn" (click)="goToCart()">
                         <i class="bi bi-cart4" style="font-size: 24px;"></i>
                         <span class="header__account--btn__text">My Cart</span>
-                        <span class="items__count wishlist">02</span>
+                        <span class="items__count wishlist">{{ cartItems.length }}</span>
                     </a>
                 </li>
             </ul>

@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CartService } from '../../services/cart.service';
+// import { CartService } from '../../services/cart.service';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { PrimaryButtonComponent } from "../primary-button/primary-button.component";
@@ -29,7 +29,7 @@ export class HeaderComponent {
 
   title = signal('SharkStore')
   subTitle = signal('Bold, fast, and cutting-edge.')
-  cartService = inject(CartService)
+  // cartService = inject(CartService)
   authService = inject(AuthService)
 
   handleLogout() {

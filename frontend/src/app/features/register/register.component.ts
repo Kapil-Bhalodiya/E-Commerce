@@ -7,7 +7,6 @@ import { PrimaryButtonComponent } from "../../compoments/primary-button/primary-
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule, PrimaryButtonComponent, RouterModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
