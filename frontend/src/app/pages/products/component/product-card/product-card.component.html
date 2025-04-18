@@ -1,0 +1,62 @@
+<div class="product__items">
+    <div class="product__items--thumbnail">
+      <a class="product__items--link" (click)="viewProduct(product._id); $event.preventDefault()">
+        <img
+          class="product__items--img product__primary--img"
+          [src]="product.image_urls[0]"
+          [alt]="'Product Image'"
+        />
+        <img class="product__items--img product__secondary--img" [src]="product.image_urls[1]"
+        [alt]="'Product Second Image'">
+      </a>
+      <!-- <div class="product__badge" *ngIf="product.isOnSale">
+        <span class="product__badge--items sale">Sale</span>
+      </div> -->
+    </div>
+    <div class="product__items--content">
+      <!-- <span class="product__items--content__subtitle">{{ product.subtitle }}</span> -->
+      <h3 class="product__items--content__title h4">
+        <p (click)="viewProduct(product._id); $event.preventDefault()">
+          {{ product.name }}
+        </p>
+      </h3>
+      <div class="product__items--price">
+        <span class="current__price">${{ product.base_price }}</span>
+        <span class="price__divided" *ngIf="product.base_price"></span>
+        <span class="old__price" *ngIf="product.base_price">${{ product.base_price }}</span>
+      </div>
+      <app-rating class="product__rating"></app-rating>
+      <ul class="product__items--action d-flex">
+        <li class="product__items--action__list">
+          <a
+            class="product__items--action__btn add__to--cart"
+            href="cart.html"
+            (click)="onAddToCart(); $event.preventDefault()"
+          >
+            <i class="bi bi-cart3 product__items--action__btn--i"></i>
+            <span class="add__to--cart__text"> + Add to cart</span>
+          </a>
+        </li>
+        <li class="product__items--action__list">
+          <a
+            class="product__items--action__btn"
+            href="wishlist.html"
+            (click)="onAddToWishlist(); $event.preventDefault()"
+          >
+            <i class="bi bi-heart"></i>
+            <span class="visually-hidden">Wishlist</span>
+          </a>
+        </li>
+        <li class="product__items--action__list">
+          <a
+            class="product__items--action__btn"
+            href="javascript:void(0)"
+            (click)="onQuickView()"
+          >
+            <i class="bi bi-eye"></i>
+            <span class="visually-hidden">Quick View</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>

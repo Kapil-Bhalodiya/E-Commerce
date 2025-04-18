@@ -1,0 +1,75 @@
+.checkout__form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .cart__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .payment-options {
+    margin-bottom: 20px;
+  
+    .payment-option {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+  
+      input[type="radio"] {
+        margin-right: 10px;
+      }
+    }
+  }
+  
+  .card-details {
+    .stripe-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 4px;
+    }
+  }
+  
+  .digital-wallet {
+    .payment-request-button {
+      display: block;
+      margin-bottom: 10px;
+    }
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 1rem;
+  }
+  
+  .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  
+  .form-error {
+    color: #721c24;
+    font-size: 0.875rem;
+    margin-top: 5px;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+  
+    &:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+  }

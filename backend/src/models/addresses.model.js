@@ -7,27 +7,22 @@ const addressSchema = new mongoose.Schema({
     required: true,
     index: true
   },
-
-  // Contact Name (for shipping to someone else)
   fullName: {
     type: String,
     required: true,
     trim: true
   },
-
-  // Optional phone (could differ from account phone)
   phone: {
     type: String,
     trim: true,
     match: [/^\+?[0-9]{7,15}$/, 'Invalid phone number']
   },
-
-  street: {
+  addressLine1: {
     type: String,
     required: true,
     trim: true
   },
-  street2: {
+  addressLine2: {
     type: String,
     trim: true,
     default: ''
@@ -52,24 +47,20 @@ const addressSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-
   isDefault: {
     type: Boolean,
     default: false
   },
-
-  label: {
+  addressType: {
     type: String,
     enum: ['home', 'work', 'other'],
     default: 'home'
   },
-
   isDeleted: {
     type: Boolean,
     default: false,
     index: true
   },
-
 }, { timestamps: true });
 
 module.exports = mongoose.model('Address', addressSchema);

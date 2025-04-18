@@ -1,0 +1,136 @@
+.section__shipping--address {
+	padding: 3rem 0 2rem
+}
+
+@media only screen and (min-width:992px) {
+	.section__shipping--address {
+		padding: 4rem 0 3rem
+	}
+}
+
+.section__shipping--address.pt-10 {
+	padding-top: 1rem
+}
+
+.section__shipping--address.pt-0 {
+	padding-top: 0
+}
+
+.section__header--title {
+	font-size: 1.8rem;
+	line-height: 2.2rem
+}
+
+@media only screen and (min-width:1200px) {
+	.section__header--title {
+		font-size: 2rem;
+		line-height: 2.4rem
+	}
+}
+
+@media only screen and (max-width:575px) {
+	.section__header--title {
+		margin-bottom: .8rem
+	}
+}
+
+.checkout__input--field {
+	width: 100%;
+	border: 1px solid var(--border-color2);
+	height: 4.5rem;
+	padding: 0 1.5rem;
+}
+
+.checkout__input--field:focus {
+	border-color: var(--secondary-color)
+}
+
+.checkout__input--list{
+	margin-bottom: 10px;
+}
+
+.checkout__input--list .form-error{
+	color: red;
+	font-size: small;
+}
+
+.checkout__select--label {
+	position: absolute;
+	top: .3rem;
+	padding: 0 1.8rem;
+	line-height: 2rem;
+	font-size: 1.2rem
+}
+
+.checkout__input--select__field {
+	width: 100%;
+	border: 0;
+	height: 4.5rem;
+	padding: 1.6rem 1.5rem .5rem;
+	border: 1px solid var(--border-color2);
+	-webkit-appearance: none;
+	cursor: pointer
+}
+
+.checkout__checkbox {
+	position: relative
+}
+
+.checkout__checkbox--input {
+	position: absolute;
+	left: -1px;
+	top: 45%;
+	-webkit-transform: translatey(-50%);
+	transform: translatey(-50%);
+	opacity: 0;
+	cursor: pointer;
+	z-index: 999
+}
+
+.checkout__checkbox--input:checked~.checkout__checkbox--checkmark {
+	background-color: var(--secondary-color);
+	border: 1px solid var(--secondary-color)
+}
+
+.checkout__checkbox--input:checked~.checkout__checkbox--checkmark::before {
+	display: block
+}
+
+.checkout__checkbox--label {
+	padding-left: 3rem;
+	cursor: pointer
+}
+
+.checkout__checkbox--checkmark {
+	height: 1.8rem;
+	width: 1.8rem;
+	border: 1px solid var(--border-color);
+	border-radius: .3rem;
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	-webkit-transform: translatey(-50%);
+	transform: translatey(-50%);
+	background: var(--white-color);
+	-webkit-transition: var(--transition);
+	transition: var(--transition)
+}
+
+.checkout__checkbox--checkmark::before {
+	left: .5rem;
+	top: .3rem;
+	width: .5rem;
+	height: .8rem;
+	border: solid #fff;
+	border-top-width: medium;
+	border-right-width: medium;
+	border-bottom-width: medium;
+	border-left-width: medium;
+	border-width: 0 2px 2px 0;
+	-webkit-transform: rotate(45deg);
+	transform: rotate(45deg);
+	content: "";
+	position: absolute;
+	display: none
+}

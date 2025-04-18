@@ -1,7 +1,7 @@
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { SearchBoxComponent } from "../../search-box/search-box.component";
 import { DropdownFilterComponent } from "../../filter/dropdown-filter/dropdown-filter.component";
-import { CartItem, CartService } from '../../../services/cart.service';
+import { CartService } from '../../../services/cart.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,15 +25,15 @@ export class HeaderTopComponent implements OnInit {
     },
   ]
 
-  cartItems: CartItem[] = [];
-
   constructor(
     private cartService: CartService,
     private router: Router
   ) { }
+  
+  cratItems: number = 0;
 
   ngOnInit() {
-    this.cartService.cartItems$.subscribe(items => this.cartItems = items);
+    this.cartService.cartItems$.subscribe(items => this.cratItems = items.length);
   }
 
   toggleMenu() {

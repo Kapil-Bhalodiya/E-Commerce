@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const Stripe = require('stripe');
+const stripe = new Stripe(process.env.STRIPE_SK);
 const Order = require('../models/orders.model');
 const OrderItem = require('../models/order-item.model');
 const Address = require('../models/addresses.model');
@@ -6,49 +9,52 @@ const Product = require('../models/product.model');
 const Coupon = require('../models/coupons.model');
 const logger = require('../utils/logger');
 const { ApiError } = require('../utils/ApiError');
-const mongoose = require('mongoose');
+const { createAddress } = require('./addresses.contoller');
+
 
 const createOrder = async (req, res, next) => {
   const session = await mongoose.startSession();
-  session.startTransaction();
+  let isTransactionCommitted = false;
 
   try {
-    const userId = req.user._id; // From auth middleware
-    const { items, shippingAddressId, paymentMethod, couponCode, notes } = req.body;
+    session.startTransaction();
+    const userId = '67fca190b5799c577b4b06bc'; // From auth middleware
+    // const { items, shippingAddressId, paymentMethod, couponCode, notes } = req.body;
+    const { cartForm, deliveryAddressForm, paymentDetailForm, couponCode } = req.body;
 
     // Verify address
-    const address = await Address.findOne({ _id: shippingAddressId, userId }).session(session);
-    if (!address) {
-      throw new ApiError('Invalid shipping address', 404);
-    }
+    // const address = await Address.findOne({ _id: shippingAddressId, userId }).session(session);
 
-    // Snapshot the shipping address (store the full address in order)
-    const shippingAddressSnapshot = {
-      fullName: address.fullName,
-      phone: address.phone,
-      street: address.street,
-      street2: address.street2,
-      city: address.city,
-      state: address.state,
-      country: address.country,
-      postalCode: address.postalCode,
-    };
+    let deliveryAddressId;
+    console.log("cart: ",cartForm)
+    console.log("Delivery : ",deliveryAddressForm)
+    console.log("payment: ",paymentDetailForm)
+
+    if (deliveryAddressForm.deliveryAddressId) {
+      // Use the existing addressId if provided
+      deliveryAddressId = deliveryAddressForm.deliveryAddressId;
+    } else {
+      // Create a new address if addressId is not provided
+      const createdAddress = await createAddress(deliveryAddressForm.newAddress);
+      console.log("createdAddress : ", createAddress)
+      deliveryAddressId = createdAddress.data._id;  // You can then use the _id of the created address
+    }
 
     // Create order items
     const orderItems = [];
     let subTotal = 0;
 
-    for (const item of items) {
+    for (const item of cartForm.items) {
       const product = await Product.findById(item.productId).session(session);
       if (!product || product.stock < item.quantity) {
         throw new ApiError(`Product ${item.productId} is unavailable or out of stock`, 400);
       }
-
+      console.log("product : ",product);
       const orderItem = new OrderItem({
         productId: item.productId,
         quantity: item.quantity,
-        price: product.price,
-        subtotal: product.price * item.quantity,
+        price: product.base_price,
+        subtotal: item.price * item.quantity,
       });
 
       await orderItem.save({ session });
@@ -112,22 +118,12 @@ const createOrder = async (req, res, next) => {
     // Calculate total
     const totalAmount = subTotal + taxAmount + shippingCost - discountAmount;
 
-    // Create payment record
-    const payment = new Payment({
-      userId,
-      amount: totalAmount,
-      method: paymentMethod,
-      status: 'pending',
-    });
-    await payment.save({ session });
-
     // Create order
     const order = new Order({
       userId,
       orderItems,
-      shippingAddress: address._id,
-      shippingAddressSnapshot, // Add snapshot of the address here
-      payment: payment._id,
+      deliveryAddressId, // Add snapshot of the address here
+      payment: null,
       totalAmount,
       subTotal,
       taxAmount,
@@ -136,28 +132,56 @@ const createOrder = async (req, res, next) => {
       couponCode: appliedCouponCode,
       status: 'pending',
       statusHistory: [{ status: 'pending', note: 'Order created' }],
-      notes,
     });
 
     await order.save({ session });
-    payment.orderId = order._id;
+
+    const payment = new Payment({
+      userId,
+      orderId: order._id,
+      amount: totalAmount,
+      method: paymentDetailForm.method,
+      status: 'pending',
+      provider: paymentDetailForm.provider,
+      stripePaymentIntentId: paymentDetailForm.stripePaymentIntentId,
+    });
+
+    console.log('Payment before save:', payment);
+    await payment.validate();
     await payment.save({ session });
 
-    await session.commitTransaction();
-    logger.info(`Order created successfully: ${order._id}`);
+    order.payment = payment._id;
+    await order.save({ session });
 
-    const populatedOrder = await Order.findById(order._id)
-      .populate('orderItems shippingAddress payment')
-      .exec();
+    await session.commitTransaction();
+    isTransactionCommitted = true;
+    logger.info(`Order created successfully: ${order._id}`)
+
+    let populatedOrder;
+    try {
+      populatedOrder = await Order.findById(order._id)
+        .populate('orderItems deliveryAddressId payment')
+        .exec();
+      if (!populatedOrder) {
+        throw new Error('Failed to populate order');
+      }
+    } catch (populateError) {
+      logger.error(`Failed to populate order: ${populateError.message}`);
+      populatedOrder = await Order.findById(order._id).exec();
+    }
 
     res.status(201).json({
       success: true,
-      data: populatedOrder,
+      data: {
+        order: populatedOrder
+      },
       message: 'Order created successfully',
     });
   } catch (error) {
-    await session.abortTransaction();
-    logger.error(`Order creation failed: ${error.message}`);
+    if (!isTransactionCommitted) {
+      await session.abortTransaction();
+    }
+    logger.error(`Order creation failed: ${error.message}`, { error });
     next(error);
   } finally {
     session.endSession();
@@ -207,75 +231,3 @@ const updateOrderStatus = async (req, res, next) => {
 };
 
 module.exports = { createOrder, getOrder, updateOrderStatus };
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const orderService = require('../services/orderService');
-// const { ApiError } = require('../utils/errorHandler');
-// const logger = require('../utils/logger');
-
-// class OrderController {
-//   async createOrder(req, res) {
-//     try {
-//       const userId = req.user._id; // From auth middleware
-//       const order = await orderService.createOrder(userId, req.body);
-//       res.status(201).json({
-//         success: true,
-//         data: order,
-//         message: 'Order created successfully',
-//       });
-//     } catch (error) {
-//       logger.error(`Create order failed: ${error.message}`);
-//       res.status(error.statusCode || 500).json({
-//         success: false,
-//         message: error.message,
-//       });
-//     }
-//   }
-
-//   async getOrder(req, res) {
-//     try {
-//       const order = await orderService.getOrder(req.params.id, req.user._id);
-//       res.status(200).json({
-//         success: true,
-//         data: order,
-//       });
-//     } catch (error) {
-//       logger.error(`Get order failed: ${error.message}`);
-//       res.status(error.statusCode || 500).json({
-//         success: false,
-//         message: error.message,
-//       });
-//     }
-//   }
-
-//   async updateOrderStatus(req, res) {
-//     try {
-//       const { status, note } = req.body;
-//       const order = await orderService.updateOrderStatus(req.params.id, status, note);
-//       res.status(200).json({
-//         success: true,
-//         data: order,
-//         message: 'Order status updated',
-//       });
-//     } catch (error) {
-//       logger.error(`Update order status failed: ${error.message}`);
-//       res.status(error.statusCode || 500).json({
-//         success: false,
-//         message: error.message,
-//       });
-//     }
-//   }
-// }
-
-// module.exports = new OrderController();
