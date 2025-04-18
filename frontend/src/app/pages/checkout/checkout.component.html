@@ -1,0 +1,82 @@
+<div class="container-fluid">
+    <div class="cart__section--inner">
+        <div class="row">
+            <div class="col-lg-8">
+                <app-stepper id="formStepper" class="stepper" [steps]="steps" [data]="referenceData"
+                    [formGroup]="formGroup" [formGroupConfigs]="formGroupConfigs"
+                    (onTransitionComplete)="onTransitionCompleteHandler($event)"
+                    (onSelectedIndexChanged)="onSelectedIndexChangedHandler($event)">
+                </app-stepper>
+                <ng-container #dynamicComponentContainer></ng-container>
+            </div>
+            <div class="col-lg-4">
+                <div class="cart__summary border-radius-10">
+                    <div class="coupon__code mb-30">
+                        <h3 class="coupon__code--title">Coupon</h3>
+                        <p class="coupon__code--desc">Enter your coupon code if you have one.</p>
+                        <div class="coupon__code--field d-flex">
+                            <label>
+                                <input class="coupon__code--field__input border-radius-5" placeholder="Coupon code"
+                                    type="text" [(ngModel)]="couponCode" name="couponCode" />
+                            </label>
+                            <button class="coupon__code--field__btn primary__btn" type="submit"
+                                [disabled]="!couponCode">
+                                Apply Coupon
+                            </button>
+                        </div>
+                        <p class="coupon__code--error text-danger" *ngIf="couponError">
+                            {{ couponError }}
+                        </p>
+                    </div>
+                    <div class="cart__summary--total mb-20">
+                        <table class="cart__summary--total__table">
+                            <tbody>
+                                <tr class="cart__summary--total__list">
+                                    <td class="cart__summary--total__title text-left">SUBTOTAL</td>
+                                    <td class="cart__summary--amount text-right">
+                                        {{ cartService.getSubtotal() }}
+                                    </td>
+                                </tr>
+                                <tr class="cart__summary--total__list">
+                                    <td class="cart__summary--total__title text-left">GRAND TOTAL</td>
+                                    <td class="cart__summary--amount text-right">
+                                        -{{ discountAmount }}
+                                    </td>
+                                </tr>
+                                <tr class="cart__summary--total__list">
+                                    <td class="cart__summary--total__title text-left">TAX (10%)</td>
+                                    <td class="cart__summary--amount text-right">
+                                        {{ cartService.getSubtotal() * 0.1 }}
+                                    </td>
+                                </tr>
+                                <tr class="cart__summary--total__list">
+                                    <td class="cart__summary--total__title text-left">SHIPPING</td>
+                                    <td class="cart__summary--amount text-right">
+                                        {{ shippingCost }}
+                                    </td>
+                                </tr>
+                                <tr class="cart__summary--total__list">
+                                    <td class="cart__summary--total__title text-left">GRAND TOTAL</td>
+                                    <td class="cart__summary--amount text-right">
+                                        {{ cartService.getSubtotal() }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="cart__summary--footer">
+                        <p class="cart__summary--footer__desc">Shipping & taxes calculated at checkout</p>
+                        <ul class="d-flex justify-content-between">
+                            <button class="cart__summary--footer__btn w-50"
+                                (click)="previousClickHandler()" [disabled]="currentIndex === 0">Back</button>
+                            <button class="cart__summary--footer__btn primary__btn checkout w-50"
+                                (click)="nextClickHandler()">
+                                {{ currentIndex === steps.length - 1 ? 'Place Order' : 'Next' }}
+                            </button>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

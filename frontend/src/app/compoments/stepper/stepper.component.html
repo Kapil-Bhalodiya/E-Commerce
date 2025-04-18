@@ -1,0 +1,15 @@
+<div class="stepper">
+  <ul class="stepper-list">
+    <li *ngFor="let step of steps; let i = index"
+        [class.active]="currentIndex === i"
+        [class.completed]="currentIndex > i"
+        (click)="goToStep(i)">
+      <span class="step-number">{{ i + 1 }}</span>
+      <span class="step-label">{{ step.label }}</span>
+    </li>
+  </ul>
+
+  <div class="step-content">
+    <ng-container #dynamicComponentContainer></ng-container>
+  </div>
+</div>

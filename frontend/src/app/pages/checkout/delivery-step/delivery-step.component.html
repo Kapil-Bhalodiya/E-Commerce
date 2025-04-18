@@ -1,0 +1,32 @@
+<form [formGroup]="formGroup" class="checkout__form">
+  <h3 class="cart__title mt-5 mb-5">Address Detail</h3>
+  <app-accordion-radio
+    [name]="'deliveryOption'"
+    [options]="accordionOptions"
+    [selectedValue]="formGroup.value.deliveryOption"
+    (valueChange)="formGroup.get('deliveryOption')?.setValue($event)"
+  ></app-accordion-radio>
+
+  <ng-template #existingAddressTemplate>
+    <div class="address-list">
+      <div
+        class="address-card"
+        *ngFor="let address of addresses"
+        [class.selected]="selectedAddressId === address._id"
+        (click)="selectAddress(address._id)"
+      >
+        <p><strong>{{ address.address1 }}, {{ address.address1 }}, {{ address.city }}, {{ address.state }}, {{ address.country }} - {{ address.postalCode }}</strong></p>
+        <p *ngIf="address.fullName">Name : <strong>{{ address.fullName }}</strong></p>
+        <p *ngIf="address.phone">Contact : <strong>{{ address.phone }}</strong></p>
+      </div>
+
+      <div class="form-error" *ngIf="!formGroup.value.addressId && formGroup.get('addressId')?.touched">
+        Please select an address.
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #newAddressTemplate>
+    <app-address-detail-form [formGroup]="newAddress"></app-address-detail-form>
+  </ng-template>
+</form>

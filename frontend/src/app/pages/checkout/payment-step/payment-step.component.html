@@ -1,0 +1,33 @@
+
+
+<div class="payment-container">
+  <h2>Secure Payment</h2>
+
+  @if (loading()) {
+  <div class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Processing payment...</p>
+  </div>
+  }
+
+  @if (paymentError()) {
+  <div class="alert alert-danger">
+    {{ paymentError() }}
+  </div>
+  }
+
+  @if (paymentSuccess()) {
+  <div class="alert alert-success">
+    <h3>Payment Successful!</h3>
+    <p>Thank you for your payment. A receipt has been sent to your email.</p>
+  </div>
+  } @else {
+  <form [formGroup]="formGroup">
+
+    <div class="card-container">
+      <label>Payment Method</label>
+      <div id="payment-element"></div>
+    </div>
+  </form>
+  }
+</div>

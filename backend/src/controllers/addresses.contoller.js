@@ -12,20 +12,20 @@ exports.createAddress = async (req, res, next) => {
       throw new ApiError(validationErrors.join(', '), 400);
     }
 
-    const { fullName, phone, street, street2, city, state, postalCode, country, label, isDefault } = req.body;
+    const { firstName, lastName, phone, addressLine1, addressLine2, city, state, postalCode, country, addressType, isDefault } = req.body;
     const userId = '67fca190b5799c577b4b06bc';
 
     const address = new Address({
       userId,
-      fullName,
+      fullName: `${firstName} ${lastName}`,
       phone,
-      street,
-      street2,
+      addressLine1,
+      addressLine2,
       city,
       state,
       postalCode,
       country,
-      label,
+      addressType,
       isDefault,
     });
 

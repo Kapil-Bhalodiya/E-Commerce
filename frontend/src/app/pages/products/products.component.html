@@ -1,0 +1,50 @@
+<app-breadcrumb></app-breadcrumb>
+<section class="shop__section section--padding">
+    <div class="container-fluid">
+        <app-product-list-header />
+        <div class="row">
+            <div class="col-xl-3 col-lg-4">
+                <div class="shop__sidebar--widget widget__area d-none d-lg-block">
+                    <div class="single__widget widget__bg">
+                        <h2 class="widget__title h3">Occasions</h2>
+                        <!-- <app-list-filter [checkboxItems]="checkboxItems"
+                            (checkboxChange)="onCheckboxChange($event)"></app-list-filter> -->
+                    </div>
+
+                    <div class="single__widget price__filter widget__bg">
+                        <h2 class="widget__title h3">Filter By Price</h2>
+
+                        <app-range-filter [minValue]="0" [maxValue]="250"
+                            (filterApplied)="onPriceFilterApplied($event)"></app-range-filter>
+                    </div>
+                    <div class="single__widget widget__bg">
+                        <h2 class="widget__title h3">Brands</h2>
+                        <app-categories-filter [items]="brands"></app-categories-filter>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-9 col-lg-8">
+                <div class="shop__product--wrapper">
+                    <div class="d-block">
+                        <div id="product_grid" class="tab_pane active show">
+                            <div class="product__section--inner product__grid--inner">
+                                <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-2 mb--n30">
+                                    <div class="col mb-30" *ngFor="let product of products">
+                                        <app-product-card [product]="product" (addToCart)="onAddToCart(product)"
+                                            (addToWishlist)="onAddToWishlist()" (quickView)="onQuickView()" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pagination" *ngIf="totalPages > 1">
+                        <button (click)="page = page - 1; fetchProducts()" [disabled]="page === 1">Previous</button>
+                        <span>Page {{page}} of {{totalPages}}</span>
+                        <button (click)="page = page + 1; fetchProducts()"
+                            [disabled]="page === totalPages">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

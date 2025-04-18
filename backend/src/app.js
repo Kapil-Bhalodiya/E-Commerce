@@ -9,6 +9,8 @@ const {subCategoryRoutes} = require("./routes/subcategories.routes")
 const {productRoutes} = require("./routes/products.routes")
 const {productVariantRoutes} = require("./routes/productvariants.routes")
 const {addressRoutes} = require("./routes/address.routes")
+const {orderRoutes} = require("./routes/order.routes")
+const {paymentRoutes} = require("./routes/payment.routes")
 
 const app = express()
 
@@ -29,6 +31,8 @@ app.use('/api/subcategories', subCategoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/product-variants', productVariantRoutes);
 app.use('/api/address', addressRoutes);
+app.use('/api/order', orderRoutes);
+app.use('/api/payment', paymentRoutes);
 
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK' });

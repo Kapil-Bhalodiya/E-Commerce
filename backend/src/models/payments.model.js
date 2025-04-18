@@ -24,10 +24,9 @@ const paymentSchema = new mongoose.Schema({
   orderId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Order',
-    required: true,
+    required: false,
     index: true,
   },
-
   method: {
     type: String,
     enum: ['card', 'paypal', 'cod', 'wallet', 'bank_transfer'],
@@ -40,11 +39,10 @@ const paymentSchema = new mongoose.Schema({
     default: 'pending',
     index: true,
   },
-  transactionId: {
+  stripePaymentIntentId: {
     type: String,
     trim: true,
     default: null,
-    unique: true, // only if from provider
   },
   amount: {
     type: Number,

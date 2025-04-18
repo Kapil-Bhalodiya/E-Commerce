@@ -1,0 +1,34 @@
+.continue__shopping {
+    padding-top: 2rem
+}
+
+.continue__shopping--link {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--secondary-color)
+}
+
+@media only screen and (min-width:992px) {
+    .continue__shopping--link {
+        font-size: 1.7rem
+    }
+}
+
+.continue__shopping--clear {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    border: 0;
+    padding: 0;
+    background: inherit
+}
+
+@media only screen and (min-width:992px) {
+    .continue__shopping--clear {
+        font-size: 1.7rem
+    }
+}
+
+.step-content {
+    display: block;
+}
