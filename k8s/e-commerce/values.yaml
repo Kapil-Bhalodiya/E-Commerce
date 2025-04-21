@@ -2,14 +2,14 @@ namespace: e-commerce
 
 frontend:
   name: frontend
-  image: "kapilbhalodiya/ecommerceapp-frontend:0.0.4"
+  image: "kapilbhalodiya/ecommerce-frontend:0.0.4"
   replicas: 1
   port: 80
   serviceport: 80
 
 backend:
   name: backend
-  image: "kapilbhalodiya/ecommerceapp-backend:0.0.4"
+  image: "kapilbhalodiya/ecommerce-backend:0.0.4"
   replicas: 1
   port: 8000
   serviceport: 8000
