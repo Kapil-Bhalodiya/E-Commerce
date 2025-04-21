@@ -9,7 +9,7 @@ frontend:
 
 backend:
   name: backend
-  image: "kapilbhalodiya/ecommerceapp-backend:0.0.2"
+  image: "kapilbhalodiya/ecommerceapp-backend:0.0.4"
   replicas: 1
   port: 8000
   serviceport: 8000
