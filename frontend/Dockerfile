@@ -1,32 +1,34 @@
-# Step 1: Build the Angular app using Node.js image
-FROM node:18 AS build
+# Build stage
+FROM node:18-slim AS build
 
-# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
+# Copy package files and install dependencies
 COPY package*.json ./
+RUN npm ci --legacy-peer-deps
 
-# Install all dependencies
-RUN npm install
-
-# Copy the rest of the application source code
-COPY . /app
-
-# Build the Angular app for production
+# Copy application code and build
+COPY . .
 RUN npm run build
 
-# Step 2: Use Nginx to serve the Angular app
-FROM nginx:alpine
+# Production stage
+FROM nginx:alpine AS production
 
-# Remove default nginx index.html
-RUN rm -rf /usr/share/nginx/html/*
+RUN mkdir -p /var/cache/nginx/client_temp /tmp \
+    && chown -R nginx:nginx /var/cache/nginx /usr/share/nginx/html /tmp
 
-# Copy the built Angular app from the build stage to Nginx's default HTML folder
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built app from build stage
 COPY --from=build /app/dist/e-commerce/browser /usr/share/nginx/html
 
-# Expose port 80 (default for Nginx)
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD wget --quiet --tries=1 --spider http://localhost:80/ || exit 1
+
+# Run with non-root
+# USER nginx
+
 EXPOSE 80
 
-# Start Nginx in the foreground (this keeps the container running)
 CMD ["nginx", "-g", "daemon off;"]

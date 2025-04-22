@@ -1,33 +1,30 @@
-# Step 1: Build stage - Using the official Node.js image
-FROM node:18 AS build
+FROM node:18-alpine
 
-# Set the working directory in the container
+# Needed for bcrypt to compile
+RUN apk add --no-cache python3 make g++ 
+
+# Set NODE_ENV
+ENV NODE_ENV=production
+
 WORKDIR /app
 
-# Copy package.json and package-lock.json first to leverage Docker caching
+# Copy package files and install dependencies
 COPY package*.json ./
+RUN npm ci --only=production
 
-# Install all dependencies (including native modules like bcrypt)
-RUN npm install
+# Copy application code
+COPY . .
 
-# Rebuild bcrypt to ensure it's compiled correctly for the container architecture
-RUN npm rebuild bcrypt
+RUN mkdir -p /app/logs && chown node:node /app/logs
 
-# Step 2: Production stage - Using a smaller image
-FROM node:18 AS production
+# Non-root user for security
+USER node
 
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy everything from the local project directory into the container
-COPY . /app
-
-#bcrypt compiled on OSX will not quite work on Linux
-RUN rm -rf node_modules
-RUN npm install bcrypt
-
-# Expose the port your app will be listening on
+# Expose application port
 EXPOSE 8000
 
-# Command to run the application
-CMD ["npm", "start"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget --quiet --tries=1 --spider http://localhost:8000/health || exit 1
+
+# Run the application - adjust based on your actual entry point
+CMD ["node", "src/index.js"]
