@@ -14,10 +14,20 @@ const {paymentRoutes} = require("./routes/payment.routes")
 
 const app = express()
 
+const allowedOrigins = process.env.CORS_ORIGIN.split(',');
+
+// CORS middleware
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true
-}))
+  origin: (origin, callback) => {
+    // If the origin is in the allowedOrigins list or if it's undefined (for example, Postman)
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed'), false);
+    }
+  },
+  credentials: true,
+}));
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
