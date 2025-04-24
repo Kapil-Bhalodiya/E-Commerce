@@ -1,8 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-// import { CartService } from '../../services/cart.service';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { PrimaryButtonComponent } from "../primary-button/primary-button.component";
 import { CommonModule } from '@angular/common';
 import { HeaderBottomComponent } from "./header-bottom/header-bottom.component";
 import { HeaderTopComponent } from "./header-top/header-top.component";
@@ -13,7 +11,7 @@ import { OffcanvasHeaderComponent } from "./offcanvas-header/offcanvas-header.co
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
-  imports: [CommonModule, PrimaryButtonComponent, HeaderBottomComponent, HeaderTopComponent, OffcanvasHeaderComponent]
+  imports: [CommonModule, HeaderBottomComponent, HeaderTopComponent, OffcanvasHeaderComponent]
 })
 export class HeaderComponent {
   constructor(
