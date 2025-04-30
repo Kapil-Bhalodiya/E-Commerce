@@ -1,0 +1,32 @@
+<div class="shop__header bg__gray--color d-flex align-items-center justify-content-between mb-30">
+    <button class="widget__filter--btn d-flex d-lg-none align-items-center" data-offcanvas>
+        <i class="bi bi-funnel-fill"></i>
+        <span class="widget__filter--btn__text">Filter</span>
+    </button>
+    <div class="product__view--mode d-flex align-items-center">
+        <div class="product__view--mode__list product__short--by align-items-center d-none d-lg-flex">
+            <label class="product__view--label">Prev Page :</label>
+            <app-dropdown-filter size="'small'" [items]="dropPageSort"></app-dropdown-filter>
+        </div>
+        <div class="product__view--mode__list product__short--by align-items-center d-none d-lg-flex">
+            <label class="product__view--label">Sort By :</label>
+            <app-dropdown-filter [items]="dropDownSort"></app-dropdown-filter>
+        </div>
+        <div class="product__view--mode__list">
+            <div class="product__grid--column__buttons d-flex justify-content-center">
+                <button class="product__grid--column__buttons--icons active" aria-label="product grid button"
+                    data-toggle="tab" data-target="#product_grid">
+                    <i class="bi bi-grid" style="color: black;"></i>
+                </button>
+                <button class="product__grid--column__buttons--icons" aria-label="product list button" data-toggle="tab"
+                    data-target="#product_list">
+                    <i class="bi bi-list-task"></i>
+                </button>
+            </div>
+        </div>
+        <div class="product__view--mode__list product__search align-items-center d-none d-lg-flex">
+            <app-search-box [placeholder]="'Search products...'" [size]="'medium'" (search)="onSearch($event)"></app-search-box>
+        </div>
+    </div>
+    <p class="product__showing--count">Showing 1–9 of 21 results</p>
+</div>

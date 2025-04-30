@@ -11,12 +11,15 @@ import { CartStepComponent } from './cart-step/cart.component';
 import { DeliveryAddressStepComponent } from './delivery-step/delivery-step.component';
 import { PaymentStepComponent } from './payment-step/payment-step.component';
 import { CartItem } from '../../models/cartItem.model';
+import { AddressService } from '../../services/address.service';
+import { Address } from '../../models/address.model';
+import { SpinnerComponent } from "../../compoments/spinner/spinner.component";
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
-  imports: [StepperComponent, CommonModule, FormsModule],
+  imports: [StepperComponent, CommonModule, FormsModule, SpinnerComponent],
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   @ViewChild(StepperComponent) formStepper!: StepperComponent;
@@ -26,27 +29,30 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   formGroupConfigs = {};
   referenceData = {
     cartItems: [] as CartItem[],
+    addresses: [] as Address[]
   };
   steps: StepConfig[] = [];
 
   currentIndex: number = 0;
-  isLoaded: boolean = false;
+  isLoading:boolean = false;
   cartItems!: CartItem[];
   couponCode: string = '';
-  notes: string = '';
   couponError: string = '';
   discountAmount: number = 0;
   shippingCost: number = 10;
+  errorMessage: string | null = null;
+  addresses: Address[] = [];
+  selectedAddressId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
-    public cartService: CartService,
-    private orderService: OrderService,
     private router: Router,
+    public cartService: CartService,
+    private addressService: AddressService,
+    private orderService: OrderService,
   ) { this.formGroup = this.fb.group({}); }
 
   ngOnInit(): void {
-    console.log('CheckoutComponent initialized');
 
     this.steps = [
       { index: 'cartForm', order: 1, label: 'Shopping Cart', component: CartStepComponent },
@@ -55,7 +61,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     ];
 
     this.initializeForm();
-    // this.fetchAddressTypes();
+    this.fetchAddresses();
     // this.fetchProvinces();
     this.formGroup?.get('cartForm')?.get('items')?.updateValueAndValidity({ onlySelf: true });
     this.cartService.getCartItems$()
@@ -105,26 +111,46 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       }),
     };
   }
+  
+  fetchAddresses() {
+    this.isLoading = true;
+    this.errorMessage = null;
+
+    this.addressService.getAddresses().pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe({
+      next: (addresses: Address[]) => {
+        this.isLoading = false;
+        this.addresses = addresses;
+        this.referenceData.addresses = addresses
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.errorMessage = 'Failed to load addresses. Please try again.';
+        console.error('Address loading failed:', err);
+      }
+    });
+  }
 
   addressTypeValidator(control: AbstractControl) {
     return control.value === '-1' ? { invalidAddressType: true } : null;
   }
-
+  
   nextClickHandler(): void {
-    console.log("this.currentIndex: ", this.currentIndex, ' = ', this.steps.length - 1);
-    console.log("this.formGroup.valid: ", this.formGroup.valid);
-    console.log("deliveryForm valid: ", this.formGroup.get('deliveryForm')?.valid);
-    console.log("deliveryForm errors: ", this.formGroup.get('deliveryForm')?.errors);
-    console.log("deliveryForm value: ", this.formGroup.get('deliveryForm')?.value);
-    if (this.currentIndex === this.steps.length - 1 && this.formGroup.valid) {
-      console.log("Proceed to Checkout....!");
-      this.proceedToCheckout();
+    const currentForm = this.formGroup.get(this.steps[this.currentIndex].index);
+    if (currentForm?.invalid) {
+      currentForm.markAllAsTouched();
+      this.errorMessage = 'Please complete all required fields.';
+      return;
     }
-    if (this.formStepper) {
+    if (this.currentIndex === this.steps.length - 1) {
+      this.proceedToCheckout();
+    } else {
+      this.currentIndex++;
       this.formStepper.nextStep();
     }
   }
-
+  
   previousClickHandler(): void {
     if (this.formStepper) {
       this.formStepper.previousStep();
@@ -134,32 +160,36 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   onTransitionCompleteHandler(ev: FormGroup): void {
     this.currentFormGroup = ev;
   }
-
+  
   onSelectedIndexChangedHandler(index: number): void {
     this.currentIndex = index;
   }
 
   applyCoupon(): void {
-    if (this.couponCode) {
-      this.orderService.validateCoupon(this.couponCode).subscribe({
-        next: (coupon) => {
-          this.couponError = '';
-          // Apply discount logic (example)
-          // this.charges.onceOffCharges[0] = { ...this.charges.onceOffCharges[0], discountAmount: coupon.discountAmount };
-        },
-        error: (err) => {
-          this.couponError = err.error.message || 'Invalid coupon';
-        },
-      });
+    if (!this.couponCode) {
+      this.couponError = 'Please enter a coupon code.';
+      return;
     }
+    this.orderService.validateCoupon(this.couponCode).pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe({
+      next: (coupon) => {
+        this.couponError = '';
+        this.discountAmount = coupon.discountAmount || 0;
+      },
+      error: (err) => {
+        this.couponError = err.error?.message || 'Invalid coupon code.';
+        this.discountAmount = 0;
+      }
+    });
   }
-
+  
   proceedToCheckout(): void {
     if (!this.cartService.getCartItems().length) {
       alert('Cart is empty');
       return;
     }
-
+    
     const orderData = {
       cartForm: {
         items: JSON.parse(localStorage.getItem('cart') as string),
@@ -171,49 +201,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       paymentDetailForm: this.formGroup.get('paymentForm')?.value,
       couponCode: this.couponCode || null,
     };
-
     console.log("orderData : ",orderData);
-    
-    this.orderService.createOrder(orderData).subscribe({
-      next: (response: any) => {
-        console.log("resposen : ",response)
-        // const { clientSecret, order } = response.data;
-  
-        // Confirm payment
-        // this.paymentStep.handleSubmit().then((paymentResult) => {
-        //   if (!paymentResult.success) {
-        //     throw new Error(paymentResult.error || 'Payment failed');
-        //   }
-  
-          // Update paymentForm with paymentIntentId
-          // this.formGroup.get('paymentForm')?.patchValue({
-          //   stripePaymentIntentId: paymentResult.paymentIntentId,
-          // });
-  
-          // // Confirm order
-          // this.orderService
-          //   .confirmOrder({ orderId: order._id, paymentIntentId: paymentResult.paymentIntentId })
-          //   .subscribe({
-          //     next: () => {
-          //       // Clear cart and redirect
-          //       this.cartService.clearCart();
-          //       this.router.navigate(['/order-confirmation', order._id]);
-          //     },
-          //     error: (confirmError: any) => {
-          //       console.error('Confirm order error:', confirmError);
-          //       alert(confirmError.message || 'Failed to confirm order');
-          //     },
-          //   });
-      //   }).catch((paymentError: any) => {
-      //     console.error('Payment error:', paymentError);
-      //     alert(paymentError.message || 'Payment failed');
-      //   });
-      },
-      error: (error: any) => {
-        console.error('Checkout error:', error);
-        alert(error.message || 'Failed to create order');
-      },
-    });
+    localStorage.setItem('orderForm', JSON.stringify(orderData));
+    this.router.navigateByUrl('/checkout-complete');
   }
 
   ngOnDestroy(): void {

@@ -4,6 +4,7 @@ import { CheckoutComponent } from './checkout.component';
 import { CartStepComponent } from './cart-step/cart.component';
 import { StepperComponent } from '../../compoments/stepper/stepper.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CheckoutCompleteComponent } from './checkout-complete/checkout-complete.component';
 
 
 @NgModule({
@@ -13,13 +14,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     StepperComponent,
     CheckoutComponent,
-    CartStepComponent
-    
+    CartStepComponent,
+    CheckoutCompleteComponent
   ],
   exports: [
     StepperComponent,
     CheckoutComponent,
-    CartStepComponent
+    CartStepComponent,
+    CheckoutCompleteComponent
   ]
 })
 export class CheckoutModule { }

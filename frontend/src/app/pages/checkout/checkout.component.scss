@@ -1,6 +1,4 @@
-cart__section--inner {
-    
-}
+cart__section--inner {}
 
 .cart__summary {
     -webkit-box-shadow: 0 2px 22px rgba(0, 0, 0, .16);
@@ -67,9 +65,11 @@ cart__section--inner {
     .cart__summary--footer__btn {
         padding: 0 2rem
     }
+
     .cart__note--title {
         font-size: 2rem
     }
+
     .coupon__code--field__input {
         width: 120px
     }
@@ -86,18 +86,20 @@ cart__section--inner {
         padding: 0 2.5rem;
         font-size: 1.5rem
     }
+
     .cart__note--textarea {
         height: 10rem
     }
+
     .coupon__code--field__input {
         width: 160px
     }
 }
 
 @media only screen and (max-width:991px) {
-	.cart__summary {
-		margin-top: 7.5rem
-	}
+    .cart__summary {
+        margin-top: 7.5rem
+    }
 }
 
 .coupon__code--field__input:focus {

@@ -36,6 +36,7 @@ export class StepperComponent implements OnInit, AfterViewInit {
   currentIndex: number = 0;
   currentFormGroup!: FormGroup;
   componentRefs: ComponentRef<FormStepComponent>[] = [];
+  animationDirection: 'slide-left' | 'slide-right' = 'slide-left';
 
   constructor(private fb: FormBuilder) {}
 
@@ -79,6 +80,7 @@ export class StepperComponent implements OnInit, AfterViewInit {
 
   nextStep(): void {
     if (this.currentIndex < this.steps.length - 1) {
+      this.animationDirection = 'slide-left';
       if (this.currentFormGroup.valid) {
         this.currentIndex++;
         this.initializeStepComponent(this.currentIndex);
@@ -92,6 +94,7 @@ export class StepperComponent implements OnInit, AfterViewInit {
 
   previousStep(): void {
     if (this.currentIndex > 0) {
+      this.animationDirection = 'slide-right';
       this.currentIndex--;
       this.initializeStepComponent(this.currentIndex);
       this.onSelectedIndexChanged.emit(this.currentIndex);
@@ -101,6 +104,7 @@ export class StepperComponent implements OnInit, AfterViewInit {
 
   goToStep(index: number): void {
     if (index >= 0 && index < this.steps.length) {
+      this.animationDirection = index > this.currentIndex ? 'slide-left' : 'slide-right';
       this.currentIndex = index;
       this.initializeStepComponent(index);
       this.onSelectedIndexChanged.emit(index);

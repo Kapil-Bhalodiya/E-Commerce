@@ -30,14 +30,9 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private addressService: AddressService,
-    private fb: FormBuilder
-  ) {}
-
   ngOnInit(): void {
+    this.addresses = this.data.addresses;
     this.initializeAccordionOptions();
-    this.loadAddresses();
     this.setupFormValidation();
   }
 
@@ -65,6 +60,14 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
       postalCode: [Validators.required, Validators.pattern('^[0-9]{6}$')],
       isDefault: []
     };
+
+    if (this.addresses.length === 0) {
+      this.formGroup.patchValue({ deliveryOption: 'new' });
+    } else {
+      const defaultAddress = this.addresses.find(a => a.isDefault);
+      this.selectedAddressId = defaultAddress?._id || this.addresses[0]._id;
+      this.formGroup.patchValue({ addressId: this.selectedAddressId });
+    }
 
     this.formGroup.get('deliveryOption')?.valueChanges.pipe(
       takeUntil(this.destroy$)
@@ -97,32 +100,6 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
 
   private addressTypeValidator(control: AbstractControl): { [key: string]: boolean } | null {
     return control.value === '' || control.value === '-1' || !control.value ? { invalidAddressType: true } : null;
-  }
-
-  private loadAddresses(): void {
-    this.isLoading = true;
-    this.errorMessage = null;
-
-    this.addressService.getAddresses().pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (res: Address[]) => {
-        this.addresses = res;
-        this.isLoading = false;
-        if (res.length === 0) {
-          this.formGroup.patchValue({ deliveryOption: 'new' });
-        } else {
-          const defaultAddress = res.find(a => a.isDefault);
-          this.selectedAddressId = defaultAddress?._id || res[0]._id;
-          this.formGroup.patchValue({ addressId: this.selectedAddressId });
-        }
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.errorMessage = 'Failed to load addresses. Please try again.';
-        console.error('Address loading failed:', err);
-      }
-    });
   }
 
   selectAddress(addressId: string): void {

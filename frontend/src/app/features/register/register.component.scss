@@ -28,6 +28,10 @@
 	font-weight: 600
 }
 
+.contact__form--error{
+	color: red;
+}
+
 @media only screen and (max-width:1199px) {
 	.contact__form--title.mb-30 {
 		margin-bottom: 2rem
