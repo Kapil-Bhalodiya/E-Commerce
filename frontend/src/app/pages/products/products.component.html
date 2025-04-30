@@ -37,12 +37,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pagination" *ngIf="totalPages > 1">
-                        <button (click)="page = page - 1; fetchProducts()" [disabled]="page === 1">Previous</button>
-                        <span>Page {{page}} of {{totalPages}}</span>
-                        <button (click)="page = page + 1; fetchProducts()"
-                            [disabled]="page === totalPages">Next</button>
-                    </div>
+                    <app-pagination [currentPage]="page" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+                    </app-pagination>
                 </div>
             </div>
         </div>

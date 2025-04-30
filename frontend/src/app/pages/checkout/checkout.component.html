@@ -2,7 +2,7 @@
     <div class="cart__section--inner">
         <div class="row">
             <div class="col-lg-8">
-                <app-stepper id="formStepper" class="stepper" [steps]="steps" [data]="referenceData"
+                <app-stepper id="formStepper" class="stepper animate-form" [steps]="steps" [data]="referenceData"
                     [formGroup]="formGroup" [formGroupConfigs]="formGroupConfigs"
                     (onTransitionComplete)="onTransitionCompleteHandler($event)"
                     (onSelectedIndexChanged)="onSelectedIndexChangedHandler($event)">
@@ -67,11 +67,13 @@
                     <div class="cart__summary--footer">
                         <p class="cart__summary--footer__desc">Shipping & taxes calculated at checkout</p>
                         <ul class="d-flex justify-content-between">
-                            <button class="cart__summary--footer__btn w-50"
-                                (click)="previousClickHandler()" [disabled]="currentIndex === 0">Back</button>
+                            <button class="cart__summary--footer__btn w-50" (click)="previousClickHandler()"
+                                [disabled]="currentIndex === 0">Back</button>
+
                             <button class="cart__summary--footer__btn primary__btn checkout w-50"
                                 (click)="nextClickHandler()">
-                                {{ currentIndex === steps.length - 1 ? 'Place Order' : 'Next' }}
+                                <app-spinner *ngIf="isLoading">Loading...</app-spinner>
+                                {{  !isLoading ? currentIndex === steps.length - 1 ? 'Place Order' : 'Next' : '' }}
                             </button>
                         </ul>
                     </div>

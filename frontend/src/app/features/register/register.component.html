@@ -11,7 +11,7 @@
                             <input id="firstName" type="text" formControlName="firstName" class="contact__form--input"
                                 placeholder="Your First Name" type="text">
                             <div *ngIf="formGroup.get('firstName')?.invalid && formGroup.get('firstName')?.touched"
-                                class="text-red-600 text-sm">This field is required</div>
+                                class="contact__form--error">This field is required</div>
                         </div>
                         <div class="col-lg-6 col-md-6">
                             <div class="contact__form--list mb-20">
@@ -20,7 +20,7 @@
                                 <input id="lastName" type="text" formControlName="lastName" class="contact__form--input"
                                     placeholder="Your Last Name" type="text">
                                 <div *ngIf="formGroup.get('lastName')?.invalid && formGroup.get('lastName')?.touched"
-                                    class="text-red-600 text-sm">This field is required</div>
+                                    class="contact__form--error">This field is required</div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6">
@@ -29,11 +29,11 @@
                             <input id="email" type="email" formControlName="email" class="contact__form--input"
                                 type="email" placeholder="e.g. johndoe@gmail.com" />
                             <div *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched"
-                                class="text-red-600 text-sm">
+                                class="contact__form--error">
                                 This field is required
                             </div>
                             <div *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched"
-                                class="text-red-600 text-sm">
+                                class="contact__form--error">
                                 Please enter a valid email address
                             </div>
                         </div>
@@ -43,26 +43,26 @@
                             <input id="password" type="password" formControlName="password" class="contact__form--input"
                                 placeholder="*********" />
                             <div *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched"
-                                class="text-red-600 text-sm">
+                                class="contact__form--error">
                                 This field is required
                             </div>
                             <div *ngIf="formGroup.get('password')?.hasError('pattern') && formGroup.get('password')?.touched"
-                                class="text-red-600 text-sm">
+                                class="contact__form--error">
                                 Please enter a valid password
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6">
                             <label for="contactNumber" class="contact__form--label">Contact Number <span class="contact__form--label__star">*</span></label>
                             <div class="flex items-center">
-                                <span class="text-gray-700 text-lg mr-2">+91 </span>
+                                <!-- <span class="text-gray-700 text-lg mr-2">+91 </span> -->
                                 <input id="contact" type="tel" formControlName="contact" class="contact__form--input" placeholder="82 123 1234" />
                             </div>
                             <div *ngIf="formGroup.get('contact')?.hasError('required') && formGroup.get('contact')?.touched"
-                                class="text-red-600 text-sm">
+                                class="contact__form--error">
                                 This field is required
                             </div>
                             <div *ngIf="formGroup.get('contact')?.hasError('pattern') && formGroup.get('contact')?.touched"
-                                class="text-red-600 text-sm">
+                                class="contact__form--error">
                                 Please enter a valid mobile number
                             </div>
                         </div>

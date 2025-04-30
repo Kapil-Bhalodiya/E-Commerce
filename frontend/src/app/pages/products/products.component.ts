@@ -4,22 +4,21 @@ import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from "./component/product-card/product-card.component";
 import { BreadcrumbComponent } from "../../compoments/breadcrumb/breadcrumb.component";
 import { ProductListHeaderComponent } from "./component/product-list-header/product-list-header.component";
-import { ModalComponent } from "../../compoments/modal/modal.component";
 import { CategoriesFilterComponent } from "../../compoments/filter/categories-filter/categories-filter.component";
 import { RangeFilterComponent } from "../../compoments/filter/range-filter/range-filter.component";
-import { ListFilterComponent } from "../../compoments/filter/list-filter/list-filter.component";
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cartItem.model';
+import { PaginationComponent } from "../../compoments/pagination/pagination.component";
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, ProductCardComponent, BreadcrumbComponent, ProductListHeaderComponent, CategoriesFilterComponent, RangeFilterComponent, ListFilterComponent],
+  imports: [CommonModule, ProductCardComponent, BreadcrumbComponent, ProductListHeaderComponent, CategoriesFilterComponent, RangeFilterComponent, PaginationComponent],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })
-export class ProductsComponent implements OnInit{
- 
+export class ProductsComponent implements OnInit {
+
   products: Product[] = [];
   checkboxItems = [
     { label: 'Denim Shirt', checked: false },
@@ -35,7 +34,7 @@ export class ProductsComponent implements OnInit{
   constructor(
     private productService: ProductService,
     private cartService: CartService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -52,7 +51,7 @@ export class ProductsComponent implements OnInit{
     });
   }
 
-  fetchAllProducts(){
+  fetchAllProducts() {
     this.productService.fetchAllProducts().subscribe({
       next: (response) => {
         this.products = response.data;
@@ -89,7 +88,7 @@ export class ProductsComponent implements OnInit{
       quantity: 1,
       image: product.image_urls.find(() => true)
     };
-  
+
     this.cartService.addToCart(cartItem);
     console.log(`${product.name} added to cart`);
   }
@@ -102,6 +101,11 @@ export class ProductsComponent implements OnInit{
   onQuickView() {
     console.log('Quick view opened');
     // Implement modal logic here (e.g., open a dialog)
+  }
+
+  onPageChange(newPage: number) {
+    this.page = newPage;
+    this.fetchProducts(); // call your API
   }
 }
 

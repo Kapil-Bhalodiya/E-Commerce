@@ -1,0 +1,17 @@
+.spinner-border {
+    color: var(--loader-color, var(--secondary-color));
+}
+.spinner-border-sm {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.spinner-border-md {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.spinner-border-lg {
+    width: 5rem;
+    height: 5rem;
+}

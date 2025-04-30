@@ -1,24 +1,26 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment,STRIPE_PK } from '../../../../environments/environment';
 import { loadStripe, Stripe, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
 import { PaymentService } from '../../../services/payment.service';
+import { SpinnerComponent } from "../../../compoments/spinner/spinner.component";
 
 @Component({
   selector: 'app-payment-step',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
   templateUrl: './payment-step.component.html',
   styleUrls: ['./payment-step.component.scss']
 })
 export class PaymentStepComponent implements OnInit {
-  private http = inject(HttpClient);
   private fb = inject(FormBuilder);
   
-  paymentForm!: FormGroup;
-  loading = signal(false);
+  @Input() formGroup!: FormGroup;
+  @Input() globalFormGroup!: FormGroup;
+
+  loading = signal(true);
   paymentError = signal<string | null>(null);
   paymentSuccess = signal(false);
   
@@ -26,25 +28,17 @@ export class PaymentStepComponent implements OnInit {
   elements: StripeElements | null = null;
   paymentElement: any = null;
   clientSecret: string | null = null;
-  // totalAmount: number = 0
 
   constructor(
     private paymentService: PaymentService
   ){}
 
   async ngOnInit() {
-    this.initializeForm();
     await this.loadStripe();
   }
 
-  initializeForm() {
-    this.paymentForm = this.fb.group({
-      name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]]
-    });
-  }
-
   async loadStripe() {
+    this.loading.set(true)
     try {
       this.stripe = await loadStripe(STRIPE_PK);
       
@@ -71,13 +65,17 @@ export class PaymentStepComponent implements OnInit {
       // Now items is an array, so you can safely use map
       const amount = items.map((element: any) => element.price)
                          .reduce((acc: number, val: number) => acc + val, 0);
-
-      // this.totalAmount = amount
+      console.log(amount)
+      
       // Create payment intent on your backend
       const response = await this.paymentService.createPaymentIntent(amount).subscribe({
         next: async (res: any) => {
           console.log("res: ",res)
+          this.loading.set(false);
           this.clientSecret = res;
+          console.log("formGrp :",this.formGroup)
+          this.formGroup.get('stripePaymentIntentId')?.setValue(res);
+          console.log("formGrp :",this.formGroup)
           await this.initializeStripeElements();
         },
         error: (err: any) => console.error("Invalid response from server :",err)
@@ -89,10 +87,10 @@ export class PaymentStepComponent implements OnInit {
       
       // Now initialize Elements with the client secret
     } catch (error) {
+      this.loading.set(false);
       console.error('Error creating payment intent:', error);
       this.paymentError.set('Failed to prepare payment. Please try again later.');
     } finally {
-      this.loading.set(false);
     }
   }
 
@@ -128,12 +126,12 @@ export class PaymentStepComponent implements OnInit {
       this.paymentElement = this.elements.create('payment', {
         defaultValues: {
           billingDetails: {
-            name: this.paymentForm.get('name')?.value || '',
-            email: this.paymentForm.get('email')?.value || ''
+            name: this.formGroup.get('name')?.value || '',
+            email: this.formGroup.get('email')?.value || ''
           }
         }
+        
       });
-      
       this.paymentElement.mount('#payment-element');
     } catch (error) {
       console.error('Error initializing payment element:', error);
@@ -158,7 +156,7 @@ export class PaymentStepComponent implements OnInit {
   // }
 
   async handleSubmit() {
-    if (!this.stripe || !this.elements || !this.paymentForm.valid) {
+    if (!this.stripe || !this.elements || !this.formGroup.valid) {
       return;
     }
     
@@ -167,14 +165,14 @@ export class PaymentStepComponent implements OnInit {
       this.paymentError.set(null);
       
       // Update billing details in the payment element
-      this.paymentElement.update({
-        defaultValues: {
-          billingDetails: {
-            name: this.paymentForm.get('name')?.value,
-            email: this.paymentForm.get('email')?.value
-          }
-        }
-      });
+      // this.paymentElement.update({
+      //   defaultValues: {
+      //     billingDetails: {
+      //       name: this.formGroup.get('name')?.value,
+      //       email: this.formGroup.get('email')?.value
+      //     }
+      //   }
+      // });
       
       // Submit the payment element form
       const { error: submitError } = await this.elements.submit();
@@ -184,7 +182,7 @@ export class PaymentStepComponent implements OnInit {
       }
       
       // Get form values
-      const { name, email } = this.paymentForm.value;
+      const { name, email } = this.formGroup.value;
       
       // Confirm payment with the client secret that's already set
       const { error } = await this.stripe.confirmPayment({

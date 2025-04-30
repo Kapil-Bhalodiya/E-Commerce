@@ -1,16 +1,13 @@
 import { Component, EventEmitter, inject, Input, input, Output, signal } from '@angular/core';
-// import { Product } from '../../../models/product.model';
-// import { PrimaryButtonComponent } from "../../../compoments/primary-button/primary-button.component";
 import { CommonModule } from '@angular/common';
-// import { CartService } from '../../../../services/cart.service';
-import { ModalComponent } from "../../../../compoments/modal/modal.component";
+// import { ModalComponent } from "../../../../compoments/modal/modal.component";
 import { RatingComponent } from "../../../../compoments/rating/rating.component";
 import { Router } from '@angular/router';
 import { Product } from '../../../../models/product.model';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, ModalComponent, RatingComponent],
+  imports: [CommonModule, RatingComponent],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss'
 })

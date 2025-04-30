@@ -44,4 +44,9 @@ export class HeaderTopComponent implements OnInit {
   goToCart() {
     this.router.navigate(['/checkout']);
   }
+
+  goToAccount(){
+    const checkLoggedInUser = localStorage.getItem('token')
+    checkLoggedInUser ? this.router.navigate(['/dashboard']) : this.router.navigate(['/login'])
+  }
 }
