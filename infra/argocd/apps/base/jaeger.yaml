@@ -13,7 +13,7 @@ spec:
     targetRevision: 0.71.3
     helm:
       valueFiles:
-        - ../../environments/production/values-jaeger.yaml
+        - ../../config/environments/production/values-jaeger.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring

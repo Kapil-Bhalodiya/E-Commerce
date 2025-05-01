@@ -13,7 +13,7 @@ spec:
     path: infra/charts/frontend
     helm:
       valueFiles:
-        - ../../environments/production/values-frontend.yaml
+        - ../../config/environments/prod/values-frontend.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
