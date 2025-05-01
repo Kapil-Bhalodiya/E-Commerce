@@ -1,54 +1,14 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: monitoring
-#   namespace: argocd
-#   finalizers:
-#     - resources-finalizer.argocd.argoproj.io
-# spec:
-#   project: default
-#   source:
-#     repoURL: https://prometheus-community.github.io/helm-charts
-#     chart: kube-prometheus-stack
-#     targetRevision: 48.1.1  
-#     helm:
-#       valueFiles:
-#         - ../../environments/production/values-monitoring.yaml
-#   destination:
-#     server: https://kubernetes.default.svc
-#     namespace: monitoring
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: true
-#     syncOptions:
-#       - CreateNamespace=true
-
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: prometheus-stack
+  name: monitoring-rules
   namespace: argocd
 spec:
   project: default
   source:
-    chart: kube-prometheus-stack
-    repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: 51.4.0
-    helm:
-      values: |
-        grafana:
-          enabled: true
-          adminPassword: admin  # Change this in production
-          service:
-            type: ClusterIP
-          ingress:
-            enabled: false  # We'll use our centralized ingress
-        prometheus:
-          prometheusSpec:
-            serviceMonitorSelectorNilUsesHelmValues: false
-            podMonitorSelectorNilUsesHelmValues: false
+    repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+    targetRevision: main
+    path: charts/monitoring
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
@@ -57,58 +17,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: loki-stack
-  namespace: argocd
-spec:
-  project: default
-  source:
-    chart: loki-stack
-    repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 2.9.10
-    helm:
-      values: |
-        loki:
-          persistence:
-            enabled: true
-            size: 10Gi
-        promtail:
-          enabled: true
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: monitoring
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: jaeger
-  namespace: argocd
-spec:
-  project: default
-  source:
-    chart: jaeger
-    repoURL: https://jaegertracing.github.io/helm-charts
-    targetRevision: 0.71.9
-    helm:
-      values: |
-        provisionDataStore:
-          cassandra: false
-        storage:
-          type: memory  # Change for production to elasticsearch
-        agent:
-          enabled: true
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: monitoring
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+      - CreateNamespace=true
