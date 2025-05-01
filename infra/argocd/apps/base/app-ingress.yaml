@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/yourusername/e-commerce-platform.git
+    repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
     targetRevision: main
     path: charts/ingress
     helm:
