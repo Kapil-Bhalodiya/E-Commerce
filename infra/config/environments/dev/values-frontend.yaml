@@ -1,0 +1,20 @@
+# replicaCount: 3
+# image:
+#   tag: "1.0.0"
+# metrics:
+#   enabled: true
+# tracing:
+#   enabled: true
+# slo:
+#   enabled: false
+
+replicaCount: 1
+resources:
+  limits:
+    cpu: "200m"
+    memory: "256Mi"
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+serviceMonitor:
+  enabled: false
