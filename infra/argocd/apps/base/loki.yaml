@@ -1,0 +1,45 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: logging
+# spec:
+#   source:
+#     repoURL: https://grafana.github.io/helm-charts
+#     chart: loki-stack
+#     targetRevision: 2.9.10
+#     helm:
+#       valueFiles:
+#         - values.yaml
+#     path: logging/loki
+#   destination:
+#     namespace: logging
+#     server: https://kubernetes.default.svc
+#   syncPolicy:
+#     automated: {}
+
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: loki-stack
+    targetRevision: 2.8.9
+    helm:
+      valueFiles:
+        - ../../environments/production/values-loki.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: logging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
