@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
     targetRevision: main
-    path: charts/monitoring
+    path: infra/charts/monitoring
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
