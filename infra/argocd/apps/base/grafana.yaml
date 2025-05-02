@@ -8,12 +8,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://grafana.github.io/helm-charts
-    chart: grafana
-    targetRevision: 6.58.7
-    helm:
-      valueFiles:
-        - ../../../config/environments/prod/values-grafana.yaml
+    - repoURL: https://grafana.github.io/helm-charts
+      targetRevision: 6.58.7
+      chart: grafana
+      helm:
+        valueFiles:
+          - $values/config/environments/prod/values-grafana.yaml
+    - repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+      targetRevision: main
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring

@@ -11,7 +11,7 @@ spec:
     path: infra/charts/ingress
     helm:
       valueFiles:
-        - ../../../config/environments/prod/values-ingress.yaml
+        - ../../config/environments/prod/values-ingress.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: dev

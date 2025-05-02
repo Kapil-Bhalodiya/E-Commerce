@@ -6,9 +6,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-    targetRevision: main
-    path: infra/charts/monitoring
+    - repoURL: https://grafana.github.io/helm-charts
+      targetRevision: 2.8.9
+      chart: loki
+      helm:
+        valueFiles:
+          - $values/config/environments/prod/values-loki.yaml
+    - repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+      targetRevision: main
+      ref: values
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
