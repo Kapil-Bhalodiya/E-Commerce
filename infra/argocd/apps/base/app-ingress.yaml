@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
     targetRevision: main
-    path: charts/ingress
+    path: infra/charts/ingress
     helm:
       valueFiles:
         - ../../config/environments/prod/values-ingress.yaml
