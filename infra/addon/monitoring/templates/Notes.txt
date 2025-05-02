@@ -1,3 +1,0 @@
-prometheus-rules.yaml: Defines alerts for high error rates and latency for both frontend and backend.
-slo-rules.yaml: Placeholder for SLOs, tracking availability over 28 days (disabled by default).
-Labels: Uses app="frontend" and app="backend" to differentiate metrics.
