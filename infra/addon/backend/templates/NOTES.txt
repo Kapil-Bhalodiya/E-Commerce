@@ -1,4 +1,0 @@
-Frontend: Uses Nginx to serve the Angular app, with a /metrics endpoint for Prometheus (via Nginx’s stub_status).
-Backend: Runs a Node.js app, exposing a /metrics endpoint (requires prom-client integration in the code).
-Tracing: Both include Jaeger tracing configuration for distributed request tracking.
-SLO Placeholder: Includes disabled SLO configurations for future use
