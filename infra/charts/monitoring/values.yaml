@@ -1,0 +1,5 @@
+rules:
+  enabled: true
+
+slo:
+  enabled: false
