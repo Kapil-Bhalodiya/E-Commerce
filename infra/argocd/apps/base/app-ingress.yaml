@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-    targetRevision: main
+    targetRevision: HEAD
     path: infra/charts/ingress
     helm:
       valueFiles:
