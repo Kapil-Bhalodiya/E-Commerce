@@ -13,7 +13,7 @@ spec:
     targetRevision: 6.58.7
     helm:
       valueFiles:
-        - ../../config/environments/production/values-grafana.yaml
+        - ../../config/environments/prod/values-grafana.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
