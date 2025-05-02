@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-addons
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - matrix:
+              generators:
+                - git:
+                    pathParamPrefix: target
+                    repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+                    revision: main
+                    files:
+                      - path: config/*/*/values.yaml
+                - git:
+                    pathParamPrefix: release
+                    repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+                    revision: main
+                    files:
+                      - path: config/{{target.path[1]}}/values.yaml
+          - git:
+              pathParamPrefix: addon
+              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+              revision: main
+              files:
+                - path: config/{{target.path[1]}}/{{target.path.basename}}/**/values.yaml
+  template:
+    metadata:
+      name: '{{addon.path.basename}}-{{target.path[1]}}'
+    spec:
+      project: '{{target.project}}'
+      source:
+        repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+        targetRevision: '{{release.tag}}'
+        path: 'addons/{{addon.path.basename}}'
+        helm:
+          valueFiles:
+            - values.yaml
+            - '../../config/{{target.path[1]}}/values.yaml'
+            - '../../config/{{target.path[1]}}/{{target.path.basename}}/values.yaml'
+            - '../../config/{{target.path[1]}}/{{target.path.basename}}/{{addon.path.basename}}/values.yaml'
+          values: |-
+            global:
+              environment: {{target.path[1]}}
+              namespace: {{target.path.basename}}
+              nameOverride: {{addon.path.basename}}
+      destination:
+        server: '{{target.address}}'
+        namespace: '{{target.path.basename}}'
+      syncPolicy:
+        automated:
+          prune: false
+        syncOptions:
+          - CreateNamespace=true
