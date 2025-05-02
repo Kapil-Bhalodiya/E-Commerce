@@ -1,0 +1,4 @@
+apiVersion: v2
+name: monitoring
+description: Helm chart for custom monitoring and SLO rules
+version: 0.1.0
