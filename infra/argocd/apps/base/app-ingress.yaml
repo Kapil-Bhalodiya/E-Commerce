@@ -8,13 +8,13 @@ spec:
   source:
     repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
     targetRevision: main
-    path: infra/charts/ingress
+    path: charts/ingress
     helm:
       valueFiles:
         - ../../config/environments/prod/values-ingress.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: ingress-nginx
+    namespace: dev
   syncPolicy:
     automated:
       prune: true
