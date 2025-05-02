@@ -1,3 +1,10 @@
-release:
-  revision: develop
-  tag: HEAD
+# release:
+#   revision: main
+#   tag: HEAD
+# project: default
+# address: https://kubernetes.default.svc
+
+target:
+  address: https://kubernetes.default.svc
+  namespace: dev
+  project: default
