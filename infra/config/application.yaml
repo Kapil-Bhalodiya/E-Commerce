@@ -26,7 +26,7 @@ spec:
       project: '{{target.project}}'
       source:
         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-        targetRevision: HEAD
+        targetRevision: main
         path: 'addons/{{app.path.basename}}'
         helm:
           valueFiles:
