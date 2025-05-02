@@ -1,0 +1,23 @@
+ingress:
+  host: www.sharkapp.local
+  paths:
+    grafana:
+      enabled: true
+      path: /grafana
+      serviceName: grafana
+      servicePort: 8080
+    loki:
+      enabled: true
+      path: /loki
+      serviceName: loki
+      servicePort: 3101
+    frontend:
+      enabled: true
+      path: /
+      serviceName: frontend
+      servicePort: 80
+    backend:
+      enabled: true
+      path: /api
+      serviceName: backend
+      servicePort: 3000
