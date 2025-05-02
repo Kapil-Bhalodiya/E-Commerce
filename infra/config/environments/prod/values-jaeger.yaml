@@ -5,11 +5,17 @@
 #     type: memory
 
 
-replicaCount: 2
-resources:
-  limits:
-    cpu: "500m"
-    memory: "512Mi"
-  requests:
-    cpu: "100m"
-    memory: "128Mi"
+jaeger:
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  agent:
+    enabled: true
+  collector:
+    enabled: true
+  query:
+    enabled: true
