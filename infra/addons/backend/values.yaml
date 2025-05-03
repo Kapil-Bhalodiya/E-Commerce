@@ -7,18 +7,18 @@ service:
   type: ClusterIP
   port: 8000
 
-# metrics:
-#   enabled: true
-#   path: /metrics
-#   port: 3000
+metrics:
+  enabled: true
+  path: /metrics
+  port: 3000
 
-# tracing:
-#   enabled: true
-#   jaegerAgentHost: jaeger-agent
-#   jaegerAgentPort: 6831
+tracing:
+  enabled: true
+  jaegerAgentHost: jaeger-agent
+  jaegerAgentPort: 6831
 
-# slo:
-#   enabled: false
-#   objectives:
-#     availability: 99.9
-#     latency: 0.5
+slo:
+  enabled: false
+  objectives:
+    availability: 99.9
+    latency: 0.5
