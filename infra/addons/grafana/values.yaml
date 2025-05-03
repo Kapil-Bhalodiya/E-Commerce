@@ -1,18 +1,18 @@
-grafana:
-  resources:
-    requests:
-      cpu: 200m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
-  service:
-    portName: grafana-custom
-    port: 8080
-    targetPort: 3000
+# grafana:
+#   resources:
+#     requests:
+#       cpu: 200m
+#       memory: 256Mi
+#     limits:
+#       cpu: 500m
+#       memory: 512Mi
+#   service:
+#     portName: grafana-custom
+#     port: 8080
+#     targetPort: 3000
 
-global:
-  environment: prod
-  namespace: monitoring
-  nameOverride: grafana
-  domain: example.com
+# global:
+#   environment: prod
+#   namespace: monitoring
+#   nameOverride: grafana
+#   domain: example.com
