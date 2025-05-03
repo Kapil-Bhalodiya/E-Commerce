@@ -6,5 +6,3 @@ resources:
   limits:
     cpu: 300m
     memory: 256Mi
-service:
-  port: 3000
