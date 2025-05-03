@@ -55,41 +55,83 @@ metadata:
 spec:
   generators:
     - matrix:
-      generators:
-        - git:
-            pathParamPrefix: target
-            repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-            revision: main
-            files:
-              - path: config/**/values.yaml
-        - git:
-            pathParamPrefix: app
-            repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-            revision: main
-            files:
-              - path: config/{{target.path.basename}}/**/values.yaml
+        generators:
+          - git:
+              pathParamPrefix: target
+              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+              revision: main
+              files:
+                - path: infra/config/*/values.yaml  # Matches infra/config/dev/values.yaml
+          - git:
+              pathParamPrefix: app
+              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+              revision: main
+              directories:  # Use directories instead of files to match subdirectories
+                - path: infra/config/{{target.path.basename}}/app/*
+                - path: infra/config/{{target.path.basename}}/monitoring/*
   template:
     metadata:
-      name: '{{app.path.basename}}-{{target.namespace}}'
+      name: '{{app.path.basename}}-{{target.path.basename}}'  # e.g., backend-dev, loki-dev
     spec:
-      project: '{{target.project}}'
+      project: default
       source:
         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
         targetRevision: main
-        path: 'addons/{{app.path.basename}}'
+        path: 'infra/addons/{{app.path.basename}}'
         helm:
           valueFiles:
-            - values.yaml
-            - '../../config/{{target.path.basename}}/values.yaml'
-            - '../../config/{{target.path.basename}}/{{app.path.basename}}/values.yaml'
+            - values.yaml  # infra/addons/<app>/values.yaml
+            - '../../config/{{target.path.basename}}/values.yaml'  # infra/config/dev/values.yaml
+            - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'  # infra/config/dev/app/backend/values.yaml or infra/config/dev/monitoring/loki/values.yaml
           values: |-
             app:
               environment: {{target.path.basename}}
               nameOverride: {{app.path.basename}}
       destination:
-        server: '{{target.address}}'
-        namespace: '{{target.namespace}}'
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{target.path.basename}}'
       syncPolicy:
         automated:
-          prune: true
-          selfHeal: true
+          prune: false
+          selfHeal: false
+        syncOptions:
+          - CreateNamespace=true
+
+
+  #         - git:
+  #             pathParamPrefix: target
+  #             repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+  #             revision: main
+  #             directories:
+  #               - path: infra/config/*/app
+  #         - git:
+  #             pathParamPrefix: app
+  #             repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+  #             revision: main
+  #             files:
+  #               - path: infra/config/{{target.path.dirname}}/app/**/values.yaml
+  # template:
+  #   metadata:
+  #     name: '{{app.path.basename}}-{{target.path.dirname}}'
+  #   spec:
+  #     project: '{{target.project}}'
+  #     source:
+  #       repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+  #       targetRevision: main
+  #       path: 'addons/{{app.path.basename}}'
+  #       helm:
+  #         valueFiles:
+  #           - values.yaml
+  #           - '../../config/{{target.path.basename}}/values.yaml'
+  #           - '../../config/{{target.path.basename}}/{{app.path.basename}}/values.yaml'
+  #         values: |-
+  #           app:
+  #             environment: {{target.path.dirname}}
+  #             nameOverride: {{app.path.basename}}
+  #     destination:
+  #       server: '{{target.address}}'
+  #       namespace: '{{target.path.dirname}}'
+  #     syncPolicy:
+  #       automated:
+  #         prune: true
+  #         selfHeal: true
