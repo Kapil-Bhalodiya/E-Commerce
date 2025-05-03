@@ -9,13 +9,13 @@ tls:
 
 # Services mapping
 services:
-  - name: frontend-{{ $.Values.app.environment }}
-    serviceName: frontend-{{ $.Values.app.environment }}
+  - name: frontend
+    serviceName: frontend
     servicePort: 80
     path: /
     pathType: Prefix
-  - name: backend-{{ $.Values.app.environment }}
-    serviceName: backend-{{ $.Values.app.environment }}
+  - name: backend
+    serviceName: backend
     servicePort: 8000
     path: /api
     pathType: Prefix
