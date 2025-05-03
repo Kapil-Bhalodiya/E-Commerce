@@ -11,3 +11,7 @@ ingress-nginx:
       limits:
         cpu: 300m
         memory: 256Mi
+
+ingress-nginx:
+  controller:
+    enabled: false

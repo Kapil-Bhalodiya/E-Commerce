@@ -1,0 +1,4 @@
+clusterIssuer: letsencrypt-dev
+tls:
+  enabled: true
+  secretName: sharkapp-tls-cert-dev
