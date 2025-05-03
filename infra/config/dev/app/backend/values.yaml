@@ -1,4 +1,7 @@
 replicaCount: 1
+
+namespace: dev
+
 resources:
   requests:
     cpu: 100m
