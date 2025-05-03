@@ -1,34 +1,82 @@
-# TODO add sync ignore on deployment replicas when HPA enabled (if not done by Argo by default)
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: ecommerce-application
+#   namespace: argocd
+# spec:
+#   generators:
+#     - matrix:
+#         generators:
+#           - git:
+#               pathParamPrefix: target
+#               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+#               revision: main
+#               files:
+#                 - path: infra/config/*/app
+#           - git:
+#               pathParamPrefix: app
+#               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+#               revision: main
+#               files:
+#                 - path: infra/config/{{target.path.basename}}/**/values.yaml
+#   template:
+#     metadata:
+#       name: '{{app.path.basename}}-{{target.namespace}}'
+#     spec:
+#       project: '{{target.project}}'
+#       source:
+#         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+#         targetRevision: main
+#         path: 'infra/addons/{{app.path.basename}}'
+#         helm:
+#           valueFiles:
+#             - values.yaml
+#             - '../../config/{{target.path.basename}}/values.yaml'
+#             - '../../config/{{target.path.basename}}/{{app.path.basename}}/values.yaml'
+#           values: |-
+#             app:
+#               environment: {{target.path.basename}}
+#               nameOverride: {{app.path.basename}}
+#       destination:
+#         server: '{{target.address}}'
+#         namespace: '{{target.namespace}}'
+#       syncPolicy:
+#         automated:
+#           prune: false
+#           selfHeal: false
+#         syncOptions:
+#           - CreateNamespace=true
+
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: ecommerce-app-v2
+  name: ecommerce-applications
   namespace: argocd
 spec:
   generators:
     - matrix:
-       generators:
-         - git:
+      generators:
+        - git:
             pathParamPrefix: target
             repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
             revision: main
             files:
-              - path: infra/config/**/values.yaml
-         - git:
+              - path: config/**/values.yaml
+        - git:
             pathParamPrefix: app
             repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
             revision: main
             files:
-              - path: infra/config/{{target.path.basename}}/**/values.yaml
+              - path: config/{{target.path.basename}}/**/values.yaml
   template:
     metadata:
-      name: '{{app.path.basename}}-{{target.path.basename}}'
+      name: '{{app.path.basename}}-{{target.namespace}}'
     spec:
-      project: default
+      project: '{{target.project}}'
       source:
         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
         targetRevision: main
-        path: 'infra/addons/{{app.path.basename}}'
+        path: 'addons/{{app.path.basename}}'
         helm:
           valueFiles:
             - values.yaml
@@ -39,11 +87,9 @@ spec:
               environment: {{target.path.basename}}
               nameOverride: {{app.path.basename}}
       destination:
-        server: https://kubernetes.default.svc
-        namespace: '{{target.path.basename}}'
+        server: '{{target.address}}'
+        namespace: '{{target.namespace}}'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
