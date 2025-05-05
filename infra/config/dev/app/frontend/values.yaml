@@ -1,6 +1,9 @@
 replicaCount: 1
 
-namespace: prod
+namespace: dev
+
+image:
+  pullPolicy: Always
 
 resources:
   requests:
