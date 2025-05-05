@@ -1,0 +1,15 @@
+replicaCount: 1
+image:
+  repository: mongo
+  tag: "6.0"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 27017
+persistence:
+  enabled: true
+  storageClass: "standard"
+  size: 10Gi
+mongodb:
+  username: "kapil001"
+  database: "e-commerce"
