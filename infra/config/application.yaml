@@ -82,7 +82,7 @@ spec:
           valueFiles:
             - values.yaml  # infra/addons/<app>/values.yaml
             - '../../config/{{target.path.basename}}/values.yaml'  # infra/config/dev/values.yaml
-            - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'  # infra/config/dev/app/backend/values.yaml or infra/config/dev/monitoring/loki/values.yaml
+            - '../../config/{{target.path.basename}}/app/{{app.path.basename}}/values.yaml'  # infra/config/dev/app/backend/values.yaml or infra/config/dev/monitoring/loki/values.yaml
           values: |-
             app:
               environment: {{target.path.basename}}
