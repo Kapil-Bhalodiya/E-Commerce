@@ -3,6 +3,9 @@ image:
   tag: "latest"
   pullPolicy: IfNotPresent
 
+env:
+  MONGODB_URI: ""  # We'll set this dynamically in the deployment
+
 service:
   type: ClusterIP
   port: 8000
