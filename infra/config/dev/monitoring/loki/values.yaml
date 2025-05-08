@@ -1,8 +1,8 @@
 loki:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 300m
-      memory: 256Mi
+  singleBinary:
+    replicas: 1
+    persistence:
+      size: 5Gi  # Smaller size for dev
+promtail:
+  config:
+    logLevel: debug
