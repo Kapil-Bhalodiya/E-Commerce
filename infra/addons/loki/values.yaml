@@ -6,12 +6,15 @@ loki:
       enabled: true
       size: 10Gi
       storageClassName: standard
-  # Define the storage backend type explicitly
+  # Explicitly define storage backend and bucketNames to avoid nil pointer
   storage:
     type: filesystem
-    # Provide empty bucketNames to avoid nil pointer errors
-    bucketNames: {}
-  config:
+    bucketNames:
+      chunks: ""
+      ruler: ""
+      admin: ""
+  # Provide config as a raw YAML string to avoid coalesce warning
+  config: |
     auth_enabled: false
     schema_config:
       configs:
