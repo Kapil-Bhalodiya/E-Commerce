@@ -3,6 +3,11 @@ loki:
     replicas: 1
     persistence:
       size: 5Gi  # Smaller size for dev
+  storage:
+    bucketNames:
+      chunks: ""
+      ruler: ""
+      admin: ""
 promtail:
   config:
-    logLevel: debug
+    logLevel: debug  # More verbose logging for dev
