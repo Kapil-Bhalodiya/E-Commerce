@@ -1,11 +1,42 @@
 loki:
-  resources:
-    requests:
-      cpu: 200m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
-  service:
-    port: 3101
-    targetPort: 3100
+  enabled: true
+  singleBinary:
+    replicas: 1  # Run Loki as a single pod for simplicity in dev
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: standard
+  config:
+    auth_enabled: false  # Disable auth for simplicity
+    schema_config:
+      configs:
+      - from: 2020-10-01
+        store: boltdb-shipper
+        object_store: filesystem
+        schema: v11
+        index:
+          prefix: index_
+          period: 24h
+    storage_config:
+      boltdb_shipper:
+        active_index_directory: /var/loki/boltdb-shipper-active
+        cache_location: /var/loki/boltdb-shipper-cache
+        shared_store: filesystem
+      filesystem:
+        directory: /var/loki/chunks
+
+promtail:
+  enabled: true
+  config:
+    logLevel: info
+    clients:
+      - url: http://loki.dev.svc.cluster.local:3100/loki/api/v1/push
+  pipelineStages:
+    - docker: {}
+  extraRelabelConfigs:
+    - source_labels: [__meta_kubernetes_pod_label_app]
+      target_label: app
+    - source_labels: [__meta_kubernetes_pod_namespace]
+      target_label: namespace
+    - source_labels: [__meta_kubernetes_pod_name]
+      target_label: pod
