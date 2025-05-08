@@ -8,3 +8,9 @@ target:
   address: https://kubernetes.default.svc
   namespace: dev
   project: default
+loki:
+  storage:
+    bucketNames:
+      chunks: ""
+      ruler: ""
+      admin: ""
