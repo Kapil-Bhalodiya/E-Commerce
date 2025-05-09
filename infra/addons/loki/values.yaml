@@ -6,24 +6,7 @@ loki:
       size: 10Gi
       storageClassName: standard
   test:
-    enabled: false  
-  deploymentMode: SimpleScalable
-
-  minio:
     enabled: false
-  lokiCanary:
-    enabled: false
-  ruler:
-    enabled: false
-  memcachedExporter:
-    # -- Whether memcached metrics should be exported
-    enabled: false
-  chunksCache:
-    enabled: false
-  resultsCache:
-    enabled: false
-    
-  # Zero out replica counts of other deployment modes
   singleBinary:
     replicas: 0
   backend:
@@ -78,12 +61,17 @@ loki:
       storage_config:
         boltdb_shipper:
           active_index_directory: /var/loki/data/boltdb-index
-          cache_location: /var/loki/data/boltdb-cache
         tsdb_shipper:
           active_index_directory: /var/loki/data/tsdb-index
-          cache_location: /var/loki/data/tsdb-cache
         filesystem:
           directory: /var/loki/chunks
+      compactor:
+        enabled: false
+      ruler:
+        storage:
+          type: local
+          local:
+            directory: /var/loki/rules
 promtail:
   enabled: true
   config:
