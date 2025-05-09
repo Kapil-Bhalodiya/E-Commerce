@@ -48,3 +48,7 @@ kubectl apply -f infrastructure/ingress/ingress-resource.yaml
 echo "Bootstrap complete!"
 echo "Access ArgoCD UI with: kubectl port-forward svc/argocd-server -n argocd 8080:443"
 echo "Initial password: $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)"
+
+
+kubectl port-forward svc/argocd-server -n argocd 8081:443 - admin - jeBaZAoI6mx5xCzu
+kubectl port-forward svc/nginx-ingress-ingress-nginx-controller -n ingress-nginx 8000:80

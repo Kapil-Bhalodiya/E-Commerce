@@ -1,0 +1,32 @@
+.rating__list {
+	margin-right: .5rem
+}
+
+@media only screen and (min-width:768px) {
+	.rating__list {
+		margin-right: .8rem
+	}
+}
+
+.rating__list:last-child {
+	margin-right: 0
+}
+
+.rating__list--icon {
+	color: var(--yellow-color)
+}
+
+.product__items--rating__count--number {
+	font-size: 1.4rem;
+	color: var(--text-gray-color);
+	padding-left: 7px;
+	line-height: 20px
+}
+
+@media only screen and (min-width:992px) {
+	.product__details--info__desc {
+		font-size: 1.6rem;
+		line-height: 2.8rem
+	}
+}
+

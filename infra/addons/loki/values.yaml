@@ -1,36 +1,59 @@
-loki:
-  enabled: true
+loki:  
+  # Zero out replica counts of other deployment modes
   singleBinary:
-    replicas: 1
-    persistence:
-      enabled: true
-      size: 10Gi
-      storageClassName: standard
-  storage:
-    type: filesystem
-  chunksCache:
-    enabled: false
-  resultsCache:
-    enabled: false
-  config: |
+    replicas: 0
+  test:
+    enabled: false  
+  loki:
+    memcached:
+      chunk_cache:
+        enabled: false
+      results_cache:
+        enabled: false  
     auth_enabled: false
-    schema_config:
-      configs:
-      - from: 2020-10-01
-        store: boltdb-shipper
-        object_store: filesystem
-        schema: v11
-        index:
-          prefix: index_
-          period: 24h
-    storage_config:
-      boltdb_shipper:
-        active_index_directory: /var/loki/boltdb-shipper-active
-        cache_location: /var/loki/boltdb-shipper-cache
-        shared_store: filesystem
-      filesystem:
-        directory: /var/loki/chunks
-
+    enabled: true
+    isDefault: true
+    resources:
+      limits:
+        memory: "500Mi"
+      requests:
+        cpu: "50m"
+        memory: "256Mi"
+    structuredConfig:
+      limits_config:
+        allow_structured_metadata: false
+      ingester:
+        chunk_idle_period: 30m
+        chunk_block_size: 1000000
+        chunk_retain_period: 5m
+        chunk_encoding: snappy
+      schema_config:
+        configs:
+          - from: 2020-07-01
+            store: boltdb-shipper
+            object_store: filesystem  # Changed from s3 to filesystem
+            schema: v11
+            index:
+              prefix: index_
+              period: 24h
+          - from: 2024-08-22
+            object_store: filesystem  # Changed from s3 to filesystem
+            schema: v13
+            store: tsdb
+            index:
+              period: 24h
+              prefix: index_
+      storage_config:
+        boltdb_shipper:
+          active_index_directory: /var/loki/data/boltdb-index
+          cache_location: /var/loki/data/boltdb-cache
+          shared_store: filesystem
+        tsdb_shipper:
+          active_index_directory: /var/loki/data/tsdb-index
+          cache_location: /var/loki/data/tsdb-cache
+          shared_store: filesystem
+        filesystem:
+          directory: /var/loki/chunks
 promtail:
   enabled: true
   config:

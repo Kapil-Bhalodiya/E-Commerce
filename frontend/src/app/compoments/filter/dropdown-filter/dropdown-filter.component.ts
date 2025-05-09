@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 export class DropdownFilterComponent {
   @Input() items: any[] = [];
   size: string = 'medium';
-  selectedOption: string = '1';
+  selectedOption: string = this.items[0];
 
   setSize(size: string): void {
     this.size = size;

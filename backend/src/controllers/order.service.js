@@ -5,7 +5,7 @@ const Address = require('../models/addresses.model');
 const Payment = require('../models/payments.model');
 const couponService = require('./coupon.service');
 const logger = require('../utils/logger');
-const { AppError } = require('../utils/errorHandler');
+const { ApiError } = require('../utils/ApiError');
 
 class OrderService {
   async createOrder(userId, orderData) {
@@ -15,13 +15,13 @@ class OrderService {
     try {
       // Validate inputs
       if (!orderData.items || !orderData.shippingAddressId || !orderData.paymentMethod) {
-        throw new AppError('Missing required fields', 400);
+        throw new ApiError('Missing required fields', 400);
       }
 
       // Verify address
       const address = await Address.findOne({ _id: orderData.shippingAddressId, userId }).session(session);
       if (!address) {
-        throw new AppError('Invalid shipping address', 404);
+        throw new ApiError('Invalid shipping address', 404);
       }
 
       // Create order items
@@ -32,7 +32,7 @@ class OrderService {
         // Fetch product details (assuming Product model exists)
         const product = await mongoose.model('Product').findById(item.productId).session(session);
         if (!product || product.stock < item.quantity) {
-          throw new AppError(`Product ${item.productId} is unavailable or out of stock`, 400);
+          throw new ApiError(`Product ${item.productId} is unavailable or out of stock`, 400);
         }
 
         const orderItem = new OrderItem({
@@ -113,7 +113,7 @@ class OrderService {
   async updateOrderStatus(orderId, status, note) {
     const order = await Order.findById(orderId);
     if (!order) {
-      throw new AppError('Order not found', 404);
+      throw new ApiError('Order not found', 404);
     }
 
     order.status = status;

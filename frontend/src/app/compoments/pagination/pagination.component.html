@@ -1,0 +1,40 @@
+<!-- <div class="pagination" *ngIf="totalPages > 1">
+    <button (click)="previous()" [disabled]="page === 1">Previous</button>
+    <span>Page {{page}} of {{totalPages}}</span>
+    <button (click)="next()" [disabled]="page === totalPages">Next</button>
+</div> -->
+
+<div class="pagination__area bg__gray--color" *ngIf="totalPages > 1">
+    <nav class="pagination justify-content-center">
+      <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
+  
+        <!-- Previous Arrow -->
+        <li class="pagination__list">
+          <button (click)="previousPage()" class="pagination__item--arrow border-0" [disabled]="currentPage === 1">
+            <i class="bi bi-arrow-left"></i>
+            <span class="visually-hidden">pagination arrow</span>
+          </button>
+        </li>
+  
+        <!-- Page Numbers -->
+        <li class="pagination__list" *ngFor="let page of pages">
+          <button
+            class="pagination__item link"
+            [ngClass]="{'pagination__item--current': currentPage === page}"
+            (click)="changePage(page)">
+            {{ page }}
+          </button>
+        </li>
+  
+        <!-- Next Arrow -->
+        <li class="pagination__list">
+          <button (click)="nextPage()" class="pagination__item--arrow border-0" [disabled]="currentPage === totalPages">
+            <i class="bi bi-arrow-right"></i>
+            <span class="visually-hidden">pagination arrow</span>
+          </button>
+        </li>
+  
+      </ul>
+    </nav>
+  </div>
+  

@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 
 export class CarouselsComponent {
-  @Input() images: [] = [];
+  @Input() images: any;
   @ViewChild('owlCarousel', { static: false }) owlCarousel?: CarouselComponent;
 
   productImages = [
@@ -51,7 +51,7 @@ export class CarouselsComponent {
 
   ngOnChanges() {
     if (this.images?.length) {
-      this.selectedImage = this.productImages[0].id;
+      this.selectedImage = this.images[0];
     }
   }
 

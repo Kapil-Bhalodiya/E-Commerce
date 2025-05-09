@@ -27,7 +27,7 @@
     transition: background-color 0.3s;
 
     &:hover {
-      background-color: darken(#ff3366, 10%);
+      background-color: var(--light-color);
     }
 
     i {
