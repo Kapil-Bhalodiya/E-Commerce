@@ -24,28 +24,12 @@ loki:
         requests:
           cpu: "100m"
           memory: "512Mi"
-      backend:
-      replicas: 1
-      resources:
-        limits:
-          memory: "1Gi"
-        requests:
-          cpu: "100m"
-          memory: "512Mi"
       podTemplate:
         spec:
-          initContainers:
-            - name: fix-permissions
-              image: busybox
-              command: ["sh", "-c", "mkdir -p /var/loki/chunks /var/loki/data/boltdb-index /var/loki/data/boltdb-cache /var/loki/data/tsdb-index /var/loki/data/tsdb-cache && chown -R 10001:10001 /var/loki"]
-              securityContext:
-                runAsUser: 10001
-                runAsGroup: 10001
-              volumeMounts:
-                - name: data
-                  mountPath: /var/loki
+          securityContext:
+            fsGroup: 10001
   loki:
-    fullnameOverride: loki-dev
+    fullnameOverride: l
     storage:
       bucketNames:
         chunks: ''
