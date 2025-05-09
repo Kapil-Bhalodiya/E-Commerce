@@ -65,10 +65,11 @@ loki:
           active_index_directory: /var/loki/data/tsdb-index
         filesystem:
           directory: /var/loki/chunks
-      compactor:
-        enabled: false
       ruler:
-        enabled: false
+        storage:
+          type: local
+          local:
+            directory: /var/loki/rules
 promtail:
   enabled: true
   config:
