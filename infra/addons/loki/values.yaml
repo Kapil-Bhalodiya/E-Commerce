@@ -75,7 +75,7 @@ promtail:
   config:
     logLevel: info
     clients:
-      - url: http://loki.dev.svc.cluster.local:3100/loki/api/v1/push
+      - url: http://loki-dev-gateway.dev.svc.cluster.local:80/loki/api/v1/push
   pipelineStages:
     - docker: {}
   extraRelabelConfigs:
@@ -85,3 +85,23 @@ promtail:
       target_label: namespace
     - source_labels: [__meta_kubernetes_pod_name]
       target_label: pod
+  extraObjects:
+    - apiVersion: apps/v1
+      kind: DaemonSet
+      metadata:
+        name: loki-dev-promtail
+        namespace: dev
+      spec:
+        template:
+          spec:
+            containers:
+              - name: promtail
+                readinessProbe:
+                  httpGet:
+                    path: /ready
+                    port: http-metrics
+                  initialDelaySeconds: 30
+                  timeoutSeconds: 5
+                  periodSeconds: 10
+                  successThreshold: 1
+                  failureThreshold: 5
