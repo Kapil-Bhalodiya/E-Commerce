@@ -1,11 +1,11 @@
 loki:
   SimpleScalable:
-    replicas: 1
+    replicas: 0  # Disable SimpleScalable mode
+  singleBinary:
+    replicas: 1  # Enable singleBinary mode
   loki:
     fullnameOverride: loki-dev
     storage:
-      # Define bucketNames with empty values to avoid nil pointer errors in the loki chart
-      # Not used with filesystem storage, but required by the chart's template logic
       bucketNames:
         chunks: ''
         ruler: ''
