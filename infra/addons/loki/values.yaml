@@ -1,11 +1,17 @@
 loki:  
   singleBinary:
     replicas: 0
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: standard
   test:
     enabled: false  
   loki:
     enterprise:
-      enabled: false  # Explicitly disable enterprise features to avoid template errors
+      enabled: false
+    canary:
+      enabled: false  # Disable canary pod
     memcached:
       chunk_cache:
         enabled: false
@@ -48,11 +54,9 @@ loki:
         boltdb_shipper:
           active_index_directory: /var/loki/data/boltdb-index
           cache_location: /var/loki/data/boltdb-cache
-          shared_store: filesystem
         tsdb_shipper:
           active_index_directory: /var/loki/data/tsdb-index
           cache_location: /var/loki/data/tsdb-cache
-          shared_store: filesystem
         filesystem:
           directory: /var/loki/chunks
 promtail:
