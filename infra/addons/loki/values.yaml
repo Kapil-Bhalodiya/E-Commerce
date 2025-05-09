@@ -68,10 +68,7 @@ loki:
       compactor:
         enabled: false
       ruler:
-        storage:
-          type: local
-          local:
-            directory: /var/loki/rules
+        enabled: false
 promtail:
   enabled: true
   config:
