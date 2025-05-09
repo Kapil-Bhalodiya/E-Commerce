@@ -1,13 +1,14 @@
 loki:
-  singleBinary:
+  SimpleScalable:
     replicas: 1
-    persistence:
-      size: 5Gi  # Smaller size for dev
-  storage:
-    bucketNames:
-      chunks: ""
-      ruler: ""
-      admin: ""
+  loki:
+    fullnameOverride: loki-dev
+    storage:
+      # Define bucketNames with empty values to avoid nil pointer errors in the loki chart
+      # Not used with filesystem storage, but required by the chart's template logic
+      bucketNames:
+        chunks: ''
+        ruler: ''
 promtail:
   config:
-    logLevel: debug  # More verbose logging for dev
+    logLevel: debug
