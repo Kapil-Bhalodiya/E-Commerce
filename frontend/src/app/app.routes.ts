@@ -1,29 +1,60 @@
-import { Routes } from '@angular/router';
-import { ProductsListComponent } from './pages/products-list/products-list.component';
-import { CartComponent } from './pages/cart/cart.component';
+import { RouterModule, Routes } from '@angular/router';
+import { CartStepComponent } from './pages/checkout/cart-step/cart.component';
 import { LoginComponent } from './features/login/login.component';
 import { AuthGuard } from './services/auth.guard';
 import { RegisterComponent } from './features/register/register.component';
+import { NgModule } from '@angular/core';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { CheckoutCompleteComponent } from './pages/checkout/checkout-complete/checkout-complete.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        component: ProductsListComponent
+        redirectTo: '/product',
+        data: { breadcrumb: 'Product' }
     },
     {
         path: 'cart',
-        component: CartComponent,
-        canActivate: [AuthGuard]
+        component: CartStepComponent
+    },
+    {
+        path: 'checkout',
+        component: CheckoutComponent
+    },
+    {
+        path: 'checkout-complete',
+        component: CheckoutCompleteComponent
+    },
+    {
+        path: 'checkout',
+        loadChildren: () => import('./pages/checkout/checkout.module').then((m) => m.CheckoutModule),
+    },
+    {
+        path: 'product',
+        loadChildren: () => import('./pages/products/products.module').then((m) => m.ProductsModule),
+        data: { breadcrumb: 'Product' }
     },
     {
         path: 'login',
         component: LoginComponent,
-        canActivate: [AuthGuard]
+        // canActivate: [AuthGuard]
     },
     {
         path: 'register',
         component: RegisterComponent,
-        canActivate: [AuthGuard]
-    }
+        // canActivate: [AuthGuard]
+    },
+    {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['admin', 'user'] },
+    },
 ];
+@NgModule({
+    imports: [RouterModule.forRoot(routes)],  // Make sure to use forRoot for app-level routing
+    exports: [RouterModule]
+})
+export class AppRoutingModule { }

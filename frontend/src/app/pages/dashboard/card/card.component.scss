@@ -1,0 +1,19 @@
+.kpi-card {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.kpi-card:hover {
+    transform: scale(1.05);
+}
+
+i {
+    font-size: 2rem;
+}
+
+h3 {
+    margin: 0;
+}

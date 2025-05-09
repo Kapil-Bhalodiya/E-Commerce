@@ -1,0 +1,80 @@
+<!-- <div class="d-lg-none p-2 text-end">
+    <button
+      class="btn btn-outline-dark"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasMobileMenu"
+      aria-controls="offcanvasMobileMenu"
+    >
+      ☰ Menu
+    </button>
+  </div>
+
+  <div
+    class="offcanvas offcanvas-start"
+    tabindex="-1"
+    id="offcanvasMobileMenu"
+    aria-labelledby="offcanvasMobileMenuLabel"
+  >
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasMobileMenuLabel">Menu</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="offcanvas-body">
+      <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link" routerLink="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/shop">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/blog">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </div> -->
+  
+
+  <!-- <div class="offcanvas-header flex justify-between items-center p-4 border-b lg:hidden">
+    <div class="text-xl font-bold">SURUCHI</div>
+    <button (click)="toggleMenu()" class="text-2xl focus:outline-none">
+      <i class="fas" [ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+    </button>
+  </div>
+  
+  <div *ngIf="isMenuOpen" class="offcanvas-menu bg-white w-full p-4">
+    <ul class="space-y-4 text-gray-700 font-medium">
+      <li>Home</li>
+      <li>Shop</li>
+      <li>About Us</li>
+      <li>Blog</li>
+      <li>Categories</li>
+      <li>Pages</li>
+      <li>Contact</li>
+    </ul>
+  </div> -->
+  
+
+  <div class="mobile-menu" [class.show]="isMenuOpen">
+    <ul>
+      <li><a routerLink="/">Home</a></li>
+      <li><a routerLink="/shop">Shop</a></li>
+      <li><a routerLink="/about-us">About Us</a></li>
+      <li><a routerLink="/blog">Blog</a></li>
+      <li><a routerLink="/categories">Categories</a></li>
+      <li><a routerLink="/pages">Pages</a></li>
+      <li><a routerLink="/contact">Contact</a></li>
+    </ul>
+    <div class="mobile-actions">
+      <a href="/login" class="login">Login / Register</a>
+      <select name="language">
+        <option value="en">English</option>
+        <!-- Add more languages as needed -->
+      </select>
+      <select name="currency">
+        <option value="usd">US Dollar</option>
+        <!-- Add more currencies as needed -->
+      </select>
+    </div>
+  </div>

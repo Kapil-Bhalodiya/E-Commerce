@@ -14,6 +14,4 @@ const couponSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-couponSchema.index({ code: 1 });
-
 module.exports = mongoose.model('Coupon', couponSchema);
