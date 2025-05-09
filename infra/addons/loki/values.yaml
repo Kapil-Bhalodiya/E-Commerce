@@ -24,14 +24,14 @@ loki:
     enabled: false
     
   # Zero out replica counts of other deployment modes
-  singleBinary:
-    replicas: 0
-  backend:
-    replicas: 1
-  read:
-    replicas: 1
-  write:
-    replicas: 1
+  # singleBinary:
+  #   replicas: 0
+  # backend:
+  #   replicas: 1
+  # read:
+  #   replicas: 1
+  # write:
+  #   replicas: 1
   loki:
     enterprise:
       enabled: false

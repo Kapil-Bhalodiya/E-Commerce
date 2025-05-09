@@ -1,4 +1,20 @@
 loki:
+  SimpleScalable:
+    read:
+      replicas: 1
+    write:
+      replicas: 1
+    backend:
+      replicas: 1
+      podTemplate:
+        spec:
+          initContainers:
+            - name: fix-permissions
+              image: busybox
+              command: ["sh", "-c", "chown -R 10001:10001 /var/loki"]
+              volumeMounts:
+                - name: data
+                  mountPath: /var/loki
   loki:
     fullnameOverride: loki-dev
     storage:
