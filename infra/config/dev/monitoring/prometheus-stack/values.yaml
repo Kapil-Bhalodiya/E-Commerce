@@ -1,55 +1,5 @@
+# Environment-specific overrides (if any)
 prometheus:
   fullnameOverride: prometheus
 grafana:
   fullnameOverride: grafana
-prometheusNodeExporter:
-  hostNetwork: false  # Use the pod's network namespace instead
-  tolerations:
-    - key: "node-role.kubernetes.io/master"
-      operator: "Exists"
-      effect: "NoSchedule"
-    - key: "node-role.kubernetes.io/control-plane"
-      operator: "Exists"
-      effect: "NoSchedule"
-  service:
-    port: 9101
-    targetPort: 9101
-  port: 9101
-  extraArgs:
-    - --web.listen-address=:9101
-    - --collector.disable-defaults
-    - --collector.cpu
-    - --collector.memory
-    - --collector.diskstats 
-app:
-  serviceMonitors:
-    - name: sharkapp-backend
-      namespace: dev
-      selector:
-        matchLabels:
-          app: backend-dev
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-          targetPort: 8080
-          relabelings:
-            - sourceLabels: [__meta_kubernetes_pod_label_app]
-              targetLabel: app
-            - sourceLabels: [__meta_kubernetes_pod_namespace]
-              targetLabel: namespace
-    - name: sharkapp-frontend
-      namespace: dev
-      selector:
-        matchLabels:
-          app: frontend-dev
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-          targetPort: 8080
-          relabelings:
-            - sourceLabels: [__meta_kubernetes_pod_label_app]
-              targetLabel: app
-            - sourceLabels: [__meta_kubernetes_pod_namespace]
-              targetLabel: namespace

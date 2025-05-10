@@ -3,7 +3,8 @@
 #   tag: HEAD
 # project: default
 # address: https://kubernetes.default.svc
-
+global:
+  env: dev
 target:
   address: https://kubernetes.default.svc
   namespace: dev
