@@ -88,7 +88,7 @@ spec:
               environment: {{target.path.basename}}
       destination:
         server: 'https://kubernetes.default.svc'
-        namespace: '{{app.path.basename}}'
+        namespace: '{{app.path.dirname}}'
       syncPolicy:
         automated:
           prune: false
