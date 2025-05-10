@@ -71,9 +71,6 @@ loki:
           type: local
           local:
             directory: /var/loki/rules
-      memberlist:
-        join_members:
-          - loki-memberlist.dev.svc.cluster.local:7946
 promtail:
   enabled: true
   config:
