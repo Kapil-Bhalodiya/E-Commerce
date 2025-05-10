@@ -67,8 +67,7 @@ spec:
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
               revision: main
               directories:  # Use directories instead of files to match subdirectories
-                - path: infra/config/{{target.path.basename}}/app/*
-                - path: infra/config/{{target.path.basename}}/monitoring/*
+               - path: infra/config/{{target.path.basename}}/*/*
   template:
     metadata:
       name: '{{app.path.basename}}-{{target.path.basename}}'  # e.g., backend-dev, loki-dev
@@ -82,7 +81,7 @@ spec:
           valueFiles:
             - values.yaml  # infra/addons/<app>/values.yaml
             - '../../config/{{target.path.basename}}/values.yaml'  # infra/config/dev/values.yaml
-            - '../../config/{{target.path.basename}}/app/{{app.path.basename}}/values.yaml'  # infra/config/dev/app/backend/values.yaml or infra/config/dev/monitoring/loki/values.yaml
+            - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'
           values: |-
             app:
               environment: {{target.path.basename}}
