@@ -10,11 +10,11 @@ loki:
   singleBinary:
     replicas: 0
   backend:
-    replicas: 2
+    replicas: 1
   read:
-    replicas: 2
+    replicas: 1
   write:
-    replicas: 2
+    replicas: 1
   loki:
     enterprise:
       enabled: false
