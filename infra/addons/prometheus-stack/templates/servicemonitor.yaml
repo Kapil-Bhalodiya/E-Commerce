@@ -1,0 +1,15 @@
+{{- range .Values.app.serviceMonitors }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+  labels:
+    prometheus: prometheus-stack
+spec:
+  selector:
+    {{- toYaml .selector | nindent 4 }}
+  endpoints:
+    {{- toYaml .endpoints | nindent 4 }}
+---
+{{- end }}
