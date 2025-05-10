@@ -61,7 +61,7 @@ spec:
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
               revision: main
               files:
-                - path: infra/config/*/values.yaml  # Matches e.g., infra/config/dev/values.yaml
+                - path: infra/config/*/values.yaml
           - git:
               pathParamPrefix: app
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
@@ -70,7 +70,7 @@ spec:
                 - path: infra/config/{{target.path.basename}}/*/*
   template:
     metadata:
-      name: '{{app.path.basename}}-{{target.path.basename}}'  # e.g., backend-dev, loki-dev
+      name: '{{app.path.basename}}-{{target.path.basename}}'
     spec:
       project: default
       source:
@@ -80,8 +80,8 @@ spec:
         helm:
           ignoreMissingValueFiles: true
           valueFiles:
-            - values.yaml  # infra/addons/<app>/values.yaml
-            - '../../config/{{target.path.basename}}/values.yaml'  # infra/config/dev/values.yaml
+            - values.yaml
+            - '../../config/{{target.path.basename}}/values.yaml'
             - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'
           values: |-
             app:
