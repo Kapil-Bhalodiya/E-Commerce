@@ -10,11 +10,11 @@ loki:
   singleBinary:
     replicas: 0
   backend:
-    replicas: 1
+    replicas: 2
   read:
-    replicas: 1
+    replicas: 2
   write:
-    replicas: 1
+    replicas: 2
   loki:
     enterprise:
       enabled: false
@@ -42,6 +42,7 @@ loki:
         chunk_block_size: 1000000
         chunk_retain_period: 5m
         chunk_encoding: snappy
+        replication_factor: 1  # Set replication factor to 1
       schema_config:
         configs:
           - from: 2020-07-01
@@ -70,6 +71,9 @@ loki:
           type: local
           local:
             directory: /var/loki/rules
+      memberlist:
+        join_members:
+          - loki-memberlist.dev.svc.cluster.local:7946
 promtail:
   enabled: true
   config:
