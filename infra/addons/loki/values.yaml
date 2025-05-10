@@ -42,7 +42,6 @@ loki:
         chunk_block_size: 1000000
         chunk_retain_period: 5m
         chunk_encoding: snappy
-        replication_factor: 1  # Set replication factor to 1
       schema_config:
         configs:
           - from: 2020-07-01
