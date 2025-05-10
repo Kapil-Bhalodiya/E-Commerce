@@ -89,7 +89,7 @@ spec:
               nameOverride: {{app.path.basename}}
       destination:
         server: 'https://kubernetes.default.svc'
-        namespace: '{{target.path.basename}}'
+        namespace: '{{ if eq .app.path.dirname "app" }}dev{{ else }}{{ .app.path.dirname }}{{ end }}'
       syncPolicy:
         automated:
           prune: false
