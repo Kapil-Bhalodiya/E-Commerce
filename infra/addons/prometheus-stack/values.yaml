@@ -35,12 +35,12 @@ grafana:
   additionalDataSources:
     - name: Loki
       type: loki
-      url: http://loki.monitoring-system.svc.cluster.local:3100
+      url: http://loki.dev.svc.cluster.local:3100
       access: proxy
       isDefault: false
     - name: Tempo
       type: tempo
-      url: http://grafana-tempo.grafana-tempo-system.svc.cluster.local:3100
+      url: http://grafana-tempo-dev.dev.svc.cluster.local:3100
       access: proxy
       isDefault: false
       jsonData:
