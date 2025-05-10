@@ -10,6 +10,17 @@ prometheusNodeExporter:
     - key: "node-role.kubernetes.io/control-plane"
       operator: "Exists"
       effect: "NoSchedule"
+  hostNetwork: true
+  service:
+    port: 9101
+    targetPort: 9101
+  port: 9101
+  extraArgs:
+    - --web.listen-address=:9101  # Explicitly set the port
+    - --collector.disable-defaults  # Disable unnecessary collectors that might bind ports
+    - --collector.cpu  # Enable only specific collectors
+    - --collector.memory
+    - --collector.diskstats  
 app:
   serviceMonitors:
     - name: sharkapp-backend
