@@ -92,46 +92,7 @@ spec:
         namespace: '{{ if eq .app.path.dirname "app" }}dev{{ else }}{{ .app.path.dirname }}{{ end }}'
       syncPolicy:
         automated:
-          prune: false
-          selfHeal: false
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
-
-
-  #         - git:
-  #             pathParamPrefix: target
-  #             repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-  #             revision: main
-  #             directories:
-  #               - path: infra/config/*/app
-  #         - git:
-  #             pathParamPrefix: app
-  #             repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-  #             revision: main
-  #             files:
-  #               - path: infra/config/{{target.path.dirname}}/app/**/values.yaml
-  # template:
-  #   metadata:
-  #     name: '{{app.path.basename}}-{{target.path.dirname}}'
-  #   spec:
-  #     project: '{{target.project}}'
-  #     source:
-  #       repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-  #       targetRevision: main
-  #       path: 'addons/{{app.path.basename}}'
-  #       helm:
-  #         valueFiles:
-  #           - values.yaml
-  #           - '../../config/{{target.path.basename}}/values.yaml'
-  #           - '../../config/{{target.path.basename}}/{{app.path.basename}}/values.yaml'
-  #         values: |-
-  #           app:
-  #             environment: {{target.path.dirname}}
-  #             nameOverride: {{app.path.basename}}
-  #     destination:
-  #       server: '{{target.address}}'
-  #       namespace: '{{target.path.dirname}}'
-  #     syncPolicy:
-  #       automated:
-  #         prune: true
-  #         selfHeal: true
