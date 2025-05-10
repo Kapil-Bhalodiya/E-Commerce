@@ -3,6 +3,7 @@ prometheus:
 grafana:
   fullnameOverride: grafana
 prometheusNodeExporter:
+  hostNetwork: false  # Use the pod's network namespace instead
   tolerations:
     - key: "node-role.kubernetes.io/master"
       operator: "Exists"
@@ -10,17 +11,16 @@ prometheusNodeExporter:
     - key: "node-role.kubernetes.io/control-plane"
       operator: "Exists"
       effect: "NoSchedule"
-  hostNetwork: true
   service:
     port: 9101
     targetPort: 9101
   port: 9101
   extraArgs:
-    - --web.listen-address=:9101  # Explicitly set the port
-    - --collector.disable-defaults  # Disable unnecessary collectors that might bind ports
-    - --collector.cpu  # Enable only specific collectors
+    - --web.listen-address=:9101
+    - --collector.disable-defaults
+    - --collector.cpu
     - --collector.memory
-    - --collector.diskstats  
+    - --collector.diskstats 
 app:
   serviceMonitors:
     - name: sharkapp-backend
