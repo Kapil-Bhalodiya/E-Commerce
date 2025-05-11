@@ -17,6 +17,6 @@ prometheus-node-exporter:
     - --collector.cpu
     - --collector.memory
     - --collector.diskstats
-  env:
-    - name: HOST_IP
-      value: "0.0.0.0"
+  # env:
+  #   - name: HOST_IP
+  #     value: "0.0.0.0"
