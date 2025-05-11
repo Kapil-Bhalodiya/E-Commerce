@@ -15,5 +15,3 @@ prometheus-node-exporter:
   extraArgs:
     - --web.listen-address=:9101
     - --collector.disable-defaults
-    - --collector.cpu
-    - --collector.diskstats
