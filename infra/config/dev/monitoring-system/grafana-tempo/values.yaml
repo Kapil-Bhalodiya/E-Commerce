@@ -4,6 +4,13 @@ tempo:
       backend: local
       local:
         path: /var/tempo/traces
+    wal:
+      path: /var/tempo/wal
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClassName: standard
+  fullnameOverride: grafana-tempo
   resources:
     limits:
       memory: "500Mi"
@@ -14,6 +21,8 @@ tempo:
     enabled: true
   serviceMonitor:
     enabled: true
+    labels:
+      prometheus: prometheus-stack
   readinessProbe:
     httpGet:
       path: /ready
