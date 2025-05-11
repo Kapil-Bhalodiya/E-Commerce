@@ -1,0 +1,5 @@
+# Environment-specific overrides (if any)
+prometheus:
+  fullnameOverride: prometheus
+grafana:
+  fullnameOverride: grafana
