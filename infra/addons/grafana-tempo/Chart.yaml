@@ -1,9 +1,9 @@
-apiVersion: v2
-name: grafana-tempo
-description: A Helm chart for deploying Grafana Tempo in Kubernetes
-version: 0.1.0
-appVersion: "2.5.0"
-dependencies:
-  - name: tempo
-    version: 1.10.2
-    repository: https://grafana.github.io/helm-charts
+# apiVersion: v2
+# name: grafana-tempo
+# description: A Helm chart for deploying Grafana Tempo in Kubernetes
+# version: 0.1.0
+# appVersion: "2.5.0"
+# dependencies:
+#   - name: tempo
+#     version: 1.10.2
+#     repository: https://grafana.github.io/helm-charts
