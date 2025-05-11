@@ -1,108 +1,182 @@
+# Prometheus Stack Values
+grafana:
+  enabled: false  # We'll use a separate Grafana installation
+  
 prometheus:
   prometheusSpec:
     serviceMonitorSelectorNilUsesHelmValues: false
-    serviceMonitorSelector:
-      matchLabels:
-        prometheus: prometheus-stack
-    podMonitorSelector:
-      matchLabels:
-        prometheus: prometheus-stack
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
+    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelector: {}
+    podMonitorNamespaceSelector: {}
+    retention: 14d
     resources:
       requests:
-        cpu: "200m"
-        memory: "1Gi"
+        memory: 1Gi
+        cpu: 500m
       limits:
-        memory: "2Gi"
+        memory: 2Gi
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: standard
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
               storage: 10Gi
-grafana:
-  adminPassword: newpassword123
-  persistence:
+
+# Configure alerts manager
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 2Gi
+
+# Enable node exporter for collecting node metrics
+nodeExporter:
+  enabled: true
+
+# Enable kube-state-metrics for collecting kubernetes state metrics
+kubeStateMetrics:
+  enabled: true
+
+# Configure Prometheus Operator
+prometheusOperator:
+  createCustomResource: true
+  serviceMonitor:
     enabled: true
-    storageClassName: standard
-    accessModes: ["ReadWriteOnce"]
-    size: 5Gi
-  grafana.ini:
-    auth.anonymous:
+  admissionWebhooks:
+    enabled: true
+    patch:
       enabled: true
-      org_role: Viewer
-  additionalDataSources:
-    - name: Loki
-      type: loki
-      url: http://loki.dev.svc.cluster.local:3100
-      access: proxy
-      isDefault: false
-    - name: Tempo
-      type: tempo
-      url: http://grafana-tempo-dev.dev.svc.cluster.local:3100
-      access: proxy
-      isDefault: false
-      jsonData:
-        httpMethod: GET
-        tracesToLogs:
-          datasourceUid: "loki"
-          spanStartTimeShift: "-1h"
-          spanEndTimeShift: "1h"
-        tracesToMetrics:
-          datasourceUid: "prometheus"
-prometheusNodeExporter:
-  hostNetwork: false
-  hostPort: false
-  tolerations:
-    - key: "node-role.kubernetes.io/master"
-      operator: "Exists"
-      effect: "NoSchedule"
-    - key: "node-role.kubernetes.io/control-plane"
-      operator: "Exists"
-      effect: "NoSchedule"
-  service:
-    port: 9101
-    targetPort: 9101
-  prometheusNodeExporter:
-    port: 9101
-    extraArgs:
-      web:
-        listen-address: ":9101"
-      collector:
-        disable-defaults: true
-        cpu: true
-        memory: true
-        diskstats: true
-app:
-  serviceMonitors:
-    - name: sharkapp-backend
-      namespace: dev
-      selector:
-        matchLabels:
-          app: backend-dev
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-          targetPort: 8080
-          relabelings:
-            - sourceLabels: [__meta_kubernetes_pod_label_app]
-              targetLabel: app
-            - sourceLabels: [__meta_kubernetes_pod_namespace]
-              targetLabel: namespace
-    - name: sharkapp-frontend
-      namespace: dev
-      selector:
-        matchLabels:
-          app: frontend-dev
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-          targetPort: 8080
-          relabelings:
-            - sourceLabels: [__meta_kubernetes_pod_label_app]
-              targetLabel: app
-            - sourceLabels: [__meta_kubernetes_pod_namespace]
-              targetLabel: namespace
+
+
+
+# prometheus:
+#   prometheusSpec:
+#     serviceMonitorSelectorNilUsesHelmValues: false
+#     serviceMonitorSelector:
+#       matchLabels:
+#         prometheus: prometheus-stack
+#     podMonitorSelector:
+#       matchLabels:
+#         prometheus: prometheus-stack
+#     resources:
+#       requests:
+#         cpu: "200m"
+#         memory: "1Gi"
+#       limits:
+#         memory: "2Gi"
+#     storageSpec:
+#       volumeClaimTemplate:
+#         spec:
+#           storageClassName: standard
+#           accessModes: ["ReadWriteOnce"]
+#           resources:
+#             requests:
+#               storage: 10Gi
+# grafana:
+#   adminPassword: newpassword123
+#   persistence:
+#     enabled: true
+#     storageClassName: standard
+#     accessModes: ["ReadWriteOnce"]
+#     size: 5Gi
+#   grafana.ini:
+#     auth.anonymous:
+#       enabled: true
+#       org_role: Viewer
+#   additionalDataSources:
+#     - name: Loki
+#       type: loki
+#       url: http://loki.dev.svc.cluster.local:3100
+#       access: proxy
+#       isDefault: false
+#     - name: Tempo
+#       type: tempo
+#       url: http://grafana-tempo-dev.dev.svc.cluster.local:3100
+#       access: proxy
+#       isDefault: false
+#       jsonData:
+#         httpMethod: GET
+#         tracesToLogs:
+#           datasourceUid: "loki"
+#           spanStartTimeShift: "-1h"
+#           spanEndTimeShift: "1h"
+#         tracesToMetrics:
+#           datasourceUid: "prometheus"
+# prometheusNodeExporter:
+#   hostNetwork: false
+#   hostPort: false
+#   tolerations:
+#     - key: "node-role.kubernetes.io/master"
+#       operator: "Exists"
+#       effect: "NoSchedule"
+#     - key: "node-role.kubernetes.io/control-plane"
+#       operator: "Exists"
+#       effect: "NoSchedule"
+#   service:
+#     port: 9101
+#     targetPort: 9101
+#   prometheusNodeExporter:
+#     port: 9101
+#     extraArgs:
+#       web:
+#         listen-address: ":9101"
+#       collector:
+#         disable-defaults: true
+#         cpu: true
+#         memory: true
+#         diskstats: true
+# app:
+#   serviceMonitors:
+#     - name: sharkapp-backend
+#       namespace: dev
+#       selector:
+#         matchLabels:
+#           app: backend-dev
+#       endpoints:
+#         - port: http
+#           path: /metrics
+#           interval: 15s
+#           targetPort: 8080
+#           relabelings:
+#             - sourceLabels: [__meta_kubernetes_pod_label_app]
+#               targetLabel: app
+#             - sourceLabels: [__meta_kubernetes_pod_namespace]
+#               targetLabel: namespace
+#     - name: sharkapp-frontend
+#       namespace: dev
+#       selector:
+#         matchLabels:
+#           app: frontend-dev
+#       endpoints:
+#         - port: http
+#           path: /metrics
+#           interval: 15s
+#           targetPort: 8080
+#           relabelings:
+#             - sourceLabels: [__meta_kubernetes_pod_label_app]
+#               targetLabel: app
+#             - sourceLabels: [__meta_kubernetes_pod_namespace]
+#               targetLabel: namespace
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

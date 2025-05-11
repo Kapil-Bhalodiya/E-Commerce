@@ -1,25 +1,25 @@
-tempo:
-  storage:
-    trace:
-      backend: local
-      local:
-        path: /var/tempo/traces
-  resources:
-    limits:
-      memory: "500Mi"
-    requests:
-      cpu: "50m"
-      memory: "256Mi"
-  metricsGenerator:
-    enabled: true
-  serviceMonitor:
-    enabled: true
-  readinessProbe:
-    httpGet:
-      path: /ready
-      port: http
-    initialDelaySeconds: 30
-    timeoutSeconds: 5
-    periodSeconds: 10
-    successThreshold: 1
-    failureThreshold: 5
+# tempo:
+#   storage:
+#     trace:
+#       backend: local
+#       local:
+#         path: /var/tempo/traces
+#   resources:
+#     limits:
+#       memory: "500Mi"
+#     requests:
+#       cpu: "50m"
+#       memory: "256Mi"
+#   metricsGenerator:
+#     enabled: true
+#   serviceMonitor:
+#     enabled: true
+#   readinessProbe:
+#     httpGet:
+#       path: /ready
+#       port: http
+#     initialDelaySeconds: 30
+#     timeoutSeconds: 5
+#     periodSeconds: 10
+#     successThreshold: 1
+#     failureThreshold: 5
