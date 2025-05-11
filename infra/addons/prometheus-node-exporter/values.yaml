@@ -16,5 +16,4 @@ prometheus-node-exporter:
     - --web.listen-address=:9101
     - --collector.disable-defaults
     - --collector.cpu
-    - --collector.memory
     - --collector.diskstats
