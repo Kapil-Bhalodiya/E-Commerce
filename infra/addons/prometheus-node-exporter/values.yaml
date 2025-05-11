@@ -15,7 +15,7 @@ prometheus-node-exporter:
   extraArgs:
     - --collector.disable-defaults
     - --collector.cpu
-    - --collector.memory
+    - --collector.meminfo
     - --collector.diskstats
   # env:
   #   - name: HOST_IP
