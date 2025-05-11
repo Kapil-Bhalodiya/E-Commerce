@@ -9,9 +9,14 @@ prometheus-node-exporter:
       operator: "Exists"
       effect: "NoSchedule"
   service:
-    port: 9102
-    targetPort: 9102
-  port: 9102
+    port: 9103
+    targetPort: 9103
+  port: 9103
   extraArgs:
-    - --web.listen-address=:9102
     - --collector.disable-defaults
+    - --collector.cpu
+    - --collector.memory
+    - --collector.diskstats
+  env:
+    - name: HOST_IP
+      value: "0.0.0.0"
