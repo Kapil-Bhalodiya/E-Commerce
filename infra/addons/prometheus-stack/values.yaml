@@ -13,9 +13,16 @@ prometheus:
         memory: "1Gi"
       limits:
         memory: "2Gi"
-    storageSpec: {}
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: standard
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
 grafana:
-  adminPassword: admin123
+  adminPassword: newpassword123
   persistence:
     enabled: true
     storageClassName: standard
@@ -57,13 +64,16 @@ prometheusNodeExporter:
   service:
     port: 9101
     targetPort: 9101
-  port: 9101
-  extraArgs:
-    - --web.listen-address=:9101
-    - --collector.disable-defaults
-    - --collector.cpu
-    - --collector.memory
-    - --collector.diskstats
+  prometheusNodeExporter:
+    port: 9101
+    extraArgs:
+      web:
+        listen-address: ":9101"
+      collector:
+        disable-defaults: true
+        cpu: true
+        memory: true
+        diskstats: true
 app:
   serviceMonitors:
     - name: sharkapp-backend
@@ -96,11 +106,3 @@ app:
               targetLabel: app
             - sourceLabels: [__meta_kubernetes_pod_namespace]
               targetLabel: namespace
-alertmanager:
-  alertmanagerSpec:
-    resources:
-      requests:
-        cpu: "100m"
-        memory: "256Mi"
-      limits:
-        memory: "512Mi"
