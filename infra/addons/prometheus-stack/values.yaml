@@ -13,14 +13,7 @@ prometheus:
         memory: "1Gi"
       limits:
         memory: "2Gi"
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: standard
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 10Gi
+    storageSpec: {}
 grafana:
   adminPassword: admin123
   persistence:
@@ -103,3 +96,11 @@ app:
               targetLabel: app
             - sourceLabels: [__meta_kubernetes_pod_namespace]
               targetLabel: namespace
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+      limits:
+        memory: "512Mi"
