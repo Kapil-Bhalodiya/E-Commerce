@@ -1,0 +1,20 @@
+prometheus-node-exporter:
+  hostNetwork: false
+  hostPort: false
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+  service:
+    port: 9101
+    targetPort: 9101
+  port: 9101
+  extraArgs:
+    - --web.listen-address=:9101
+    - --collector.disable-defaults
+    - --collector.cpu
+    - --collector.memory
+    - --collector.diskstats
