@@ -4,7 +4,7 @@ clusterIssuer: ''
 
 # TLS settings
 tls:
-  enabled: true
+  enabled: false
   secretName: sharkapp-tls-cert
 
 # Services mapping
@@ -25,8 +25,8 @@ ingressClass: nginx
 
 # Advanced ingress annotations
 annotations:
-  nginx.ingress.kubernetes.io/ssl-redirect: "true"
-  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
   nginx.ingress.kubernetes.io/proxy-body-size: "50m"
   nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
   nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
