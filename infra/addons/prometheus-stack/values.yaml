@@ -31,7 +31,7 @@ grafana:
   grafana.ini:
     server:
       domain: grafana.sharkapp.local
-      root_url: http://grafana.sharkapp.local:8000/
+      root_url: https://grafana.sharkapp.local:8001/
     auth.anonymous:
       enabled: true
       org_role: Viewer
@@ -65,8 +65,10 @@ grafana:
       nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
       nginx.ingress.kubernetes.io/proxy-buffers: "4 256k"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    tls:
+      - hosts:
+          - grafana.sharkapp.local
+        secretName: sharkapp-tls
 prometheus-node-exporter:
   enabled: true
 app:
