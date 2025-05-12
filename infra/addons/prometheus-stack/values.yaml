@@ -30,8 +30,8 @@ grafana:
     size: 5Gi
   grafana.ini:
     server:
-      domain: "{{ .Values.grafanaHost }}"
-      root_url: "http://{{ .Values.grafanaHost }}:8000"
+      domain: grafana.sharkapp.local
+      root_url: http://grafana.sharkapp.local:8000/
     auth.anonymous:
       enabled: true
       org_role: Viewer
@@ -58,7 +58,7 @@ grafana:
     enabled: true
     ingressClassName: nginx
     hosts:
-      - "{{ .Values.grafanaHost }}"
+      - grafana.sharkapp.local
     path: /
 prometheus-node-exporter:
   enabled: true
