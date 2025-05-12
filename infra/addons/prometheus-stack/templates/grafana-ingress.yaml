@@ -21,7 +21,3 @@ spec:
             name: prometheus-stack-dev-grafana
             port:
               number: 80
-  tls:
-  - hosts:
-    - grafana.sharkapp.local
-    secretName: sharkapp-tls
