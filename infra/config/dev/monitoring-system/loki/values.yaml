@@ -1,0 +1,49 @@
+loki:
+  SimpleScalable:
+    read:
+      replicas: 1
+      resources:
+        limits:
+          memory: "1Gi"
+        requests:
+          cpu: "100m"
+          memory: "512Mi"
+    write:
+      replicas: 1
+      resources:
+        limits:
+          memory: "1Gi"
+        requests:
+          cpu: "100m"
+          memory: "512Mi"
+    backend:
+      replicas: 1
+      resources:
+        limits:
+          memory: "1Gi"
+        requests:
+          cpu: "100m"
+          memory: "512Mi"
+      podTemplate:
+        spec:
+          securityContext:
+            fsGroup: 10001
+          initContainers:
+            - name: fix-permissions
+              image: busybox
+              command: ["sh", "-c", "mkdir -p /var/loki/chunks /var/loki/data/boltdb-index /var/loki/data/tsdb-index /var/loki/rules && chown -R 10001:10001 /var/loki"]
+              securityContext:
+                runAsUser: 10001
+                runAsGroup: 10001
+              volumeMounts:
+                - name: data
+                  mountPath: /var/loki
+  loki:
+    fullnameOverride: loki-dev
+    storage:
+      bucketNames:
+        chunks: ''
+        ruler: ''
+promtail:
+  config:
+    logLevel: debug

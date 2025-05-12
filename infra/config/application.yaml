@@ -19,9 +19,6 @@ spec:
               revision: main
               directories:
                 - path: infra/config/{{target.path.basename}}/*/*
-                # Add an exclude condition
-                - path: infra/config/{{target.path.basename}}/monitoring/prometheus-stack
-                  exclude: true
   template:
     metadata:
       name: '{{app.path.basename}}-{{target.path.basename}}'

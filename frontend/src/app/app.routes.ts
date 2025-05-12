@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { ProductsListComponent } from './pages/products-list/products-list.component';
-import { CartComponent } from './pages/cart/cart.component';
+import { ProductsComponent } from './pages/products/products.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { LoginComponent } from './features/login/login.component';
 import { AuthGuard } from './services/auth.guard';
 import { RegisterComponent } from './features/register/register.component';
@@ -9,11 +9,11 @@ export const routes: Routes = [
     {
         path: '',
         pathMatch: 'full',
-        component: ProductsListComponent
+        component: ProductsComponent
     },
     {
         path: 'cart',
-        component: CartComponent,
+        component: CheckoutComponent,
         canActivate: [AuthGuard]
     },
     {
