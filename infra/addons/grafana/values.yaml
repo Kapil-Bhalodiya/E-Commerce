@@ -1,74 +1,74 @@
-adminPassword: "admin"  # Change this in production!
+# adminPassword: "admin"  # Change this in production!
 
-persistence:
-  enabled: true
-  size: 5Gi
+# persistence:
+#   enabled: true
+#   size: 5Gi
 
-datasources:
-  datasources.yaml:
-    apiVersion: 1
-    datasources:
-    - name: Prometheus
-      type: prometheus
-      url: http://prometheus-stack-prometheus:9090
-      access: proxy
-      isDefault: true
-    - name: Loki
-      type: loki
-      url: http://loki:3100
-      access: proxy
+# datasources:
+#   datasources.yaml:
+#     apiVersion: 1
+#     datasources:
+#     - name: Prometheus
+#       type: prometheus
+#       url: http://prometheus-stack-prometheus:9090
+#       access: proxy
+#       isDefault: true
+#     - name: Loki
+#       type: loki
+#       url: http://loki:3100
+#       access: proxy
 
-dashboardProviders:
-  dashboardproviders.yaml:
-    apiVersion: 1
-    providers:
-    - name: 'default'
-      orgId: 1
-      folder: ''
-      type: file
-      disableDeletion: false
-      editable: true
-      options:
-        path: /var/lib/grafana/dashboards/default
+# dashboardProviders:
+#   dashboardproviders.yaml:
+#     apiVersion: 1
+#     providers:
+#     - name: 'default'
+#       orgId: 1
+#       folder: ''
+#       type: file
+#       disableDeletion: false
+#       editable: true
+#       options:
+#         path: /var/lib/grafana/dashboards/default
 
-dashboards:
-  default:
-    kubernetes-cluster:
-      gnetId: 7249
-      revision: 1
-      datasource: Prometheus
-    node-exporter:
-      gnetId: 1860
-      revision: 27
-      datasource: Prometheus
-    logs-dashboard:
-      gnetId: 12611
-      revision: 1
-      datasource: Loki
+# dashboards:
+#   default:
+#     kubernetes-cluster:
+#       gnetId: 7249
+#       revision: 1
+#       datasource: Prometheus
+#     node-exporter:
+#       gnetId: 1860
+#       revision: 27
+#       datasource: Prometheus
+#     logs-dashboard:
+#       gnetId: 12611
+#       revision: 1
+#       datasource: Loki
 
-service:
-  type: ClusterIP
+# service:
+#   type: ClusterIP
 
-ingress:
-  enabled: true
-  ingressClassName: nginx
-  hosts:
-    - www.sharkapp.local  # Replace with your actual domain
-  tls:
-    - secretName: grafana-tls
-      hosts:
-        - www.sharkapp.local  # Replace with your actual domain
+# ingress:
+#   enabled: true
+#   ingressClassName: nginx
+#   hosts:
+#     - www.sharkapp.local  # Replace with your actual domain
+#   tls:
+#     - secretName: grafana-tls
+#       hosts:
+#         - www.sharkapp.local  # Replace with your actual domain
 
-resources:
-  limits:
-    cpu: 200m
-    memory: 256Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
+# resources:
+#   limits:
+#     cpu: 200m
+#     memory: 256Mi
+#   requests:
+#     cpu: 100m
+#     memory: 128Mi
 
-# ServiceMonitor for Prometheus to scrape Grafana metrics
-serviceMonitor:
-  enabled: true
-  labels:
-    release: prometheus-stack
+# # ServiceMonitor for Prometheus to scrape Grafana metrics
+# serviceMonitor:
+#   enabled: true
+#   labels:
+#     release: prometheus-stack

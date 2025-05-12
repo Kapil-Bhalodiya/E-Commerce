@@ -1,10 +1,10 @@
-apiVersion: v2
-name: grafana-wrapper
-description: A Helm chart for deploying Grafana
-type: application
-version: 0.1.0
-appVersion: "9.5.2"
-dependencies:
-  - name: grafana
-    version: "6.58.9"  # Use the latest available version
-    repository: "https://grafana.github.io/helm-charts"
+# apiVersion: v2
+# name: grafana-wrapper
+# description: A Helm chart for deploying Grafana
+# type: application
+# version: 0.1.0
+# appVersion: "9.5.2"
+# dependencies:
+#   - name: grafana
+#     version: "6.58.9"  # Use the latest available version
+#     repository: "https://grafana.github.io/helm-charts"
