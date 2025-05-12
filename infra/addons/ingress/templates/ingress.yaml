@@ -30,7 +30,7 @@ spec:
         pathType: {{ .pathType }}
         backend:
           service:
-            name: {{ .serviceName }}-{{ $.Values.app.environment }}
+            name: '{{ .serviceName }}-dev'
             port:
               number: {{ .servicePort }}
       {{- end }}
