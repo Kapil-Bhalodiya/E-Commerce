@@ -8,7 +8,7 @@
             <img class="product__media--preview__items--img" [src]="selectedImage" alt="product-media-img">
           </a>
           <div class="product__media--view__icon">
-            <a class="product__media--view__icon--link glightbox" href="big-product2.jpg"
+            <a class="product__media--view__icon--link glightbox" [href]="selectedImage"
               data-gallery="product-media-preview">
               <i class="bi bi-search"></i>
             </a>
@@ -24,10 +24,10 @@
     <div class="swiper-slide">
       <div class="product__media--nav__items">
         <owl-carousel-o [options]="carouselOptions">
-          <ng-container *ngFor="let slide of productImages">
-            <ng-template carouselSlide [id]="slide.id" class="owl-item" style="height: 400px;">
-              <img [src]="slide.src" class="product__media--nav__items--img"
-                [class.active]="slide.src === selectedImage" (click)="onThumbnailClick(slide.src)" />
+          <ng-container *ngFor="let slide of images">
+            <ng-template carouselSlide [id]="slide" class="owl-item" style="height: 400px;">
+              <img [src]="slide" class="product__media--nav__items--img"
+                [class.active]="slide === selectedImage" (click)="onThumbnailClick(slide)" />
             </ng-template>
           </ng-container>
         </owl-carousel-o>
