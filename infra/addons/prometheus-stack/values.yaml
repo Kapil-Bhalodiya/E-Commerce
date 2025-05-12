@@ -67,7 +67,12 @@ grafana:
         tracesToMetrics:
           datasourceUid: "prometheus"
 prometheus-node-exporter:
-  enabled: false
+  enabled: true
+  extraArgs:
+    - --collector.disable-defaults
+    - --collector.cpu
+    - --collector.meminfo
+    - --collector.diskstats
 app:
   serviceMonitors:
     - name: sharkapp-backend
