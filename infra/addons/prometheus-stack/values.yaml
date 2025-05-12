@@ -1,61 +1,3 @@
-# # Prometheus Stack Values
-# grafana:
-#   enabled: false  # We'll use a separate Grafana installation
-  
-# prometheus:
-#   prometheusSpec:
-#     serviceMonitorSelectorNilUsesHelmValues: false
-#     serviceMonitorSelector: {}
-#     serviceMonitorNamespaceSelector: {}
-#     podMonitorSelectorNilUsesHelmValues: false
-#     podMonitorSelector: {}
-#     podMonitorNamespaceSelector: {}
-#     retention: 14d
-#     resources:
-#       requests:
-#         memory: 1Gi
-#         cpu: 500m
-#       limits:
-#         memory: 2Gi
-#     storageSpec:
-#       volumeClaimTemplate:
-#         spec:
-#           accessModes: ["ReadWriteOnce"]
-#           resources:
-#             requests:
-#               storage: 10Gi
-
-# # Configure alerts manager
-# alertmanager:
-#   alertmanagerSpec:
-#     storage:
-#       volumeClaimTemplate:
-#         spec:
-#           accessModes: ["ReadWriteOnce"]
-#           resources:
-#             requests:
-#               storage: 2Gi
-
-# # Enable node exporter for collecting node metrics
-# nodeExporter:
-#   enabled: true
-
-# # Enable kube-state-metrics for collecting kubernetes state metrics
-# kubeStateMetrics:
-#   enabled: true
-
-# # Configure Prometheus Operator
-# prometheusOperator:
-#   createCustomResource: true
-#   serviceMonitor:
-#     enabled: true
-#   admissionWebhooks:
-#     enabled: true
-#     patch:
-#       enabled: true
-
-
-
 prometheus:
   prometheusSpec:
     serviceMonitorSelectorNilUsesHelmValues: false
@@ -79,6 +21,21 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
+    additionalServiceMonitors:
+      - name: prometheus-node-exporter-dev
+        selector:
+          matchLabels:
+            app.kubernetes.io/name: prometheus-node-exporter
+            app.kubernetes.io/instance: prometheus-node-exporter-dev
+        namespaceSelector:
+          matchNames:
+            - dev
+        endpoints:
+          - port: metrics
+            interval: 15s
+            targetPort: 9103
+        additionalLabels:
+          prometheus: prometheus-stack
 grafana:
   adminPassword: newpassword123
   persistence:
@@ -109,29 +66,8 @@ grafana:
           spanEndTimeShift: "1h"
         tracesToMetrics:
           datasourceUid: "prometheus"
-prometheusNodeExporter:
-  hostNetwork: false
-  hostPort: false
-  tolerations:
-    - key: "node-role.kubernetes.io/master"
-      operator: "Exists"
-      effect: "NoSchedule"
-    - key: "node-role.kubernetes.io/control-plane"
-      operator: "Exists"
-      effect: "NoSchedule"
-  service:
-    port: 9101
-    targetPort: 9101
-  prometheusNodeExporter:
-    port: 9101
-    extraArgs:
-      web:
-        listen-address: ":9101"
-      collector:
-        disable-defaults: true
-        cpu: true
-        memory: true
-        diskstats: true
+prometheus-node-exporter:
+  enabled: false
 app:
   serviceMonitors:
     - name: sharkapp-backend
@@ -164,19 +100,5 @@ app:
               targetLabel: app
             - sourceLabels: [__meta_kubernetes_pod_namespace]
               targetLabel: namespace
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
