@@ -1,168 +1,70 @@
-# Loki values
-loki:
-  auth_enabled: false
-  
-  # Data persistence configuration
-  persistence:
+loki:  
+  # Zero out replica counts of other deployment modes
+  singleBinary:
+    replicas: 0
+  test:
+    enabled: false  
+  loki:
+    memcached:
+      chunk_cache:
+        enabled: false
+      results_cache:
+        enabled: false  
+    auth_enabled: false
     enabled: true
-    size: 10Gi
-  
-  # Loki configuration
-  config:
-    storage_config:
-      boltdb_shipper:
-        active_index_directory: /data/loki/index
-        cache_location: /data/loki/index_cache
-        cache_ttl: 24h
-        shared_store: filesystem
-      filesystem:
-        directory: /data/loki/chunks
-    schema_config:
-      configs:
-        - from: 2020-10-24
-          store: boltdb-shipper
-          object_store: filesystem
-          schema: v11
-          index:
-            prefix: index_
-            period: 24h
-    limits_config:
-      retention_period: 7d
-      enforce_metric_name: false
-      reject_old_samples: true
-      reject_old_samples_max_age: 168h
-    
-  # Service monitor for Prometheus integration
-  serviceMonitor:
-    enabled: true
-    labels:
-      release: prometheus-stack
-  
-  # Resource limits
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1Gi
-    requests:
-      cpu: 200m
-      memory: 256Mi
-
-# Promtail configuration (log collector)
+    isDefault: true
+    resources:
+      limits:
+        memory: "500Mi"
+      requests:
+        cpu: "50m"
+        memory: "256Mi"
+    structuredConfig:
+      limits_config:
+        allow_structured_metadata: false
+      ingester:
+        chunk_idle_period: 30m
+        chunk_block_size: 1000000
+        chunk_retain_period: 5m
+        chunk_encoding: snappy
+      schema_config:
+        configs:
+          - from: 2020-07-01
+            store: boltdb-shipper
+            object_store: filesystem  # Changed from s3 to filesystem
+            schema: v11
+            index:
+              prefix: index_
+              period: 24h
+          - from: 2024-08-22
+            object_store: filesystem  # Changed from s3 to filesystem
+            schema: v13
+            store: tsdb
+            index:
+              period: 24h
+              prefix: index_
+      storage_config:
+        boltdb_shipper:
+          active_index_directory: /var/loki/data/boltdb-index
+          cache_location: /var/loki/data/boltdb-cache
+          shared_store: filesystem
+        tsdb_shipper:
+          active_index_directory: /var/loki/data/tsdb-index
+          cache_location: /var/loki/data/tsdb-cache
+          shared_store: filesystem
+        filesystem:
+          directory: /var/loki/chunks
 promtail:
   enabled: true
   config:
     clients:
-      - url: http://loki:3100/loki/api/v1/push
-  
-  # Service monitor for Prometheus integration
-  serviceMonitor:
-    enabled: true
-    labels:
-      release: prometheus-stack
-  
-  # Resource settings
-  resources:
-    limits:
-      cpu: 200m
-      memory: 256Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
-
-
-# loki:  
-#   singleBinary:
-#     replicas: 0
-#     persistence:
-#       enabled: true
-#       size: 10Gi
-#       storageClassName: standard
-#   test:
-#     enabled: false
-#   singleBinary:
-#     replicas: 0
-#   backend:
-#     replicas: 1
-#   read:
-#     replicas: 1
-#   write:
-#     replicas: 1
-#   loki:
-#     enterprise:
-#       enabled: false
-#     canary:
-#       enabled: false
-#     memcached:
-#       chunk_cache:
-#         enabled: false
-#       results_cache:
-#         enabled: false
-#     auth_enabled: false
-#     enabled: true
-#     isDefault: true
-#     resources:
-#       limits:
-#         memory: "500Mi"
-#       requests:
-#         cpu: "50m"
-#         memory: "256Mi"
-#     structuredConfig:
-#       limits_config:
-#         allow_structured_metadata: false
-#       ingester:
-#         chunk_idle_period: 30m
-#         chunk_block_size: 1000000
-#         chunk_retain_period: 5m
-#         chunk_encoding: snappy
-#       schema_config:
-#         configs:
-#           - from: 2020-07-01
-#             store: boltdb-shipper
-#             object_store: filesystem
-#             schema: v11
-#             index:
-#               prefix: index_
-#               period: 24h
-#           - from: 2024-08-22
-#             object_store: filesystem
-#             schema: v13
-#             store: tsdb
-#             index:
-#               period: 24h
-#               prefix: index_
-#       storage_config:
-#         boltdb_shipper:
-#           active_index_directory: /var/loki/data/boltdb-index
-#         tsdb_shipper:
-#           active_index_directory: /var/loki/data/tsdb-index
-#         filesystem:
-#           directory: /var/loki/chunks
-#       ruler:
-#         storage:
-#           type: local
-#           local:
-#             directory: /var/loki/rules
-# promtail:
-#   enabled: true
-#   config:
-#     logLevel: info
-#     clients:
-#       - url: http://loki-dev-gateway.dev.svc.cluster.local:80/loki/api/v1/push
-#   pipelineStages:
-#     - docker: {}
-#   extraRelabelConfigs:
-#     - source_labels: [__meta_kubernetes_pod_label_app]
-#       target_label: app
-#     - source_labels: [__meta_kubernetes_pod_namespace]
-#       target_label: namespace
-#     - source_labels: [__meta_kubernetes_pod_name]
-#       target_label: pod
-#   readinessProbe:
-#     httpGet:
-#       path: /ready
-#       port: http-metrics
-#     initialDelaySeconds: 30
-#     timeoutSeconds: 5
-#     periodSeconds: 10
-#     successThreshold: 1
-#     failureThreshold: 5
+      - url: http://loki.dev.svc.cluster.local:3100/loki/api/v1/push
+  pipelineStages:
+    - docker: {}
+  extraRelabelConfigs:
+    - source_labels: [__meta_kubernetes_pod_label_app]
+      target_label: app
+    - source_labels: [__meta_kubernetes_pod_namespace]
+      target_label: namespace
+    - source_labels: [__meta_kubernetes_pod_name]
+      target_label: pod

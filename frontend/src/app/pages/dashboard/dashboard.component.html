@@ -1,0 +1,79 @@
+<!-- <div class="container-fluid dashboard-container"> -->
+<!-- <h2 class="mb-4">Dashboard</h2> -->
+<!-- <div class="row kpi-grid mb-4">
+        <div class="col-md-4">
+            <app-card title="Total Users" [value]="kpis.totalUsers || 0" icon="bi bi-people"></app-card>
+        </div>
+        <div class="col-md-4">
+            <app-card title="Total Admins" [value]="kpis.totalAdmins || 0" icon="bi bi-shield-lock"></app-card>
+        </div>
+        <div class="col-md-4">
+            <app-card title="Sales" [value]="kpis.sales || 0" icon="bi bi-currency-dollar"></app-card>
+        </div>
+    </div>
+    <div class="card chart-card mb-4">
+        <div class="card-body">
+            <app-chart></app-chart>
+        </div>
+    </div>
+    <div class="card table-card" *ngIf="isAdmin">
+        <div class="card-body">
+            <app-table></app-table>
+        </div>
+    </div> -->
+
+    <!-- <div class="my__account--section__inner border-radius-10 d-flex">
+        <div class="col-md-3">
+            <div class="sidebar">
+                <h4>My Profile</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" routerLink="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/addresses">Addresses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/wishlist">Wishlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" (click)="logout()">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card orders-card">
+                <div class="card-body">
+                    <h4>Orders History</h4>
+                    <app-table [columns]="columns"></app-table>
+                </div>
+            </div>
+        </div>
+    </div> -->
+<!-- </div> -->
+<!-- </section> -->
+<section class="my__account--section section--padding">
+    <div class="container">
+        <p class="account__welcome--text">Hello, Admin welcome to your dashboard!</p>
+        <div class="my__account--section__inner border-radius-10 d-flex">
+            <div class="account__left--sidebar">
+                <h2 class="account__content--title h3 mb-20">My Profile</h2>
+                <ul class="account__menu">
+                    <li class="account__menu--list active"><a href="my-account.html">Dashboard</a></li>
+                    <li class="account__menu--list"><a href="my-account-2.html">Addresses</a></li>
+                    <li class="account__menu--list"><a href="wishlist.html">Wishlist</a></li>
+                    <li class="account__menu--list"><a (click)="logout()">Log Out</a></li>
+                </ul>
+            </div>
+            <div class="account__wrapper">
+                <div class="account__content">
+                    <h2 class="account__content--title h3 mb-20">Orders History</h2>
+                    <div class="account__table--area">
+                        <app-table [columns]="columns"></app-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

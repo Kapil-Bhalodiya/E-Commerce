@@ -1,0 +1,147 @@
+.my__account--section__inner {
+	background: var(--white-color);
+	-webkit-box-shadow: 0 2px 22px rgba(0, 0, 0, .16);
+	box-shadow: 0 2px 22px rgba(0, 0, 0, .16);
+	padding: 3rem 2rem
+}
+
+@media only screen and (min-width:1199px) {
+	.my__account--section__inner {
+		padding: 5rem 4rem
+	}
+}
+
+@media only screen and (max-width:991px) {
+	.my__account--section__inner {
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column
+	}
+}
+
+.account__welcome--text {
+	font-size: 1.6rem;
+	margin-bottom: 2rem
+}
+
+@media only screen and (min-width:992px) {
+	.account__welcome--text {
+		font-size: 1.8rem;
+		margin-bottom: 3rem
+	}
+}
+
+.account__left--sidebar {
+	border-right: 1px solid var(--border-color2);
+	padding-right: 3rem;
+	margin-right: 3rem;
+	width: 18rem
+}
+
+@media only screen and (min-width:1199px) {
+	.account__left--sidebar {
+		padding-right: 5rem;
+		margin-right: 5rem;
+		width: 23rem
+	}
+}
+
+@media only screen and (max-width:991px) {
+	.account__left--sidebar {
+		width: 100%;
+		padding-right: 0;
+		margin-right: 0;
+		border-right: 0;
+		border-bottom: 1px solid var(--border-color2);
+		padding-bottom: 2.5rem;
+		margin-bottom: 2.5rem
+	}
+}
+
+.account__content--title {
+	font-weight: 600
+}
+
+@media only screen and (max-width:991px) {
+	.account__menu {
+		width: 250px;
+		margin-right: 3rem
+	}
+}
+
+@media only screen and (max-width:479px) {
+	.account__menu {
+		margin-right: 0
+	}
+}
+
+.account__menu--list {
+	font-size: 1.5rem;
+	line-height: 2.5rem;
+	font-weight: 600;
+	cursor: pointer;
+	-webkit-transition: var(--transition);
+	transition: var(--transition);
+	margin-bottom: 1.5rem
+}
+
+.account__menu--list:last-child {
+	margin-bottom: 0
+}
+
+.account__menu--list:hover {
+	color: var(--secondary-color)
+}
+
+.account__menu--list.active {
+	color: var(--secondary-color)
+}
+
+@media only screen and (min-width:992px) {
+	.account__menu--list {
+		font-size: 1.6rem
+	}
+}
+
+.account__wrapper {
+	width: calc(100% - 18rem)
+}
+
+@media only screen and (min-width:1199px) {
+	.account__wrapper {
+		width: calc(100% - 23rem)
+	}
+}
+
+@media only screen and (max-width:991px) {
+	.account__wrapper {
+		width: 100%
+	}
+}
+
+
+
+
+
+// .dashboard-container {
+//     animation: fadeIn 0.5s ease-in;
+//   }
+  
+//   .kpi-grid {
+//     display: flex;
+//     gap: 16px;
+//   }
+  
+//   .chart-card,
+//   .table-card {
+//     background-color: var(--card-bg);
+//     box-shadow: var(--shadow);
+//     border: none;
+//   }
+  
+//   @media (max-width: 768px) {
+//     .kpi-grid {
+//       flex-direction: column;
+//     }
+//   }

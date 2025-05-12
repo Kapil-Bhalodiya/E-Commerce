@@ -1,27 +1,12 @@
 apiVersion: v2
-name: loki-stack
-description: A Helm chart for deploying Loki and Promtail
-type: application
-version: 0.1.0
-appVersion: "2.8.2"
+appVersion: "1.0"
+description: A Helm chart for loki-stack
+name: loki
+version: 2.6.1
 dependencies:
-  - name: loki
-    version: "5.8.9"  # Use the latest available version
-    repository: "https://grafana.github.io/helm-charts"
-  - name: promtail
-    version: "6.15.2"  # Use the latest available version
-    repository: "https://grafana.github.io/helm-charts"
-
-
-# apiVersion: v2
-# appVersion: "1.0"
-# description: A Helm chart for loki-stack
-# name: loki
-# version: 2.6.1
-# dependencies:
-#   - name: loki
-#     version: 6.7.4
-#     repository: https://grafana.github.io/helm-charts
-#   - name: promtail
-#     version: 6.16.4
-#     repository: https://grafana.github.io/helm-charts
+    - name: loki
+      version: 6.7.4
+      repository: https://grafana.github.io/helm-charts
+    - name: promtail
+      version: 6.16.4
+      repository: https://grafana.github.io/helm-charts
