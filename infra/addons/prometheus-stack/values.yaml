@@ -31,7 +31,7 @@ grafana:
   grafana.ini:
     server:
       domain: grafana.sharkapp.local
-      root_url: https://grafana.sharkapp.local:8001/
+      root_url: https://grafana.sharkapp.local:31450/
     auth.anonymous:
       enabled: true
       org_role: Viewer
