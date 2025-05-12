@@ -3,3 +3,4 @@ prometheus:
   fullnameOverride: prometheus
 grafana:
   fullnameOverride: grafana
+grafanaHost: grafana.sharkapp.local

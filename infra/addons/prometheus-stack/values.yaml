@@ -21,21 +21,6 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
-    additionalServiceMonitors:
-      - name: prometheus-node-exporter-dev
-        selector:
-          matchLabels:
-            app.kubernetes.io/name: prometheus-node-exporter
-            app.kubernetes.io/instance: prometheus-node-exporter-dev
-        namespaceSelector:
-          matchNames:
-            - dev
-        endpoints:
-          - port: metrics
-            interval: 15s
-            targetPort: 9103
-        additionalLabels:
-          prometheus: prometheus-stack
 grafana:
   adminPassword: newpassword123
   persistence:
@@ -44,6 +29,9 @@ grafana:
     accessModes: ["ReadWriteOnce"]
     size: 5Gi
   grafana.ini:
+    server:
+      domain: "{{ .Values.grafanaHost }}"
+      root_url: "http://{{ .Values.grafanaHost }}:8000"
     auth.anonymous:
       enabled: true
       org_role: Viewer
@@ -66,13 +54,14 @@ grafana:
           spanEndTimeShift: "1h"
         tracesToMetrics:
           datasourceUid: "prometheus"
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - "{{ .Values.grafanaHost }}"
+    path: /
 prometheus-node-exporter:
   enabled: true
-  extraArgs:
-    - --collector.disable-defaults
-    - --collector.cpu
-    - --collector.meminfo
-    - --collector.diskstats
 app:
   serviceMonitors:
     - name: sharkapp-backend
@@ -105,5 +94,3 @@ app:
               targetLabel: app
             - sourceLabels: [__meta_kubernetes_pod_namespace]
               targetLabel: namespace
-
-
