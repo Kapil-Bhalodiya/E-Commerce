@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: {{ .Values.grafana.ingress.ingressClassName }}
   rules:
-    - host: {{ .Values.grafanaHost }}
+    - host: {{ .Values.grafanaHost | default "grafana.sharkapp.local" }}
       http:
         paths:
           - path: {{ .Values.grafana.ingress.path }}
