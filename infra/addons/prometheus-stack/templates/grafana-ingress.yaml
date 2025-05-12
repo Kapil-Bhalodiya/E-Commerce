@@ -1,22 +1,24 @@
+{{- if .Values.grafana.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: "grafana-ingress"
+  name: {{ include "kube-prometheus-stack.fullname" . }}-grafana
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "grafana.labels" . | nindent 4 }}
+    {{- include "kube-prometheus-stack.labels" . | nindent 4 }}
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.grafana.ingress.ingressClassName }}
   rules:
-    - host: grafana.sharkapp.local
+    - host: {{ .Values.grafanaHost }}
       http:
         paths:
-          - path: /
+          - path: {{ .Values.grafana.ingress.path }}
             pathType: Prefix
             backend:
               service:
-                name: {{ include "grafana.fullname" . }}
+                name: {{ include "kube-prometheus-stack.fullname" . }}-grafana
                 port:
                   number: 80
+{{- end }}
