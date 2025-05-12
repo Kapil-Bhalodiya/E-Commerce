@@ -55,20 +55,7 @@ grafana:
         tracesToMetrics:
           datasourceUid: "prometheus"
   ingress:
-    enabled: true
-    ingressClassName: nginx
-    hosts:
-      - grafana.sharkapp.local
-    path: /
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /
-      nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
-      nginx.ingress.kubernetes.io/proxy-buffers: "4 256k"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    tls:
-      - hosts:
-          - grafana.sharkapp.local
-        secretName: sharkapp-tls
+    enabled: false  # Disable Helm-managed Ingress
 prometheus-node-exporter:
   enabled: true
 app:
