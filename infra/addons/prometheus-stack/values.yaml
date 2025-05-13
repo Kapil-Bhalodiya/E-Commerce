@@ -90,3 +90,17 @@ app:
               targetLabel: app
             - sourceLabels: [__meta_kubernetes_pod_namespace]
               targetLabel: namespace
+    - name: process-exporter
+      namespace: dev
+      selector:
+        matchLabels:
+          app: process-exporter
+      endpoints:
+        - port: metrics
+          path: /metrics
+          interval: 15s
+          relabelings:
+            - sourceLabels: [__meta_kubernetes_pod_node_name]
+              targetLabel: node
+            - sourceLabels: [__meta_kubernetes_pod_namespace]
+              targetLabel: namespace

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: process-exporter
+  namespace: dev
+  labels:
+    app: process-exporter
+spec:
+  selector:
+    matchLabels:
+      app: process-exporter
+  template:
+    metadata:
+      labels:
+        app: process-exporter
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9256"
+        prometheus.io/path: "/metrics"
+    spec:
+      hostPID: true  # Allow access to host PID namespace to see all processes
+      containers:
+      - name: process-exporter
+        image: ncabatoff/process-exporter:0.8.7
+        args:
+          - "--procfs=/host/proc"
+          - "--config.path=/etc/process-exporter/process-exporter.yaml"
+        ports:
+        - name: metrics
+          containerPort: 9256
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+        securityContext:
+          runAsUser: 65532
+          runAsGroup: 65532
+          runAsNonRoot: true
+        volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: config-volume
+          mountPath: /etc/process-exporter/process-exporter.yaml
+          subPath: process-exporter.yaml
+      volumes:
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: config-volume
+        configMap:
+          name: process-exporter-config
