@@ -36,9 +36,8 @@ spec:
             cpu: "100m"
             memory: "128Mi"
         securityContext:
-          runAsUser: 65532
-          runAsGroup: 65532
-          runAsNonRoot: true
+          runAsUser: 0  # Run as root for debugging
+          runAsNonRoot: false
         volumeMounts:
         - name: proc
           mountPath: /host/proc
