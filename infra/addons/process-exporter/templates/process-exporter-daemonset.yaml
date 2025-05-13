@@ -18,7 +18,7 @@ spec:
         prometheus.io/port: "9256"
         prometheus.io/path: "/metrics"
     spec:
-      hostPID: true  # Access host PID namespace to see all processes
+      hostPID: true
       containers:
       - name: process-exporter
         image: ncabatoff/process-exporter:0.8.7
