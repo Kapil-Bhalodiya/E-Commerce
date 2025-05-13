@@ -95,6 +95,8 @@ app:
       selector:
         matchLabels:
           app: process-exporter
+      additionalLabels:  # Add this to ensure Prometheus picks it up
+        prometheus: prometheus-stack
       endpoints:
         - port: metrics
           path: /metrics
