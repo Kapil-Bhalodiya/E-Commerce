@@ -104,3 +104,7 @@ app:
               targetLabel: node
             - sourceLabels: [__meta_kubernetes_pod_namespace]
               targetLabel: namespace
+            - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+              targetLabel: __meta_kubernetes_pod_annotation_prometheus_io_scrape
+            - action: labelmap
+              regex: __meta_kubernetes_pod_label_(.+)
