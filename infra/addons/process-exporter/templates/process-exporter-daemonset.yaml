@@ -51,4 +51,4 @@ spec:
           path: /proc
       - name: config-volume
         configMap:
-          name: process-exporter-config
+          name: process-exporter-config-temp
