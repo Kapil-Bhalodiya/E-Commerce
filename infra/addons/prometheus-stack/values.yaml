@@ -64,7 +64,8 @@ app:
       namespace: dev
       selector:
         matchLabels:
-          app: frontend-dev
+          app.kubernetes.io/instance: frontend-dev
+          app.kubernetes.io/name: frontend
       additionalLabels:  # Ensure the label matches the selector
         release: prometheus-stack-dev
       endpoints:
@@ -81,7 +82,8 @@ app:
       namespace: dev
       selector:
         matchLabels:
-          app: backend-dev
+          app.kubernetes.io/instance: backend-dev  # Match the service label
+          app.kubernetes.io/name: backend
       additionalLabels:
         release: prometheus-stack-dev
       endpoints:
