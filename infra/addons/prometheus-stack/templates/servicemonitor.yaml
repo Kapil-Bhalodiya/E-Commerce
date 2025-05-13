@@ -5,7 +5,7 @@ metadata:
   name: {{ .name }}
   namespace: {{ .namespace }}
   labels:
-    prometheus: prometheus-stack
+    release: prometheus-stack-dev
 spec:
   selector:
     {{- toYaml .selector | nindent 4 }}
