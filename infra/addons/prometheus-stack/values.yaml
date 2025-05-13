@@ -89,6 +89,9 @@ app:
           path: /metrics
           interval: 15s
           targetPort: 8080
+          relabelings:
+            - sourceLabels: [__meta_kubernetes_pod_namespace]
+              targetLabel: namespace
     - name: process-exporter
       namespace: dev
       selector:
