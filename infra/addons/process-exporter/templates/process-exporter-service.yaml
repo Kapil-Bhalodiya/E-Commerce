@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: process-exporter
+  namespace: dev
+  labels:
+    app: process-exporter
+spec:
+  selector:
+    app: process-exporter
+  ports:
+  - name: metrics
+    port: 9256
+    targetPort: 9256
+    protocol: TCP
+  clusterIP: None  # Headless service since DaemonSet pods are scraped individually
