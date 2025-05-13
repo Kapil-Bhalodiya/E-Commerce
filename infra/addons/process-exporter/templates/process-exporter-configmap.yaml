@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: process-exporter-config
   namespace: dev
+  labels:
+    app.kubernetes.io/instance: process-exporter-dev
 data:
   process-exporter.yaml: |
     process_names:

@@ -9,8 +9,7 @@ spec:
   selector:
     app: process-exporter
   ports:
-  - name: metrics
-    port: 9256
-    targetPort: 9256
-    protocol: TCP
-  clusterIP: None
+    - name: metrics
+      port: 9256
+      targetPort: 9256
+      protocol: TCP
