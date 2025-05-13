@@ -103,5 +103,3 @@ app:
           relabelings:
             - sourceLabels: [__meta_kubernetes_pod_namespace]
               targetLabel: namespace
-            - sourceLabels: [__meta_kubernetes_pod_label_app]
-              targetLabel: app
