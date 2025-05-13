@@ -1,5 +1,9 @@
 # Environment-specific overrides (if any)
 prometheus:
+  prometheusSpec:
+    serviceMonitorNamespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: dev
   fullnameOverride: prometheus
 grafana:
   fullnameOverride: grafana
