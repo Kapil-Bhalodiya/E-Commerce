@@ -14,7 +14,7 @@ spec:
   - host: grafana.sharkapp.local
     http:
       paths:
-      - path: /
+      - path: /.*
         pathType: Prefix
         backend:
           service:
