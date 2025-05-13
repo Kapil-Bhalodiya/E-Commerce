@@ -65,6 +65,8 @@ app:
       selector:
         matchLabels:
           app: backend-dev
+      additionalLabels:  # Ensure the label matches the selector
+        prometheus: prometheus-stack
       endpoints:
         - port: http
           path: /metrics
@@ -80,6 +82,8 @@ app:
       selector:
         matchLabels:
           app: frontend-dev
+      additionalLabels:  # Ensure the label matches the selector
+        prometheus: prometheus-stack
       endpoints:
         - port: http
           path: /metrics
