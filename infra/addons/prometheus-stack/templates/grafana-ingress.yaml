@@ -14,10 +14,14 @@ spec:
   - host: grafana.sharkapp.local
     http:
       paths:
-      - path: /.*
+      - path: /
         pathType: Prefix
         backend:
           service:
             name: prometheus-stack-dev-grafana
             port:
               number: 80
+  tls:
+  - hosts:
+    - grafana.sharkapp.local
+    secretName: sharkapp-tls
