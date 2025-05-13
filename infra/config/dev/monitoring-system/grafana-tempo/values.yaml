@@ -22,7 +22,7 @@ tempo:
   serviceMonitor:
     enabled: true
     labels:
-      prometheus: prometheus-stack
+      release: prometheus-stack-dev
   readinessProbe:
     httpGet:
       path: /ready
