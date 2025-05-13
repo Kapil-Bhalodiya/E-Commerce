@@ -60,23 +60,6 @@ prometheus-node-exporter:
   enabled: true
 app:
   serviceMonitors:
-    - name: sharkapp-backend
-      namespace: dev
-      selector:
-        matchLabels:
-          app: backend-dev
-      additionalLabels:  # Ensure the label matches the selector
-        prometheus: prometheus-stack
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-          targetPort: 8080
-          relabelings:
-            - sourceLabels: [__meta_kubernetes_pod_label_app]
-              targetLabel: app
-            - sourceLabels: [__meta_kubernetes_pod_namespace]
-              targetLabel: namespace
     - name: sharkapp-frontend
       namespace: dev
       selector:
@@ -94,23 +77,26 @@ app:
               targetLabel: app
             - sourceLabels: [__meta_kubernetes_pod_namespace]
               targetLabel: namespace
+    - name: sharkapp-backend
+      namespace: dev
+      selector:
+        matchLabels:
+          app: backend-dev
+      additionalLabels:
+        prometheus: prometheus-stack
+      endpoints:
+        - port: http
+          path: /metrics
+          interval: 15s
+          targetPort: 8080
     - name: process-exporter
       namespace: dev
       selector:
         matchLabels:
           app: process-exporter
-      additionalLabels:  # Add this to ensure Prometheus picks it up
+      additionalLabels:
         prometheus: prometheus-stack
       endpoints:
         - port: metrics
           path: /metrics
           interval: 15s
-          relabelings:
-            - sourceLabels: [__meta_kubernetes_pod_node_name]
-              targetLabel: node
-            - sourceLabels: [__meta_kubernetes_pod_namespace]
-              targetLabel: namespace
-            - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
-              targetLabel: __meta_kubernetes_pod_annotation_prometheus_io_scrape
-            - action: labelmap
-              regex: __meta_kubernetes_pod_label_(.+)
