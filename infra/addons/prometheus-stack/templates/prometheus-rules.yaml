@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: process-exporter-rules
+  namespace: dev
+spec:
+  groups:
+  - name: process-exporter
+    rules:
+    - record: namedprocess_namegroup_cpu_seconds_total_with_pod
+      expr: |
+        namedprocess_namegroup_cpu_seconds_total{namespace="dev"}
+        * on(node, pid) group_left(pod, namespace)
+        container_pid_namespace{namespace="dev"}
+    - record: namedprocess_namegroup_memory_resident_bytes_with_pod
+      expr: |
+        namedprocess_namegroup_memory_resident_bytes{namespace="dev"}
+        * on(node, pid) group_left(pod, namespace)
+        container_pid_namespace{namespace="dev"}

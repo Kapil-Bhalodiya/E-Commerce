@@ -13,4 +13,4 @@ spec:
     port: 9256
     targetPort: 9256
     protocol: TCP
-  clusterIP: None  # Headless service since DaemonSet pods are scraped individually
+  clusterIP: None  # Headless service for DaemonSet
