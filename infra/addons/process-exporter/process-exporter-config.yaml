@@ -1,4 +1,5 @@
-process_names:
-  - name: "{{.Comm}}"
-    comm:
-      - .*
+config:
+  processNames:
+    - name: "{{.Comm}}"
+      comm:
+        - .*
