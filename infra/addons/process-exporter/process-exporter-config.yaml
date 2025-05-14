@@ -1,5 +1,0 @@
-config:
-  processNames:
-    - name: "{{.Comm}}"
-      comm:
-        - .*
