@@ -74,9 +74,9 @@ app:
           interval: 15s
           targetPort: 8000
           relabelings:
-            - sourceLabels: [__meta_kubernetes_pod_label_app]
-              targetLabel: app
-            - sourceLabels: [__meta_kubernetes_pod_namespace]
+            - action: replace
+              sourceLabels:
+              - __meta_kubernetes_pod_namespace
               targetLabel: namespace
     - name: sharkapp-backend
       namespace: dev
@@ -92,7 +92,9 @@ app:
           interval: 15s
           targetPort: 8000
           relabelings:
-            - sourceLabels: [__meta_kubernetes_pod_namespace]
+            - action: replace
+              sourceLabels:
+              - __meta_kubernetes_pod_namespace
               targetLabel: namespace
     - name: process-exporter
       namespace: dev
@@ -106,5 +108,7 @@ app:
           path: /metrics
           interval: 15s
           relabelings:
-            - sourceLabels: [__meta_kubernetes_pod_namespace]
+            - action: replace
+              sourceLabels:
+              - __meta_kubernetes_pod_namespace
               targetLabel: namespace
