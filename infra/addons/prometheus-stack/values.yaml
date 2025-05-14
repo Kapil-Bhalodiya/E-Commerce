@@ -1,10 +1,12 @@
+prometheusOperator:
+  enabled: true
 prometheus:
-  enabled: true  # Ensure Prometheus instance is enabled
+  enabled: true
   prometheusSpec:
-    replicas: 1  # Number of Prometheus replicas
+    replicas: 1
     service:
       type: ClusterIP
-      port: 9090  # Port for the prometheus-operated service
+      port: 9090
     kubeControllerManager:
       enabled: true
       scheme: http
@@ -59,6 +61,7 @@ prometheus:
             requests:
               storage: 10Gi
 grafana:
+  enabled: true
   adminPassword: newpassword123
   persistence:
     enabled: true
