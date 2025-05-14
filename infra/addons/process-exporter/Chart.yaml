@@ -1,6 +1,0 @@
-apiVersion: v2
-name: process-exporter
-description: A Helm chart for deploying process-exporter
-type: application
-version: 0.1.0
-appVersion: "0.8.7"

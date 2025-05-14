@@ -52,3 +52,4 @@ echo "Initial password: $(kubectl -n argocd get secret argocd-initial-admin-secr
 
 kubectl port-forward svc/nginx-ingress-ingress-nginx-controller -n ingress-nginx 8000:80
 kubectl port-forward service/argocd-server -n argocd 8081:443 - jeBaZAoI6mx5xCzu
+kubectl port-forward svc/prometheus-stack-dev-grafana -n dev 3000:80 - prom-operator
