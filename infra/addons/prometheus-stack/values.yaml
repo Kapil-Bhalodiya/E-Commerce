@@ -66,6 +66,8 @@ grafana:
     enabled: false  # Disable Helm-managed Ingress
 prometheus-node-exporter:
   enabled: true
+app:
+  serviceMonitors: []
 # app:
 #   serviceMonitors:
 #     - name: sharkapp-frontend
