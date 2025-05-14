@@ -1,5 +1,13 @@
 prometheus:
   prometheusSpec:
+    kubeControllerManager:
+      scheme: http
+    kubeScheduler:
+      scheme: http
+    kubeProxy:
+      scheme: http
+    kubeEtcd:
+      scheme: http
     serviceMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelector:
       matchLabels:
