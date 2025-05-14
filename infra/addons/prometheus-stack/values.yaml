@@ -60,6 +60,8 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
+
+
 grafana:
   enabled: true
   adminPassword: newpassword123
@@ -76,6 +78,11 @@ grafana:
       enabled: true
       org_role: Viewer
   additionalDataSources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-operated.monitoring.svc.cluster.local:9090
+      access: proxy
+      isDefault: true
     - name: Loki
       type: loki
       url: http://loki.dev.svc.cluster.local:3100
@@ -95,9 +102,13 @@ grafana:
         tracesToMetrics:
           datasourceUid: "prometheus"
   ingress:
-    enabled: false
+    enabled: true
+
+
 prometheus-node-exporter:
   enabled: true
+
+
 app:
   serviceMonitors: []
 # app:
