@@ -4,7 +4,7 @@ prometheus:
     serviceMonitorNamespaceSelector:
       matchLabels:
         kubernetes.io/metadata.name: dev
-  fullnameOverride: prometheus
+  fullnameOverride: prometheus-stack-dev-kube-prometheus
 grafana:
   fullnameOverride: grafana
 grafanaHost: grafana.sharkapp.local
