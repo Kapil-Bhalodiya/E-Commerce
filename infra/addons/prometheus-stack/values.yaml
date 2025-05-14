@@ -1,21 +1,37 @@
 prometheus:
   prometheusSpec:
     kubeControllerManager:
+      enabled: true
       scheme: http
-      service:
-        port: 10252  # Default metrics port for kube-controller-manager in KIND
+      serviceMonitor:
+        scheme: http
+        insecureSkipVerify: true
+      endpoints:
+        - 10252  # Metrics port for kube-controller-manager
     kubeScheduler:
+      enabled: true
       scheme: http
-      service:
-        port: 10251  # Default metrics port for kube-scheduler in KIND
+      serviceMonitor:
+        scheme: http
+        insecureSkipVerify: true
+      endpoints:
+        - 10251  # Metrics port for kube-scheduler
     kubeProxy:
+      enabled: true
       scheme: http
-      service:
-        port: 10249
+      serviceMonitor:
+        scheme: http
+        insecureSkipVerify: true
+      endpoints:
+        - 10249  # Metrics port for kube-proxy
     kubeEtcd:
+      enabled: true
       scheme: http
-      service:
-        port: 2381
+      serviceMonitor:
+        scheme: http
+        insecureSkipVerify: true
+      endpoints:
+        - 2381
     serviceMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelector:
       matchLabels:
