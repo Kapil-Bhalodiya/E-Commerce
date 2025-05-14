@@ -2,12 +2,20 @@ prometheus:
   prometheusSpec:
     kubeControllerManager:
       scheme: http
+      service:
+        port: 10252  # Default metrics port for kube-controller-manager in KIND
     kubeScheduler:
       scheme: http
+      service:
+        port: 10251  # Default metrics port for kube-scheduler in KIND
     kubeProxy:
       scheme: http
+      service:
+        port: 10249
     kubeEtcd:
       scheme: http
+      service:
+        port: 2381
     serviceMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelector:
       matchLabels:
