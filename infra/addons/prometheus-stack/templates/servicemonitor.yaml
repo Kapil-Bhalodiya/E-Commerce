@@ -9,15 +9,15 @@ metadata:
 spec:
   selector:
     {{- toYaml .selector | nindent 4 }}
-  endpoints:
-  - port: metrics
-    path: /metrics
-    interval: 15s
-    relabelings:
-    - sourceLabels: [__meta_kubernetes_pod_namespace]
-      targetLabel: namespace
-      action: replace  
   # endpoints:
-  #   {{- toYaml .endpoints | nindent 4 }}
+  # - port: metrics
+  #   path: /metrics
+  #   interval: 15s
+  #   relabelings:
+  #   - sourceLabels: [__meta_kubernetes_pod_namespace]
+  #     targetLabel: namespace
+  #     action: replace  
+  endpoints:
+    {{- toYaml .endpoints | nindent 4 }}
 ---
 {{- end }}
