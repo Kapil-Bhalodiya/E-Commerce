@@ -72,7 +72,7 @@ app:
         - port: http
           path: /metrics
           interval: 15s
-          targetPort: 8000
+          targetPort: 8080
           relabelings:
             - action: replace
               sourceLabels:
@@ -90,7 +90,7 @@ app:
         - port: http
           path: /metrics
           interval: 15s
-          targetPort: 8000
+          targetPort: 8080
           relabelings:
             - action: replace
               sourceLabels:
