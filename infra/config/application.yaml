@@ -42,7 +42,7 @@ spec:
         namespace: '{{target.path.basename}}'
       syncPolicy:
         automated:
-          prune: true  # Changed to true
+          prune: false  # Changed to true
           selfHeal: true  # Changed to true
         syncOptions:
         - CreateNamespace=true
