@@ -58,57 +58,57 @@ grafana:
     enabled: false  # Disable Helm-managed Ingress
 prometheus-node-exporter:
   enabled: true
-app:
-  serviceMonitors:
-    - name: sharkapp-frontend
-      namespace: dev
-      selector:
-        matchLabels:
-          app.kubernetes.io/instance: frontend-dev
-          app.kubernetes.io/name: frontend
-      additionalLabels:  # Ensure the label matches the selector
-        release: prometheus-stack-dev
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-          targetPort: 8000
-          relabelings:
-            - action: replace
-              sourceLabels:
-              - __meta_kubernetes_pod_namespace
-              targetLabel: namespace
-    - name: sharkapp-backend
-      namespace: dev
-      selector:
-        matchLabels:
-          app.kubernetes.io/instance: backend-dev  # Match the service label
-          app.kubernetes.io/name: backend
-      additionalLabels:
-        release: prometheus-stack-dev
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-          targetPort: 8000
-          relabelings:
-            - action: replace
-              sourceLabels:
-              - __meta_kubernetes_pod_namespace
-              targetLabel: namespace
-    - name: process-exporter
-      namespace: dev
-      selector:
-        matchLabels:
-          app: process-exporter
-      additionalLabels:
-        release: prometheus-stack-dev
-      endpoints:
-        - port: metrics
-          path: /metrics
-          interval: 15s
-          relabelings:
-            - action: replace
-              sourceLabels:
-              - __meta_kubernetes_pod_namespace
-              targetLabel: namespace
+# app:
+#   serviceMonitors:
+#     - name: sharkapp-frontend
+#       namespace: dev
+#       selector:
+#         matchLabels:
+#           app.kubernetes.io/instance: frontend-dev
+#           app.kubernetes.io/name: frontend
+#       additionalLabels:  # Ensure the label matches the selector
+#         release: prometheus-stack-dev
+#       endpoints:
+#         - port: http
+#           path: /metrics
+#           interval: 15s
+#           targetPort: 8000
+#           relabelings:
+#             - action: replace
+#               sourceLabels:
+#               - __meta_kubernetes_pod_namespace
+#               targetLabel: namespace
+#     - name: sharkapp-backend
+#       namespace: dev
+#       selector:
+#         matchLabels:
+#           app.kubernetes.io/instance: backend-dev  # Match the service label
+#           app.kubernetes.io/name: backend
+#       additionalLabels:
+#         release: prometheus-stack-dev
+#       endpoints:
+#         - port: http
+#           path: /metrics
+#           interval: 15s
+#           targetPort: 8000
+#           relabelings:
+#             - action: replace
+#               sourceLabels:
+#               - __meta_kubernetes_pod_namespace
+#               targetLabel: namespace
+#     - name: process-exporter
+#       namespace: dev
+#       selector:
+#         matchLabels:
+#           app: process-exporter
+#       additionalLabels:
+#         release: prometheus-stack-dev
+#       endpoints:
+#         - port: metrics
+#           path: /metrics
+#           interval: 15s
+#           relabelings:
+#             - action: replace
+#               sourceLabels:
+#               - __meta_kubernetes_pod_namespace
+#               targetLabel: namespace
