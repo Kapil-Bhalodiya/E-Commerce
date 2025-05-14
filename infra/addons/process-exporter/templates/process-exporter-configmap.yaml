@@ -6,6 +6,9 @@ metadata:
 data:
   process-exporter.yaml: |
     process_names:
-      - name: "{{.Comm}}"
-        comm:
-          - node
+      - name: "{{.Comm}}-{{.Pid}}"
+        cmdline:
+          - ".*node.*"
+        labels:
+          pod: "{{.PodName}}"
+          container: "{{.ContainerName}}"
