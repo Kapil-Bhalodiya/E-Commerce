@@ -22,7 +22,7 @@ prometheus:
         scheme: http
         insecureSkipVerify: true
       endpoints:
-        - 10251
+        - 10249
     kubeProxy:
       enabled: true
       scheme: http
