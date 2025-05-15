@@ -5,7 +5,7 @@
 
 clusterIssuer: letsencrypt-dev
 tls:
-  enabled: true  # Currently disabled for local testing
+  enabled: false  # Currently disabled for local testing
   secretName: sharkapp-tls-cert-dev
 annotations:
   nginx.ingress.kubernetes.io/ssl-redirect: "false"
