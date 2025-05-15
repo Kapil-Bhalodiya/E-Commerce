@@ -2,7 +2,13 @@ ingress-nginx:
   controller:
     replicaCount: 2
     service:
-      type: LoadBalancer
+      type: NodePort
+      ports:
+        http: 80
+        https: 443
+      nodePorts:
+        http: 30931
+        https: 30443
       externalTrafficPolicy: Local
     resources:
       requests:
