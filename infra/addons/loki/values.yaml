@@ -20,7 +20,7 @@ loki:
     storage:
       filesystem:
         directory: /var/loki/chunks
-  schemaConfig:  # Define directly under loki
+  schemaConfig:
     configs:
       - from: "2024-01-01"
         store: boltdb-shipper
@@ -37,7 +37,7 @@ loki:
         shared_store: filesystem
       filesystem:
         directory: /var/loki/chunks
-    schema_config:  # Keep for consistency
+    schema_config:
       configs:
         - from: "2024-01-01"
           store: boltdb-shipper
@@ -46,7 +46,7 @@ loki:
           index:
             prefix: loki_index_
             period: 24h
-  useTestSchema: false  # Disable since we're providing a proper schema
+  useTestSchema: false
 tableManager:
   retention_deletes_enabled: false
   retention_period: 0
@@ -75,11 +75,23 @@ promtail:
     successThreshold: 1
     failureThreshold: 5
 monitoring:
+  dashboards:
+    enabled: false
+  rules:
+    enabled: false
+  serviceMonitor:
+    enabled: false
   selfMonitoring:
-    enabled: false  # Disable self-monitoring to avoid Grafana Agent CRD
+    enabled: false
     grafanaAgent:
-      enabled: false  # Explicitly disable Grafana Agent
+      enabled: false
       installOperator: false
+  lokiCanary:
+    enabled: false  # Disable canary to avoid additional dependencies
+gateway:
+  enabled: true
+  replicas: 1
+  verboseLogging: true
 
 
 
