@@ -6,8 +6,8 @@ version: 0.1.0
 appVersion: "2.8.2"
 dependencies:
   - name: loki
-    version: "5.8.9"  # Use the latest available version
-    repository: "https://grafana.github.io/helm-charts"
+    version: 5.47.2
+    repository: https://grafana.github.io/helm-charts
   - name: promtail
     version: "6.15.2"  # Use the latest available version
     repository: "https://grafana.github.io/helm-charts"
