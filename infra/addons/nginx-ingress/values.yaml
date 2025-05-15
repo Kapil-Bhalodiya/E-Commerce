@@ -1,5 +1,6 @@
 ingress-nginx:
   controller:
+    enabled: true
     replicaCount: 2
     service:
       type: NodePort
@@ -17,7 +18,3 @@ ingress-nginx:
       limits:
         cpu: 300m
         memory: 256Mi
-
-ingress-nginx:
-  controller:
-    enabled: false
