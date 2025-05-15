@@ -5,5 +5,6 @@ prometheus:
       matchLabels:
         kubernetes.io/metadata.name: dev
 grafana:
+  namespaceOverride: dev
   fullnameOverride: grafana
-grafanaHost: grafana.sharkapp.local
+# grafanaHost: grafana.sharkapp.local
