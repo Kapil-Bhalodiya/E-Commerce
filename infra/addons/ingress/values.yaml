@@ -1,6 +1,6 @@
 # Global settings
 domain: www.sharkapp.local
-clusterIssuer: ''
+clusterIssuer: 'letsencrypt-dev'
 
 # TLS settings
 tls:
