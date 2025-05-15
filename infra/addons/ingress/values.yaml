@@ -4,7 +4,7 @@ clusterIssuer: 'letsencrypt-dev'
 
 # TLS settings
 tls:
-  enabled: false
+  enabled: true
   secretName: sharkapp-tls-cert
 
 # Services mapping
