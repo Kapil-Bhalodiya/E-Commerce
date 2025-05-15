@@ -1,3 +1,89 @@
+loki:
+  isDefault: false
+  auth_enabled: false
+  deploymentMode: SimpleScalable
+  backend:
+    replicas: 1
+  write:
+    replicas: 1
+  read:
+    replicas: 1
+  persistence:
+    enabled: true
+    size: 10Gi
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: standard
+  commonConfig:
+    path_prefix: /var/loki
+    replication_factor: 1
+    storage:
+      filesystem:
+        directory: /var/loki/chunks
+  schemaConfig:  # Define directly under loki
+    configs:
+      - from: "2024-01-01"
+        store: boltdb-shipper
+        object_store: filesystem
+        schema: v12
+        index:
+          prefix: loki_index_
+          period: 24h
+  structuredConfig:
+    storage_config:
+      boltdb_shipper:
+        active_index_directory: /var/loki/index
+        cache_location: /var/loki/index_cache
+        shared_store: filesystem
+      filesystem:
+        directory: /var/loki/chunks
+    schema_config:  # Keep for consistency
+      configs:
+        - from: "2024-01-01"
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v12
+          index:
+            prefix: loki_index_
+            period: 24h
+  useTestSchema: false  # Disable since we're providing a proper schema
+tableManager:
+  retention_deletes_enabled: false
+  retention_period: 0
+promtail:
+  enabled: true
+  config:
+    logLevel: info
+    clients:
+      - url: http://loki-dev-gateway.dev.svc.cluster.local:80/loki/api/v1/push
+  pipelineStages:
+    - docker: {}
+  extraRelabelConfigs:
+    - source_labels: [__meta_kubernetes_pod_label_app]
+      target_label: app
+    - source_labels: [__meta_kubernetes_pod_namespace]
+      target_label: namespace
+    - source_labels: [__meta_kubernetes_pod_name]
+      target_label: pod
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http-metrics
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 5
+
+
+
+
+
+
+
+
+
+
 # # Loki values
 # loki:
 #   auth_enabled: false
@@ -70,99 +156,99 @@
 #       memory: 128Mi
 
 
-loki:  
-  singleBinary:
-    replicas: 0
-    persistence:
-      enabled: true
-      size: 10Gi
-      storageClassName: standard
-  test:
-    enabled: false
-  singleBinary:
-    replicas: 0
-  backend:
-    replicas: 1
-  read:
-    replicas: 1
-  write:
-    replicas: 1
-  loki:
-    enterprise:
-      enabled: false
-    canary:
-      enabled: false
-    memcached:
-      chunk_cache:
-        enabled: false
-      results_cache:
-        enabled: false
-    auth_enabled: false
-    enabled: true
-    isDefault: true
-    resources:
-      limits:
-        memory: "500Mi"
-      requests:
-        cpu: "50m"
-        memory: "256Mi"
-    structuredConfig:
-      limits_config:
-        allow_structured_metadata: false
-      ingester:
-        chunk_idle_period: 30m
-        chunk_block_size: 1000000
-        chunk_retain_period: 5m
-        chunk_encoding: snappy
-      schema_config:
-        configs:
-          - from: 2020-07-01
-            store: boltdb-shipper
-            object_store: filesystem
-            schema: v11
-            index:
-              prefix: index_
-              period: 24h
-          - from: 2024-08-22
-            object_store: filesystem
-            schema: v13
-            store: tsdb
-            index:
-              period: 24h
-              prefix: index_
-      storage_config:
-        boltdb_shipper:
-          active_index_directory: /var/loki/data/boltdb-index
-        tsdb_shipper:
-          active_index_directory: /var/loki/data/tsdb-index
-        filesystem:
-          directory: /var/loki/chunks
-      ruler:
-        storage:
-          type: local
-          local:
-            directory: /var/loki/rules
-promtail:
-  enabled: true
-  config:
-    logLevel: info
-    clients:
-      - url: http://loki-dev-gateway.dev.svc.cluster.local:80/loki/api/v1/push
-  pipelineStages:
-    - docker: {}
-  extraRelabelConfigs:
-    - source_labels: [__meta_kubernetes_pod_label_app]
-      target_label: app
-    - source_labels: [__meta_kubernetes_pod_namespace]
-      target_label: namespace
-    - source_labels: [__meta_kubernetes_pod_name]
-      target_label: pod
-  readinessProbe:
-    httpGet:
-      path: /ready
-      port: http-metrics
-    initialDelaySeconds: 30
-    timeoutSeconds: 5
-    periodSeconds: 10
-    successThreshold: 1
-    failureThreshold: 5
+# loki:  
+#   singleBinary:
+#     replicas: 0
+#     persistence:
+#       enabled: true
+#       size: 10Gi
+#       storageClassName: standard
+#   test:
+#     enabled: false
+#   singleBinary:
+#     replicas: 0
+#   backend:
+#     replicas: 1
+#   read:
+#     replicas: 1
+#   write:
+#     replicas: 1
+#   loki:
+#     enterprise:
+#       enabled: false
+#     canary:
+#       enabled: false
+#     memcached:
+#       chunk_cache:
+#         enabled: false
+#       results_cache:
+#         enabled: false
+#     auth_enabled: false
+#     enabled: true
+#     isDefault: true
+#     resources:
+#       limits:
+#         memory: "500Mi"
+#       requests:
+#         cpu: "50m"
+#         memory: "256Mi"
+#     structuredConfig:
+#       limits_config:
+#         allow_structured_metadata: false
+#       ingester:
+#         chunk_idle_period: 30m
+#         chunk_block_size: 1000000
+#         chunk_retain_period: 5m
+#         chunk_encoding: snappy
+#       schema_config:
+#         configs:
+#           - from: 2020-07-01
+#             store: boltdb-shipper
+#             object_store: filesystem
+#             schema: v11
+#             index:
+#               prefix: index_
+#               period: 24h
+#           - from: 2024-08-22
+#             object_store: filesystem
+#             schema: v13
+#             store: tsdb
+#             index:
+#               period: 24h
+#               prefix: index_
+#       storage_config:
+#         boltdb_shipper:
+#           active_index_directory: /var/loki/data/boltdb-index
+#         tsdb_shipper:
+#           active_index_directory: /var/loki/data/tsdb-index
+#         filesystem:
+#           directory: /var/loki/chunks
+#       ruler:
+#         storage:
+#           type: local
+#           local:
+#             directory: /var/loki/rules
+# promtail:
+#   enabled: true
+#   config:
+#     logLevel: info
+#     clients:
+#       - url: http://loki-dev-gateway.dev.svc.cluster.local:80/loki/api/v1/push
+#   pipelineStages:
+#     - docker: {}
+#   extraRelabelConfigs:
+#     - source_labels: [__meta_kubernetes_pod_label_app]
+#       target_label: app
+#     - source_labels: [__meta_kubernetes_pod_namespace]
+#       target_label: namespace
+#     - source_labels: [__meta_kubernetes_pod_name]
+#       target_label: pod
+#   readinessProbe:
+#     httpGet:
+#       path: /ready
+#       port: http-metrics
+#     initialDelaySeconds: 30
+#     timeoutSeconds: 5
+#     periodSeconds: 10
+#     successThreshold: 1
+#     failureThreshold: 5
