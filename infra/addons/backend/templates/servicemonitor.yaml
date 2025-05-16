@@ -12,7 +12,7 @@ spec:
     matchLabels:
       {{- include "backend.selectorLabels" . | nindent 6 }}
   endpoints:
-    - port: {{ .Values.metrics.port }}
+    - port: http
       path: {{ .Values.metrics.path }}
       interval: 15s
 {{- end }}
