@@ -5,6 +5,9 @@ image:
   tag: "latest"
   pullPolicy: IfNotPresent
 
+labels:
+  release: prometheus-stack-dev
+
 service:
   type: ClusterIP
   port: 80
