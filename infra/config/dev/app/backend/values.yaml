@@ -2,6 +2,9 @@ replicaCount: 1
 
 namespace: dev
 
+labels:
+  release: prometheus-stack-dev
+
 image:
   pullPolicy: Always
   
