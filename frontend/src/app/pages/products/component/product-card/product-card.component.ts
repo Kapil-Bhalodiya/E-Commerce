@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RatingComponent } from "../../../../compoments/rating/rating.component";
 import { Router } from '@angular/router';
 import { Product } from '../../../../models/product.model';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-product-card',
@@ -17,6 +18,7 @@ export class ProductCardComponent {
     // private productModel: Product
   ) {}
   showModal: boolean = false;
+  imageURL: string = environment.apiUrl;
   @Input() product:Product = {
     _id: '',
     name: '',

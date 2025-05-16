@@ -32,14 +32,14 @@ export class ProductService {
       params = params.set('occasions', filters.occasions.join(','));
     }
 
-    return this.http.get<any>(`${environment.apiUrl}/products`, { params });
+    return this.http.get<any>(`${environment.backendApi}/products`, { params });
   }
   
   fetchAllProducts(): Observable<any>{
-    return this.http.get<any>(`${environment.apiUrl}/products`);
+    return this.http.get<any>(`${environment.backendApi}/products`);
   }
 
   getProductById(id: string): Observable<Product> {
-    return this.http.get<Product>(`${environment.apiUrl}/products/${id}`);
+    return this.http.get<Product>(`${environment.backendApi}/products/${id}`);
   }
 }
