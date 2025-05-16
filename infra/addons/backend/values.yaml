@@ -13,7 +13,7 @@ service:
 metrics:
   enabled: true
   path: /metrics
-  port: 3000
+  port: 8000
 
 tracing:
   enabled: true
