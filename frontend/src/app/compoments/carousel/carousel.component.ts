@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { CarouselModule, CarouselComponent, OwlOptions } from 'ngx-owl-carousel-o';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Component({
   standalone: true,
@@ -13,7 +14,8 @@ import { CommonModule } from '@angular/common';
 export class CarouselsComponent {
   @Input() images: any;
   @ViewChild('owlCarousel', { static: false }) owlCarousel?: CarouselComponent;
-
+  
+  imageURL: string = environment.apiUrl;
   productImages = [
     { id: '1', src: 'Men/Tshirt/Whale Shark/Whale Shark - Blue.webp' },
     { id: '3', src: 'Women/TShirt/Tralala/Tralala - black.webp' },

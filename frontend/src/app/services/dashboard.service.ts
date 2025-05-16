@@ -11,11 +11,11 @@ export class DashboardService {
   constructor(private http: HttpClient) {}
 
   getKPIs(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/dashboard/kpis`);
+    return this.http.get(`${environment.backendApi}/dashboard/kpis`);
   }
 
   getUsers(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/dashboard/users`);
+    return this.http.get(`${environment.backendApi}/dashboard/users`);
   }
 
 //   getKPIUpdates(): Observable<any> {
