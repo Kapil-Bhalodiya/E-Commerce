@@ -1,0 +1,6 @@
+apiVersion: v2
+name: process-exporter
+description: A Helm chart for deploying Process Exporter to monitor processes in Kubernetes
+type: application
+version: 0.1.0
+appVersion: "0.7.10"
