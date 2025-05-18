@@ -29,6 +29,9 @@ spec:
         - name: proc
           mountPath: /host/proc
           readOnly: true
+        securityContext:
+          runAsUser: 0
+          privileged: true
         resources:
           {{- toYaml .Values.resources | nindent 14 }}
       volumes:
