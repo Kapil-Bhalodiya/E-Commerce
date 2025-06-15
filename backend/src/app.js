@@ -13,21 +13,31 @@ const {orderRoutes} = require("./routes/order.routes")
 const {paymentRoutes} = require("./routes/payment.routes")
 
 const app = express()
-
+const client = require('prom-client');
 const allowedOrigins = process.env.CORS_ORIGIN.split(',');
 
-// CORS middleware
 app.use(cors({
   origin: (origin, callback) => {
     // If the origin is in the allowedOrigins list or if it's undefined (for example, Postman)
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
+      console.log("CORS not allowed..")
       callback(new Error('CORS not allowed'), false);
     }
   },
   credentials: true,
 }));
+
+const httpRequestsTotal = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['status'],
+})
+
+client.collectDefaultMetrics();
+
+// CORS middleware
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
@@ -47,5 +57,17 @@ app.use('/api/payment', paymentRoutes);
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK' });
 });
+
+app.get('/', (req, res) => {
+  httpRequestsTotal.inc({ status: '200' });
+  res.send('Hello World');
+});
+
+// Expose /metrics endpoint
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', client.register.contentType);
+  res.end(await client.register.metrics());
+});
+
 
 module.exports = {app}

@@ -17,7 +17,7 @@ export class OrderService {
    * @param orderData Contains items, shippingAddressId, paymentMethod, couponCode, and notes
    */
   createOrder(orderData: any): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/order`, orderData);
+    return this.http.post(`${environment.backendApi}/order`, orderData);
   }
 
   /**

@@ -12,14 +12,14 @@ export class PaymentService {
   constructor(private http: HttpClient) {}
 
   createPaymentIntent(amount: number): Observable<string> {
-    return this.http.post<string>(`${environment.apiUrl}/payment/create-payment-intent`, { amount });
+    return this.http.post<string>(`${environment.backendApi}/payment/create-payment-intent`, { amount });
   }
 
   confirmPayment(data: { paymentIntentId: string; deliveryAddressId: string; amount: number }): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/confirm-payment`, data);
+    return this.http.post<void>(`${environment.backendApi}/confirm-payment`, data);
   }
 
   confirmCOD(deliveryAddressId: string): Observable<void> {
-    return this.http.post<void>(`${environment.apiUrl}/confirm-cod`, { deliveryAddressId });
+    return this.http.post<void>(`${environment.backendApi}/confirm-cod`, { deliveryAddressId });
   }
 }

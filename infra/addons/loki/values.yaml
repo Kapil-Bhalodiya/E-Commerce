@@ -1,73 +1,181 @@
-# Loki values
 loki:
+  isDefault: false
   auth_enabled: false
-  
-  # Data persistence configuration
+  deploymentMode: SimpleScalable
+  backend:
+    replicas: 1
+  write:
+    replicas: 1
+  read:
+    replicas: 1
   persistence:
     enabled: true
     size: 10Gi
-  
-  # Loki configuration
-  config:
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: standard
+  commonConfig:
+    path_prefix: /var/loki
+    replication_factor: 1
+    storage:
+      filesystem:
+        directory: /var/loki/chunks
+  schemaConfig:
+    configs:
+      - from: "2024-01-01"
+        store: boltdb-shipper
+        object_store: filesystem
+        schema: v12
+        index:
+          prefix: loki_index_
+          period: 24h
+  structuredConfig:
     storage_config:
       boltdb_shipper:
-        active_index_directory: /data/loki/index
-        cache_location: /data/loki/index_cache
-        cache_ttl: 24h
+        active_index_directory: /var/loki/index
+        cache_location: /var/loki/index_cache
         shared_store: filesystem
       filesystem:
-        directory: /data/loki/chunks
+        directory: /var/loki/chunks
     schema_config:
       configs:
-        - from: 2020-10-24
+        - from: "2024-01-01"
           store: boltdb-shipper
           object_store: filesystem
-          schema: v11
+          schema: v12
           index:
-            prefix: index_
+            prefix: loki_index_
             period: 24h
-    limits_config:
-      retention_period: 7d
-      enforce_metric_name: false
-      reject_old_samples: true
-      reject_old_samples_max_age: 168h
-    
-  # Service monitor for Prometheus integration
-  serviceMonitor:
-    enabled: true
-    labels:
-      release: prometheus-stack
-  
-  # Resource limits
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 1Gi
-    requests:
-      cpu: 200m
-      memory: 256Mi
-
-# Promtail configuration (log collector)
+  useTestSchema: false
+tableManager:
+  retention_deletes_enabled: false
+  retention_period: 0
 promtail:
   enabled: true
   config:
+    logLevel: info
     clients:
-      - url: http://loki:3100/loki/api/v1/push
-  
-  # Service monitor for Prometheus integration
+      - url: http://loki-gateway.dev.svc.cluster.local:80/loki/api/v1/push  # Corrected to match actual service name
+  pipelineStages:
+    - docker: {}
+  extraRelabelConfigs:
+    - source_labels: [__meta_kubernetes_pod_label_app]
+      target_label: app
+    - source_labels: [__meta_kubernetes_pod_namespace]
+      target_label: namespace
+    - source_labels: [__meta_kubernetes_pod_name]
+      target_label: pod
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http-metrics
+    initialDelaySeconds: 30
+    timeoutSeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    failureThreshold: 5
+monitoring:
+  enabled: false  # Explicitly disable all monitoring features
+  dashboards:
+    enabled: false
+  rules:
+    enabled: false
   serviceMonitor:
-    enabled: true
-    labels:
-      release: prometheus-stack
+    enabled: false
+  selfMonitoring:
+    enabled: false
+    grafanaAgent:
+      enabled: false
+      installOperator: false
+  lokiCanary:
+    enabled: false
+gateway:
+  enabled: true
+  replicas: 1
+  verboseLogging: true
+grafanaAgent:  # Explicitly disable at the chart level
+  enabled: false
+  installOperator: false
+
+
+
+
+
+
+
+
+
+
+# # Loki values
+# loki:
+#   auth_enabled: false
   
-  # Resource settings
-  resources:
-    limits:
-      cpu: 200m
-      memory: 256Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
+#   # Data persistence configuration
+#   persistence:
+#     enabled: true
+#     size: 10Gi
+  
+#   # Loki configuration
+#   config:
+#     storage_config:
+#       boltdb_shipper:
+#         active_index_directory: /data/loki/index
+#         cache_location: /data/loki/index_cache
+#         cache_ttl: 24h
+#         shared_store: filesystem
+#       filesystem:
+#         directory: /data/loki/chunks
+#     schema_config:
+#       configs:
+#         - from: 2020-10-24
+#           store: boltdb-shipper
+#           object_store: filesystem
+#           schema: v11
+#           index:
+#             prefix: index_
+#             period: 24h
+#     limits_config:
+#       retention_period: 7d
+#       enforce_metric_name: false
+#       reject_old_samples: true
+#       reject_old_samples_max_age: 168h
+    
+#   # Service monitor for Prometheus integration
+#   serviceMonitor:
+#     enabled: true
+#     labels:
+#       release: prometheus-stack
+  
+#   # Resource limits
+#   resources:
+#     limits:
+#       cpu: 1000m
+#       memory: 1Gi
+#     requests:
+#       cpu: 200m
+#       memory: 256Mi
+
+# # Promtail configuration (log collector)
+# promtail:
+#   enabled: true
+#   config:
+#     clients:
+#       - url: http://loki:3100/loki/api/v1/push
+  
+#   # Service monitor for Prometheus integration
+#   serviceMonitor:
+#     enabled: true
+#     labels:
+#       release: prometheus-stack
+  
+#   # Resource settings
+#   resources:
+#     limits:
+#       cpu: 200m
+#       memory: 256Mi
+#     requests:
+#       cpu: 100m
+#       memory: 128Mi
 
 
 # loki:  

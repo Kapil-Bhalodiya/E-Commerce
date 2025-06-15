@@ -1,7 +1,7 @@
 image:
   repository: kapilbhalodiya/ecom-backend
   tag: "latest"
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 env:
   MONGODB_URI: ""  # We'll set this dynamically in the deployment
@@ -13,7 +13,7 @@ service:
 metrics:
   enabled: true
   path: /metrics
-  port: 3000
+  port: 8000
 
 tracing:
   enabled: true

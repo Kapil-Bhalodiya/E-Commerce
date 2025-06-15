@@ -3,7 +3,7 @@ namespace: dev
 image:
   repository: kapilbhalodiya/ecom-frontend
   tag: "latest"
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   type: ClusterIP

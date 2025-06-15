@@ -5,7 +5,7 @@
         <div class="product__media--preview__items">
           <a class="product__media--preview__items--link glightbox" data-gallery="product-media-preview"
             href="big-product2.jpg">
-            <img class="product__media--preview__items--img" [src]="selectedImage" alt="product-media-img">
+            <img class="product__media--preview__items--img" [src]="imageURL+'/'+selectedImage" alt="product-media-img">
           </a>
           <div class="product__media--view__icon">
             <a class="product__media--view__icon--link glightbox" [href]="selectedImage"
@@ -26,7 +26,7 @@
         <owl-carousel-o [options]="carouselOptions">
           <ng-container *ngFor="let slide of images">
             <ng-template carouselSlide [id]="slide" class="owl-item" style="height: 400px;">
-              <img [src]="slide" class="product__media--nav__items--img"
+              <img [src]="imageURL+'/'+slide" class="product__media--nav__items--img"
                 [class.active]="slide === selectedImage" (click)="onThumbnailClick(slide)" />
             </ng-template>
           </ng-container>
