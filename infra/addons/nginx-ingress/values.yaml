@@ -1,8 +1,15 @@
 ingress-nginx:
   controller:
+    enabled: true
     replicaCount: 2
     service:
-      type: LoadBalancer
+      type: NodePort
+      ports:
+        http: 80
+        https: 443
+      nodePorts:
+        http: 30931
+        https: 30443
       externalTrafficPolicy: Local
     resources:
       requests:
@@ -11,7 +18,3 @@ ingress-nginx:
       limits:
         cpu: 300m
         memory: 256Mi
-
-ingress-nginx:
-  controller:
-    enabled: false

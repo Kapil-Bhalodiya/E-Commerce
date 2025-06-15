@@ -3,10 +3,10 @@
       <a class="product__items--link" (click)="viewProduct(product._id); $event.preventDefault()">
         <img
           class="product__items--img product__primary--img"
-          [src]="product.image_urls[0]"
+          [src]="imageURL+'/'+product.image_urls[0]"
           [alt]="'Product Image'"
         />
-        <img class="product__items--img product__secondary--img" [src]="product.image_urls[1]"
+        <img class="product__items--img product__secondary--img" [src]="imageURL+'/'+product.image_urls[1]"
         [alt]="'Product Second Image'">
       </a>
       <!-- <div class="product__badge" *ngIf="product.isOnSale">

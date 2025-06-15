@@ -31,6 +31,7 @@ export class HeaderTopComponent implements OnInit {
   ) { }
   
   cratItems: number = 0;
+  checkLoggedInUser = localStorage.getItem('token')
 
   ngOnInit() {
     this.cartService.cartItems$.subscribe(items => this.cratItems = items.length);
@@ -42,11 +43,10 @@ export class HeaderTopComponent implements OnInit {
   onSearch($event: string) {
   }
   goToCart() {
-    this.router.navigate(['/checkout']);
+    this.checkLoggedInUser ? this.router.navigate(['/checkout']): this.router.navigate(['/login'])
   }
 
   goToAccount(){
-    const checkLoggedInUser = localStorage.getItem('token')
-    checkLoggedInUser ? this.router.navigate(['/dashboard']) : this.router.navigate(['/login'])
+    this.checkLoggedInUser ? this.router.navigate(['/dashboard']) : this.router.navigate(['/login'])
   }
 }

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "process-exporter.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "process-exporter.labels" . | nindent 8 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "process-exporter.selectorLabels" . | nindent 10 }}
+  template:
+    metadata:
+      labels:
+        {{- include "process-exporter.selectorLabels" . | nindent 12 }}
+    spec:
+      hostPID: true
+      containers:
+      - name: process-exporter
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+        - --procfs=/host/proc
+        - --web.listen-address=:{{ .Values.service.targetPort }}
+        - --config.path=/etc/process-exporter/process-exporter.yaml
+        ports:
+        - containerPort: {{ .Values.service.targetPort }}
+          name: metrics
+        volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: config
+          mountPath: /etc/process-exporter
+          readOnly: true
+        securityContext:
+          runAsUser: 0
+          privileged: true
+        resources:
+          {{- toYaml .Values.resources | nindent 14 }}
+      volumes:
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: config
+        configMap:
+          name: {{ include "process-exporter.fullname" . }}-config
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/control-plane
+        effect: NoSchedule

@@ -13,11 +13,11 @@ export class AddressService {
   constructor(private http: HttpClient) {}
 
   getAddresses(): Observable<Address[]> {
-    return this.http.get<{ data: Address[] }>(`${environment.apiUrl}/address`)
+    return this.http.get<{ data: Address[] }>(`${environment.backendApi}/address`)
     .pipe(map((response) => response.data));;
   }
 
   addAddress(address: Address): Observable<Address> {
-    return this.http.post<Address>(`${environment.apiUrl}/address`, address);
+    return this.http.post<Address>(`${environment.backendApi}/address`, address);
   }
 }
