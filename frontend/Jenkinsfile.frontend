@@ -1,0 +1,42 @@
+@Library('jenkins-shared-library') _
+
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'ecom-frontend'
+        IMAGE_TAG = "${env.BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
+        REGISTRY_CREDENTIALS = 'Dockerhub-creds'
+        MANIFEST_FILE = 'infra/addons/frontend/templates/deployment.yaml'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+
+        stage('Build Docker Image') {
+            steps { buildDocker('frontend', IMAGE_NAME, IMAGE_TAG) }
+        }
+
+        stage('Push Docker Image') {
+            steps { pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS) }
+        }
+
+        stage('Update Kubernetes Manifest') {
+            steps {
+                updateK8sManifest(MANIFEST_FILE, IMAGE_NAME, IMAGE_TAG)
+                withCredentials([usernamePassword(credentialsId: 'GitHub_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                    sh '''
+                        git config --global user.email "ci@example.com"
+                        git config --global user.name "CI Bot"
+                        git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+                        git add ${MANIFEST_FILE}
+                        git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
+                        git push origin main
+                    '''
+                }
+            }
+        }
+    }
+}
