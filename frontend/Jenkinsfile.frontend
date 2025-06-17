@@ -1,4 +1,4 @@
-load 'jenkins-shared-library/vars/buildDocker.groovy'
+@Library('jenkins-shared-library@main') _
 
 pipeline {
     agent any
