@@ -29,14 +29,16 @@ pipeline {
             steps {
                 updateK8sManifest(MANIFEST_FILE, IMAGE_NAME, IMAGE_TAG)
                 withCredentials([usernamePassword(credentialsId: 'GitHub_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                    sh '''
-                        git config --global user.email "ci@example.com"
-                        git config --global user.name "CI Bot"
-                        git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-                        git add ${MANIFEST_FILE}
-                        git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
-                        git push origin main
-                    '''
+                   dir("${WORKSPACE}") {
+                        sh '''
+                            git config --global user.email "ci@example.com"
+                            git config --global user.name "CI Bot"
+                            git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+                            git add ${MANIFEST_FILE}
+                            git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
+                            git push origin main
+                        '''
+                    }
                 }
             }
         }
