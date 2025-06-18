@@ -34,7 +34,7 @@ pipeline {
         stage('Update Kubernetes Manifest') {
             steps {
                 updateK8sManifest(MANIFEST_FILE, IMAGE_NAME, IMAGE_TAG)
-                withCredentials([usernamePassword(credentialsId: 'GitHub_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                     dir("${WORKSPACE}") {
                         sh '''
                             git config --global user.email "ci@example.com"
