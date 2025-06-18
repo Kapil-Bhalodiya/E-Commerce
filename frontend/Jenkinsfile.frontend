@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'ecom-frontend'
+        IMAGE_NAME = 'docker.io/kapilbhalodiya/ecom-frontend'
         IMAGE_TAG = "${env.BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
         REGISTRY_CREDENTIALS = 'Dockerhub-creds'
         MANIFEST_FILE = 'infra/addons/frontend/templates/deployment.yaml'
