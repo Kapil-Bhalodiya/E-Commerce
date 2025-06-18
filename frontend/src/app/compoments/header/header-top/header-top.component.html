@@ -13,7 +13,7 @@
         </div>
 
         <div class="search-bar">
-            <app-dropdown-filter [items]="dropDownList"></app-dropdown-filter>
+            <app-dropdown-filter [items]="dropDownList" [defaultOption]="dropDownList[0]"></app-dropdown-filter>
             <app-search-box [placeholder]="'Keyword Here..'" [size]="'large'"
                 (search)="onSearch($event)"></app-search-box>
         </div>
@@ -30,7 +30,7 @@
                     <a class="header__account--btn" href="my-account.html">
                         <i class="bi bi-heart" style="font-size: 24px;"></i>
                         <span class="header__account--btn__text">wish List</span>
-                        <span class="items__count wishlist">02</span>
+                        <span class="items__count wishlist">0</span>
                     </a>
                 </li>
                 <li class="header__account--items">

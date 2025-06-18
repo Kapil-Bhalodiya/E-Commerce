@@ -1,10 +1,13 @@
 <div class="header--select">
-    <select
-        class="product__view--select"
-        [ngClass]="size"
-        [(ngModel)]="selectedOption"
-        (ngModelChange)="onSortChange()"
-    >
-        <option *ngFor="let item of items" [value]="item">{{item.label}}</option>
-    </select>
+  <select
+    class="product__view--select"
+    [ngClass]="size"
+    [(ngModel)]="selectedOption"
+    (ngModelChange)="onSortChange()"
+  >
+    <option disabled>- Select -</option>
+    <option *ngFor="let item of items" [value]="item.value">
+      {{ item.label }}
+    </option>
+  </select>
 </div>
