@@ -12,9 +12,15 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git', credentialsId: 'GitHub_Cred'
+            steps { 
+                sh '''
+                     echo "Debugging: Where am I Start?"
+                    pwd
+                    ls -la
+                '''
+                checkout scm 
             }
+
         }
 
         stage('Build Docker Image') {
@@ -31,8 +37,12 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'GitHub_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                    dir("${WORKSPACE}") {
                         sh '''
+                            echo "Debugging: Where am I?"
+                            pwd
+                            ls -la
                             git config --global user.email "ci@example.com"
                             git config --global user.name "CI Bot"
+                            git remote -v || echo "No remotes yet"
                             git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git
                             git add ${MANIFEST_FILE}
                             git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
