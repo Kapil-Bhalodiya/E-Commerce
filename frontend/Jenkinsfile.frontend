@@ -18,13 +18,7 @@ pipeline {
                     pwd
                     ls -la
                 '''
-                checkout([$class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
-                        credentialsId: 'GitHub_Cred'
-                    ]]
-                ])
+                checkout scm
             }
 
         }
@@ -40,19 +34,18 @@ pipeline {
         stage('Update Kubernetes Manifest') {
             steps {
                 updateK8sManifest(MANIFEST_FILE, IMAGE_NAME, IMAGE_TAG)
-                withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                   dir("${WORKSPACE}") {
+                withCredentials([usernamePassword(credentialsId: 'GitHub_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                    dir("${WORKSPACE}") {
                         sh '''
-                            echo "Debugging: Where am I?"
-                            pwd
-                            ls -la
                             git config --global user.email "ci@example.com"
                             git config --global user.name "CI Bot"
-                            git remote -v || echo "No remotes yet"
-                            git remote set-url origin https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+
+                            git checkout main || git checkout -b main
+                            git pull origin main
+
                             git add ${MANIFEST_FILE}
                             git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
-                            git push origin main
+                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
                         '''
                     }
                 }
