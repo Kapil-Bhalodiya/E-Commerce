@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout') {
             steps { 
                 sh '''
-                     echo "Debugging: Where am I Start?"
+                     echo "Debugging: Where am I Start - Testing SCM Trigger pipeline"
                     pwd
                     ls -la
                 '''
