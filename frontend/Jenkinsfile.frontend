@@ -57,9 +57,15 @@ pipeline {
                 withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
                     sh '''
                         export KUBECONFIG=$KUBECONFIG_FILE
+
+                        # Install kubectl (temporary install for this job only)
+                        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                        chmod +x kubectl
+                        sudo mv kubectl /usr/local/bin/kubectl || mv kubectl /usr/bin/kubectl
+
+                        # Apply manifest
                         kubectl apply -f infra/addons/frontend/templates/deployment.yaml
                         kubectl rollout restart deployment frontend-dev -n dev
-                        kubectl get pods -n dev
                     '''
                 }
             }
