@@ -52,15 +52,18 @@ pipeline {
             }
         }
 
-         stage('Deploy to Kubernetes') {
+        stage('Deploy to Kubernetes') {
             steps {
-                withKubeConfig(credentialsId: 'KubeConfig-Creds') {
+                withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
                     sh '''
+                        export KUBECONFIG=$KUBECONFIG_FILE
                         kubectl apply -f infra/addons/frontend/templates/deployment.yaml
-                        kubectl rollout status deployment frontend-dev -n dev
+                        kubectl rollout restart deployment frontend-dev -n dev
+                        kubectl get pods -n dev
                     '''
                 }
             }
         }
+
     }
 }
