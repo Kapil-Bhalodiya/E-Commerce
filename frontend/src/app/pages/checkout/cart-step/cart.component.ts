@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { TableComponent } from "../../../compoments/table/table.component";
 import { CartService } from '../../../services/cart.service';
 import { Router } from '@angular/router';
-import { OrderService } from '../../../services/order.service';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormStepComponent } from '../../../compoments/stepper/models/form-step-cponent.model';
@@ -16,14 +15,14 @@ import { CartItem } from '../../../models/cartItem.model';
 })
 export class CartStepComponent implements FormStepComponent, OnInit{
   cartItems: CartItem[] = [];
-  
   tableColumns = ['Product', 'Price', 'Quantity', 'Total'];
   tableData: any[] = [];
   formGroup!: FormGroup;
   globalFormGroup!: FormGroup<any>;
   
   constructor(
-    public cartService: CartService
+    public cartService: CartService,
+    private router: Router
   ) {}
   
   data: any;
@@ -36,7 +35,7 @@ export class CartStepComponent implements FormStepComponent, OnInit{
   }
   
   continueShopping() {
-    
+    this.router.navigate(['/'])
   }
   
   prepareTableData() {

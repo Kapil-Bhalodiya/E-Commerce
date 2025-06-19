@@ -1,92 +1,72 @@
-.contact__form {
-	background: var(--white-color);
-	border-radius: 10px;
-	-webkit-box-shadow: 0 7px 20px rgba(0, 0, 0, .16);
-	box-shadow: 0 7px 20px rgba(0, 0, 0, .16);
-	padding: 2rem
+.signup-section {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
 }
 
-@media only screen and (min-width:576px) {
-	.contact__form {
-		padding: 3rem
-	}
+.signup-form {
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-@media only screen and (min-width:768px) {
-	.contact__form {
-		padding: 4rem
-	}
+.signup-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
-@media only screen and (min-width:992px) {
-	.contact__form {
-		padding: 5.5rem 3.5rem 5.5rem 10rem
-	}
+.signup-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #212529;
 }
 
-.contact__form--title {
-	font-weight: 600
+.form-control {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.contact__form--error{
-	color: red;
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-@media only screen and (max-width:1199px) {
-	.contact__form--title.mb-30 {
-		margin-bottom: 2rem
-	}
+.btn-primary {
+    background: #0d6efd;
+    border: none;
+    padding: 0.75rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
 }
 
-.contact__form--label {
-	display: block;
-	margin-bottom: 8px
+.btn-primary:hover {
+    background: #0a58ca;
 }
 
-.contact__form--label__star {
-	color: var(--secondary-color)
+.text-danger {
+    animation: fadeIn 0.3s ease-in;
 }
 
-.contact__form--input {
-	width: 100%;
-	height: 45px;
-	padding: 5px 15px;
-	border-radius: 8px;
-	border: 1px solid var(--border-color)
+.input-group-text {
+    background: #f8f9fa;
+    border-color: #ced4da;
 }
 
-.contact__form--input:focus {
-	border-color: var(--secondary-color) !important
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-@media only screen and (min-width:576px) {
-	.contact__form--input {
-		height: 50px
-	}
-}
+@media (max-width: 768px) {
+    .signup-form {
+        margin: 0 1rem;
+    }
 
-.contact__form--textarea {
-	width: 100%;
-	height: 100px;
-	padding: 12px 15px;
-	border-radius: 8px;
-	resize: none;
-	border: 1px solid var(--border-color);
-	font-family: var(--font-poppins)
-}
+    .card-body {
+        padding: 1.5rem !important;
+    }
 
-.contact__form--textarea:focus {
-	border-color: var(--secondary-color) !important
-}
-
-@media only screen and (min-width:992px) {
-	.contact__form--textarea {
-		height: 120px
-	}
-}
-
-@media only screen and (min-width:1200px) {
-	.contact__form--textarea {
-		height: 160px
-	}
+    .signup-title {
+        font-size: 1.5rem;
+    }
 }

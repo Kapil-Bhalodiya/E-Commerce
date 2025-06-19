@@ -12,7 +12,7 @@
                         <i class="bi bi-x-lg"></i>
                     </button>
                     <div class="cart__thumbnail">
-                        <a href="product-details.html"><img class="border-radius-5" [src]="row.product.image" alt="cart-product"></a>
+                        <a href="product-details.html"><img class="border-radius-5" [src]="imageURL+'/'+row.product.image" alt="cart-product"></a>
                     </div>
                     <div class="cart__content">
                         <h4 class="cart__content--title"><a href="product-details.html">{{ row.product.name }}</a></h4>

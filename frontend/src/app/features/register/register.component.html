@@ -1,83 +1,61 @@
-<section class="contact__section section--padding">
+<section class="signup-section d-flex align-items-center justify-content-center min-vh-100">
     <div class="container">
-        <div class="contact__form">
-            <div class="main__contact--area position__relative">
-                <h3 class="contact__form--title mb-40">Sign Up</h3>
-                <form [formGroup]="formGroup" (ngSubmit)="registraionHandle()" class="contact__form--inner">
+        <div class="signup-form card shadow-lg">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="signup-title text-center mb-4">Create Your Account</h3>
+                <form [formGroup]="formGroup" (ngSubmit)="registraionHandle()" class="signup-form-inner">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6">
-                            <label class="contact__form--label" for="input1">First Name <span
-                                    class="contact__form--label__star">*</span></label>
-                            <input id="firstName" type="text" formControlName="firstName" class="contact__form--input"
-                                placeholder="Your First Name" type="text">
-                            <div *ngIf="formGroup.get('firstName')?.invalid && formGroup.get('firstName')?.touched"
-                                class="contact__form--error">This field is required</div>
-                        </div>
-                        <div class="col-lg-6 col-md-6">
-                            <div class="contact__form--list mb-20">
-                                <label class="contact__form--label">Last Name <span
-                                        class="contact__form--label__star">*</span></label>
-                                <input id="lastName" type="text" formControlName="lastName" class="contact__form--input"
-                                    placeholder="Your Last Name" type="text">
-                                <div *ngIf="formGroup.get('lastName')?.invalid && formGroup.get('lastName')?.touched"
-                                    class="contact__form--error">This field is required</div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6">
-                            <label for="email" class="contact__form--label" for="input4">Email <span
-                                    class="contact__form--label__star">*</span></label>
-                            <input id="email" type="email" formControlName="email" class="contact__form--input"
-                                type="email" placeholder="e.g. johndoe@gmail.com" />
-                            <div *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched"
-                                class="contact__form--error">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                            <input id="firstName" type="text" formControlName="firstName" class="form-control form-control-lg" placeholder="Your First Name" />
+                            <div *ngIf="formGroup.get('firstName')?.invalid && formGroup.get('firstName')?.touched" class="text-danger small mt-1">
                                 This field is required
                             </div>
-                            <div *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched"
-                                class="contact__form--error">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                            <input id="lastName" type="text" formControlName="lastName" class="form-control form-control-lg" placeholder="Your Last Name" />
+                            <div *ngIf="formGroup.get('lastName')?.invalid && formGroup.get('lastName')?.touched" class="text-danger small mt-1">
+                                This field is required
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                            <input id="email" type="email" formControlName="email" class="form-control form-control-lg" placeholder="e.g. johndoe@gmail.com" />
+                            <div *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched" class="text-danger small mt-1">
+                                This field is required
+                            </div>
+                            <div *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched" class="text-danger small mt-1">
                                 Please enter a valid email address
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6">
-                            <label for="password" class="contact__form--label" for="input4">Password <span
-                                    class="contact__form--label__star">*</span></label>
-                            <input id="password" type="password" formControlName="password" class="contact__form--input"
-                                placeholder="*********" />
-                            <div *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched"
-                                class="contact__form--error">
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                            <input id="password" type="password" formControlName="password" class="form-control form-control-lg" placeholder="*********" />
+                            <div *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched" class="text-danger small mt-1">
                                 This field is required
                             </div>
-                            <div *ngIf="formGroup.get('password')?.hasError('pattern') && formGroup.get('password')?.touched"
-                                class="contact__form--error">
+                            <div *ngIf="formGroup.get('password')?.hasError('pattern') && formGroup.get('password')?.touched" class="text-danger small mt-1">
                                 Please enter a valid password
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6">
-                            <label for="contactNumber" class="contact__form--label">Contact Number <span class="contact__form--label__star">*</span></label>
-                            <div class="flex items-center">
-                                <!-- <span class="text-gray-700 text-lg mr-2">+91 </span> -->
-                                <input id="contact" type="tel" formControlName="contact" class="contact__form--input" placeholder="82 123 1234" />
+                        <div class="col-md-6 mb-3">
+                            <label for="contactNumber" class="form-label">Contact Number <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">+91</span>
+                                <input id="contact" type="tel" formControlName="contact" class="form-control form-control-lg" placeholder="821231234" />
                             </div>
-                            <div *ngIf="formGroup.get('contact')?.hasError('required') && formGroup.get('contact')?.touched"
-                                class="contact__form--error">
+                            <div *ngIf="formGroup.get('contact')?.hasError('required') && formGroup.get('contact')?.touched" class="text-danger small mt-1">
                                 This field is required
                             </div>
-                            <div *ngIf="formGroup.get('contact')?.hasError('pattern') && formGroup.get('contact')?.touched"
-                                class="contact__form--error">
+                            <div *ngIf="formGroup.get('contact')?.hasError('pattern') && formGroup.get('contact')?.touched" class="text-danger small mt-1">
                                 Please enter a valid mobile number
                             </div>
                         </div>
-                        <!-- <div class="col-12">
-                            <div class="contact__form--list mb-15">
-                                <label class="contact__form--label" for="input5">Write Your Message <span
-                                        class="contact__form--label__star">*</span></label>
-                                <textarea class="contact__form--textarea" name="message" id="input5"
-                                    placeholder="Write Your Message"></textarea>
-                            </div>
-                        </div> -->
                     </div>
-                    <app-primary-button [label]="'Register'" [size]="'lg'" class="mt-2" />
-                    <div class="mt-4 text-center">
-                        <p>Already account? <a routerLink="/login" class="text-purple-600 hover:cursor-pointer">Sign In</a></p>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Register</button>
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Already have an account? <a routerLink="/login" class="text-primary fw-medium text-decoration-none">Sign In</a></p>
                     </div>
                 </form>
             </div>

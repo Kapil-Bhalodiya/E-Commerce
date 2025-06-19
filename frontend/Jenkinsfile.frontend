@@ -8,46 +8,45 @@ pipeline {
         IMAGE_TAG = "${env.BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
         REGISTRY_CREDENTIALS = 'Dockerhub-creds'
         MANIFEST_FILE = 'infra/addons/frontend/templates/deployment.yaml'
+        K8S_NAMESPACE = 'dev'
+        HELM_RELEASE = 'frontend-dev'
     }
 
     stages {
         stage('Checkout') {
-            steps { 
-                sh '''
-                     echo "Debugging: Where am I Start - Testing SCM Trigger pipeline"
-                    pwd
-                    ls -la
-                '''
+            steps {
                 checkout scm
             }
-
         }
 
         stage('Build Docker Image') {
-            steps { buildDocker('frontend', IMAGE_NAME, IMAGE_TAG) }
+            steps {
+                buildDocker('frontend', IMAGE_NAME, IMAGE_TAG)
+            }
         }
 
         stage('Push Docker Image') {
-            steps { pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS) }
+            steps {
+                pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS)
+            }
         }
 
         stage('Update Kubernetes Manifest') {
             steps {
                 updateK8sManifest(MANIFEST_FILE, IMAGE_NAME, IMAGE_TAG)
                 withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                    dir("${WORKSPACE}") {
-                        sh '''
-                            git config --global user.email "ci@example.com"
-                            git config --global user.name "CI Bot"
+                    sh """
+                        git config user.email "ci@example.com"
+                        git config user.name "CI Bot"
 
-                            git checkout main || git checkout -b main
-                            git pull origin main
+                        git fetch origin main
+                        git checkout main
+                        git pull origin main
 
-                            git add ${MANIFEST_FILE}
-                            git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
-                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
-                        '''
-                    }
+                        git add ${MANIFEST_FILE}
+                        git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
+                        git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
+                    """
                 }
             }
         }
@@ -55,7 +54,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
-                    sh '''
+                    sh """
                         export KUBECONFIG=$KUBECONFIG_FILE
 
                         # Install kubectl if not present
@@ -70,17 +69,25 @@ pipeline {
                             curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
                             chmod 700 get_helm.sh
                             ./get_helm.sh
+                            rm -f get_helm.sh
                         fi
 
-                        # 🟢 FIXED: Properly pass image repo and tag to Helm
-                        helm upgrade --install frontend-dev ./infra/addons/frontend \
-                          --namespace dev --create-namespace \
-                          --set image.repository=${IMAGE_NAME} \
-                          --set image.tag=${IMAGE_TAG}
-                    '''
+                        helm upgrade --install ${HELM_RELEASE} ./infra/addons/frontend \
+                            --namespace ${K8S_NAMESPACE} --create-namespace \
+                            --set image.repository=${IMAGE_NAME} \
+                            --set image.tag=${IMAGE_TAG}
+                    """
                 }
             }
         }
+    }
 
+    post {
+        success {
+            echo "✅ Deployment completed successfully."
+        }
+        failure {
+            echo "❌ Deployment failed. Check Jenkins logs for details."
+        }
     }
 }
