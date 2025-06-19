@@ -31,27 +31,6 @@ pipeline {
             steps { pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS) }
         }
 
-        stage('Update Kubernetes Manifest') {
-            steps {
-                updateK8sManifest(MANIFEST_FILE, IMAGE_NAME, IMAGE_TAG)
-                withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                    dir("${WORKSPACE}") {
-                        sh '''
-                            git config --global user.email "ci@example.com"
-                            git config --global user.name "CI Bot"
-
-                            git checkout main || git checkout -b main
-                            git pull origin main
-
-                            git add ${MANIFEST_FILE}
-                            git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
-                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
-                        '''
-                    }
-                }
-            }
-        }
-
         stage('Deploy to Kubernetes') {
             steps {
                 withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
@@ -72,12 +51,15 @@ pipeline {
                             ./get_helm.sh
                         fi
 
-                        helm upgrade --install frontend-dev ./infra/addons/frontend --namespace dev --create-namespace
+                        # Deploy with proper image tag using --set
+                        helm upgrade --install frontend-dev ./infra/addons/frontend \
+                            --namespace dev --create-namespace \
+                            --set image.repository=${IMAGE_NAME} \
+                            --set image.tag=${IMAGE_TAG}
                     '''
                 }
             }
         }
-
 
     }
 }
