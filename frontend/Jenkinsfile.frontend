@@ -58,17 +58,20 @@ pipeline {
                     sh '''
                         export KUBECONFIG=$KUBECONFIG_FILE
 
-                        # Install kubectl (temporary)
-                        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-                        chmod +x kubectl
-                        mv kubectl /usr/bin/kubectl || mv kubectl /usr/local/bin/kubectl || echo "kubectl move failed but proceeding"
+                        # Install kubectl if not present
+                        if ! command -v kubectl >/dev/null; then
+                            curl -LO "https://dl.k8s.io/release/v1.33.2/bin/linux/amd64/kubectl"
+                            chmod +x kubectl
+                            mv kubectl /usr/local/bin/kubectl || mv kubectl /usr/bin/kubectl
+                        fi
 
-                        # Install Helm (temporary)
-                        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-                        chmod 700 get_helm.sh
-                        ./get_helm.sh
+                        # Install Helm if not present
+                        if ! command -v helm >/dev/null; then
+                            curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+                            chmod 700 get_helm.sh
+                            ./get_helm.sh
+                        fi
 
-                        # Deploy using Helm
                         helm upgrade --install frontend-dev ./infra/addons/frontend --namespace dev --create-namespace
                     '''
                 }
