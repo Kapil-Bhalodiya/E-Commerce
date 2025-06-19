@@ -1,222 +1,73 @@
-.contact__form {
-	background: var(--white-color);
-	border-radius: 10px;
-	-webkit-box-shadow: 0 7px 20px rgba(0, 0, 0, .16);
-	box-shadow: 0 7px 20px rgba(0, 0, 0, .16);
-	padding: 2rem
+.login-section {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    min-height: 100vh;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
-@media only screen and (min-width:576px) {
-	.contact__form {
-		padding: 3rem
-	}
+.login-form {
+    max-width: 450px;
+    margin: 1rem auto;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-@media only screen and (min-width:768px) {
-	.contact__form {
-		padding: 4rem
-	}
+.login-form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
 }
 
-@media only screen and (min-width:992px) {
-	.contact__form {
-		padding: 5.5rem 3.5rem 5.5rem 10rem
-	}
+.login-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #212529;
 }
 
-.contact__form--title {
-	font-weight: 600
+.form-control {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-@media only screen and (max-width:1199px) {
-	.contact__form--title.mb-30 {
-		margin-bottom: 2rem
-	}
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-.contact__form--label {
-	display: block;
-	margin-bottom: 8px
+.btn-primary {
+    background: #0d6efd;
+    border: none;
+    padding: 0.75rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
 }
 
-.contact__form--label__star {
-	color: var(--secondary-color)
+.btn-primary:hover {
+    background: #0a58ca;
 }
 
-.contact__form--input {
-	width: 100%;
-	height: 45px;
-	padding: 5px 15px;
-	border-radius: 8px;
-	border: 1px solid var(--border-color)
+.text-danger {
+    animation: fadeIn 0.3s ease-in;
 }
 
-.contact__form--input:focus {
-	border-color: var(--secondary-color) !important
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-@media only screen and (min-width:576px) {
-	.contact__form--input {
-		height: 50px
-	}
+@media (max-width: 768px) {
+    .login-form {
+        margin: 0.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .login-title {
+        font-size: 1.5rem;
+    }
 }
-
-.contact__form--textarea {
-	width: 100%;
-	height: 100px;
-	padding: 12px 15px;
-	border-radius: 8px;
-	resize: none;
-	border: 1px solid var(--border-color);
-	font-family: var(--font-poppins)
-}
-
-.contact__form--textarea:focus {
-	border-color: var(--secondary-color) !important
-}
-
-@media only screen and (min-width:992px) {
-	.contact__form--textarea {
-		height: 120px
-	}
-}
-
-@media only screen and (min-width:1200px) {
-	.contact__form--textarea {
-		height: 160px
-	}
-}
-
-
-
-
-// .account__login {
-// 	background: var(--white-color);
-// 	padding: 2.5rem;
-// 	border-radius: 1rem;
-// 	-webkit-box-shadow: 0 5px 30px rgba(0, 0, 0, .1);
-// 	box-shadow: 0 5px 30px rgba(0, 0, 0, .1)
-// }
-
-// @media only screen and (min-width:992px) {
-// 	.account__login {
-// 		padding: 3rem
-// 	}
-// }
-
-// .account__login--header__title {
-// 	font-weight: 600
-// }
-
-// .account__login--header__desc {
-// 	font-size: 1.5rem;
-// 	font-weight: 600
-// }
-
-// .account__login--input {
-// 	width: 100%;
-// 	height: 4.8rem;
-// 	border: 1px solid var(--border-color);
-// 	border-radius: .5rem;
-// 	padding: 0 1.5rem;
-// 	margin-bottom: 1.5rem
-// }
-
-// @media only screen and (min-width:768px) {
-// 	.account__login--input {
-// 		height: 5.2rem
-// 	}
-// }
-
-// @media only screen and (min-width:992px) {
-// 	.account__login--input {
-// 		font-size: 1.5rem
-// 	}
-// }
-
-// .account__login--input:focus {
-// 	border-color: var(--secondary-color)
-// }
-
-// .account__login--btn {
-// 	width: 100%;
-// 	border-radius: .5rem;
-// 	font-size: 1.5rem
-// }
-
-// @media only screen and (min-width:992px) {
-// 	.account__login--btn {
-// 		font-size: 1.7rem
-// 	}
-// }
-
-// @media only screen and (max-width:767px) {
-// 	.account__login--btn {
-// 		height: 4rem;
-// 		line-height: 4rem
-// 	}
-// }
-
-// .account__login--signup__text {
-// 	text-align: center;
-// 	font-size: 1.5rem;
-// 	font-weight: 600;
-// 	color: var(--text-gray-color)
-// }
-
-// .account__login--signup__text button {
-// 	padding: 0;
-// 	background: inherit;
-// 	border: 0;
-// 	font-weight: 600
-// }
-
-// .account__login--signup__text button:hover {
-// 	color: var(--secondary-color)
-// }
-
-// .account__login--forgot {
-// 	font-weight: 600;
-// 	color: var(--secondary-color);
-// 	font-size: 1.5rem;
-// 	padding: 0;
-// 	background: inherit;
-// 	border: 0
-// }
-
-// @media only screen and (max-width:575px) {
-// 	.account__login--forgot {
-// 		margin-top: .6rem
-// 	}
-// }
-
-// .account__login--forgot:hover {
-// 	color: var(--primary-color)
-// }
-
-// @media only screen and (max-width:767px) {
-// 	.account__login.register {
-// 		margin-top: 6rem
-// 	}
-// }
-
-// @media only screen and (max-width:575px) {
-// 	.account__login--remember__forgot {
-// 		-webkit-box-orient: vertical;
-// 		-webkit-box-direction: normal;
-// 		-ms-flex-direction: column;
-// 		flex-direction: column;
-// 		-webkit-box-align: start;
-// 		-ms-flex-align: start;
-// 		align-items: flex-start
-// 	}
-// }
-
-// @media only screen and (max-width:575px) {
-// 	.account__login--remember .checkout__checkbox--checkmark {
-// 		top: 0;
-// 		top: 5px;
-// 		-webkit-transform: inherit;
-// 		transform: inherit
-// 	}
-// }

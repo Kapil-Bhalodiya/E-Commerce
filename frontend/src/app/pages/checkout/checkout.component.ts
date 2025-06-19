@@ -14,12 +14,13 @@ import { CartItem } from '../../models/cartItem.model';
 import { AddressService } from '../../services/address.service';
 import { Address } from '../../models/address.model';
 import { SpinnerComponent } from "../../compoments/spinner/spinner.component";
+import { HeaderComponent } from "../../compoments/header/header.component";
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
-  imports: [StepperComponent, CommonModule, FormsModule, SpinnerComponent],
+  imports: [StepperComponent, CommonModule, FormsModule, SpinnerComponent, HeaderComponent],
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   @ViewChild(StepperComponent) formStepper!: StepperComponent;

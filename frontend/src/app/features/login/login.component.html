@@ -1,90 +1,32 @@
-<!-- <div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h2 class="text-2xl font-semibold text-center mb-4">Sign in</h2>
-        <form [formGroup]="formGroup" (ngSubmit)="loginHandle()">
-            <div class="mb-4">
-                <label for="emailAddress" class="block text-sm font-medium text-gray-700">Email Address</label>
-                <input id="email" type="email" formControlName="email"
-                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="e.g. johndoe@gmail.com" />
-                <div *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched"
-                    class="text-red-600 text-sm">
-                    This field is required
-                </div>
-                <div *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched"
-                    class="text-red-600 text-sm">
-                    Please enter a valid email address
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input id="password" type="password" formControlName="password"
-                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="*********" />
-                <div *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched"
-                    class="text-red-600 text-sm">
-                    This field is required
-                </div>
-                <div *ngIf="formGroup.get('password')?.hasError('pattern') && formGroup.get('password')?.touched"
-                    class="text-red-600 text-sm">
-                    Please enter a valid email address
-                </div>
-            </div>
-
-            <div *ngIf="errorMessage" class="text-red-500 text-sm mb-4">{{ errorMessage }}</div>
-
-            <app-primary-button label="Log In" />
-
-            <div class="mt-4 text-center">
-                <p>Don't have an account? <a routerLink="/register" class="text-purple-600 hover:cursor-pointer">Sign
-                        Up</a></p>
-            </div>
-        </form>
-    </div>
-</div> -->
-<section class="contact__section section--padding">
+<section class="login-section d-flex align-items-center justify-content-center">
     <div class="container">
-        <div class="contact__form">
-            <div class="main__contact--area position__relative">
-                <h3 class="contact__form--title mb-40">Sign In</h3>
-                <form [formGroup]="formGroup" (ngSubmit)="loginHandle()" class="contact__form--inner">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6">
-                            <label for="email" class="contact__form--label" for="input4">Email <span
-                                    class="contact__form--label__star">*</span></label>
-                            <input id="email" type="email" formControlName="email" class="contact__form--input"
-                                type="email" placeholder="e.g. johndoe@gmail.com" />
-                            <div *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched"
-                                class="text-red-600 text-sm">
-                                This field is required
-                            </div>
-                            <div *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched"
-                                class="text-red-600 text-sm">
-                                Please enter a valid email address
-                            </div>
-                            <label for="password" class="contact__form--label" for="input4">Password <span
-                                    class="contact__form--label__star">*</span></label>
-                            <input id="password" type="password" formControlName="password" class="contact__form--input"
-                                placeholder="*********" />
-                            <div *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched"
-                                class="text-red-600 text-sm">
-                                This field is required
-                            </div>
-                            <div *ngIf="formGroup.get('password')?.hasError('pattern') && formGroup.get('password')?.touched"
-                                class="text-red-600 text-sm">
-                                Please enter a valid password
-                            </div>
+        <div class="login-form card shadow-lg">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="login-title text-center mb-4">Welcome Back</h3>
+                <form [formGroup]="formGroup" (ngSubmit)="loginHandle()" class="login-form-inner">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                        <input id="email" type="email" formControlName="email" class="form-control form-control-lg" placeholder="e.g. johndoe@gmail.com" />
+                        <div *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched" class="text-danger small mt-1">
+                            This field is required
                         </div>
-
-                        <div class="col-lg-6 col-md-6">
-
+                        <div *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched" class="text-danger small mt-1">
+                            Please enter a valid email address
                         </div>
                     </div>
-                    <app-primary-button [label]="'Login'" [size]="'lg'" class="mt-2" />
-                    <div class="mt-4 text-center">
-                        <p>Don't have an account? <a routerLink="/register" class="text-purple-600 hover:cursor-pointer">Sign
-                                Up</a></p>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                        <input id="password" type="password" formControlName="password" class="form-control form-control-lg" placeholder="*********" />
+                        <div *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched" class="text-danger small mt-1">
+                            This field is required
+                        </div>
+                        <div *ngIf="formGroup.get('password')?.hasError('pattern') && formGroup.get('password')?.touched" class="text-danger small mt-1">
+                            Please enter a valid password
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Login</button>
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Don't have an account? <a routerLink="/register" class="text-primary fw-medium text-decoration-none">Sign Up</a></p>
                     </div>
                 </form>
             </div>
