@@ -1,0 +1,82 @@
+<section class="banner-section section--padding color-scheme-2" [ngClass]="{'banner-style2': type === 'categories', 'banner-discount pt-0': type === 'discount'}">
+  <div *ngIf="type === 'categories'" class="section__heading text-center mb-5">
+    <h2 class="section__heading--maintitle style2">Shop by Categories</h2>
+  </div>
+  <div class="container-fluid">
+    <div *ngIf="type === 'categories'" class="row g-5 mb-5">
+      <div class="col-lg-4 order-md-first">
+        <div class="banner__items position-relative">
+          <a class="banner__items--thumbnail" [routerLink]="banners[0]?.link" [attr.aria-label]="'Shop ' + banners[0]?.alt">
+            <img class="banner__items--thumbnail__img" [src]="imageURL + '/' + banners[0]?.image" [alt]="banners[0]?.alt">
+            <div class="banner__items--content style2">
+              <h3 class="banner__items--content__title style2" [innerHTML]="banners[0]?.title"></h3>
+              <span class="banner__items--content__link style2">SHOP NOW</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="banner-style2-top-sidebar d-flex gap-5 mb-5">
+          <div class="banner__items position-relative" *ngIf="banners[1]">
+            <a class="banner__items--thumbnail" [routerLink]="banners[1].link" [attr.aria-label]="'Shop ' + banners[1]?.alt">
+              <img class="banner__items--thumbnail__img" [src]="imageURL + '/' + banners[1].image" [alt]="banners[1].alt">
+              <div class="banner__items--content style2">
+                <h3 class="banner__items--content__title style2" [innerHTML]="banners[1].title"></h3>
+                <span class="banner__items--content__link style2">SHOP NOW</span>
+              </div>
+            </a>
+          </div>
+          <div class="banner__items position-relative" *ngIf="banners[2]">
+            <a class="banner__items--thumbnail" [routerLink]="banners[2].link" [attr.aria-label]="'Shop ' + banners[2]?.alt">
+              <img class="banner__items--thumbnail__img" [src]="imageURL + '/' + banners[2].image" [alt]="banners[2].alt">
+              <div class="banner__items--content style2">
+                <h3 class="banner__items--content__title style2" [innerHTML]="banners[2].title"></h3>
+                <span class="banner__items--content__link style2">SHOP NOW</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="row row-cols-sm-2 row-cols-1 g-4">
+          <div class="col" *ngIf="banners[3]">
+            <div class="banner__items position-relative">
+              <a class="banner__items--thumbnail" [routerLink]="banners[3].link" [attr.aria-label]="'Shop ' + banners[3]?.alt">
+                <img class="banner__items--thumbnail__img" [src]="imageURL + '/' + banners[3].image" [alt]="banners[3].alt">
+                <div class="banner__items--content style2">
+                  <h3 class="banner__items--content__title style2" [innerHTML]="banners[3].title"></h3>
+                  <span class="banner__items--content__link style2">SHOP NOW</span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="col" *ngIf="banners[4]">
+            <div class="banner__items position-relative">
+              <a class="banner__items--thumbnail" [routerLink]="banners[4].link" [attr.aria-label]="'Shop ' + banners[4]?.alt">
+                <img class="banner__items--thumbnail__img" [src]="imageURL + '/' + banners[4].image" [alt]="banners[4].alt">
+                <div class="banner__items--content style2" [ngClass]="banners[4].position">
+                  <h3 class="banner__items--content__title style2" [innerHTML]="banners[4].title"></h3>
+                  <span class="banner__items--content__link style2">SHOP NOW</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="type === 'discount'" class="banner__discount--inner position-relative">
+      <div class="row row-cols-sm-2 row-cols-1 g-4">
+        <div class="col" *ngFor="let banner of banners">
+          <div class="banner__items banner__discount--items position-relative">
+            <a class="banner__items--thumbnail" [routerLink]="banner.link" [attr.aria-label]="'Shop ' + banner.alt">
+              <img class="banner__items--thumbnail__img" [src]="imageURL + '/' + banner.image" [alt]="banner.alt">
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="banner__discount--content text-center">
+        <span class="banner__discount--content__subtitle">{{ discountContent?.subtitle }}</span>
+        <h2 class="banner__discount--content__title h3" [innerHTML]="discountContent?.title"></h2>
+        <a class="banner__discount--content__link" [routerLink]="discountContent?.ctaLink">{{ discountContent?.cta }}</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,216 @@
+@media only screen and (min-width:1200px) {
+	.shop__card--section__inner {
+		padding: 0 4.5rem
+	}
+}
+
+.shop__card--banner__thumbnail {
+	width: 50%;
+	overflow: hidden
+}
+
+.shop__card--banner__thumbnail a {
+	width: 100%
+}
+
+.shop__card--banner__thumbnail a img {
+	width: 100%
+}
+
+.shop__card--banner__thumbnail.two {
+	margin: 3rem 0 0 2.5rem
+}
+
+@media only screen and (max-width:767px) {
+	.shop__card--banner__thumbnail.two {
+		margin: 0 0 0 2rem
+	}
+}
+
+@media only screen and (max-width:575px) {
+	.shop__card--banner__thumbnail.two {
+		margin: 0 0 0 1.5rem
+	}
+}
+
+.shop__card--banner__thumbnail:hover .shop__card--banner__thumbnail--img {
+	-webkit-transform: scale(1.04);
+	transform: scale(1.04)
+}
+
+.shop__card--play {
+	left: 50%;
+	right: auto;
+	-webkit-transform: translatey(-50%) translatex(-50%);
+	transform: translatey(-50%) translatex(-50%);
+	top: 50%;
+	position: absolute
+}
+
+@media only screen and (max-width:767px) {
+	.shop__card--play {
+		margin-top: 0
+	}
+}
+
+@media only screen and (min-width:1200px) {
+	.shop__card--play__icon {
+		width: 7rem;
+		height: 7rem
+	}
+}
+
+@media only screen and (min-width:1600px) {
+	.shop__card--play__icon {
+		width: 8rem;
+		height: 8rem
+	}
+}
+
+@media only screen and (max-width:767px) {
+	.shop__card--play__icon {
+		width: 6rem;
+		height: 6rem
+	}
+}
+
+@media only screen and (max-width:575px) {
+	.shop__card--play__icon {
+		width: 5rem;
+		height: 5rem
+	}
+}
+
+@media only screen and (max-width:767px) {
+	.shop__card--content {
+		margin-top: 2.5rem;
+		text-align: center
+	}
+}
+
+.shop__card--content__subtitle {
+	font-weight: 400;
+	color: var(--text-gray-color);
+	margin-bottom: .3rem
+}
+
+@media only screen and (min-width:1200px) {
+	.shop__card--content__subtitle {
+		font-size: 1.7rem
+	}
+}
+
+@media only screen and (min-width:1366px) {
+	.shop__card--content__subtitle {
+		font-size: 1.8rem
+	}
+}
+
+.shop__card--content__maintitle {
+	font-weight: 600
+}
+
+@media only screen and (min-width:992px) {
+	.shop__card--content__maintitle {
+		line-height: 4.5rem
+	}
+}
+
+.shop__card--content__desc {
+	margin-bottom: 2rem
+}
+
+@media only screen and (min-width:768px) {
+	.shop__card--content__desc {
+		margin-bottom: 2.5rem
+	}
+}
+
+//banner-bideo
+.banner__bideo--play {
+	position: absolute;
+	top: 50%;
+	right: 24%;
+	-webkit-transform: translatey(-50%);
+	transform: translatey(-50%)
+}
+
+@media only screen and (min-width:768px) {
+	.banner__bideo--play {
+		right: 8%
+	}
+}
+
+@media only screen and (min-width:992px) {
+	.banner__bideo--play {
+		right: 10%
+	}
+}
+
+@media only screen and (min-width:1200px) {
+	.banner__bideo--play {
+		right: 24%
+	}
+}
+
+@media only screen and (max-width:767px) {
+	.banner__bideo--play {
+		position: inherit;
+		display: inline-block;
+		top: inherit;
+		-webkit-transform: inherit;
+		transform: inherit;
+		right: 0;
+		margin-top: 2rem
+	}
+}
+
+.banner__bideo--play__icon {
+	width: 5rem;
+	height: 5rem;
+	background: var(--secondary-color);
+	color: var(--white-color);
+	border-radius: 50%;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-animation: animate 2s linear infinite;
+	animation: animate 2s linear infinite
+}
+
+.banner__bideo--play__icon:hover {
+	color: var(--white-color);
+	background: var(--primary-color)
+}
+
+@media only screen and (min-width:768px) {
+	.banner__bideo--play__icon {
+		width: 6rem;
+		height: 6rem
+	}
+}
+
+@media only screen and (min-width:1200px) {
+	.banner__bideo--play__icon {
+		width: 7rem;
+		height: 7rem
+	}
+}
+
+.banner__bideo--play__icon:hover {
+	-webkit-transform: scale(1.08);
+	transform: scale(1.08)
+}
+
+@media only screen and (max-width:767px) {
+	.banner__bideo--play__icon svg {
+		width: 3.5rem;
+		height: 3.5rem
+	}
+}

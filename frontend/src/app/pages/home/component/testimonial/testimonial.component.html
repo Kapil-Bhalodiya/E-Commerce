@@ -1,0 +1,12 @@
+<section class="testimonial-section testimonial-bg position-relative section-padding color-scheme-2">
+  <div class="container">
+    <div class="testimonial-bg-inner testimonial-activation-column1">
+      <app-carousel [images]="testimonialImages"></app-carousel>
+      <div class="testimonial-content text-center">
+        <h2 class="testimonial-items-title text-white h3">{{ currentTestimonial?.name }}</h2>
+        <span class="testimonial-items-subtitle text-white">{{ currentTestimonial?.title }}</span>
+        <p class="testimonial-items-desc style2 text-white">{{ currentTestimonial?.quote }}</p>
+      </div>
+    </div>
+  </div>
+</section>
