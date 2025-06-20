@@ -3,7 +3,7 @@
         <div class="row row-cols-1">
             <div class="col">
                 <div class="breadcrumb__content text-center">
-                    <h1 class="breadcrumb__content--title text-white mb-25">Product Details</h1>
+                    <h1 class="breadcrumb__content--title text-white mb-25">{{ breadcrumbs[breadcrumbs.length - 1]?.label }}</h1>
                     <ul class="breadcrumb__content--menu d-flex justify-content-center">
                         <li *ngFor="let breadcrumb of breadcrumbs; let last = last" class="breadcrumb__content--menu__items">
                             <span *ngIf="!last">

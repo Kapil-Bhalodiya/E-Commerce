@@ -1,0 +1,24 @@
+<section class="hero-slider-section color-scheme-2">
+  <div class="hero-slider-inner hero-slider-activation">
+    <app-carousel [images]="slideImages"></app-carousel>
+    <div class="container-fluid">
+      <div class="hero-slider-items-inner hero-slider-bg2-inner">
+        <div class="row row-cols-1">
+          <div class="col">
+            <div class="slider-content">
+              <p class="slider-content-desc desc1 text-secondary2 mb-3">{{ currentSlide?.offer }}</p>
+              <h2 class="slider-content-maintitle h1">{{ currentSlide?.title }}</h2>
+              <p class="slider-content-desc desc2 d-sm-none mb-4">{{ currentSlide?.description }}</p>
+              <a class="bg-secondary2 slider-btn primary-btn" [routerLink]="currentSlide?.ctaLink">
+                {{ currentSlide?.ctaText }}
+                <svg class="primary-btn-arrow-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                  <path d="M10,2.5L8.5,4l5.7,5.7H2v2.5h12.2l-5.7,5.7,1.5,1.5,7.5-7.5Z" fill="currentColor"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

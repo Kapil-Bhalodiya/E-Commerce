@@ -7,13 +7,12 @@ import { NgModule } from '@angular/core';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { CheckoutCompleteComponent } from './pages/checkout/checkout-complete/checkout-complete.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
     {
         path: '',
-        pathMatch: 'full',
-        redirectTo: '/product',
-        data: { breadcrumb: 'Product' }
+        component: HomeComponent
     },
     {
         path: 'cart',

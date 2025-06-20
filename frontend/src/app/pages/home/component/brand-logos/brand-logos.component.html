@@ -1,0 +1,13 @@
+<div class="brand-logo-section bg-secondary section-padding color-scheme-2">
+  <div class="container-fluid">
+    <div class="row row-cols-1">
+      <div class="col">
+        <div class="brand-logo-section-inner d-flex justify-content-center align-items-center">
+          <div class="brand-logo-items" *ngFor="let logo of logos">
+            <img class="brand-logo-items-thumbnail-img d-block" [src]="imageURL + '/' + logo.src" [alt]="logo.alt">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

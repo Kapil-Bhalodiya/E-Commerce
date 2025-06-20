@@ -7,21 +7,21 @@
         <nav class="header__menu--navigation">
           <ul class="d-flex">
             <li class="header__menu--items">
-              <a class="header__menu--link">Home</a>
+              <a class="header__menu--link" routerLink="/">Home</a>
             </li>
             <li class="header__menu--items">
-              <a class="header__menu--link" routerLink="/shop">Shop</a>
+              <a class="header__menu--link" routerLink="/product">Shop</a>
             </li>
             <li class="header__menu--items">
               <a class="header__menu--link" routerLink="/about-us">About Us</a>
             </li>
             <li class="header__menu--items">
-              <a class="header__menu--link" href="index.html">Categories
+              <a class="header__menu--link" routerLink="/product">Categories
                 <i class="bi bi-chevron-down"></i>
               </a>
               <ul class="header__sub--menu">
-                <li class="header__sub--menu__items"><a class="header__sub--menu__link" href="#">Men</a></li>
-                <li class="header__sub--menu__items"><a class="header__sub--menu__link" href="#">Women</a></li>
+                <li class="header__sub--menu__items"><a class="header__sub--menu__link" routerLink="/product/category/men">Men</a></li>
+                <li class="header__sub--menu__items"><a class="header__sub--menu__link" routerLink="/product/category/women">Women</a></li>
               </ul>
             </li>
             <li class="header__menu--items"><a class="header__menu--link" routerLink="/blog">Blog</a></li>

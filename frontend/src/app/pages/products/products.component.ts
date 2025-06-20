@@ -10,10 +10,12 @@ import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cartItem.model';
 import { PaginationComponent } from "../../compoments/pagination/pagination.component";
+import { HeaderComponent } from "../../compoments/header/header.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, ProductCardComponent, BreadcrumbComponent, ProductListHeaderComponent, CategoriesFilterComponent, RangeFilterComponent, PaginationComponent],
+  imports: [CommonModule, ProductCardComponent, BreadcrumbComponent, ProductListHeaderComponent, CategoriesFilterComponent, RangeFilterComponent, PaginationComponent, HeaderComponent],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })
@@ -33,7 +35,8 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -81,6 +84,8 @@ export class ProductsComponent implements OnInit {
   }
 
   onAddToCart(product: Product) {
+    const checkLoggedInUser = localStorage.getItem('token')
+    if(checkLoggedInUser){ 
     const cartItem: CartItem = {
       productId: product._id,
       name: product.name,
@@ -91,6 +96,7 @@ export class ProductsComponent implements OnInit {
 
     this.cartService.addToCart(cartItem);
     console.log(`${product.name} added to cart`);
+    } else this.router.navigate(['/login'])
   }
 
   onAddToWishlist() {
