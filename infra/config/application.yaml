@@ -10,13 +10,13 @@ spec:
           - git:
               pathParamPrefix: target
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-              revision: Dev-Metrics-Alternative-Monitoring-Approaches
+              revision: main
               files:
                 - path: infra/config/*/values.yaml
           - git:
               pathParamPrefix: app
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-              revision: Dev-Metrics-Alternative-Monitoring-Approaches
+              revision: main
               directories:
                 - path: infra/config/{{target.path.basename}}/*/*
   template:
@@ -26,7 +26,7 @@ spec:
       project: default
       source:
         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
-        targetRevision: Dev-Metrics-Alternative-Monitoring-Approaches
+        targetRevision: main
         path: 'infra/addons/{{app.path.basename}}'
         helm:
           ignoreMissingValueFiles: true
