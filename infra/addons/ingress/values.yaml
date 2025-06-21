@@ -17,7 +17,7 @@ services:
   - name: backend
     serviceName: backend
     servicePort: 8000
-    path: /api
+    path: /(api|uploads)
     pathType: Prefix
 
 # Ingress controller settings
