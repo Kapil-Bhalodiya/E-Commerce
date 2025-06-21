@@ -19,6 +19,11 @@ services:
     servicePort: 8000
     path: /api
     pathType: Prefix
+  - name: backend-uploads
+    serviceName: backend
+    servicePort: 8000
+    path: /uploads
+    pathType: Prefix
 
 # Ingress controller settings
 ingressClass: nginx
