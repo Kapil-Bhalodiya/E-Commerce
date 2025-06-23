@@ -55,10 +55,10 @@ pipeline {
                         git add .
                         
                         echo "Commiting changes: "
-                         git commit -m "Update backend image to ${IMAGE_TAG}" || echo "No changes to commit"
+                        git commit -m "Update backend image to ${IMAGE_TAG}" || echo "No changes to commit"
                         
-                        echo "Pushing changes to github: "
-                        git push https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
+                        echo "Pushing changes to github: {GIT_USER}:${GIT_TOKEN}"
+                        git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
                     '''
                     }
                 }
