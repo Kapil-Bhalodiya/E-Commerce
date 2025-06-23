@@ -33,22 +33,15 @@ pipeline {
          stage("Update: Kubernetes manifests"){
             steps{
                 script {
-                    dir("${WORKSPACE}/../infra/addons/frontend") {
-                        sh "ls -la ${WORKSPACE}/infra/addons/frontend"
+                    dir("${WORKSPACE}/infra/addons/frontend") {
                         sh """
+                            ls -la
                             sed -i -E 's|^(\\s*tag:) .*|\\1 "${IMAGE_TAG}"|' values.yaml
+                            cat values.yaml
                         """
-                        sh "cat values.yaml" // Optional: See result in logs
                     }
-
-                    
-                    // dir('kubernetes'){
-                    //     sh """
-                    //         sed -i -e s/wanderlust-frontend-beta.*/wanderlust-frontend-beta:${IMAGE_TAG}/g frontend.yaml
-                    //     """
-                    // }
-                    
                 }
+
             }
         }
         stage("Git: Code update and push to GitHub"){
