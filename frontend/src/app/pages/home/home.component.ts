@@ -16,8 +16,7 @@ import { HeaderComponent } from "../../compoments/header/header.component";
     BrandLogosComponent,
     ShopCardsComponent,
     TestimonialComponent,
-    ContactSectionComponent,
-    HeaderComponent
+    ContactSectionComponent
 ],
   templateUrl: './home.component.html'
 })
