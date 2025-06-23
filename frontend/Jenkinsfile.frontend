@@ -59,7 +59,7 @@ pipeline {
                         git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
                         
                         echo "Pushing changes to github: "
-                        git push
+                        git push origin main
                     '''
                     }
                 }
