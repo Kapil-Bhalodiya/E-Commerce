@@ -33,10 +33,12 @@ pipeline {
          stage("Update: Kubernetes manifests"){
             steps{
                 script {
-                    dir('../infra/addons/frontend') {
+                    dir("${WORKSPACE}/../infra/addons/frontend") {
+                        sh "ls -la ${WORKSPACE}/infra/addons/frontend"
                         sh """
                             sed -i -E 's|^(\\s*tag:) .*|\\1 "${IMAGE_TAG}"|' values.yaml
                         """
+                        sh "cat values.yaml" // Optional: See result in logs
                     }
 
                     
