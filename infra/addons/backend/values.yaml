@@ -1,6 +1,6 @@
 image:
   repository: kapilbhalodiya/ecom-backend
-  tag: "22-bdb9afd"
+  tag: "23-8a92b66"
   pullPolicy: Always
 
 env:
