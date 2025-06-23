@@ -30,56 +30,95 @@ pipeline {
                 pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS)
             }
         }
+         stage("Update: Kubernetes manifests"){
+            steps{
+                script {
+                    dir('../infra/addons/frontend') {
+                        sh """
+                            sed -i -E 's|^(\\s*tag:) .*|\\1 "${IMAGE_TAG}"|' values.yaml
+                        """
+                    }
 
-        stage('Update Kubernetes Manifest') {
-            steps {
-                updateK8sManifest(MANIFEST_FILE, IMAGE_NAME, IMAGE_TAG)
-                withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                    sh """
-                        git config user.email "ci@example.com"
-                        git config user.name "CI Bot"
-
-                        git fetch origin main
-                        git checkout main
-                        git pull origin main
-
-                        git add ${MANIFEST_FILE}
-                        git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
-                        git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
-                    """
+                    
+                    // dir('kubernetes'){
+                    //     sh """
+                    //         sed -i -e s/wanderlust-frontend-beta.*/wanderlust-frontend-beta:${IMAGE_TAG}/g frontend.yaml
+                    //     """
+                    // }
+                    
+                }
+            }
+        }
+        stage("Git: Code update and push to GitHub"){
+            steps{
+                script{
+                    withCredentials([gitUsernamePassword(credentialsId: 'Github-Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                        sh '''
+                        echo "Checking repository status: "
+                        git status
+                    
+                        echo "Adding changes to git: "
+                        git add .
+                        
+                        echo "Commiting changes: "
+                         git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
+                        
+                        echo "Pushing changes to github: "
+                        git push https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
+                    '''
+                    }
                 }
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
-                    sh """
-                        export KUBECONFIG=$KUBECONFIG_FILE
+        // stage('Update Kubernetes Manifest') {
+        //     steps {
+        //         updateK8sManifest(MANIFEST_FILE, IMAGE_NAME, IMAGE_TAG)
+        //         withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+        //             sh """
+        //                 git config user.email "ci@example.com"
+        //                 git config user.name "CI Bot"
 
-                        # Install kubectl if not present
-                        if ! command -v kubectl >/dev/null; then
-                            curl -LO "https://dl.k8s.io/release/v1.33.2/bin/linux/amd64/kubectl"
-                            chmod +x kubectl
-                            mv kubectl /usr/local/bin/kubectl || mv kubectl /usr/bin/kubectl
-                        fi
+        //                 git fetch origin main
+        //                 git checkout main
+        //                 git pull origin main
 
-                        # Install Helm if not present
-                        if ! command -v helm >/dev/null; then
-                            curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-                            chmod 700 get_helm.sh
-                            ./get_helm.sh
-                            rm -f get_helm.sh
-                        fi
+        //                 git add ${MANIFEST_FILE}
+        //                 git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
+        //                 git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
+        //             """
+        //         }
+        //     }
+        // }
+        // stage('Deploy to Kubernetes') {
+        //     steps {
+        //         withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
+        //             sh """
+        //                 export KUBECONFIG=$KUBECONFIG_FILE
 
-                        helm upgrade --install ${HELM_RELEASE} ./infra/addons/frontend \
-                            --namespace ${K8S_NAMESPACE} --create-namespace \
-                            --set image.repository=${IMAGE_NAME} \
-                            --set image.tag=${IMAGE_TAG}
-                    """
-                }
-            }
-        }
+        //                 # Install kubectl if not present
+        //                 if ! command -v kubectl >/dev/null; then
+        //                     curl -LO "https://dl.k8s.io/release/v1.33.2/bin/linux/amd64/kubectl"
+        //                     chmod +x kubectl
+        //                     mv kubectl /usr/local/bin/kubectl || mv kubectl /usr/bin/kubectl
+        //                 fi
+
+        //                 # Install Helm if not present
+        //                 if ! command -v helm >/dev/null; then
+        //                     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+        //                     chmod 700 get_helm.sh
+        //                     ./get_helm.sh
+        //                     rm -f get_helm.sh
+        //                 fi
+
+        //                 helm upgrade --install ${HELM_RELEASE} ./infra/addons/frontend \
+        //                     --namespace ${K8S_NAMESPACE} --create-namespace \
+        //                     --set image.repository=${IMAGE_NAME} \
+        //                     --set image.tag=${IMAGE_TAG}
+        //             """
+        //         }
+        //     }
+        // }
     }
 
     post {
