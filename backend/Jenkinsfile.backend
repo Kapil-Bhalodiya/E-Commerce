@@ -33,9 +33,11 @@ pipeline {
          stage("Update: Kubernetes manifests"){
             steps{
                 script {
-                    dir('../infra/addons/backend') {
+                    dir("${WORKSPACE}/infra/addons/backend") {
                         sh """
+                            ls -la
                             sed -i -E 's|^(\\s*tag:) .*|\\1 "${IMAGE_TAG}"|' values.yaml
+                            cat values.yaml
                         """
                     }
                 }
@@ -44,7 +46,7 @@ pipeline {
         stage("Git: Code update and push to GitHub"){
             steps{
                 script{
-                    withCredentials([gitUsernamePassword(credentialsId: 'Github-Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                    withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh '''
                         echo "Checking repository status: "
                         git status
