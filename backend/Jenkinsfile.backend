@@ -25,7 +25,7 @@ pipeline {
                 changeset "**/backend/**"
             }
             steps {
-                echo "Changes detected in backend folder. Proceeding with build."
+                echo "Changes detected in backend folder. Proceeding with build.."
             }
         }
 
