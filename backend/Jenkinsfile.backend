@@ -1,3 +1,5 @@
+@Library('jenkins-shared-library@main') _
+
 pipeline {
     agent any
 
@@ -16,7 +18,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
+                        credentialsId: 'Github_Cred'
+                    ]],
+                    poll: true
+                ])
             }
         }
 
