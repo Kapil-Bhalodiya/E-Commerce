@@ -83,18 +83,14 @@ pipeline {
                         sh '''
                             git config --global user.email "ci@example.com"
                             git config --global user.name "CI Bot"
+                            git config --global pull.rebase false   # <----- ✅ Important Fix
 
-                            # Add changes first
                             git add .
-                            git commit -m "Update backend image to ${IMAGE_TAG}" || echo "No changes to commit"
+                            git commit -m "Update Frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
 
-                            # Ensure on main
-                            git branch --show-current
                             git checkout main || echo "Already on main"
-
                             git pull origin main
 
-                            # Push changes
                             git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
                         '''
                     }
