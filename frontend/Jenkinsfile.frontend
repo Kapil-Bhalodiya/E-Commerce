@@ -35,13 +35,14 @@ pipeline {
             }
             steps {
                 script {
-                echo "🛠️ DEBUG: Starting Docker Build"
-                sh '''
-                    docker --version
-                    docker info
-                    ls -la frontend/
-                '''
-                buildDocker('frontend', IMAGE_NAME, IMAGE_TAG)
+                    echo "🛠️ DEBUG: Starting Docker Build"
+                    sh '''
+                        docker --version
+                        docker info
+                        ls -la frontend/
+                    '''
+                    buildDocker('frontend', IMAGE_NAME, IMAGE_TAG)
+                }
             }
         }
 
