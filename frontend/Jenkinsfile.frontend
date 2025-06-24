@@ -21,15 +21,11 @@ pipeline {
         }
 
         stage('Detect Changes in Frontend') {
-            sh '''
-                echo "🛠️ DEBUG: Starting Docker Build"
-                docker --version
-                docker info
-                ls -la frontend/
-                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} frontend/
-            '''
             when {
                 changeset "**/frontend/**"
+            }
+            steps {
+                echo "Changes detected in frontend folder. Proceeding with build."
             }
         }
 
@@ -38,6 +34,13 @@ pipeline {
                 changeset "**/frontend/**"
             }
             steps {
+                script {
+                echo "🛠️ DEBUG: Starting Docker Build"
+                sh '''
+                    docker --version
+                    docker info
+                    ls -la frontend/
+                '''
                 buildDocker('frontend', IMAGE_NAME, IMAGE_TAG)
             }
         }
@@ -90,23 +93,23 @@ pipeline {
             }
         }
 
-        // stage('Deploy to Kubernetes') {
-        //     when {
-        //         changeset "**/frontend/**"
-        //     }
-        //     steps {
-        //         withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
-        //             sh '''
-        //                 export KUBECONFIG=$KUBECONFIG_FILE
+        stage('Deploy to Kubernetes') {
+            when {
+                changeset "**/frontend/**"
+            }
+            steps {
+                withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
+                    sh '''
+                        export KUBECONFIG=$KUBECONFIG_FILE
 
-        //                 helm upgrade --install ${HELM_RELEASE} ./infra/addons/frontend \
-        //                     --namespace ${K8S_NAMESPACE} --create-namespace \
-        //                     --set image.repository=${IMAGE_NAME} \
-        //                     --set image.tag=${IMAGE_TAG}
-        //             '''
-        //         }
-        //     }
-        // }
+                        helm upgrade --install ${HELM_RELEASE} ./infra/addons/frontend \
+                            --namespace ${K8S_NAMESPACE} --create-namespace \
+                            --set image.repository=${IMAGE_NAME} \
+                            --set image.tag=${IMAGE_TAG}
+                    '''
+                }
+            }
+        }
     }
 
     post {
