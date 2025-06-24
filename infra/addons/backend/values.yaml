@@ -1,3 +1,6 @@
+replicaCount: 1
+namespace: dev
+
 image:
   repository: kapilbhalodiya/ecom-backend
   tag: "32-fe3d076"

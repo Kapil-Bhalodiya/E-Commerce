@@ -23,19 +23,13 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          # env: //commented for now
-          # - name: MONGODB_URI
-          #   valueFrom:
-          #     secretKeyRef:
-          #       name: backend-mongodb-secret
-          #       key: mongodb-uri
           resources:
             requests:
-              cpu: "200m"
-              memory: "256Mi"
+              cpu: "100m"
+              memory: "128Mi"
             limits:
-              cpu: "1"
-              memory: "1Gi"
+              cpu: "500m"
+              memory: "512Mi"
         # {{- if .Values.tracing.enabled }}
         # - name: JAEGER_AGENT_HOST
         #   value: {{ .Values.tracing.jaegerAgentHost }}
