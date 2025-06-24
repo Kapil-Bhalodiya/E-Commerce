@@ -14,82 +14,82 @@ pipeline {
     }
 
     stages {
-            stage('Checkout') {
-                steps {
-                    checkout scm
-                }
+        stage('Checkout') {
+            steps {
+                checkout scm
             }
+        }
 
-            stage('Detect Changes in Frontend') {
-                when {
-                    changeset "**/frontend/**"
-                }
-                echo "🛠️ DEBUG: Starting Docker Build"
-                sh '''
-                    docker --version
-                    docker info
-                    ls -la frontend/
-                    docker build -t ${IMAGE_NAME}:${IMAGE_TAG} frontend/
-                '''
+        stage('Detect Changes in Frontend') {
+            when {
+                changeset "**/frontend/**"
             }
+            echo "🛠️ DEBUG: Starting Docker Build"
+            sh '''
+                docker --version
+                docker info
+                ls -la frontend/
+                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} frontend/
+            '''
+        }
 
-            stage('Build Docker Image') {
-                when {
-                    changeset "**/frontend/**"
-                }
-                steps {
-                    buildDocker('frontend', IMAGE_NAME, IMAGE_TAG)
-                }
+        stage('Build Docker Image') {
+            when {
+                changeset "**/frontend/**"
             }
-
-            stage('Push Docker Image') {
-                when {
-                    changeset "**/frontend/**"
-                }
-                steps {
-                    pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS)
-                }
+            steps {
+                buildDocker('frontend', IMAGE_NAME, IMAGE_TAG)
             }
+        }
 
-            stage("Update Kubernetes manifests") {
-                when {
-                    changeset "**/frontend/**"
-                }
-                steps {
-                    script {
-                        dir("${WORKSPACE}/infra/addons/frontend") {
-                            sh """
-                                sed -i -E 's|^(\\s*tag:) .*|\\1 "${IMAGE_TAG}"|' values.yaml
-                                cat values.yaml
-                            """
-                        }
+        stage('Push Docker Image') {
+            when {
+                changeset "**/frontend/**"
+            }
+            steps {
+                pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS)
+            }
+        }
+
+        stage("Update Kubernetes manifests") {
+            when {
+                changeset "**/frontend/**"
+            }
+            steps {
+                script {
+                    dir("${WORKSPACE}/infra/addons/frontend") {
+                        sh """
+                            sed -i -E 's|^(\\s*tag:) .*|\\1 "${IMAGE_TAG}"|' values.yaml
+                            cat values.yaml
+                        """
                     }
                 }
             }
+        }
 
-            stage("Git Commit Manifest Changes") {
-                when {
-                    changeset "**/frontend/**"
-                }
-                steps {
-                    script {
-                        withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                            sh '''
-                                git config --global user.email "ci@example.com"
-                                git config --global user.name "CI Bot"
+        stage("Git Commit Manifest Changes") {
+            when {
+                changeset "**/frontend/**"
+            }
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                        sh '''
+                            git config --global user.email "ci@example.com"
+                            git config --global user.name "CI Bot"
 
-                                git checkout main || git checkout -b main
-                                git pull origin main
+                            git checkout main || git checkout -b main
+                            git pull origin main
 
-                                git add .
-                                git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
-                                git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
-                            '''
-                        }
+                            git add .
+                            git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
+                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
+                        '''
                     }
                 }
             }
-    
+        }
+
         // stage('Deploy to Kubernetes') {
         //     when {
         //         changeset "**/frontend/**"
