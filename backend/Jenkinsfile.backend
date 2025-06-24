@@ -7,35 +7,64 @@ pipeline {
         IMAGE_NAME = 'docker.io/kapilbhalodiya/ecom-backend'
         IMAGE_TAG = "${env.BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
         REGISTRY_CREDENTIALS = 'Dockerhub-creds'
-        MANIFEST_FILE = 'infra/addons/backend/templates/deployment.yaml'
         K8S_NAMESPACE = 'dev'
         HELM_RELEASE = 'backend-dev'
+    }
+
+    triggers {
+        pollSCM('H/2 * * * *')
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
+                        credentialsId: 'Github_Cred'
+                    ]],
+                    poll: true
+                ])
+            }
+        }
+
+        stage('Detect Changes in Backend') {
+            when {
+                changeset "**/backend/**"
+            }
+            steps {
+                echo "Changes detected in backend folder. Proceeding with build.."
             }
         }
 
         stage('Build Docker Image') {
+            when {
+                changeset "**/backend/**"
+            }
             steps {
                 buildDocker('backend', IMAGE_NAME, IMAGE_TAG)
             }
         }
 
         stage('Push Docker Image') {
+            when {
+                changeset "**/backend/**"
+            }
             steps {
                 pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS)
             }
         }
-         stage("Update: Kubernetes manifests"){
-            steps{
+
+        stage("Update Kubernetes manifests") {
+            when {
+                changeset "**/backend/**"
+            }
+            steps {
                 script {
                     dir("${WORKSPACE}/infra/addons/backend") {
                         sh """
-                            ls -la
                             sed -i -E 's|^(\\s*tag:) .*|\\1 "${IMAGE_TAG}"|' values.yaml
                             cat values.yaml
                         """
@@ -43,73 +72,46 @@ pipeline {
                 }
             }
         }
-        stage("Git: Code update and push to GitHub"){
-            steps{
-                script{
+
+        stage("Git Commit Manifest Changes") {
+            when {
+                changeset "**/backend/**"
+            }
+            steps {
+                script {
                     withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh '''
-                        echo "Checking repository status: "
-                        git status
-                    
-                        echo "--- Checkout main branch or create if missing ---"
-                        git checkout main || git checkout -b main
-                        git pull https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main || true
+                            git config --global user.email "ci@example.com"
+                            git config --global user.name "CI Bot"
+                            git config --global pull.rebase false   # <----- ✅ Important Fix
 
-                        echo "--- Git Add / Commit / Push ---"
-                        git add .
-                        git commit -m "Update backend image to ${IMAGE_TAG}" || echo "No changes to commit"
-                        git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
+                            git add .
+                            git commit -m "Update Frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
+
+                            git checkout main || echo "Already on main"
+                            git pull origin main
+
+                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
                         '''
                     }
                 }
             }
         }
 
-        // stage('Update Kubernetes Manifest') {
-        //     steps {
-        //         updateK8sManifest(MANIFEST_FILE, IMAGE_NAME, IMAGE_TAG)
-        //         withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-        //             sh """
-        //                 git config user.email "ci@example.com"
-        //                 git config user.name "CI Bot"
-
-        //                 git fetch origin main
-        //                 git checkout main
-        //                 git pull origin main
-
-        //                 git add ${MANIFEST_FILE}
-        //                 git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
-        //                 git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
-        //             """
-        //         }
-        //     }
-        // }
         // stage('Deploy to Kubernetes') {
+        //     when {
+        //         changeset "**/backend/**"
+        //     }
         //     steps {
         //         withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
-        //             sh """
+        //             sh '''
         //                 export KUBECONFIG=$KUBECONFIG_FILE
 
-        //                 # Install kubectl if not present
-        //                 if ! command -v kubectl >/dev/null; then
-        //                     curl -LO "https://dl.k8s.io/release/v1.33.2/bin/linux/amd64/kubectl"
-        //                     chmod +x kubectl
-        //                     mv kubectl /usr/local/bin/kubectl || mv kubectl /usr/bin/kubectl
-        //                 fi
-
-        //                 # Install Helm if not present
-        //                 if ! command -v helm >/dev/null; then
-        //                     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-        //                     chmod 700 get_helm.sh
-        //                     ./get_helm.sh
-        //                     rm -f get_helm.sh
-        //                 fi
-
-        //                 helm upgrade --install ${HELM_RELEASE} ./infra/addons/frontend \
+        //                 helm upgrade --install ${HELM_RELEASE} ./infra/addons/backend \
         //                     --namespace ${K8S_NAMESPACE} --create-namespace \
         //                     --set image.repository=${IMAGE_NAME} \
         //                     --set image.tag=${IMAGE_TAG}
-        //             """
+        //             '''
         //         }
         //     }
         // }
@@ -117,7 +119,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ Deployment completed successfully."
+            echo "✅ Backend Deployment completed successfully."
         }
         failure {
             echo "❌ Deployment failed. Check Jenkins logs for details."
