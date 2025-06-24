@@ -53,7 +53,7 @@ pipeline {
                         git status
                     
                         echo "--- Checkout main branch or create if missing ---"
-                        git checkout main || git checkout -b main
+                        git checkout main
                         git pull https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main || true
 
                         echo "--- Git Add / Commit / Push ---"
