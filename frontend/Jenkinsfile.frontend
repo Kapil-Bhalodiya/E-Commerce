@@ -25,7 +25,7 @@ pipeline {
                         url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
                         credentialsId: 'Github_Cred'
                     ]],
-                    poll: true // 👈 Important: this enables changelog generation for polling
+                    poll: true
                 ])
             }
         }
@@ -91,12 +91,14 @@ pipeline {
                         sh '''
                             git config --global user.email "ci@example.com"
                             git config --global user.name "CI Bot"
-
-                            git checkout main || git checkout -b main
-                            git pull origin main
+                            git config --global pull.rebase false
 
                             git add .
-                            git commit -m "Update frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
+                            git commit -m "Update Frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
+
+                            git checkout main || echo "Already on main"
+                            git pull origin main
+
                             git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
                         '''
                     }
@@ -104,23 +106,23 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            when {
-                changeset "**/frontend/**"
-            }
-            steps {
-                withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
-                    sh '''
-                        export KUBECONFIG=$KUBECONFIG_FILE
+        // stage('Deploy to Kubernetes') {
+        //     when {
+        //         changeset "**/frontend/**"
+        //     }
+        //     steps {
+        //         withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
+        //             sh '''
+        //                 export KUBECONFIG=$KUBECONFIG_FILE
 
-                        helm upgrade --install ${HELM_RELEASE} ./infra/addons/frontend \
-                            --namespace ${K8S_NAMESPACE} --create-namespace \
-                            --set image.repository=${IMAGE_NAME} \
-                            --set image.tag=${IMAGE_TAG}
-                    '''
-                }
-            }
-        }
+        //                 helm upgrade --install ${HELM_RELEASE} ./infra/addons/frontend \
+        //                     --namespace ${K8S_NAMESPACE} --create-namespace \
+        //                     --set image.repository=${IMAGE_NAME} \
+        //                     --set image.tag=${IMAGE_TAG}
+        //             '''
+        //         }
+        //     }
+        // }
     }
 
     post {
