@@ -5,8 +5,10 @@ def call(String serviceName, String imageTag, String credentialsId) {
             git config --global user.name "CI Bot"
             git config --global pull.rebase false 
 
+            git stash || echo "Nothing to stash"
             git checkout main || echo "Already on main"
             git pull origin main
+            git stash pop || echo "Nothing to pop"
 
             git add .
             git commit -m "Update ${serviceName} image to ${imageTag}" || echo "No changes to commit"
