@@ -12,9 +12,7 @@ def call(Map config) {
             CHANGESET_PATTERN = "${config.changesetPattern}"
         }
 
-        triggers {
-            pollSCM('H/5 * * * *')
-        }
+
 
         stages {
             stage('Checkout') {
@@ -46,6 +44,8 @@ def call(Map config) {
                     commitManifestChanges(config.serviceName, IMAGE_TAG, config.gitConfig.credentialsId)
                 }
             }
+
+
         }
 
         post {
