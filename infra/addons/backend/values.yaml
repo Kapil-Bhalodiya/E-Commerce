@@ -3,11 +3,7 @@ namespace: dev
 
 image:
   repository: kapilbhalodiya/ecom-backend
-<<<<<<< Updated upstream
-  tag: "16-163260e"
-=======
   tag: "17-c86f12f"
->>>>>>> Stashed changes
   pullPolicy: Always
 
 env:
