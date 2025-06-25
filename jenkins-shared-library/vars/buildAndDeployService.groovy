@@ -23,7 +23,7 @@ def call(Map config) {
                 }
             }
 
-            stage("Detect Changes in ${config.serviceName}") {
+            stage('Detect Changes') {
                 when {
                     changeset "${CHANGESET_PATTERN}"
                 }
@@ -50,7 +50,7 @@ def call(Map config) {
                 }
             }
 
-            stage("Update Kubernetes manifests") {
+            stage('Update Kubernetes manifests') {
                 when {
                     changeset "${CHANGESET_PATTERN}"
                 }
@@ -59,7 +59,7 @@ def call(Map config) {
                 }
             }
 
-            stage("Git Commit Manifest Changes") {
+            stage('Git Commit Manifest Changes') {
                 when {
                     changeset "${CHANGESET_PATTERN}"
                 }
