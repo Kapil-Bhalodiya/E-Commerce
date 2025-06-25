@@ -5,7 +5,7 @@ const { asyncHandler } = require("../utils/asyncHandler");
 
 
 const testingApi = (req,res) => {
-    res.send("Api working.., CHeck Now")
+    res.send("Api working..")
     console.log("Api Working..")
 }
 
