@@ -24,8 +24,12 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
+            env:
             - name: MONGODB_URI
-              value: "{{ .Values.env.MONGODB_URI }}"
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: uri
             - name: NODE_ENV
               value: "{{ .Values.env.NODE_ENV }}"
             - name: PORT
