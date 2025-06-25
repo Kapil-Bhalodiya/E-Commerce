@@ -3,13 +3,13 @@ def call(Map config) {
         agent any
 
         environment {
-            IMAGE_NAME = config.imageName
+            IMAGE_NAME = "${config.imageName}"
             IMAGE_TAG = "${env.BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
-            REGISTRY_CREDENTIALS = config.registryCredentials ?: 'Dockerhub-creds'
-            K8S_NAMESPACE = config.namespace ?: 'dev'
-            HELM_RELEASE = config.helmRelease
-            SERVICE_PATH = config.servicePath
-            CHANGESET_PATTERN = config.changesetPattern
+            REGISTRY_CREDENTIALS = "${config.registryCredentials ?: 'Dockerhub-creds'}"
+            K8S_NAMESPACE = "${config.namespace ?: 'dev'}"
+            HELM_RELEASE = "${config.helmRelease}"
+            SERVICE_PATH = "${config.servicePath}"
+            CHANGESET_PATTERN = "${config.changesetPattern}"
         }
 
         triggers {
