@@ -39,7 +39,7 @@ client.collectDefaultMetrics();
 
 // CORS middleware
 
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../public')));
 
 app.use(express.json({limit: "20kb"}))
 app.use(express.urlencoded({extended: true}))
