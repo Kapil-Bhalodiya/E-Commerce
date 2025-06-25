@@ -3,7 +3,7 @@ namespace: dev
 
 image:
   repository: kapilbhalodiya/ecom-backend
-  tag: "18-21f2493"
+  tag: "19-de25025"
   pullPolicy: Always
 
 env:
