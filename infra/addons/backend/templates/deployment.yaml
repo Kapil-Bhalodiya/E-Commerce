@@ -24,7 +24,7 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
-            - name: STRIPE_SECRET_KEY
+            - name: STRIPE_SK
               valueFrom:
                 secretKeyRef:
                   name: backend-secrets
