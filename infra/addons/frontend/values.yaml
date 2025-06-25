@@ -2,7 +2,7 @@ replicaCount: 1
 namespace: dev
 image:
   repository: kapilbhalodiya/ecom-frontend
-  tag: "17-699bc26"
+  tag: "44-4162c81"
   pullPolicy: Always
 
 service:
