@@ -24,7 +24,6 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
-            env:
             - name: MONGODB_URI
               valueFrom:
                 secretKeyRef:
