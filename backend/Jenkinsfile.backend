@@ -1,128 +1,19 @@
 @Library('jenkins-shared-library@main') _
 
-pipeline {
-    agent any
+def config = [
+    serviceName: 'Backend',
+    imageName: 'docker.io/kapilbhalodiya/ecom-backend',
+    servicePath: 'backend',
+    changesetPattern: '**/backend/**',
+    helmPath: 'infra/addons/backend',
+    helmRelease: 'backend-dev',
+    namespace: 'dev',
+    registryCredentials: 'Dockerhub-creds',
+    gitConfig: [
+        url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
+        credentialsId: 'Github_Cred',
+        branch: '*/main'
+    ]
+]
 
-    environment {
-        IMAGE_NAME = 'docker.io/kapilbhalodiya/ecom-backend'
-        IMAGE_TAG = "${env.BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
-        REGISTRY_CREDENTIALS = 'Dockerhub-creds'
-        K8S_NAMESPACE = 'dev'
-        HELM_RELEASE = 'backend-dev'
-    }
-
-    triggers {
-        pollSCM('H/2 * * * *')
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
-                        credentialsId: 'Github_Cred'
-                    ]],
-                    poll: true
-                ])
-            }
-        }
-
-        stage('Detect Changes in Backend') {
-            when {
-                changeset "**/backend/**"
-            }
-            steps {
-                echo "Changes detected in backend folder. Proceeding with build.."
-            }
-        }
-
-        stage('Build Docker Image') {
-            when {
-                changeset "**/backend/**"
-            }
-            steps {
-                buildDocker('backend', IMAGE_NAME, IMAGE_TAG)
-            }
-        }
-
-        stage('Push Docker Image') {
-            when {
-                changeset "**/backend/**"
-            }
-            steps {
-                pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS)
-            }
-        }
-
-        stage("Update Kubernetes manifests") {
-            when {
-                changeset "**/backend/**"
-            }
-            steps {
-                script {
-                    dir("${WORKSPACE}/infra/addons/backend") {
-                        sh """
-                            sed -i -E 's|^(\\s*tag:) .*|\\1 "${IMAGE_TAG}"|' values.yaml
-                            cat values.yaml
-                        """
-                    }
-                }
-            }
-        }
-
-        stage("Git Commit Manifest Changes") {
-            when {
-                changeset "**/backend/**"
-            }
-            steps {
-                script {
-                     withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                        sh '''
-                            git config --global user.email "ci@example.com"
-                            git config --global user.name "CI Bot"
-                            git config --global pull.rebase false 
-
-                            git checkout main || echo "Already on main"
-                            git pull origin main
-
-                            git add .
-                            git commit -m "Update Backend image to ${IMAGE_TAG}" || echo "No changes to commit"
-
-                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
-                        '''
-                    }
-                }
-            }
-        }
-
-        // stage('Deploy to Kubernetes') {
-        //     when {
-        //         changeset "**/backend/**"
-        //     }
-        //     steps {
-        //         withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
-        //             sh '''
-        //                 export KUBECONFIG=$KUBECONFIG_FILE
-
-        //                 helm upgrade --install ${HELM_RELEASE} ./infra/addons/backend \
-        //                     --namespace ${K8S_NAMESPACE} --create-namespace \
-        //                     --set image.repository=${IMAGE_NAME} \
-        //                     --set image.tag=${IMAGE_TAG}
-        //             '''
-        //         }
-        //     }
-        // }
-    }
-
-    post {
-        success {
-            echo "✅ Backend Deployment completed successfully."
-        }
-        failure {
-            echo "❌ Deployment failed. Check Jenkins logs for details."
-        }
-    }
-}
+buildAndDeployService(config)

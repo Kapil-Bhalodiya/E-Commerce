@@ -1,136 +1,19 @@
 @Library('jenkins-shared-library@main') _
 
-pipeline {
-    agent any
+def config = [
+    serviceName: 'Frontend',
+    imageName: 'docker.io/kapilbhalodiya/ecom-frontend',
+    servicePath: 'frontend',
+    changesetPattern: '**/frontend/**',
+    helmPath: 'infra/addons/frontend',
+    helmRelease: 'frontend-dev',
+    namespace: 'dev',
+    registryCredentials: 'Dockerhub-creds',
+    gitConfig: [
+        url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
+        credentialsId: 'Github_Cred',
+        branch: '*/main'
+    ]
+]
 
-    environment {
-        IMAGE_NAME = 'docker.io/kapilbhalodiya/ecom-frontend'
-        IMAGE_TAG = "${env.BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
-        REGISTRY_CREDENTIALS = 'Dockerhub-creds'
-        K8S_NAMESPACE = 'dev'
-        HELM_RELEASE = 'frontend-dev'
-    }
-
-    triggers {
-        pollSCM('H/2 * * * *')
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
-                        credentialsId: 'Github_Cred'
-                    ]],
-                    poll: true
-                ])
-            }
-        }
-
-        stage('Detect Changes in Frontend') {
-            when {
-                changeset "**/frontend/**"
-            }
-            steps {
-                echo "Changes detected in frontend folder. Proceeding with build."
-            }
-        }
-
-        stage('Build Docker Image') {
-            when {
-                changeset "**/frontend/**"
-            }
-            steps {
-                script {
-                    echo "🛠️ DEBUG: Starting Docker Build"
-                    sh '''
-                        docker --version
-                        docker info
-                        ls -la frontend/
-                    '''
-                    buildDocker('frontend', IMAGE_NAME, IMAGE_TAG)
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            when {
-                changeset "**/frontend/**"
-            }
-            steps {
-                pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS)
-            }
-        }
-
-        stage("Update Kubernetes manifests") {
-            when {
-                changeset "**/frontend/**"
-            }
-            steps {
-                script {
-                    dir("${WORKSPACE}/infra/addons/frontend") {
-                        sh """
-                            sed -i -E 's|^(\\s*tag:) .*|\\1 "${IMAGE_TAG}"|' values.yaml
-                            cat values.yaml
-                        """
-                    }
-                }
-            }
-        }
-
-        stage("Git Commit Manifest Changes") {
-            when {
-                changeset "**/frontend/**"
-            }
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'Github_Cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                        sh '''
-                            git config --global user.email "ci@example.com"
-                            git config --global user.name "CI Bot"
-                            git config --global pull.rebase false
-
-                            git add .
-                            git commit -m "Update Frontend image to ${IMAGE_TAG}" || echo "No changes to commit"
-
-                            git checkout main || echo "Already on main"
-                            git pull origin main
-
-                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
-                        '''
-                    }
-                }
-            }
-        }
-
-        // stage('Deploy to Kubernetes') {
-        //     when {
-        //         changeset "**/frontend/**"
-        //     }
-        //     steps {
-        //         withCredentials([file(credentialsId: 'KubeConfig-Creds', variable: 'KUBECONFIG_FILE')]) {
-        //             sh '''
-        //                 export KUBECONFIG=$KUBECONFIG_FILE
-
-        //                 helm upgrade --install ${HELM_RELEASE} ./infra/addons/frontend \
-        //                     --namespace ${K8S_NAMESPACE} --create-namespace \
-        //                     --set image.repository=${IMAGE_NAME} \
-        //                     --set image.tag=${IMAGE_TAG}
-        //             '''
-        //         }
-        //     }
-        // }
-    }
-
-    post {
-        success {
-            echo "✅ Frontend Deployment completed successfully."
-        }
-        failure {
-            echo "❌ Deployment failed. Check Jenkins logs for details."
-        }
-    }
-}
+buildAndDeployService(config)
