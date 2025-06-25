@@ -1,5 +1,14 @@
 def call(String path, String imageName, String tag) {
     dir(path) {
-        sh "docker build -t ${imageName}:${tag} ."
+        echo "🛠️ Building Docker image: ${imageName}:${tag}"
+        sh """
+            docker build \
+                --build-arg BUILD_DATE=\$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
+                --build-arg VCS_REF=${env.GIT_COMMIT} \
+                --build-arg VERSION=${tag} \
+                -t ${imageName}:${tag} \
+                -t ${imageName}:latest .
+        """
+        echo "✅ Docker image built successfully"
     }
 }
