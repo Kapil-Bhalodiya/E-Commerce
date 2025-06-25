@@ -23,7 +23,19 @@ def call(Map config) {
             stage('Build Docker Image') {
                 steps {
                     script {
-                        env.IMAGE_TAG = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
+                        def gitCommit = ""
+                        try {
+                            gitCommit = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
+                            if (!gitCommit) {
+                                error("GIT_COMMIT is empty.")
+                            }
+                        } catch (Exception e) {
+                            // fallback to previous build tag if commit hash isn't available
+                            echo "⚠️ Warning: Could not determine git commit. Falling back to latest image tag."
+                            gitCommit = "latest"
+                        }
+
+                        env.IMAGE_TAG = "${env.BUILD_NUMBER}-${gitCommit}"
                         buildDocker(SERVICE_PATH, IMAGE_NAME, env.IMAGE_TAG)
                     }
                 }
