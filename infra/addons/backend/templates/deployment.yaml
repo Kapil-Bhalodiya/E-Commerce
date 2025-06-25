@@ -24,11 +24,33 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
+            - name: MONGODB_URI
+              value: "{{ .Values.env.MONGODB_URI }}"
+            - name: NODE_ENV
+              value: "{{ .Values.env.NODE_ENV }}"
+            - name: PORT
+              value: "{{ .Values.service.port }}"
+            - name: CORS_ORIGIN
+              value: "http://www.sharkapp.local:8000,https://www.sharkapp.local:8000"
             - name: STRIPE_SK
               valueFrom:
                 secretKeyRef:
                   name: backend-secrets
                   key: stripe-secret-key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: jwt-secret
+            - name: CLOUDINARY_CLOUD_NAME
+              value: "dummy"
+            - name: CLOUDINARY_API_KEY
+              value: "dummy"
+            - name: CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: cloudinary-api-secret
           resources:
             requests:
               cpu: "100m"
