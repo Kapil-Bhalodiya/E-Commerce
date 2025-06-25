@@ -4,7 +4,6 @@ def call(String imageName, String tag, String registryCredsId) {
         sh """
             echo \$PASS | docker login -u \$USER --password-stdin
             docker push ${imageName}:${tag}
-            docker push ${imageName}:latest
         """
         echo "✅ Docker image pushed successfully"
     }
