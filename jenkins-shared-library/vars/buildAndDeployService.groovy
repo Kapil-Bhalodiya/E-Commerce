@@ -4,7 +4,6 @@ def call(Map config) {
 
         environment {
             IMAGE_NAME = "${config.imageName}"
-            IMAGE_TAG = "${env.BUILD_NUMBER}-${GIT_COMMIT.take(7)}"
             REGISTRY_CREDENTIALS = "${config.registryCredentials ?: 'Dockerhub-creds'}"
             K8S_NAMESPACE = "${config.namespace ?: 'dev'}"
             HELM_RELEASE = "${config.helmRelease}"
@@ -23,25 +22,28 @@ def call(Map config) {
 
             stage('Build Docker Image') {
                 steps {
-                    buildDocker(SERVICE_PATH, IMAGE_NAME, IMAGE_TAG)
+                    script {
+                        env.IMAGE_TAG = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
+                        buildDocker(SERVICE_PATH, IMAGE_NAME, env.IMAGE_TAG)
+                    }
                 }
             }
 
             stage('Push Docker Image') {
                 steps {
-                    pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS)
+                    pushDocker(IMAGE_NAME, env.IMAGE_TAG, REGISTRY_CREDENTIALS)
                 }
             }
 
             stage('Update Kubernetes manifests') {
                 steps {
-                    updateK8sManifest(config.helmPath, IMAGE_TAG)
+                    updateK8sManifest(config.helmPath, env.IMAGE_TAG)
                 }
             }
 
             stage('Git Commit Manifest Changes') {
                 steps {
-                    commitManifestChanges(config.serviceName, IMAGE_TAG, config.gitConfig.credentialsId)
+                    commitManifestChanges(config.serviceName, env.IMAGE_TAG, config.gitConfig.credentialsId)
                 }
             }
 
