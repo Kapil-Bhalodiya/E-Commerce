@@ -5,8 +5,8 @@ const { asyncHandler } = require("../utils/asyncHandler");
 
 
 const testingApi = (req,res) => {
-    res.send("Api working..")
-    console.log("Api Working..")
+    res.send("Api working Fine..")
+    console.log("Api Working Fine..")
 }
 
 const registerUser = asyncHandler(async (req,res) => {
