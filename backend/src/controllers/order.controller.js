@@ -1,16 +1,12 @@
 const mongoose = require('mongoose');
-const Stripe = require('stripe');
-const stripe = new Stripe(process.env.STRIPE_SK);
 const Order = require('../models/orders.model');
 const OrderItem = require('../models/order-item.model');
-const Address = require('../models/addresses.model');
 const Payment = require('../models/payments.model');
 const Product = require('../models/product.model');
 const Coupon = require('../models/coupons.model');
 const logger = require('../utils/logger');
 const { ApiError } = require('../utils/ApiError');
 const { createAddress } = require('./addresses.contoller');
-
 
 const createOrder = async (req, res, next) => {
   const session = await mongoose.startSession();
