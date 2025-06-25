@@ -45,15 +45,15 @@ spec:
                 secretKeyRef:
                   name: backend-secrets
                   key: jwt-secret
-            - name: CLOUDINARY_CLOUD_NAME
-              value: "dummy"
-            - name: CLOUDINARY_API_KEY
-              value: "dummy"
-            - name: CLOUDINARY_API_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: cloudinary-api-secret
+            # - name: CLOUDINARY_CLOUD_NAME
+            #   value: "dummy"
+            # - name: CLOUDINARY_API_KEY
+            #   value: "dummy"
+            # - name: CLOUDINARY_API_SECRET
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: backend-secrets
+            #       key: cloudinary-api-secret
           resources:
             requests:
               cpu: "100m"
