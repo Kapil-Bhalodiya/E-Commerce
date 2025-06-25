@@ -40,11 +40,6 @@ spec:
                 secretKeyRef:
                   name: backend-secrets
                   key: stripe-secret-key
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: jwt-secret
             # - name: CLOUDINARY_CLOUD_NAME
             #   value: "dummy"
             # - name: CLOUDINARY_API_KEY
