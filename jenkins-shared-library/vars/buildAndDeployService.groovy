@@ -13,7 +13,7 @@ def call(Map config) {
         }
 
         triggers {
-            pollSCM('H/2 * * * *')
+            pollSCM('H/5 * * * *')
         }
 
         stages {
@@ -23,46 +23,25 @@ def call(Map config) {
                 }
             }
 
-            stage('Detect Changes') {
-                when {
-                    changeset "${CHANGESET_PATTERN}"
-                }
-                steps {
-                    echo "Changes detected in ${config.serviceName} folder. Proceeding with build.."
-                }
-            }
-
             stage('Build Docker Image') {
-                when {
-                    changeset "${CHANGESET_PATTERN}"
-                }
                 steps {
                     buildDocker(SERVICE_PATH, IMAGE_NAME, IMAGE_TAG)
                 }
             }
 
             stage('Push Docker Image') {
-                when {
-                    changeset "${CHANGESET_PATTERN}"
-                }
                 steps {
                     pushDocker(IMAGE_NAME, IMAGE_TAG, REGISTRY_CREDENTIALS)
                 }
             }
 
             stage('Update Kubernetes manifests') {
-                when {
-                    changeset "${CHANGESET_PATTERN}"
-                }
                 steps {
                     updateK8sManifest(config.helmPath, IMAGE_TAG)
                 }
             }
 
             stage('Git Commit Manifest Changes') {
-                when {
-                    changeset "${CHANGESET_PATTERN}"
-                }
                 steps {
                     commitManifestChanges(config.serviceName, IMAGE_TAG, config.gitConfig.credentialsId)
                 }
