@@ -1,2 +1,50 @@
+# Security files
 *.key
 *.crt
+
+# Logs
+*.log
+logs/
+backend/logs/
+
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Build outputs
+dist/
+build/
+.angular/cache/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Uploads and media (should be in cloud storage)
+uploads/
+public/product/
+public/banner/
+public/slider/
+public/subcategory/
+
+# Helm charts (downloaded dependencies)
+charts/*.tgz
+
+# Temporary files
+*.tmp
+*.temp
+temp.yaml
+
+# Cache directories
+.angular/cache/
