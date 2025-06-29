@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { SearchBoxComponent } from "../../../../compoments/search-box/search-box.component";
-import { DropdownFilterComponent } from "../../../../compoments/filter/dropdown-filter/dropdown-filter.component";
+import { SearchBoxComponent } from "../../../../components/search-box/search-box.component";
+import { DropdownFilterComponent } from "../../../../components/filter/dropdown-filter/dropdown-filter.component";
 
 @Component({
   selector: 'app-product-list-header',

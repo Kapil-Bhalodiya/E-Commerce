@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment,STRIPE_PK } from '../../../../environments/environment';
 import { loadStripe, Stripe, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
 import { PaymentService } from '../../../services/payment.service';
-import { SpinnerComponent } from "../../../compoments/spinner/spinner.component";
+import { SpinnerComponent } from "../../../components/spinner/spinner.component";
 
 @Component({
   selector: 'app-payment-step',

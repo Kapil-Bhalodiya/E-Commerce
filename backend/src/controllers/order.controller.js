@@ -6,7 +6,7 @@ const Product = require('../models/product.model');
 const Coupon = require('../models/coupons.model');
 const logger = require('../utils/logger');
 const { ApiError } = require('../utils/ApiError');
-const { createAddress } = require('./addresses.contoller');
+const { createAddress } = require('./addresses.controller');
 
 const createOrder = async (req, res, next) => {
   const session = await mongoose.startSession();
