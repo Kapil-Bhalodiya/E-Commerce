@@ -49,7 +49,7 @@ export class ProductCardComponent {
   }
 
   getProductImage(): string {
-    return this.product.image_urls?.[0] || '/assets/images/placeholder.jpg'
+    return `${this.imageURL}/${this.product.image_urls?.[0]}`
   }
 
   trackByProductId(index: number, product: Product): string {
