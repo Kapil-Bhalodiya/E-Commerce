@@ -28,18 +28,15 @@ export class RegisterComponent {
 
   registraionHandle(): void {
     if (this.formGroup.valid) {
-      this.authService.onRegister(this.formGroup.value).subscribe({
+      this.authService.register(this.formGroup.value).subscribe({
         next: (res) => {
-          console.log("res: ",res);
           if(res.success)
-            this.router.navigateByUrl('/login')
+            this.router.navigate(['/login'])
         },
         error: (err) => {
-          console.error("Registraion Failed.! ",err);
+          // Handle registration error
         }
       })
-    } else {
-      console.log("Form is invalid");
     }
   }
 }

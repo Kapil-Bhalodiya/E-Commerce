@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { CartStepComponent } from './pages/checkout/cart-step/cart.component';
 import { LoginComponent } from './features/login/login.component';
-import { AuthGuard } from './services/auth.guard';
+import { AuthGuard } from './core/guards/auth.guard';
 import { RegisterComponent } from './features/register/register.component';
 import { NgModule } from '@angular/core';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
@@ -20,15 +20,13 @@ export const routes: Routes = [
     },
     {
         path: 'checkout',
-        component: CheckoutComponent
+        component: CheckoutComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'checkout-complete',
-        component: CheckoutCompleteComponent
-    },
-    {
-        path: 'checkout',
-        loadChildren: () => import('./pages/checkout/checkout.module').then((m) => m.CheckoutModule),
+        component: CheckoutCompleteComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'product',
@@ -38,12 +36,12 @@ export const routes: Routes = [
     {
         path: 'login',
         component: LoginComponent,
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'register',
         component: RegisterComponent,
-        // canActivate: [AuthGuard]
+        canActivate: [AuthGuard]
     },
     {
         path: 'dashboard',
@@ -53,7 +51,7 @@ export const routes: Routes = [
     },
 ];
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],  // Make sure to use forRoot for app-level routing
+    imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })
 export class AppRoutingModule { }

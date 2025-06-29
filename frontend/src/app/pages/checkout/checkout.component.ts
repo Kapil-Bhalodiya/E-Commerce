@@ -64,20 +64,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     this.formGroup?.get('cartForm')?.get('items')?.updateValueAndValidity({ onlySelf: true });
     this.cartService.getCartItems$()
-      .pipe(takeUntil(this.ngUnsubscribe),
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
         catchError(error => {
-          console.error('Error fetching cart items:', error);
-          this.cartItems = []; // Fallback to empty array
-          return of([]);
+          this.errorMessage = 'Failed to load cart items'
+          this.cartItems = []
+          return of([])
         })
       )
-      .subscribe((items: any[]) => {
-        console.log('Cart items received:', items);
-        this.cartItems = items || [];
-      });
-
-      console.log("currentFormGroup : ",this.currentFormGroup?.valid)
-      console.log("currentFormGroup : ",this.currentFormGroup?.value)
+      .subscribe((items: CartItem[]) => {
+        this.cartItems = items || []
+        this.referenceData.cartItems = items
+      })
   }
 
   initializeForm() {
@@ -184,25 +182,24 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
   
   proceedToCheckout(): void {
-    if (!this.cartService.getCartItems().length) {
-      alert('Cart is empty');
-      return;
+    const cartItems = this.cartService.getCartItems()
+    if (!cartItems.length) {
+      this.errorMessage = 'Cart is empty'
+      return
     }
     
     const orderData = {
-      cartForm: {
-        items: JSON.parse(localStorage.getItem('cart') as string),
-      },
+      cartForm: { items: cartItems },
       deliveryAddressForm: {
         deliveryAddressId: this.formGroup.get('deliveryForm.addressId')?.value,
-        deliverAddress: this.formGroup.get('deliveryForm.newAddress')?.value
+        newAddress: this.formGroup.get('deliveryForm.newAddress')?.value
       },
       paymentDetailForm: this.formGroup.get('paymentForm')?.value,
-      couponCode: this.couponCode || null,
-    };
-    console.log("orderData : ",orderData);
-    localStorage.setItem('orderForm', JSON.stringify(orderData));
-    this.router.navigateByUrl('/checkout-complete');
+      couponCode: this.couponCode || null
+    }
+    
+    localStorage.setItem('orderForm', JSON.stringify(orderData))
+    this.router.navigate(['/checkout-complete'])
   }
 
   ngOnDestroy(): void {

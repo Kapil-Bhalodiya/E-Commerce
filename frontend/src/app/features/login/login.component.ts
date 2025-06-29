@@ -28,11 +28,9 @@ export class LoginComponent {
   loginHandle() {
     if (this.formGroup.valid) {
       const { email, password } = this.formGroup.value;
-      this.authService.onLogin(email, password).subscribe({
+      this.authService.login({ email, password }).subscribe({
         next: (response) => {
-          console.log("reponse: ",response);
-          localStorage.setItem('token', response.data.accessToken)
-          this.router.navigate(['/']); // Replace with your intended route
+          this.router.navigate(['/']);
         },
         error: (err) => {
           this.errorMessage = 'Invalid credentials. Please try again.';

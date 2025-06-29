@@ -30,8 +30,8 @@
                             <div class="product__section--inner product__grid--inner">
                                 <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-2 mb--n30">
                                     <div class="col mb-30" *ngFor="let product of products">
-                                        <app-product-card [product]="product" (addToCart)="onAddToCart(product)"
-                                            (addToWishlist)="onAddToWishlist()" (quickView)="onQuickView()" />
+                                        <app-product-card [product]="product" (addToCart)="onAddToCart($event)"
+                                            (addToWishlist)="onAddToWishlist($event)" (quickView)="onQuickView($event)" />
                                     </div>
                                 </div>
                             </div>
