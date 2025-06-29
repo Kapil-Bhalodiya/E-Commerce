@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.yourdomain.com',
-  backendApi: 'https://api.yourdomain.com/api',
+  apiUrl: 'http://www.sharkapp.local:8000/',
+  backendApi: 'http://www.sharkapp.local:8000/api',
   enableLogging: false,
   enableDebug: false,
   cacheTimeout: 600000, // 10 minutes
