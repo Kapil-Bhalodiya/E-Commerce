@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { TableComponent } from "../../../compoments/table/table.component";
+import { TableComponent } from "../../../components/table/table.component";
 import { CartService } from '../../../services/cart.service';
 import { Router } from '@angular/router';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormStepComponent } from '../../../compoments/stepper/models/form-step-cponent.model';
+import { FormStepComponent } from '../../../components/stepper/models/form-step-cponent.model';
 import { CartItem } from '../../../models/cartItem.model';
 
 @Component({

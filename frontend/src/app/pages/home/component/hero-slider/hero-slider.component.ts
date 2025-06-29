@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CarouselsComponent } from '../../../../compoments/carousel/carousel.component';
+import { CarouselsComponent } from '../../../../components/carousel/carousel.component';
 import { environment } from '../../../../../environments/environment';
 
 @Component({
