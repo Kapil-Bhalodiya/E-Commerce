@@ -54,7 +54,12 @@ client.collectDefaultMetrics();
 
 // CORS middleware
 
-app.use('/uploads', express.static(path.join(__dirname, '../public')));
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads'), {
+  setHeaders: (res, path, stat) => {
+    res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+  }
+}));
+
 
 app.use(express.json({limit: "20kb"}))
 app.use(express.urlencoded({extended: true}))
