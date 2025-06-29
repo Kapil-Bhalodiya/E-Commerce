@@ -9,7 +9,7 @@ target:
   address: https://kubernetes.default.svc
   namespace: dev
   project: default
-  branch: Dev-Metrics-Alternative-Monitoring-Approaches
+  branch: main
 loki:
   storage:
     bucketNames:
