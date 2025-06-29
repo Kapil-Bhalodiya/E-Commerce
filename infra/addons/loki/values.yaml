@@ -55,7 +55,7 @@ promtail:
   config:
     logLevel: info
     clients:
-      - url: http://loki-dev-gateway.dev.svc.cluster.local:80/loki/api/v1/push
+      - url: http://loki-gateway:80/loki/api/v1/push
   pipelineStages:
     - docker: {}
   extraRelabelConfigs:
@@ -75,7 +75,7 @@ promtail:
     successThreshold: 1
     failureThreshold: 5
 monitoring:
-  enabled: false  # Explicitly disable all monitoring features
+  enabled: false
   dashboards:
     enabled: false
   rules:
@@ -85,7 +85,6 @@ monitoring:
   selfMonitoring:
     enabled: false
     grafanaAgent:
-      enabled: false
       installOperator: false
   lokiCanary:
     enabled: false
@@ -93,6 +92,3 @@ gateway:
   enabled: true
   replicas: 1
   verboseLogging: true
-grafanaAgent:  # Explicitly disable at the chart level
-  enabled: false
-  installOperator: false
