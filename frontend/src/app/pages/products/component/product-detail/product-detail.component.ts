@@ -65,7 +65,7 @@ export class ProductDetailComponent implements OnInit {
         this.initializeVariants();
       },
       error: (err) => {
-        console.error('Error fetching product:', err);
+        // Handle error appropriately
       }
     });
   }
@@ -114,21 +114,18 @@ export class ProductDetailComponent implements OnInit {
 
   addToCart(): void {
     if (this.product && this.selectedVariant) {
-      console.log(`Added to cart: ${this.product.name}, Color: ${this.selectedColor}, Size: ${this.selectedSize}, SKU: ${this.selectedVariant}`);
       // Implement cart logic here
     }
   }
 
   buyNow(): void {
     if (this.product && this.selectedVariant) {
-      console.log(`Buy now: ${this.product.name}, Color: ${this.selectedColor}, Size: ${this.selectedSize}, SKU: ${this.selectedVariant}`);
       // Implement buy now logic
     }
   }
 
   addToWishlist(): void {
     if (this.product) {
-      console.log(`Added to wishlist: ${this.product.name}`);
       // Implement wishlist logic
     }
   }

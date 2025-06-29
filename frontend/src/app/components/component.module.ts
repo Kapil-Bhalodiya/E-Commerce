@@ -4,11 +4,8 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { PrimaryButtonComponent } from './primary-button/primary-button.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
-
 @NgModule({
     imports: [
-        BrowserAnimationsModule,
         RouterModule,
         CommonModule,
         PrimaryButtonComponent,

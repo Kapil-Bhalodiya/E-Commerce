@@ -1,65 +1,58 @@
-import { Component, EventEmitter, inject, Input, input, Output, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { RatingComponent } from "../../../../components/rating/rating.component";
-import { Router } from '@angular/router';
-import { Product } from '../../../../models/product.model';
-import { environment } from '../../../../../environments/environment';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Router } from '@angular/router'
+import { RatingComponent } from '../../../../components/rating/rating.component'
+import { Product } from '../../../../models/product.model'
+import { environment } from '../../../../../environments/environment'
 
 @Component({
   selector: 'app-product-card',
+  standalone: true,
   imports: [CommonModule, RatingComponent],
   templateUrl: './product-card.component.html',
-  styleUrl: './product-card.component.scss'
+  styleUrl: './product-card.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductCardComponent {
-  constructor(
-    private router: Router,
+  @Input({ required: true }) product!: Product
+  @Output() addToCart = new EventEmitter<Product>()
+  @Output() addToWishlist = new EventEmitter<Product>()
+  @Output() quickView = new EventEmitter<Product>()
+  
+  readonly imageURL = environment.apiUrl
+  showModal = false
 
-  ) {}
-  showModal: boolean = false;
-  imageURL: string = environment.apiUrl;
-  @Input() product:Product = {
-    _id: '',
-    name: '',
-    description: '',
-    brand: '',
-    subcategory: '',
-    base_price: 0,
-    tags: [],
-    dietary_needs: [],
-    image_urls: [],
-    variant_ids: []
+  constructor(private router: Router) {}
+
+  openModal(): void {
+    this.showModal = true
+  }
+
+  closeModal(): void {
+    this.showModal = false
   }
   
-  @Output() addToCart = new EventEmitter<void>();
-  @Output() addToWishlist = new EventEmitter<void>();
-  @Output() quickView = new EventEmitter<void>();
-  
-
-  openModal() {
-    this.showModal = true;
+  onAddToCart(): void {
+    this.addToCart.emit(this.product)
   }
 
-  // Method to close the modal
-  closeModal() {
-    this.showModal = false;
-  }
-  
-  onAddToCart() {
-    this.addToCart.emit();
+  onAddToWishlist(): void {
+    this.addToWishlist.emit(this.product)
   }
 
-  onAddToWishlist() {
-    this.addToWishlist.emit();
+  onQuickView(): void {
+    this.quickView.emit(this.product)
   }
 
-  onQuickView() {
-    this.quickView.emit();
+  viewProduct(): void {
+    this.router.navigate(['/product/product-detail', this.product._id])
   }
 
-  viewProduct(id: string) {
-    this.router.navigate([`/product/product-detail/${id}`]);
+  getProductImage(): string {
+    return this.product.image_urls?.[0] || '/assets/images/placeholder.jpg'
   }
-  
+
+  trackByProductId(index: number, product: Product): string {
+    return product._id
+  }
 }

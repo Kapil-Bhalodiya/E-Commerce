@@ -13,7 +13,7 @@ exports.createAddress = async (req, res, next) => {
     }
 
     const { firstName, lastName, phone, addressLine1, addressLine2, city, state, postalCode, country, addressType, isDefault } = req.body;
-    const userId = '67fca190b5799c577b4b06bc';
+    const userId = req.user?._id || req.userId;
 
     const address = new Address({
       userId,
@@ -49,7 +49,7 @@ exports.createAddress = async (req, res, next) => {
 // Get all addresses for the current user
 exports.getAddresses = async (req, res, next) => {
   try {
-    const userId = '67fca190b5799c577b4b06bc';
+    const userId = req.user?._id || req.userId;
     const addresses = await Address.find({ userId, isDeleted: false });
 
     res.status(200).json({

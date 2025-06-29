@@ -23,7 +23,7 @@ import { HeaderComponent } from "../../components/header/header.component";
 export class HomeComponent {
   slides = [
     {
-      image: 'uploads/slider/slider1.png',
+      image: 'public/slider/slider1.png',
       offer: 'Big Offer 50% off',
       title: 'New Collection Summer Sale',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -31,7 +31,7 @@ export class HomeComponent {
       ctaLink: '/product'
     },
     {
-      image: 'uploads/slider/slider2.png',
+      image: 'public/slider/slider2.png',
       offer: 'Big Offer 50% off',
       title: 'Winter Collection Sale',
       description: 'Explore our latest winter styles.',
@@ -39,7 +39,7 @@ export class HomeComponent {
       ctaLink: '/product'
     },
     {
-      image: 'uploads/slider/slider3.png',
+      image: 'public/slider/slider3.png',
       offer: 'Big Offer 50% off',
       title: 'Spring Collection Sale',
       description: 'Fresh styles for the new season.',
@@ -49,16 +49,16 @@ export class HomeComponent {
   ];
 
   categoryBanners = [
-    { image: 'uploads/banner/banner7.png', title: 'NEW <br> ACCESSORIES', link: '/product', alt: 'New Accessories Banner' },
-    { image: 'uploads/banner/banner8.png', title: 'NEW <br> ACCESSORIES', link: '/product', alt: 'New Accessories Banner', maxHeight: true },
-    { image: 'uploads/banner/banner9.png', title: 'TRENDING <br> NOW', link: '/product', alt: 'Trending Now Banner' },
-    { image: 'uploads/banner/banner10.png', title: 'TOP <br> SELLER', link: '/product', alt: 'Top Seller Banner', maxHeight: true },
-    { image: 'uploads/banner/banner11.png', title: 'TOP <br> DECORATION', link: '/product', alt: 'Top Decoration Banner', position: 'right' }
+    { image: 'public/banner/banner7.png', title: 'NEW <br> ACCESSORIES', link: '/product', alt: 'New Accessories Banner' },
+    { image: 'public/banner/banner8.png', title: 'NEW <br> ACCESSORIES', link: '/product', alt: 'New Accessories Banner', maxHeight: true },
+    { image: 'public/banner/banner9.png', title: 'TRENDING <br> NOW', link: '/product', alt: 'Trending Now Banner' },
+    { image: 'public/banner/banner10.png', title: 'TOP <br> SELLER', link: '/product', alt: 'Top Seller Banner', maxHeight: true },
+    { image: 'public/banner/banner11.png', title: 'TOP <br> DECORATION', link: '/product', alt: 'Top Decoration Banner', position: 'right' }
   ];
 
   discountBanners = [
-    { image: 'uploads/banner/banner12.png', link: '/product', alt: 'Summer Collection Banner 1' },
-    { image: 'uploads/banner/banner13.png', link: '/product', alt: 'Summer Collection Banner 2' }
+    { image: 'public/banner/banner12.png', link: '/product', alt: 'Summer Collection Banner 1' },
+    { image: 'public/banner/banner13.png', link: '/product', alt: 'Summer Collection Banner 2' }
   ];
 
   discountContent = {
@@ -69,11 +69,11 @@ export class HomeComponent {
   };
 
   brandLogos = [
-    { src: 'uploads/banner/brand-logo1.png', alt: 'Brand Logo 1' },
-    { src: 'uploads/banner/brand-logo2.png', alt: 'Brand Logo 2' },
-    { src: 'uploads/banner/brand-logo3.png', alt: 'Brand Logo 3' },
-    { src: 'uploads/banner/brand-logo4.png', alt: 'Brand Logo 4' },
-    { src: 'uploads/banner/brand-logo5.png', alt: 'Brand Logo 5' }
+    { src: 'public/banner/brand-logo1.png', alt: 'Brand Logo 1' },
+    { src: 'public/banner/brand-logo2.png', alt: 'Brand Logo 2' },
+    { src: 'public/banner/brand-logo3.png', alt: 'Brand Logo 3' },
+    { src: 'public/banner/brand-logo4.png', alt: 'Brand Logo 4' },
+    { src: 'public/banner/brand-logo5.png', alt: 'Brand Logo 5' }
   ];
 
   shopCardContent = {
@@ -85,8 +85,8 @@ export class HomeComponent {
   };
 
   shopCardBanners = [
-    { image: 'uploads/banner/banner16.png', link: '/shop', alt: 'Gift Card Banner 1' },
-    { image: 'uploads/banner/banner17.png', link: '/shop', alt: 'Gift Card Banner 2' }
+    { image: 'public/banner/banner16.png', link: '/shop', alt: 'Gift Card Banner 1' },
+    { image: 'public/banner/banner17.png', link: '/shop', alt: 'Gift Card Banner 2' }
   ];
 
   shopCardVideoUrl = 'https://vimeo.com/115041822';

@@ -10,12 +10,12 @@ import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cartItem.model';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
-import { HeaderComponent } from "../../components/header/header.component";
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
-  imports: [CommonModule, ProductCardComponent, BreadcrumbComponent, ProductListHeaderComponent, CategoriesFilterComponent, RangeFilterComponent, PaginationComponent, HeaderComponent],
+  imports: [CommonModule, ProductCardComponent, BreadcrumbComponent, 
+    ProductListHeaderComponent, CategoriesFilterComponent, RangeFilterComponent, PaginationComponent],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })
@@ -48,19 +48,22 @@ export class ProductsComponent implements OnInit {
     this.productService.fetchProducts(this.page, 4, this.filters).subscribe({
       next: (response) => {
         this.products = response.data.products;
-        this.totalPages = response.data.pages;
+        this.totalPages = response.data.totalPages;
       },
-      error: (error) => console.error('Error fetching products:', error)
+      error: (error) => {
+        // Handle error appropriately
+      }
     });
   }
 
   fetchAllProducts() {
     this.productService.fetchAllProducts().subscribe({
       next: (response) => {
-        this.products = response.data;
-        // this.totalPages = response.pages;
+        this.products = response.data.products;
       },
-      error: (error) => console.error('Error fetching products:', error)
+      error: (error) => {
+        // Handle error appropriately
+      }
     });
   }
 
@@ -95,17 +98,15 @@ export class ProductsComponent implements OnInit {
     };
 
     this.cartService.addToCart(cartItem);
-    console.log(`${product.name} added to cart`);
+    // Product added to cart successfully
     } else this.router.navigate(['/login'])
   }
 
-  onAddToWishlist() {
-    console.log('Added to wishlist');
+  onAddToWishlist(product: Product) {
     // Implement wishlist logic here
   }
 
-  onQuickView() {
-    console.log('Quick view opened');
+  onQuickView(product: Product) {
     // Implement modal logic here (e.g., open a dialog)
   }
 

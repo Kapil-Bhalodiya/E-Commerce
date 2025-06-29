@@ -14,7 +14,7 @@ const createOrder = async (req, res, next) => {
 
   try {
     session.startTransaction();
-    const userId = '67fca190b5799c577b4b06bc'; // From auth middleware
+    const userId = req.user?._id || req.userId;
     // const { items, shippingAddressId, paymentMethod, couponCode, notes } = req.body;
     const { cartForm, deliveryAddressForm, paymentDetailForm, couponCode } = req.body;
 
@@ -22,9 +22,7 @@ const createOrder = async (req, res, next) => {
     // const address = await Address.findOne({ _id: shippingAddressId, userId }).session(session);
 
     let deliveryAddressId;
-    console.log("cart: ",cartForm)
-    console.log("Delivery : ",deliveryAddressForm)
-    console.log("payment: ",paymentDetailForm)
+    logger.debug('Order data received', { cartForm, deliveryAddressForm, paymentDetailForm });
 
     if (deliveryAddressForm.deliveryAddressId) {
       // Use the existing addressId if provided
@@ -32,7 +30,7 @@ const createOrder = async (req, res, next) => {
     } else {
       // Create a new address if addressId is not provided
       const createdAddress = await createAddress(deliveryAddressForm.newAddress);
-      console.log("createdAddress : ", createAddress)
+      logger.debug('Created new address', { deliveryAddressId });
       deliveryAddressId = createdAddress.data._id;  // You can then use the _id of the created address
     }
 
@@ -45,7 +43,7 @@ const createOrder = async (req, res, next) => {
       if (!product || product.stock < item.quantity) {
         throw new ApiError(`Product ${item.productId} is unavailable or out of stock`, 400);
       }
-      console.log("product : ",product);
+      logger.debug('Processing product', { productId: product._id, stock: product.stock });
       const orderItem = new OrderItem({
         productId: item.productId,
         quantity: item.quantity,
@@ -142,7 +140,7 @@ const createOrder = async (req, res, next) => {
       stripePaymentIntentId: paymentDetailForm.stripePaymentIntentId,
     });
 
-    console.log('Payment before save:', payment);
+    logger.debug('Creating payment', { orderId: order._id, amount: totalAmount });
     await payment.validate();
     await payment.save({ session });
 

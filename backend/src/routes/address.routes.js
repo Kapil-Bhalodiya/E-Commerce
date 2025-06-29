@@ -1,6 +1,6 @@
 const express = require('express');
 const addressRoutes = express.Router();
-const addressController = require('../controllers/addresses.contoller');
+const addressController = require('../controllers/addresses.controller');
 // const { protect } = require('../middlewares/auth.middleware');
 
 // Create a new address
