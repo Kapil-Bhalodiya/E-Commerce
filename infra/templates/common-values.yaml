@@ -1,18 +1,16 @@
+# Common Helm values template
 replicaCount: 1
 namespace: dev
+
 image:
-  repository: kapilbhalodiya/ecom-frontend
-  tag: "12-d4fd165"
   pullPolicy: Always
 
 service:
   type: ClusterIP
-  port: 80
 
 metrics:
   enabled: true
   path: /metrics
-  port: 80
 
 tracing:
   enabled: true
@@ -23,4 +21,3 @@ slo:
   enabled: false
   objectives:
     availability: 99.9
-    latency: 1 # seconds, 95th percentile

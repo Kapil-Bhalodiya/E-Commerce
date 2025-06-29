@@ -5,7 +5,7 @@ import { BrandLogosComponent } from './component/brand-logos/brand-logos.compone
 import { ShopCardsComponent } from './component/shop-cards/shop-cards.component';
 import { TestimonialComponent } from './component/testimonial/testimonial.component';
 import { ContactSectionComponent } from './component/contact-section/contact-section.component';
-import { HeaderComponent } from "../../compoments/header/header.component";
+import { HeaderComponent } from "../../components/header/header.component";
 
 @Component({
   selector: 'app-home',

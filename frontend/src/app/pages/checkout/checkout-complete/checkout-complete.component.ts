@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../../services/order.service';
-import { SpinnerComponent } from "../../../compoments/spinner/spinner.component";
+import { SpinnerComponent } from "../../../components/spinner/spinner.component";
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartService } from '../../../services/cart.service';

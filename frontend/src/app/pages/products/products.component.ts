@@ -2,15 +2,15 @@ import { Component, OnInit, signal } from '@angular/core';
 import { Product } from '../../models/product.model';
 import { CommonModule } from '@angular/common';
 import { ProductCardComponent } from "./component/product-card/product-card.component";
-import { BreadcrumbComponent } from "../../compoments/breadcrumb/breadcrumb.component";
+import { BreadcrumbComponent } from "../../components/breadcrumb/breadcrumb.component";
 import { ProductListHeaderComponent } from "./component/product-list-header/product-list-header.component";
-import { CategoriesFilterComponent } from "../../compoments/filter/categories-filter/categories-filter.component";
-import { RangeFilterComponent } from "../../compoments/filter/range-filter/range-filter.component";
+import { CategoriesFilterComponent } from "../../components/filter/categories-filter/categories-filter.component";
+import { RangeFilterComponent } from "../../components/filter/range-filter/range-filter.component";
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cartItem.model';
-import { PaginationComponent } from "../../compoments/pagination/pagination.component";
-import { HeaderComponent } from "../../compoments/header/header.component";
+import { PaginationComponent } from "../../components/pagination/pagination.component";
+import { HeaderComponent } from "../../components/header/header.component";
 import { Router } from '@angular/router';
 
 @Component({
