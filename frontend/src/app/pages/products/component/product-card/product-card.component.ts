@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Input, input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { ModalComponent } from "../../../../compoments/modal/modal.component";
-import { RatingComponent } from "../../../../compoments/rating/rating.component";
+
+import { RatingComponent } from "../../../../components/rating/rating.component";
 import { Router } from '@angular/router';
 import { Product } from '../../../../models/product.model';
 import { environment } from '../../../../../environments/environment';
@@ -15,7 +15,7 @@ import { environment } from '../../../../../environments/environment';
 export class ProductCardComponent {
   constructor(
     private router: Router,
-    // private productModel: Product
+
   ) {}
   showModal: boolean = false;
   imageURL: string = environment.apiUrl;
@@ -36,7 +36,7 @@ export class ProductCardComponent {
   @Output() addToWishlist = new EventEmitter<void>();
   @Output() quickView = new EventEmitter<void>();
   
-  // cartService = inject(CartService)
+
   openModal() {
     this.showModal = true;
   }

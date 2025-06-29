@@ -5,7 +5,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
 // import { ChartComponent } from './chart/chart.component';
-import { TableComponent } from '../../compoments/table/table.component';
+import { TableComponent } from '../../components/table/table.component';
 import { Router } from '@angular/router';
 
 @Component({
