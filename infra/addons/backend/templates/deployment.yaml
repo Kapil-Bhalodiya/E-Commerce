@@ -33,7 +33,10 @@ spec:
             - name: PORT
               value: "{{ .Values.env.PORT }}"
             - name: MONGODB_URI
-              value: "mongodb://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}"
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: uri
             {{- if .Values.external.stripe.enabled }}
             - name: STRIPE_SK
               valueFrom:

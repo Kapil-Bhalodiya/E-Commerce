@@ -54,7 +54,7 @@ metrics:
 database:
   host: mongodb
   port: 27017
-  name: ecommerce
+  name: e-commerce
 
 # External services
 external:
