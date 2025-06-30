@@ -32,13 +32,6 @@ livenessProbe:
   initialDelaySeconds: 30
   periodSeconds: 10
 
-readinessProbe:
-  httpGet:
-    path: /ready
-    port: 8000
-  initialDelaySeconds: 10
-  periodSeconds: 5
-
 # Security
 securityContext:
   runAsNonRoot: true
