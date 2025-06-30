@@ -2,7 +2,7 @@
 
 # Basic ingress settings
 ingressClassName: nginx
-domain: "localhost"
+domain: "www.sharkapp.local"
 
 # TLS settings
 tls:
