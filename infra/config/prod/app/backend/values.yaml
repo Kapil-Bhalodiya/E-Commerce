@@ -1,5 +1,6 @@
 # Prod backend - production overrides only
 
+namespace: prod
 replicaCount: 3
 
 image:
@@ -38,6 +39,8 @@ external:
 
 # Production security
 securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
   readOnlyRootFilesystem: true
   capabilities:
     drop: ["ALL"]
