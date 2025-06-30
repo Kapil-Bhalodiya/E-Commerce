@@ -1,5 +1,6 @@
 # Dev ingress - development overrides only
 
+namespace: dev
 domain: "www.sharkapp.local"
 
 # TLS disabled for local dev

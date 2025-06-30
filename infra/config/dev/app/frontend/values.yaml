@@ -1,5 +1,7 @@
 # Dev frontend - only dev-specific overrides
 
+namespace: dev
+
 image:
   tag: "dev-latest"
 
