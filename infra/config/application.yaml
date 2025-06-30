@@ -3,6 +3,9 @@ kind: ApplicationSet
 metadata:
   name: ecommerce-applications
   namespace: argocd
+  labels:
+    app.kubernetes.io/name: ecommerce
+    app.kubernetes.io/part-of: ecommerce-platform
 spec:
   generators:
     - matrix:
@@ -22,6 +25,12 @@ spec:
   template:
     metadata:
       name: '{{app.path.basename}}-{{target.path.basename}}'
+      labels:
+        environment: '{{target.path.basename}}'
+        service: '{{app.path.basename}}'
+        app.kubernetes.io/name: '{{app.path.basename}}'
+        app.kubernetes.io/instance: '{{app.path.basename}}-{{target.path.basename}}'
+        app.kubernetes.io/part-of: ecommerce-platform
     spec:
       project: default
       source:
@@ -31,18 +40,28 @@ spec:
         helm:
           ignoreMissingValueFiles: true
           valueFiles:
-            - values.yaml
-            - '../../config/{{target.path.basename}}/values.yaml'
-            - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'
+            - values.yaml  # Base chart values
+            - '../../config/{{target.path.basename}}/values.yaml'  # Environment config
+            - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'  # Service-specific
           values: |-
-            app:
+            global:
               environment: {{target.path.basename}}
+              service: {{app.path.basename}}
+            namespace: {{target.path.basename}}
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: '{{target.path.basename}}'
       syncPolicy:
         automated:
           prune: true
-          selfHeal: false
+          selfHeal: true
         syncOptions:
-        - CreateNamespace=true
+          - CreateNamespace=true
+          - RespectIgnoreDifferences=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m
+      revisionHistoryLimit: 10
