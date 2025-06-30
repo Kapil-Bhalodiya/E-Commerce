@@ -1,12 +1,13 @@
-# clusterIssuer: letsencrypt-dev
-# tls:
-#   enabled: true
-#   secretName: sharkapp-tls-cert-dev
+# Dev ingress - development overrides only
 
-clusterIssuer: letsencrypt-dev
+domain: "www.sharkapp.local"
+
+# TLS disabled for local dev
 tls:
-  enabled: false  # Currently disabled for local testing
-  secretName: sharkapp-tls-cert-dev
+  enabled: false
+
+# Development annotations
 annotations:
   nginx.ingress.kubernetes.io/ssl-redirect: "false"
   nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+  nginx.ingress.kubernetes.io/limit-rps: "100"  # Relaxed for dev

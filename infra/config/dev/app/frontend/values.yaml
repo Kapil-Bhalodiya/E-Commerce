@@ -1,17 +1,13 @@
-replicaCount: 1
-
-namespace: dev
-
-# labels:
-#   release: prometheus-stack-dev
+# Dev frontend - only dev-specific overrides
 
 image:
-  pullPolicy: Always
+  tag: "dev-latest"
 
-resources:
-  requests:
-    cpu: 50m
-    memory: 64Mi
-  limits:
-    cpu: 200m
-    memory: 128Mi
+# API configuration for dev
+api:
+  baseUrl: "http://backend.dev.svc.cluster.local:8000"
+
+# Development features
+features:
+  hotReload: true
+  sourceMap: true

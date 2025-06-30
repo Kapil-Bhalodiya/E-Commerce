@@ -1,17 +1,20 @@
-replicaCount: 1
-
-namespace: dev
-
-# labels:
-#   release: prometheus-stack-dev
+# Dev backend - only dev-specific overrides
 
 image:
-  pullPolicy: Always
-  
+  tag: "dev-latest"
+
+env:
+  NODE_ENV: "development"
+  LOG_LEVEL: "debug"
+
+# Lower resources for dev
 resources:
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: "50m"
+    memory: "64Mi"
   limits:
-    cpu: 300m
-    memory: 256Mi
+    cpu: "200m"
+    memory: "256Mi"
+
+database:
+  host: mongodb.dev.svc.cluster.local

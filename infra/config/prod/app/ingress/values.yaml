@@ -1,0 +1,48 @@
+# Prod ingress - production overrides only
+
+domain: "sharkapp.com"
+
+# TLS enabled for production
+tls:
+  enabled: true
+  secretName: "sharkapp-prod-tls"
+  issuer: "letsencrypt-prod"
+
+# Production annotations with security and performance
+annotations:
+  nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+  nginx.ingress.kubernetes.io/limit-rps: "50"
+  nginx.ingress.kubernetes.io/limit-connections: "10"
+  nginx.ingress.kubernetes.io/rate-limit: "100"
+  nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+  # Security headers
+  nginx.ingress.kubernetes.io/configuration-snippet: |
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+# Production service routing with additional paths
+services:
+  - name: frontend
+    serviceName: frontend
+    servicePort: 80
+    path: /
+    pathType: Prefix
+  - name: backend-api
+    serviceName: backend
+    servicePort: 8000
+    path: /api
+    pathType: Prefix
+  - name: backend-uploads
+    serviceName: backend
+    servicePort: 8000
+    path: /uploads
+    pathType: Prefix
+  - name: backend-health
+    serviceName: backend
+    servicePort: 8000
+    path: /health
+    pathType: Exact

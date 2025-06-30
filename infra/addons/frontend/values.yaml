@@ -1,26 +1,51 @@
+# Frontend base configuration - minimal defaults only
+
 replicaCount: 1
-namespace: dev
+
 image:
   repository: kapilbhalodiya/ecom-frontend
-  tag: "16-22dd0fc"
-  pullPolicy: Always
+  tag: "latest"
+  pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
   port: 80
 
+# Minimal base resources
+resources:
+  requests:
+    cpu: "50m"
+    memory: "64Mi"
+  limits:
+    cpu: "200m"
+    memory: "128Mi"
+
+# Health checks
+livenessProbe:
+  httpGet:
+    path: /
+    port: 80
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 80
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+# Security
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 101  # nginx user
+
+# Monitoring
 metrics:
   enabled: true
   path: /metrics
   port: 80
 
-tracing:
-  enabled: true
-  jaegerAgentHost: jaeger-agent
-  jaegerAgentPort: 6831
-
-slo:
-  enabled: false
-  objectives:
-    availability: 99.9
-    latency: 1 # seconds, 95th percentile
+# API configuration
+api:
+  baseUrl: "http://backend:8000"
