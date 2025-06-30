@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { Banner, ContentSection } from '../../../../shared/interfaces/home.interface';
 
 @Component({
   selector: 'app-shop-cards',
@@ -11,14 +12,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./shop-cards.component.scss']
 })
 export class ShopCardsComponent {
-  @Input() content?: {
-    subtitle: string;
-    title: string;
-    description: string;
-    cta: string;
-    ctaLink: string;
-  };
-  @Input() banners: { image: string; link: string; alt: string }[] = [];
-  @Input() videoUrl: string = '';
-  imageURL: string = environment.apiUrl;
+  @Input() content?: ContentSection;
+  @Input() banners: Banner[] = [];
+  @Input() videoUrl = 'https://vimeo.com/115041822';
+  readonly imageURL = environment.apiUrl;
 }

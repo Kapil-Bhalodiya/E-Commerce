@@ -1,4 +1,4 @@
-<form class="price__filter--form" (ngSubmit)="onFilter()">
+<form class="price__filter--form" [formGroup]="priceForm" (ngSubmit)="onFilter()">
     <div class="price__filter--form__inner mb-15 d-flex align-items-center">
       <div class="price__filter--group">
         <label class="price__filter--label" for="Filter-Price-GTE">From</label>
@@ -26,7 +26,7 @@
             type="number"
             [min]="minValue"
             [max]="maxValue"
-            placeholder="250.00"
+            placeholder="5000"
             formControlName="to"
           />
         </div>

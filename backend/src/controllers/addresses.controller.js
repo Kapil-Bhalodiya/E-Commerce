@@ -42,7 +42,7 @@ exports.createAddress = async (userId, addressInput, session = null) => {
 // Get all addresses for the current user
 exports.getAddresses = async (req, res, next) => {
   try {
-    const userId = req.user?._id || req.userId;
+    const userId = req.user._id;
     const addresses = await Address.find({ userId, isDeleted: false });
 
     res.status(200).json({

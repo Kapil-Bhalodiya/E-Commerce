@@ -7,7 +7,7 @@
           [alt]="product.name"
         />
         <img class="product__items--img product__secondary--img" 
-             [src]="product.image_urls?.[1] ? imageURL + '/' + product.image_urls[1] : getProductImage()"
+             [src]="product.image_urls[1] ? imageURL + '/' + product.image_urls[1] : getProductImage()"
              [alt]="product.name">
       </a>
       <!-- <div class="product__badge" *ngIf="product.isOnSale">
@@ -22,9 +22,8 @@
         </p>
       </h3>
       <div class="product__items--price">
-        <span class="current__price">${{ product.base_price }}</span>
-        <span class="price__divided" *ngIf="product.base_price"></span>
-        <span class="old__price" *ngIf="product.sale_price">${{ product.sale_price }}</span>
+        <span class="current__price">{{ product.base_price }}</span>
+        <span class="old__price" *ngIf="product.sale_price">{{ product.sale_price }}</span>
       </div>
       <app-rating class="product__rating"></app-rating>
       <ul class="product__items--action d-flex">

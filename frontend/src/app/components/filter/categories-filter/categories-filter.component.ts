@@ -9,9 +9,20 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class CategoriesFilterComponent {
   @Input() items: string[] = [];
-  @Output() categorySelected = new EventEmitter<string>(); 
+  @Output() selectionChange = new EventEmitter<string[]>();
+  selectedItems: string[] = [];
 
   onBrandClick(category: string) {
-    this.categorySelected.emit(category); 
+    const index = this.selectedItems.indexOf(category);
+    if (index > -1) {
+      this.selectedItems.splice(index, 1);
+    } else {
+      this.selectedItems.push(category);
+    }
+    this.selectionChange.emit([...this.selectedItems]);
+  }
+
+  isSelected(category: string): boolean {
+    return this.selectedItems.includes(category);
   }
 }

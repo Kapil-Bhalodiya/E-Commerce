@@ -111,6 +111,26 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
     return this.formGroup.get('newAddress') as FormGroup;
   }
 
+  setDeliveryOption(option: string): void {
+    this.formGroup.patchValue({ deliveryOption: option });
+    this.formGroup.get('deliveryOption')?.markAsTouched();
+  }
+
+  getAddressIcon(type: string): string {
+    switch (type?.toLowerCase()) {
+      case 'home': return 'bi-house';
+      case 'office': return 'bi-building';
+      case 'work': return 'bi-briefcase';
+      default: return 'bi-geo-alt';
+    }
+  }
+
+  editAddress(addressId: string, event: Event): void {
+    event.stopPropagation();
+    // Implement edit address functionality
+    console.log('Edit address:', addressId);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

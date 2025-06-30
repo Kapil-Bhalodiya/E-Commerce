@@ -1,13 +1,13 @@
 const express = require('express');
 const addressRoutes = express.Router();
 const addressController = require('../controllers/addresses.controller');
-// const { protect } = require('../middlewares/auth.middleware');
+const jwtVerify = require('../middlewares/auth.middleware');
 
 // Create a new address
 addressRoutes.post('/', addressController.createAddress);
 
 // Get all addresses for the user
-addressRoutes.get('/', addressController.getAddresses);
+addressRoutes.get('/', jwtVerify, addressController.getAddresses);
 
 // Update an address
 addressRoutes.put('/:addressId', addressController.updateAddress);

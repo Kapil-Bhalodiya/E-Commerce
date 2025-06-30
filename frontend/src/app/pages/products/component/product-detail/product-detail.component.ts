@@ -7,6 +7,7 @@ import { RatingComponent } from "../../../../components/rating/rating.component"
 import { RadioVariantComponent } from "../../../../components/radio-variant/radio-variant.component";
 import { QuantityBoxComponent } from "../../../../components/quantity-box/quantity-box.component";
 import { PrimaryButtonComponent } from "../../../../components/primary-button/primary-button.component";
+import { ToastComponent } from "../../../../shared/components/toast/toast.component";
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../../services/product.service';
 import { Product } from '../../../../models/product.model';
@@ -21,7 +22,8 @@ import { Variant } from '../../../../models/productvariant.model';
     RatingComponent,
     RadioVariantComponent,
     QuantityBoxComponent,
-    PrimaryButtonComponent
+    PrimaryButtonComponent,
+    ToastComponent
   ],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss'
@@ -45,6 +47,12 @@ export class ProductDetailComponent implements OnInit {
 
   selectedSize: string = this.productSizes[0];
   selectedColor: string = this.productColors[0];
+  selectedQuantity: number = 1;
+  
+  // Toast properties
+  showToast = false;
+  toastMessage = '';
+  toastType: 'success' | 'error' | 'warning' = 'success';
 
   constructor(
     private route: ActivatedRoute,
@@ -60,12 +68,12 @@ export class ProductDetailComponent implements OnInit {
 
   fetchProduct(id: string): void {
     this.productService.getProductById(id).subscribe({
-      next: (product) => {
-        this.product = product;
+      next: (response: any) => {
+        this.product = response.data || response;
         this.initializeVariants();
       },
       error: (err) => {
-        // Handle error appropriately
+        console.error('Error fetching product:', err);
       }
     });
   }
@@ -96,7 +104,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   onSizeChange(size: string) {
-    this.selectedColor = size;
+    this.selectedSize = size;
     this.updateSelectedVariant();
   }
 
@@ -106,16 +114,26 @@ export class ProductDetailComponent implements OnInit {
   }
 
   getCurrentPrice(): number {
-    if (this.product && this.selectedVariant) {
-      return this.product.base_price + (this.selectedVariant.price || 0);
+    if (this.selectedVariant) {
+      return this.selectedVariant.price || this.product?.base_price || 0;
     }
     return this.product?.base_price || 0;
   }
 
   addToCart(): void {
-    if (this.product && this.selectedVariant) {
-      // Implement cart logic here
+    if (!this.product) return;
+    
+    if (!this.selectedVariant) {
+      this.showToastMessage('Please select size and color before adding to cart.', 'warning');
+      return;
     }
+    
+    if (this.selectedVariant.stock_quantity <= 0) {
+      this.showToastMessage('Sorry, this variant is out of stock!', 'error');
+      return;
+    }
+    
+    this.showToastMessage(`Added ${this.product.name} (${this.selectedColor} - ${this.selectedSize}) to cart!`, 'success');
   }
 
   buyNow(): void {
@@ -126,7 +144,52 @@ export class ProductDetailComponent implements OnInit {
 
   addToWishlist(): void {
     if (this.product) {
-      // Implement wishlist logic
+      this.showToastMessage(`Added ${this.product.name} to wishlist!`, 'success');
     }
+  }
+
+  showToastMessage(message: string, type: 'success' | 'error' | 'warning') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToast = true;
+    
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+  }
+
+  getStockStatusClass(): string {
+    if (!this.selectedVariant) return 'out-of-stock';
+    
+    const stock = this.selectedVariant.stock_quantity;
+    if (stock <= 0) return 'out-of-stock';
+    if (stock <= 5) return 'low-stock';
+    return 'in-stock';
+  }
+
+  getStockStatusText(): string {
+    if (!this.selectedVariant) return 'Select variant';
+    
+    const stock = this.selectedVariant.stock_quantity;
+    if (stock <= 0) return 'Out of Stock';
+    if (stock <= 5) return `Only ${stock} left in stock`;
+    return 'In Stock';
+  }
+
+  getStockIcon(): string {
+    if (!this.selectedVariant) return 'bi-question-circle';
+    
+    const stock = this.selectedVariant.stock_quantity;
+    if (stock <= 0) return 'bi-x-circle';
+    if (stock <= 5) return 'bi-exclamation-triangle';
+    return 'bi-check-circle';
+  }
+
+  onQuantityChange(quantity: number): void {
+    this.selectedQuantity = quantity;
+  }
+
+  getMaxQuantity(): number {
+    return this.selectedVariant?.stock_quantity || 10;
   }
 }

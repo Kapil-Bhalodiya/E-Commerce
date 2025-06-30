@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-// Define an interface for the dropdown items to handle both value and id
 interface DropdownItem {
   label: string;
-  value?: string; // Optional for dropDownList
-  id?: string;    // Optional for dropDownSort, dropPageSort
+  value?: string;
+  id?: string;
 }
 
 @Component({
@@ -20,6 +19,7 @@ export class DropdownFilterComponent implements OnInit, OnChanges {
   @Input() items: DropdownItem[] = [];
   @Input() size: string = 'medium';
   @Input() defaultOption: DropdownItem = { label: '-- Select --', value: '' };
+  @Output() selectionChange = new EventEmitter<string>();
   selectedOption: string | undefined = ''; 
 
   ngOnInit(): void {
@@ -34,13 +34,15 @@ export class DropdownFilterComponent implements OnInit, OnChanges {
 
   setDefaultOption(): void {
     if (this.items && this.items.length > 0) {
-      this.selectedOption = this.items[0].value;
+      this.selectedOption = this.items[0].value || this.items[0].id;
     } else {
       this.selectedOption = '';
     }
   }
 
   onSortChange(): void {
-    console.log(`Sorting by: ${this.selectedOption}`);
+    if (this.selectedOption) {
+      this.selectionChange.emit(this.selectedOption);
+    }
   }
 }

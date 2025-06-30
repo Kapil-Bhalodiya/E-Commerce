@@ -5,7 +5,7 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { RegisterComponent } from './features/register/register.component';
 import { NgModule } from '@angular/core';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
-import { CheckoutCompleteComponent } from './pages/checkout/checkout-complete/checkout-complete.component';
+import { CheckoutCompleteComponent } from './pages/checkout-complete/checkout-complete.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { HomeComponent } from './pages/home/home.component';
 

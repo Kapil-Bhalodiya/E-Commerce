@@ -1,28 +1,96 @@
-<div class="payment-container">
-  <h2>Secure Payment</h2>
-
-  @if (loading()) {
-  <app-spinner [color]="'primary'" [size]="'large'">Loading..</app-spinner>
-  }
-
-  @if (paymentError()) {
-  <div class="alert alert-danger">
-    {{ paymentError() }}
+<div class="payment__container">
+  <!-- Payment Header -->
+  <div class="payment__header">
+    <div class="payment__icon">
+      <i class="bi bi-credit-card"></i>
+    </div>
+    <h2 class="payment__title">Secure Payment</h2>
+    <p class="payment__subtitle">Your payment information is encrypted and secure</p>
   </div>
-  }
 
-  @if (paymentSuccess()) {
-  <div class="alert alert-success">
+  <!-- Loading State -->
+  <div class="payment__loading" *ngIf="loading()">
+    <app-spinner [color]="'primary'" [size]="'large'"></app-spinner>
+    <p>Setting up secure payment...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="payment__error" *ngIf="paymentError()">
+    <div class="error__icon">
+      <i class="bi bi-exclamation-triangle"></i>
+    </div>
+    <h4>Payment Error</h4>
+    <p>{{ paymentError() }}</p>
+    <button class="btn btn-outline" (click)="loadStripe()">Try Again</button>
+  </div>
+
+  <!-- Success State -->
+  <div class="payment__success" *ngIf="paymentSuccess()">
+    <div class="success__icon">
+      <i class="bi bi-check-circle"></i>
+    </div>
     <h3>Payment Successful!</h3>
     <p>Thank you for your payment. A receipt has been sent to your email.</p>
   </div>
-  } @else {
-  <form [formGroup]="formGroup">
 
-    <div class="card-container">
-      <label>Payment Method</label>
-      <div id="payment-element"></div>
-    </div>
-  </form>
-  }
+  <!-- Payment Form -->
+  <div class="payment__form">
+    <form [formGroup]="formGroup">
+      <!-- Payment Methods -->
+      <div class="payment__methods">
+        <h4 class="methods__title">
+          <i class="bi bi-wallet2"></i>
+          Payment Method
+        </h4>
+        
+        <div class="method__options">
+          <div class="method__option active">
+            <input type="radio" id="card" name="method" value="card" checked>
+            <label for="card" class="method__label">
+              <i class="bi bi-credit-card"></i>
+              <span>Credit/Debit Card</span>
+              <div class="card__icons">
+                <i class="bi bi-credit-card-2-front"></i>
+                <i class="bi bi-credit-card-2-back"></i>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stripe Payment Element -->
+      <div class="payment__element">
+        <div class="element__container">
+          <div id="payment-element"></div>
+        </div>
+      </div>
+
+      <!-- Payment Action -->
+      <div class="payment__action">
+        <button 
+          class="payment__submit-btn"
+          (click)="handleSubmit()"
+          [disabled]="loading()">
+          <span *ngIf="!loading()">Complete Payment</span>
+          <app-spinner *ngIf="loading()"></app-spinner>
+        </button>
+      </div>
+
+      <!-- Security Features -->
+      <div class="payment__security">
+        <div class="security__item">
+          <i class="bi bi-shield-check"></i>
+          <span>SSL Encrypted</span>
+        </div>
+        <div class="security__item">
+          <i class="bi bi-lock"></i>
+          <span>PCI Compliant</span>
+        </div>
+        <div class="security__item">
+          <i class="bi bi-eye-slash"></i>
+          <span>Data Protected</span>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

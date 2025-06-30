@@ -1,0 +1,197 @@
+<div class="checkout-complete__container">
+  <div class="container">
+    <!-- Success Header -->
+    <div class="success__header">
+      <div class="success__animation">
+        <div class="checkmark__circle">
+          <div class="checkmark"></div>
+        </div>
+      </div>
+      <h1 class="success__title">Order Placed Successfully!</h1>
+      <p class="success__subtitle">Thank you for your purchase. Your order has been confirmed.</p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Order Summary -->
+      <div class="col-lg-8">
+        <div class="order__summary-card">
+          <div class="card__header">
+            <h2 class="card__title">
+              <i class="bi bi-receipt"></i>
+              Order Summary
+            </h2>
+            <div class="order__actions">
+              <button class="action__btn" (click)="downloadInvoice()" title="Download Invoice">
+                <i class="bi bi-download"></i>
+              </button>
+              <button class="action__btn" (click)="shareOrder()" title="Share Order">
+                <i class="bi bi-share"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="order__details">
+            <div class="detail__row">
+              <span class="detail__label">Order Number:</span>
+              <span class="detail__value order__number">{{ orderDetails.orderNumber }}</span>
+            </div>
+            <div class="detail__row">
+              <span class="detail__label">Order Date:</span>
+              <span class="detail__value">{{ orderDetails.orderDate | date:'MMM dd, yyyy - HH:mm' }}</span>
+            </div>
+            <div class="detail__row">
+              <span class="detail__label">Estimated Delivery:</span>
+              <span class="detail__value">{{ orderDetails.estimatedDelivery | date:'MMM dd, yyyy' }}</span>
+            </div>
+            <div class="detail__row">
+              <span class="detail__label">Payment Method:</span>
+              <span class="detail__value">{{ orderDetails.paymentMethod }}</span>
+            </div>
+            <div class="detail__row total">
+              <span class="detail__label">Total Amount:</span>
+              <span class="detail__value">${{ orderDetails.total | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+          <!-- Order Items -->
+          <div class="order__items" *ngIf="orderDetails.items.length > 0">
+            <h3 class="items__title">Order Items</h3>
+            <div class="item__list">
+              <div class="order__item" *ngFor="let item of orderDetails.items">
+                <img [src]="item.image || 'https://via.placeholder.com/60x60'" [alt]="item.name" class="item__image">
+                <div class="item__details">
+                  <h4 class="item__name">{{ item.name }}</h4>
+                  <p class="item__quantity">Qty: {{ item.quantity }}</p>
+                </div>
+                <div class="item__price">
+                  ${{ (item.price * item.quantity) | number:'1.2-2' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Tracking -->
+        <div class="tracking__card">
+          <div class="card__header">
+            <h2 class="card__title">
+              <i class="bi bi-truck"></i>
+              Order Tracking
+            </h2>
+          </div>
+          
+          <div class="tracking__timeline">
+            <div class="timeline__item" 
+                 *ngFor="let step of trackingSteps; let i = index"
+                 [class.completed]="step.completed"
+                 [class.active]="step.active">
+              <div class="timeline__marker">
+                <i class="bi" [ngClass]="step.icon"></i>
+              </div>
+              <div class="timeline__content">
+                <h4 class="timeline__title">{{ step.title }}</h4>
+                <p class="timeline__description">{{ step.description }}</p>
+              </div>
+              <div class="timeline__connector" *ngIf="i < trackingSteps.length - 1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <!-- Shipping Address -->
+        <div class="address__card">
+          <div class="card__header">
+            <h3 class="card__title">
+              <i class="bi bi-geo-alt"></i>
+              Shipping Address
+            </h3>
+          </div>
+          <div class="address__content">
+            <p class="address__name">{{ orderDetails.shippingAddress.name }}</p>
+            <p class="address__line">{{ orderDetails.shippingAddress.address }}</p>
+            <p class="address__line">
+              {{ orderDetails.shippingAddress.city }}, {{ orderDetails.shippingAddress.state }} {{ orderDetails.shippingAddress.zipCode }}
+            </p>
+            <p class="address__country">{{ orderDetails.shippingAddress.country }}</p>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="actions__card">
+          <div class="card__header">
+            <h3 class="card__title">
+              <i class="bi bi-lightning"></i>
+              Quick Actions
+            </h3>
+          </div>
+          <div class="actions__list">
+            <button class="action__button primary" (click)="viewOrderDetails()">
+              <i class="bi bi-eye"></i>
+              <span>View Order Details</span>
+            </button>
+            <button class="action__button secondary" (click)="goToDashboard()">
+              <i class="bi bi-speedometer2"></i>
+              <span>Go to Dashboard</span>
+            </button>
+            <button class="action__button success" (click)="continueShopping()">
+              <i class="bi bi-bag-plus"></i>
+              <span>Continue Shopping</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Customer Support -->
+        <div class="support__card">
+          <div class="support__icon">
+            <i class="bi bi-headset"></i>
+          </div>
+          <h3 class="support__title">Need Help?</h3>
+          <p class="support__description">Our customer support team is here to assist you 24/7.</p>
+          <div class="support__actions">
+            <button class="support__btn">
+              <i class="bi bi-chat-dots"></i>
+              Live Chat
+            </button>
+            <button class="support__btn">
+              <i class="bi bi-telephone"></i>
+              Call Us
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="recommendations__section">
+      <div class="section__header">
+        <h2 class="section__title">
+          <i class="bi bi-star"></i>
+          You Might Also Like
+        </h2>
+      </div>
+      
+      <div class="recommendations__grid">
+        <div class="recommendation__card" *ngFor="let product of recommendations">
+          <img [src]="product.image" [alt]="product.name" class="product__image">
+          <div class="product__info">
+            <h4 class="product__name">{{ product.name }}</h4>
+            <div class="product__rating">
+              <div class="stars">
+                <i class="bi bi-star-fill" *ngFor="let star of [1,2,3,4,5]; let i = index" 
+                   [class.active]="i < product.rating"></i>
+              </div>
+              <span class="rating__value">({{ product.rating }})</span>
+            </div>
+            <div class="product__price">${{ product.price | number:'1.2-2' }}</div>
+            <button class="add-to-cart__btn" (click)="addToCart(product)">
+              <i class="bi bi-cart-plus"></i>
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

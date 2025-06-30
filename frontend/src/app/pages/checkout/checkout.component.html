@@ -1,84 +1,130 @@
-<div class="container-fluid">
-    <div class="cart__section--inner">
-        <div class="row">
+<div class="checkout__container">
+    <div class="container">
+        <!-- Checkout Header -->
+        <div class="checkout__header">
+            <h1 class="checkout__title">Checkout</h1>
+            <p class="checkout__subtitle">Complete your purchase securely</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Main Checkout Form -->
             <div class="col-lg-8">
-                <app-stepper id="formStepper" class="stepper animate-form" [steps]="steps" [data]="referenceData"
-                    [formGroup]="formGroup" [formGroupConfigs]="formGroupConfigs"
-                    (onTransitionComplete)="onTransitionCompleteHandler($event)"
-                    (onSelectedIndexChanged)="onSelectedIndexChangedHandler($event)">
-                </app-stepper>
-                <ng-container #dynamicComponentContainer></ng-container>
+                <div class="checkout__form-wrapper">
+                    <app-stepper 
+                        id="formStepper" 
+                        class="modern-stepper" 
+                        [steps]="steps" 
+                        [data]="referenceData"
+                        [formGroup]="formGroup" 
+                        [formGroupConfigs]="formGroupConfigs"
+                        (onTransitionComplete)="onTransitionCompleteHandler($event)"
+                        (onSelectedIndexChanged)="onSelectedIndexChangedHandler($event)">
+                    </app-stepper>
+                    <ng-container #dynamicComponentContainer></ng-container>
+                </div>
             </div>
+
+            <!-- Order Summary Sidebar -->
             <div class="col-lg-4">
-                <div class="cart__summary border-radius-10">
-                    <div class="coupon__code mb-30">
-                        <h3 class="coupon__code--title">Coupon</h3>
-                        <p class="coupon__code--desc">Enter your coupon code if you have one.</p>
-                        <div class="coupon__code--field d-flex">
-                            <label>
-                                <input class="coupon__code--field__input border-radius-5" placeholder="Coupon code"
-                                    type="text" [(ngModel)]="couponCode" name="couponCode" />
-                            </label>
-                            <button class="coupon__code--field__btn primary__btn" type="submit"
+                <div class="order__summary">
+                    <!-- Order Summary Header -->
+                    <div class="summary__header">
+                        <h3 class="summary__title">
+                            <i class="bi bi-receipt"></i>
+                            Order Summary
+                        </h3>
+                    </div>
+
+                    <!-- Coupon Section -->
+                    <div class="coupon__section">
+                        <h4 class="coupon__title">
+                            <i class="bi bi-tag"></i>
+                            Promo Code
+                        </h4>
+                        <div class="coupon__input-group">
+                            <input 
+                                class="coupon__input" 
+                                placeholder="Enter coupon code"
+                                type="text" 
+                                [(ngModel)]="couponCode" 
+                                name="couponCode">
+                            <button 
+                                class="coupon__apply-btn" 
+                                type="button"
+                                (click)="applyCoupon()"
                                 [disabled]="!couponCode">
-                                Apply Coupon
+                                Apply
                             </button>
                         </div>
-                        <p class="coupon__code--error text-danger" *ngIf="couponError">
+                        <div class="coupon__error" *ngIf="couponError">
+                            <i class="bi bi-exclamation-circle"></i>
                             {{ couponError }}
-                        </p>
+                        </div>
                     </div>
-                    <div class="cart__summary--total mb-20">
-                        <table class="cart__summary--total__table">
-                            <tbody>
-                                <tr class="cart__summary--total__list">
-                                    <td class="cart__summary--total__title text-left">SUBTOTAL</td>
-                                    <td class="cart__summary--amount text-right">
-                                        {{ cartService.getSubtotal() }}
-                                    </td>
-                                </tr>
-                                <tr class="cart__summary--total__list">
-                                    <td class="cart__summary--total__title text-left">GRAND TOTAL</td>
-                                    <td class="cart__summary--amount text-right">
-                                        -{{ discountAmount }}
-                                    </td>
-                                </tr>
-                                <tr class="cart__summary--total__list">
-                                    <td class="cart__summary--total__title text-left">TAX (10%)</td>
-                                    <td class="cart__summary--amount text-right">
-                                        {{ cartService.getSubtotal() * 0.1 }}
-                                    </td>
-                                </tr>
-                                <tr class="cart__summary--total__list">
-                                    <td class="cart__summary--total__title text-left">SHIPPING</td>
-                                    <td class="cart__summary--amount text-right">
-                                        {{ shippingCost }}
-                                    </td>
-                                </tr>
-                                <tr class="cart__summary--total__list">
-                                    <td class="cart__summary--total__title text-left">GRAND TOTAL</td>
-                                    <td class="cart__summary--amount text-right">
-                                        {{ cartService.getSubtotal() }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="cart__summary--footer">
-                        <p class="cart__summary--footer__desc">Shipping & taxes calculated at checkout</p>
-                        <ul class="d-flex justify-content-between">
-                            <button class="cart__summary--footer__btn w-50" (click)="previousClickHandler()"
-                                [disabled]="currentIndex === 0">Back</button>
 
-                            <button class="cart__summary--footer__btn primary__btn checkout w-50"
-                                (click)="nextClickHandler()">
-                                <app-spinner *ngIf="isLoading">Loading...</app-spinner>
-                                {{  !isLoading ? currentIndex === steps.length - 1 ? 'Place Order' : 'Next' : '' }}
-                            </button>
-                        </ul>
+                    <!-- Price Breakdown -->
+                    <div class="price__breakdown">
+                        <div class="price__item">
+                            <span class="price__label">Subtotal</span>
+                            <span class="price__value">${{ cartService.getSubtotal() | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="price__item" *ngIf="discountAmount > 0">
+                            <span class="price__label discount">Discount</span>
+                            <span class="price__value discount">-${{ discountAmount | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="price__item">
+                            <span class="price__label">Tax (10%)</span>
+                            <span class="price__value">${{ (cartService.getSubtotal() * 0.1) | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="price__item">
+                            <span class="price__label">Shipping</span>
+                            <span class="price__value">${{ shippingCost | number:'1.2-2' }}</span>
+                        </div>
+                        <div class="price__divider"></div>
+                        <div class="price__item total">
+                            <span class="price__label">Total</span>
+                            <span class="price__value">${{ getGrandTotal() | number:'1.2-2' }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="checkout__actions">
+                        <button 
+                            class="btn btn-outline" 
+                            (click)="previousClickHandler()"
+                            [disabled]="currentIndex === 0">
+                            <i class="bi bi-arrow-left"></i>
+                            Back
+                        </button>
+                        
+                        <button 
+                            class="btn btn-primary" 
+                            (click)="nextClickHandler()"
+                            [disabled]="isLoading">
+                            <app-spinner *ngIf="isLoading"></app-spinner>
+                            <span *ngIf="!isLoading">
+                                {{ currentIndex === steps.length - 1 ? 'Place Order' : 'Continue' }}
+                                <i class="bi" [ngClass]="currentIndex === steps.length - 1 ? 'bi-check-circle' : 'bi-arrow-right'"></i>
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Security Badge -->
+                    <div class="security__badge">
+                        <i class="bi bi-shield-check"></i>
+                        <div class="security__text">
+                            <strong>Secure Checkout</strong>
+                            <small>Your payment information is protected</small>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<app-toast 
+    [show]="showToast" 
+    [message]="toastMessage" 
+    [type]="toastType">
+</app-toast>
