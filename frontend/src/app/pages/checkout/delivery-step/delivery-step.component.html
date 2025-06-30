@@ -1,32 +1,105 @@
-<form [formGroup]="formGroup" class="checkout__form">
-  <h3 class="cart__title mt-5 mb-5">Address Detail</h3>
-  <app-accordion-radio
-    [name]="'deliveryOption'"
-    [options]="accordionOptions"
-    [selectedValue]="formGroup.value.deliveryOption"
-    (valueChange)="formGroup.get('deliveryOption')?.setValue($event)"
-  ></app-accordion-radio>
+<div class="delivery__container">
+  <!-- Header -->
+  <div class="delivery__header">
+    <div class="header__icon">
+      <i class="bi bi-geo-alt"></i>
+    </div>
+    <h3 class="header__title">Delivery Address</h3>
+    <p class="header__subtitle">Choose where you'd like your order delivered</p>
+  </div>
 
-  <ng-template #existingAddressTemplate>
-    <div class="address-list">
-      <div
-        class="address-card"
-        *ngFor="let address of addresses"
-        [class.selected]="selectedAddressId === address._id"
-        (click)="selectAddress(address._id)"
-      >
-        <p><strong>{{ address.address1 }}, {{ address.address1 }}, {{ address.city }}, {{ address.state }}, {{ address.country }} - {{ address.postalCode }}</strong></p>
-        <p *ngIf="address.fullName">Name : <strong>{{ address.fullName }}</strong></p>
-        <p *ngIf="address.phone">Contact : <strong>{{ address.phone }}</strong></p>
-      </div>
-
-      <div class="form-error" *ngIf="!formGroup.value.addressId && formGroup.get('addressId')?.touched">
-        Please select an address.
+  <form [formGroup]="formGroup" class="delivery__form">
+    <!-- Address Options -->
+    <div class="address__options">
+      <div class="option__tabs">
+        <button 
+          type="button"
+          class="tab__button"
+          [class.active]="formGroup.value.deliveryOption === 'existing'"
+          (click)="setDeliveryOption('existing')"
+          [disabled]="addresses.length === 0">
+          <i class="bi bi-house"></i>
+          <span>Saved Addresses</span>
+          <small *ngIf="addresses.length > 0">({{ addresses.length }})</small>
+        </button>
+        
+        <button 
+          type="button"
+          class="tab__button"
+          [class.active]="formGroup.value.deliveryOption === 'new'"
+          (click)="setDeliveryOption('new')">
+          <i class="bi bi-plus-circle"></i>
+          <span>New Address</span>
+        </button>
       </div>
     </div>
-  </ng-template>
 
-  <ng-template #newAddressTemplate>
-    <app-address-detail-form [formGroup]="newAddress"></app-address-detail-form>
-  </ng-template>
-</form>
+    <!-- Existing Addresses -->
+    <div class="existing__addresses" *ngIf="formGroup.value.deliveryOption === 'existing'">
+      <div class="addresses__grid" *ngIf="addresses.length > 0; else noAddresses">
+        <div
+          class="address__card"
+          *ngFor="let address of addresses"
+          [class.selected]="selectedAddressId === address._id"
+          (click)="selectAddress(address._id)">
+          
+          <div class="card__header">
+            <div class="address__type">
+              <i class="bi" [ngClass]="getAddressIcon(address.addressType)"></i>
+              <span>{{ address.addressType || 'Address' }}</span>
+            </div>
+            <div class="default__badge" *ngIf="address.isDefault">
+              <i class="bi bi-star-fill"></i>
+              <span>Default</span>
+            </div>
+          </div>
+          
+          <div class="card__content">
+            <h5 class="address__name" *ngIf="address.fullName">{{ address.fullName }}</h5>
+            <p class="address__text">
+              {{ address.address1 }}<span *ngIf="address.address2">, {{ address.address2 }}</span><br>
+              {{ address.city }}, {{ address.state || address.country }}<br>
+              {{ address.country }} - {{ address.postalCode }}
+            </p>
+            <p class="address__phone" *ngIf="address.phone">
+              <i class="bi bi-telephone"></i>
+              {{ address.phone }}
+            </p>
+          </div>
+          
+          <div class="card__actions">
+            <button type="button" class="edit__btn" (click)="editAddress(address._id, $event)">
+              <i class="bi bi-pencil"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <ng-template #noAddresses>
+        <div class="no__addresses">
+          <i class="bi bi-house-x"></i>
+          <h4>No Saved Addresses</h4>
+          <p>You don't have any saved addresses yet.</p>
+          <button type="button" class="btn btn-primary" (click)="setDeliveryOption('new')">
+            Add New Address
+          </button>
+        </div>
+      </ng-template>
+      
+      <div class="validation__error" *ngIf="!formGroup.value.addressId && formGroup.get('addressId')?.touched">
+        <i class="bi bi-exclamation-circle"></i>
+        Please select an address to continue.
+      </div>
+    </div>
+
+    <!-- New Address Form -->
+    <div class="new__address" *ngIf="formGroup.value.deliveryOption === 'new'">
+      <div class="form__header">
+        <h4>Add New Address</h4>
+        <p>Fill in the details for your new delivery address</p>
+      </div>
+      
+      <app-address-detail-form [formGroup]="newAddress"></app-address-detail-form>
+    </div>
+  </form>
+</div>

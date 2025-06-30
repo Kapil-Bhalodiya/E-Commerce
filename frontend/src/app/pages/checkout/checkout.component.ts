@@ -14,11 +14,12 @@ import { CartItem } from '../../models/cartItem.model';
 import { AddressService } from '../../services/address.service';
 import { Address } from '../../models/address.model';
 import { SpinnerComponent } from "../../components/spinner/spinner.component";
+import { ToastComponent } from '../../shared/components/toast/toast.component';
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
-  imports: [StepperComponent, CommonModule, FormsModule, SpinnerComponent],
+  imports: [StepperComponent, CommonModule, FormsModule, SpinnerComponent, ToastComponent],
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   @ViewChild(StepperComponent) formStepper!: StepperComponent;
@@ -42,6 +43,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   addresses: Address[] = [];
   selectedAddressId: string | null = null;
+  
+  showToast = false;
+  toastMessage = '';
+  toastType: 'success' | 'error' | 'warning' = 'success';
 
   constructor(
     private fb: FormBuilder,
@@ -104,6 +109,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         method: ['card'],
         provider: ['Stripe'],
         stripePaymentIntentId: [''],
+        paymentCompleted: [false],
         saveCard: [false],
       }),
     };
@@ -137,10 +143,16 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     const currentForm = this.formGroup.get(this.steps[this.currentIndex].index);
     if (currentForm?.invalid) {
       currentForm.markAllAsTouched();
-      this.errorMessage = 'Please complete all required fields.';
+      this.showToastMessage('Please complete all required fields.', 'warning');
       return;
     }
+    
+    // Special validation for payment step
     if (this.currentIndex === this.steps.length - 1) {
+      if (!this.validatePayment()) {
+        this.showToastMessage('Please complete payment before placing order.', 'error');
+        return;
+      }
       this.proceedToCheckout();
     } else {
       this.currentIndex++;
@@ -180,11 +192,17 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  getGrandTotal(): number {
+    const subtotal = this.cartService.getSubtotal();
+    const tax = subtotal * 0.1;
+    return subtotal + tax + this.shippingCost - this.discountAmount;
+  }
   
   proceedToCheckout(): void {
     const cartItems = this.cartService.getCartItems()
     if (!cartItems.length) {
-      this.errorMessage = 'Cart is empty'
+      this.showToastMessage('Cart is empty', 'error');
       return
     }
     
@@ -199,7 +217,36 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
     
     localStorage.setItem('orderForm', JSON.stringify(orderData))
+    this.showToastMessage('Order placed successfully!', 'success');
     this.router.navigate(['/checkout-complete'])
+  }
+
+  validatePayment(): boolean {
+    const paymentForm = this.formGroup.get('paymentForm');
+    const stripePaymentIntentId = paymentForm?.get('stripePaymentIntentId')?.value;
+    const paymentCompleted = paymentForm?.get('paymentCompleted')?.value;
+    
+    // Check if payment is completed
+    if (!paymentCompleted) {
+      return false;
+    }
+    
+    // Check if payment intent exists and is valid
+    if (!stripePaymentIntentId || stripePaymentIntentId.trim() === '') {
+      return false;
+    }
+    
+    return true;
+  }
+
+  showToastMessage(message: string, type: 'success' | 'error' | 'warning') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToast = true;
+    
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
   }
 
   ngOnDestroy(): void {

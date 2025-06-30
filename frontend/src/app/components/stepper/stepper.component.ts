@@ -57,7 +57,7 @@ export class StepperComponent implements OnInit, AfterViewInit {
   }
 
   initializeStepComponent(index: number): void {
-    this.dynamicComponentContainer.clear(); // Clear previous step component
+    this.dynamicComponentContainer.clear();
 
     const step = this.steps[index];
     const injector = Injector.create({
@@ -87,7 +87,7 @@ export class StepperComponent implements OnInit, AfterViewInit {
         this.onSelectedIndexChanged.emit(this.currentIndex);
         this.onTransitionComplete.emit(this.currentFormGroup);
       } else {
-        this.currentFormGroup.markAllAsTouched(); // Mark form as touched to show validation errors
+        this.currentFormGroup.markAllAsTouched();
       }
     }
   }
@@ -111,6 +111,19 @@ export class StepperComponent implements OnInit, AfterViewInit {
     } else {
       console.warn(`Index ${index} is out of bounds for the stepper.`);
     }
+  }
+
+  getProgressPercentage(): number {
+    return ((this.currentIndex + 1) / this.steps.length) * 100;
+  }
+
+  getStepDescription(index: number): string {
+    const descriptions = [
+      'Review your cart items',
+      'Enter delivery address',
+      'Complete payment'
+    ];
+    return descriptions[index] || '';
   }
 
   ngOnDestroy(): void {

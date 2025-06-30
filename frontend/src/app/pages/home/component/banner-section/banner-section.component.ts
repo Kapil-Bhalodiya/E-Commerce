@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { Banner, ContentSection } from '../../../../shared/interfaces/home.interface';
 
 @Component({
   selector: 'app-banner-section',
@@ -12,19 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class BannerSectionComponent {
   @Input() type: 'categories' | 'discount' = 'categories';
-  @Input() banners: {
-    image: string;
-    title?: string;
-    link: string;
-    alt: string;
-    maxHeight?: boolean;
-    position?: string;
-  }[] = [];
-  @Input() discountContent?: {
-    subtitle: string;
-    title: string;
-    cta: string;
-    ctaLink: string;
-  };
-  imageURL: string = environment.apiUrl;
+  @Input() banners: Banner[] = [];
+  @Input() discountContent?: ContentSection;
+  readonly imageURL = environment.apiUrl;
 }

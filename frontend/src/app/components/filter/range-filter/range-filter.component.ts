@@ -1,16 +1,16 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { PrimaryButtonComponent } from "../../primary-button/primary-button.component";
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-range-filter',
-  imports: [PrimaryButtonComponent],
+  imports: [PrimaryButtonComponent, ReactiveFormsModule],
   templateUrl: './range-filter.component.html',
   styleUrl: './range-filter.component.scss'
 })
-export class RangeFilterComponent {
-  @Input() minValue: number = 0; // Optional min value from parent
-  @Input() maxValue: number = 250; // Optional max value from parent
+export class RangeFilterComponent implements OnInit {
+  @Input() minValue: number = 0;
+  @Input() maxValue: number = 250;
   @Output() filterApplied = new EventEmitter<{ from: number; to: number }>(); // Emit price range
 
   priceForm: FormGroup;

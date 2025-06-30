@@ -1,10 +1,28 @@
 <div class="quantity__box">
-    <button type="button" class="quantity__value quickview__value--quantity decrease"
-        aria-label="quantity value" value="Decrease Value">-</button>
-    <label>
-        <input type="number" class="quantity__number quickview__value--number"
-            value="1" />
-    </label>
-    <button type="button" class="quantity__value quickview__value--quantity increase"
-        aria-label="quantity value" value="Increase Value">+</button>
+    <button 
+        type="button" 
+        class="quantity__btn decrease"
+        (click)="decrease()"
+        [disabled]="quantity <= 1"
+        aria-label="Decrease quantity">
+        <i class="bi bi-dash"></i>
+    </button>
+    
+    <input 
+        type="number" 
+        class="quantity__input"
+        [(ngModel)]="quantity"
+        [min]="1"
+        [max]="maxQuantity"
+        (change)="onQuantityChange($event)"
+        readonly>
+    
+    <button 
+        type="button" 
+        class="quantity__btn increase"
+        (click)="increase()"
+        [disabled]="quantity >= maxQuantity"
+        aria-label="Increase quantity">
+        <i class="bi bi-plus"></i>
+    </button>
 </div>

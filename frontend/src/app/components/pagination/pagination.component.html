@@ -1,14 +1,8 @@
-<!-- <div class="pagination" *ngIf="totalPages > 1">
-    <button (click)="previous()" [disabled]="page === 1">Previous</button>
-    <span>Page {{page}} of {{totalPages}}</span>
-    <button (click)="next()" [disabled]="page === totalPages">Next</button>
-</div> -->
 
-<div class="pagination__area bg__gray--color" *ngIf="totalPages > 1">
+<div class="pagination__area bg__gray--color" *ngIf="totalPages >= 1">
     <nav class="pagination justify-content-center">
       <ul class="pagination__wrapper d-flex align-items-center justify-content-center">
   
-        <!-- Previous Arrow -->
         <li class="pagination__list">
           <button (click)="previousPage()" class="pagination__item--arrow border-0" [disabled]="currentPage === 1">
             <i class="bi bi-arrow-left"></i>
@@ -16,7 +10,6 @@
           </button>
         </li>
   
-        <!-- Page Numbers -->
         <li class="pagination__list" *ngFor="let page of pages">
           <button
             class="pagination__item link"
@@ -26,7 +19,6 @@
           </button>
         </li>
   
-        <!-- Next Arrow -->
         <li class="pagination__list">
           <button (click)="nextPage()" class="pagination__item--arrow border-0" [disabled]="currentPage === totalPages">
             <i class="bi bi-arrow-right"></i>

@@ -10,10 +10,13 @@ export interface ProductFilters {
   minPrice?: number
   maxPrice?: number
   brands?: string[]
-  occasions?: string[]
+  occasion?: string[]
+  tags?: string[]
   category?: string
   subcategory?: string
   search?: string
+  sortBy?: string
+  limit?: number
 }
 
 export interface ProductResponse {
@@ -40,12 +43,17 @@ export class ProductService {
     limit: number = APP_CONFIG.PAGINATION.DEFAULT_PAGE_SIZE,
     filters: ProductFilters = {}
   ): Observable<ProductResponse> {
+    const actualLimit = filters.limit || limit;
     let params = new HttpParams()
       .set('page', page.toString())
-      .set('limit', Math.min(limit, APP_CONFIG.PAGINATION.MAX_PAGE_SIZE).toString())
+      .set('limit', Math.min(actualLimit, APP_CONFIG.PAGINATION.MAX_PAGE_SIZE).toString())
+
+    if (filters.sortBy) {
+      params = params.set('sortBy', filters.sortBy);
+    }
 
     Object.entries(filters).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
+      if (value !== undefined && value !== null && key !== 'limit' && key !== 'sortBy') {
         if (Array.isArray(value) && value.length > 0) {
           params = params.set(key, value.join(','))
         } else if (!Array.isArray(value)) {
@@ -54,7 +62,7 @@ export class ProductService {
       }
     })
 
-    return this.http.get<ProductResponse>(`${environment.backendApi}${API_ENDPOINTS.PRODUCTS.BASE}`, { params })
+    return this.http.get<any>(`${environment.backendApi}${API_ENDPOINTS.PRODUCTS.BASE}`, { params })
   }
   
   fetchAllProducts(): Observable<ProductResponse> {

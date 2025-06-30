@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CarouselsComponent } from '../../../../components/carousel/carousel.component';
 import { environment } from '../../../../../environments/environment';
+import { Testimonial } from '../../../../shared/interfaces/home.interface';
 
 @Component({
   selector: 'app-testimonial',
@@ -9,19 +10,14 @@ import { environment } from '../../../../../environments/environment';
   templateUrl: './testimonial.component.html'
 })
 export class TestimonialComponent implements OnInit {
-  @Input() testimonials: {
-    image: string;
-    name: string;
-    title: string;
-    quote: string;
-  }[] = [];
+  @Input() testimonials: Testimonial[] = [];
 
   testimonialImages: string[] = [];
-  currentTestimonial: any = null;
-  imageURL: string = environment.apiUrl;
+  currentTestimonial: Testimonial | null = null;
+  readonly imageURL = environment.apiUrl;
 
   ngOnInit(): void {
-    this.testimonialImages = this.testimonials.map(testimonial => testimonial.image);
+    this.testimonialImages = this.testimonials.map(t => t.image);
     this.currentTestimonial = this.testimonials[0] || null;
   }
 

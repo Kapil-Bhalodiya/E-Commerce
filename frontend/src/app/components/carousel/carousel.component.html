@@ -1,47 +1,29 @@
-<div class="product__media--preview  swiper">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide">
-      <div class="product__media--preview">
-        <div class="product__media--preview__items">
-          <a class="product__media--preview__items--link glightbox" data-gallery="product-media-preview"
-            href="big-product2.jpg">
-            <img class="product__media--preview__items--img" [src]="imageURL+'/'+selectedImage" alt="product-media-img">
-          </a>
-          <div class="product__media--view__icon">
-            <a class="product__media--view__icon--link glightbox" [href]="selectedImage"
-              data-gallery="product-media-preview">
-              <i class="bi bi-search"></i>
-            </a>
-          </div>
-        </div>
+<div class="product__gallery">
+  <div class="main__image-container">
+    <img 
+      class="main__image" 
+      [src]="imageURL + '/' + selectedImage" 
+      [alt]="'Product image'"
+      *ngIf="selectedImage">
+    <div class="image__overlay">
+      <button class="zoom__btn" title="Zoom image" (click)="openImageModal()">
+        <i class="bi bi-zoom-in"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="thumbnail__container">
+    <div class="thumbnail__grid">
+      <div 
+        class="thumbnail__item" 
+        *ngFor="let image of images; let i = index"
+        [class.active]="image === selectedImage"
+        (click)="onThumbnailClick(image)">
+        <img 
+          [src]="imageURL + '/' + image" 
+          [alt]="'Product thumbnail ' + (i + 1)"
+          class="thumbnail__image">
       </div>
     </div>
   </div>
 </div>
-
-<div class="product__media--nav">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide">
-      <div class="product__media--nav__items">
-        <owl-carousel-o [options]="carouselOptions">
-          <ng-container *ngFor="let slide of images">
-            <ng-template carouselSlide [id]="slide" class="owl-item" style="height: 400px;">
-              <img [src]="imageURL+'/'+slide" class="product__media--nav__items--img"
-                [class.active]="slide === selectedImage" (click)="onThumbnailClick(slide)" />
-            </ng-template>
-          </ng-container>
-        </owl-carousel-o>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- <owl-carousel-o [options]="customOptions">
-
-  <ng-container *ngFor="let slide of productImages">
-    <ng-template carouselSlide [id]="slide.id">
-      <img [src]="slide.src">
-    </ng-template>
-  </ng-container>
-
-</owl-carousel-o> -->

@@ -1,15 +1,33 @@
-<div class="stepper">
-  <ul class="stepper-list">
-    <li *ngFor="let step of steps; let i = index"
-        [class.active]="currentIndex === i"
-        [class.completed]="currentIndex > i"
-        (click)="goToStep(i)">
-      <span class="step-number">{{ i + 1 }}</span>
-      <span class="step-label">{{ step.label }}</span>
-    </li>
-  </ul>
+<div class="modern-stepper">
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+    </div>
+  </div>
 
-  <div class="step-content" [ngClass]="animationDirection">
+  <div class="steps-container">
+    <div class="step-item" 
+         *ngFor="let step of steps; let i = index"
+         [class.active]="currentIndex === i"
+         [class.completed]="currentIndex > i"
+         [class.clickable]="currentIndex > i"
+         (click)="goToStep(i)">
+      
+      <div class="step-circle">
+        <span class="step-number" *ngIf="currentIndex < i || currentIndex === i">{{ i + 1 }}</span>
+        <i class="bi bi-check" *ngIf="currentIndex > i"></i>
+      </div>
+      
+      <div class="step-content">
+        <h4 class="step-title">{{ step.label }}</h4>
+        <p class="step-description">{{ getStepDescription(i) }}</p>
+      </div>
+      
+      <div class="step-connector" *ngIf="i < steps.length - 1"></div>
+    </div>
+  </div>
+
+  <div class="step-content-wrapper" [ngClass]="animationDirection">
     <ng-container #dynamicComponentContainer></ng-container>
   </div>
 </div>

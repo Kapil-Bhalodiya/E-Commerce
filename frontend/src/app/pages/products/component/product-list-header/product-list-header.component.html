@@ -5,12 +5,12 @@
     </button>
     <div class="product__view--mode d-flex align-items-center">
         <div class="product__view--mode__list product__short--by align-items-center d-none d-lg-flex">
-            <label class="product__view--label">Prev Page :</label>
-            <app-dropdown-filter size="'small'" [items]="dropPageSort"></app-dropdown-filter>
+            <label class="product__view--label">Per Page :</label>
+            <app-dropdown-filter size="small" [items]="dropPageSort" (selectionChange)="onPageSizeChange($event)"></app-dropdown-filter>
         </div>
         <div class="product__view--mode__list product__short--by align-items-center d-none d-lg-flex">
             <label class="product__view--label">Sort By :</label>
-            <app-dropdown-filter [items]="dropDownSort"></app-dropdown-filter>
+            <app-dropdown-filter [items]="dropDownSort" (selectionChange)="onSortChange($event)"></app-dropdown-filter>
         </div>
         <div class="product__view--mode__list">
             <div class="product__grid--column__buttons d-flex justify-content-center">
@@ -25,8 +25,8 @@
             </div>
         </div>
         <div class="product__view--mode__list product__search align-items-center d-none d-lg-flex">
-            <app-search-box [placeholder]="'Search products...'" [size]="'medium'" (search)="onSearch($event)"></app-search-box>
+            <app-search-box placeholder="Search products..." size="medium" (search)="onSearch($event)"></app-search-box>
         </div>
     </div>
-    <p class="product__showing--count">Showing 1–9 of 21 results</p>
+    <p class="product__showing--count">Showing {{ getShowingText() }}</p>
 </div>

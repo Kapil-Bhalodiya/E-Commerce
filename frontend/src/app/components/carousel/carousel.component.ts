@@ -61,6 +61,88 @@ export class CarouselsComponent {
     this.selectedImage = img;
   }
 
+  openImageModal() {
+    if (this.selectedImage) {
+      const modal = document.createElement('div');
+      modal.className = 'image-modal-overlay';
+      modal.innerHTML = `
+        <div class="image-modal">
+          <button class="modal-close">&times;</button>
+          <img src="${this.imageURL}/${this.selectedImage}" alt="Zoomed product image">
+        </div>
+      `;
+      
+      // Add styles
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        cursor: pointer;
+      `;
+      
+      const modalContent = modal.querySelector('.image-modal') as HTMLElement;
+      modalContent.style.cssText = `
+        position: relative;
+        max-width: 90%;
+        max-height: 90%;
+        cursor: default;
+      `;
+      
+      const img = modal.querySelector('img') as HTMLElement;
+      img.style.cssText = `
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+      `;
+      
+      const closeBtn = modal.querySelector('.modal-close') as HTMLElement;
+      closeBtn.style.cssText = `
+        position: absolute;
+        top: -40px;
+        right: 0;
+        background: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `;
+      
+      // Close modal events
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          document.body.removeChild(modal);
+        }
+      });
+      
+      closeBtn.addEventListener('click', () => {
+        document.body.removeChild(modal);
+      });
+      
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (document.body.contains(modal)) {
+            document.body.removeChild(modal);
+          }
+        }
+      });
+      
+      document.body.appendChild(modal);
+    }
+  }
+
   nextSlide() {
     this.owlCarousel?.next();
   }
