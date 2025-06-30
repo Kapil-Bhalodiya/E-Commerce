@@ -1,5 +1,6 @@
 # Prod ingress - production overrides only
 
+namespace: prod
 domain: "sharkapp.com"
 
 # TLS enabled for production
@@ -23,26 +24,3 @@ annotations:
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-
-# Production service routing with additional paths
-services:
-  - name: frontend
-    serviceName: frontend
-    servicePort: 80
-    path: /
-    pathType: Prefix
-  - name: backend-api
-    serviceName: backend
-    servicePort: 8000
-    path: /api
-    pathType: Prefix
-  - name: backend-uploads
-    serviceName: backend
-    servicePort: 8000
-    path: /uploads
-    pathType: Prefix
-  - name: backend-health
-    serviceName: backend
-    servicePort: 8000
-    path: /health
-    pathType: Exact
