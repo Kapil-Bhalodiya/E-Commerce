@@ -59,6 +59,6 @@ database:
 # External services
 external:
   stripe:
-    enabled: false
+    enabled: true
   cloudinary:
     enabled: false
