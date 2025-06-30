@@ -1,64 +1,133 @@
-<section class="signup-section d-flex align-items-center justify-content-center min-vh-100">
-    <div class="container">
-        <div class="signup-form card shadow-lg">
-            <div class="card-body p-4 p-md-5">
-                <h3 class="signup-title text-center mb-4">Create Your Account</h3>
-                <form [formGroup]="formGroup" (ngSubmit)="registraionHandle()" class="signup-form-inner">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
-                            <input id="firstName" type="text" formControlName="firstName" class="form-control form-control-lg" placeholder="Your First Name" />
-                            <div *ngIf="formGroup.get('firstName')?.invalid && formGroup.get('firstName')?.touched" class="text-danger small mt-1">
-                                This field is required
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
-                            <input id="lastName" type="text" formControlName="lastName" class="form-control form-control-lg" placeholder="Your Last Name" />
-                            <div *ngIf="formGroup.get('lastName')?.invalid && formGroup.get('lastName')?.touched" class="text-danger small mt-1">
-                                This field is required
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                            <input id="email" type="email" formControlName="email" class="form-control form-control-lg" placeholder="e.g. johndoe@gmail.com" />
-                            <div *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched" class="text-danger small mt-1">
-                                This field is required
-                            </div>
-                            <div *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched" class="text-danger small mt-1">
-                                Please enter a valid email address
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
-                            <input id="password" type="password" formControlName="password" class="form-control form-control-lg" placeholder="*********" />
-                            <div *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched" class="text-danger small mt-1">
-                                This field is required
-                            </div>
-                            <div *ngIf="formGroup.get('password')?.hasError('pattern') && formGroup.get('password')?.touched" class="text-danger small mt-1">
-                                Please enter a valid password
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="contactNumber" class="form-label">Contact Number <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text">+91</span>
-                                <input id="contact" type="tel" formControlName="contact" class="form-control form-control-lg" placeholder="821231234" />
-                            </div>
-                            <div *ngIf="formGroup.get('contact')?.hasError('required') && formGroup.get('contact')?.touched" class="text-danger small mt-1">
-                                This field is required
-                            </div>
-                            <div *ngIf="formGroup.get('contact')?.hasError('pattern') && formGroup.get('contact')?.touched" class="text-danger small mt-1">
-                                Please enter a valid mobile number
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-3">Register</button>
-                    <div class="text-center mt-4">
-                        <p class="mb-0">Already have an account? <a routerLink="/login" class="text-primary fw-medium text-decoration-none">Sign In</a></p>
-                    </div>
-                </form>
-            </div>
+<section class="auth-section">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-icon">
+          <i class="bi bi-person-plus"></i>
         </div>
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-subtitle">Join us today and start shopping</p>
+      </div>
+      
+      <form [formGroup]="formGroup" (ngSubmit)="registrationHandle()" class="auth-form">
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>{{ errorMessage }}
+        </div>
+        
+        <div *ngIf="successMessage" class="alert alert-success" role="alert">
+          <i class="bi bi-check-circle me-2"></i>{{ successMessage }}
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <div class="input-wrapper">
+              <i class="bi bi-person input-icon"></i>
+              <input 
+                id="firstName" 
+                type="text" 
+                formControlName="firstName" 
+                class="form-input" 
+                placeholder="First name"
+                [class.error]="formGroup.get('firstName')?.invalid && formGroup.get('firstName')?.touched"
+              />
+            </div>
+            <div *ngIf="formGroup.get('firstName')?.invalid && formGroup.get('firstName')?.touched" class="error-message">
+              First name is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <div class="input-wrapper">
+              <i class="bi bi-person input-icon"></i>
+              <input 
+                id="lastName" 
+                type="text" 
+                formControlName="lastName" 
+                class="form-input" 
+                placeholder="Last name"
+                [class.error]="formGroup.get('lastName')?.invalid && formGroup.get('lastName')?.touched"
+              />
+            </div>
+            <div *ngIf="formGroup.get('lastName')?.invalid && formGroup.get('lastName')?.touched" class="error-message">
+              Last name is required
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="input-wrapper">
+            <i class="bi bi-envelope input-icon"></i>
+            <input 
+              id="email" 
+              type="email" 
+              formControlName="email" 
+              class="form-input" 
+              placeholder="Enter your email"
+              [class.error]="formGroup.get('email')?.invalid && formGroup.get('email')?.touched"
+            />
+          </div>
+          <div *ngIf="formGroup.get('email')?.invalid && formGroup.get('email')?.touched" class="error-message">
+            <span *ngIf="formGroup.get('email')?.hasError('required')">Email is required</span>
+            <span *ngIf="formGroup.get('email')?.hasError('email')">Please enter a valid email</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="input-wrapper">
+            <i class="bi bi-phone input-icon"></i>
+            <input 
+              id="contact" 
+              type="tel" 
+              formControlName="contact" 
+              class="form-input with-prefix" 
+              placeholder="Enter mobile number"
+              [class.error]="formGroup.get('contact')?.invalid && formGroup.get('contact')?.touched"
+            />
+          </div>
+          <div *ngIf="formGroup.get('contact')?.invalid && formGroup.get('contact')?.touched" class="error-message">
+            <span *ngIf="formGroup.get('contact')?.hasError('required')">Mobile number is required</span>
+            <span *ngIf="formGroup.get('contact')?.hasError('pattern')">Please enter a valid 10-digit mobile number</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="input-wrapper">
+            <i class="bi bi-lock input-icon"></i>
+            <input 
+              id="password" 
+              [type]="showPassword ? 'text' : 'password'" 
+              formControlName="password" 
+              class="form-input" 
+              placeholder="Create password"
+              [class.error]="formGroup.get('password')?.invalid && formGroup.get('password')?.touched"
+            />
+            <button type="button" class="password-toggle" (click)="togglePassword()">
+              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
+          <div *ngIf="formGroup.get('password')?.invalid && formGroup.get('password')?.touched" class="error-message">
+            <span *ngIf="formGroup.get('password')?.hasError('required')">Password is required</span>
+            <span *ngIf="formGroup.get('password')?.hasError('pattern')">Password must contain at least 6 characters with uppercase, lowercase, number and special character</span>
+          </div>
+          <div class="password-strength" *ngIf="formGroup.get('password')?.value">
+            <div class="strength-bar">
+              <div class="strength-fill" [ngClass]="getPasswordStrength()"></div>
+            </div>
+            <span class="strength-text">{{ getPasswordStrengthText() }}</span>
+          </div>
+        </div>
+        
+        <button type="submit" class="auth-btn" [disabled]="formGroup.invalid || isLoading">
+          <span *ngIf="!isLoading">Create Account</span>
+          <span *ngIf="isLoading" class="loading-spinner">
+            <i class="bi bi-arrow-clockwise spin"></i> Creating account...
+          </span>
+        </button>
+      </form>
+      
+      <div class="auth-footer">
+        <p>Already have an account? <a routerLink="/login" class="auth-link">Sign in</a></p>
+      </div>
     </div>
+  </div>
 </section>

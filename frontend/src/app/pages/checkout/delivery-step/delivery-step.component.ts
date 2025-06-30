@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AddressService } from '../../../services/address.service';
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Address } from '../../../models/address.model';
 import { FormStepComponent } from '../../../components/stepper/models/form-step-cponent.model';
 import { CommonModule } from '@angular/common';
@@ -58,7 +57,7 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
       city: [Validators.required],
       country: [Validators.required],
       postalCode: [Validators.required, Validators.pattern('^[0-9]{6}$')],
-      isDefault: []
+      isDefault: [Validators.required]
     };
 
     if (this.addresses.length === 0) {

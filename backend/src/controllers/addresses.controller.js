@@ -1,49 +1,42 @@
 const Address = require('../models/addresses.model');
 const { createAddressSchema, updateAddressSchema } = require('../validators/addressValidator'); // Import Joi validation schemas
 const {ApiError} = require('../utils/ApiError'); // Assuming you have an ApiError utility to handle errors
+const logger = require('../utils/logger');
 
-// Create a new address
-exports.createAddress = async (req, res, next) => {
-  try {
-    // Validate request body using Joi schema
-    const { error } = createAddressSchema.validate(req.body, { abortEarly: false });
-    if (error) {
-      const validationErrors = error.details.map(err => err.message);
-      throw new ApiError(validationErrors.join(', '), 400);
-    }
-
-    const { firstName, lastName, phone, addressLine1, addressLine2, city, state, postalCode, country, addressType, isDefault } = req.body;
-    const userId = req.user?._id || req.userId;
-
-    const address = new Address({
-      userId,
-      fullName: `${firstName} ${lastName}`,
-      phone,
-      addressLine1,
-      addressLine2,
-      city,
-      state,
-      postalCode,
-      country,
-      addressType,
-      isDefault,
-    });
-
-    if (isDefault) {
-      // Set all other addresses as not default when creating a new default address
-      await Address.updateMany({ userId }, { isDefault: false });
-    }
-
-    await address.save();
-
-    res.status(201).json({
-      success: true,
-      message: 'Address created successfully',
-      data: address,
-    });
-  } catch (error) {
-    next(error);
+exports.createAddress = async (userId, addressInput, session = null) => {
+  const { error } = createAddressSchema.validate(addressInput, { abortEarly: false });
+  if (error) {
+    const validationErrors = error.details.map(err => err.message);
+    throw new ApiError(validationErrors.join(', '), 400);
   }
+
+  const {
+    firstName, lastName, phone,
+    address1, address2, city,
+    postalCode, country,
+    addressType, isDefault
+  } = addressInput;
+
+  if (isDefault) {
+    await Address.updateMany({ userId }, { isDefault: false }, { session });
+  }
+
+  const address = new Address({
+    userId,
+    fullName: `${firstName} ${lastName}`,
+    phone,
+    addressLine1: address1,
+    addressLine2: address2,
+    city,
+    postalCode,
+    country,
+    addressType,
+    isDefault,
+  });
+
+  await address.save({ session });
+  logger.info(`Address created for user ${userId}`);
+  return address;
 };
 
 // Get all addresses for the current user
@@ -87,13 +80,13 @@ exports.updateAddress = async (req, res, next) => {
 
     address.fullname = fullname;
     address.phone = phone;
-    address.street = street;
-    address.street2 = street2;
+    address.addressLine1 = street;
+    address.addressLine2 = street2;
     address.city = city;
     address.state = state;
     address.postalCode = postalCode;
     address.country = country;
-    address.label = label;
+    address.addressType = label;
     address.isDefault = isDefault;
 
     await address.save();

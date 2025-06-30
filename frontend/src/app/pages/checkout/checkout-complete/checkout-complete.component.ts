@@ -13,6 +13,7 @@ import { CartService } from '../../../services/cart.service';
 })
 export class CheckoutCompleteComponent implements OnInit{
   orderData: any
+  userData: any
   orderResponse: any;
   isLoading: boolean = false
   constructor(
@@ -21,6 +22,7 @@ export class CheckoutCompleteComponent implements OnInit{
     public cartService: CartService
   ) {
     this.orderData = JSON.parse(localStorage.getItem('orderForm') as string)
+    this.userData = JSON.parse(localStorage.getItem('user_data') as string)
   }
   ngOnInit(): void {
     this.createOrder()
@@ -28,7 +30,7 @@ export class CheckoutCompleteComponent implements OnInit{
 
   createOrder() {
     this.isLoading = true
-    this.orderService.createOrder(this.orderData).subscribe({
+    this.orderService.createOrder(this.orderData, this.userData).subscribe({
       next: (response: any) => {
         this.isLoading = false
         this.orderResponse = response.data

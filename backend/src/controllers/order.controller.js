@@ -9,29 +9,26 @@ const { ApiError } = require('../utils/ApiError');
 const { createAddress } = require('./addresses.controller');
 
 const createOrder = async (req, res, next) => {
+
   const session = await mongoose.startSession();
   let isTransactionCommitted = false;
-
+  
   try {
     session.startTransaction();
-    const userId = req.user?._id || req.userId;
-    // const { items, shippingAddressId, paymentMethod, couponCode, notes } = req.body;
-    const { cartForm, deliveryAddressForm, paymentDetailForm, couponCode } = req.body;
-
-    // Verify address
-    // const address = await Address.findOne({ _id: shippingAddressId, userId }).session(session);
+    
+    const userId = req.body.userData?._id || req.userId;
+    const { cartForm, deliveryAddressForm, paymentDetailForm, couponCode } = req.body.orderData;
 
     let deliveryAddressId;
-    logger.debug('Order data received', { cartForm, deliveryAddressForm, paymentDetailForm });
 
     if (deliveryAddressForm.deliveryAddressId) {
-      // Use the existing addressId if provided
+      logger.info('Using existing deliveryAddressId', { deliveryAddressId: deliveryAddressForm.deliveryAddressId });
       deliveryAddressId = deliveryAddressForm.deliveryAddressId;
     } else {
-      // Create a new address if addressId is not provided
-      const createdAddress = await createAddress(deliveryAddressForm.newAddress);
-      logger.debug('Created new address', { deliveryAddressId });
-      deliveryAddressId = createdAddress.data._id;  // You can then use the _id of the created address
+      logger.info('Creating new address with input', deliveryAddressForm.newAddress);
+      const address = await createAddress(userId, deliveryAddressForm.newAddress, session);
+      logger.info('New address created', { addressId: address._id });
+      deliveryAddressId = address._id;
     }
 
     // Create order items
@@ -61,9 +58,9 @@ const createOrder = async (req, res, next) => {
     }
 
     // Calculate taxes and shipping
-    const taxRate = 0.1; // 10% tax
+    const taxRate = 0.1;
     const taxAmount = subTotal * taxRate;
-    const shippingCost = 10; // Fixed shipping cost
+    const shippingCost = 10;
 
     // Apply coupon if provided
     let discountAmount = 0;
@@ -116,7 +113,7 @@ const createOrder = async (req, res, next) => {
     const order = new Order({
       userId,
       orderItems,
-      deliveryAddressId, // Add snapshot of the address here
+      deliveryAddressId,
       payment: null,
       totalAmount,
       subTotal,
