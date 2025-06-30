@@ -20,7 +20,7 @@ export interface AuthResponse {
   success: boolean
   data: {
     user: any
-    token: string
+    accessToken: string
   }
   message: string
 }
@@ -58,8 +58,8 @@ export class AuthService {
   }
 
   private handleAuthSuccess(response: AuthResponse): void {
-    if (response.success && response.data.token) {
-      localStorage.setItem(STORAGE_KEYS.TOKEN, response.data.token)
+    if (response.success && response.data.accessToken) {
+      localStorage.setItem(STORAGE_KEYS.TOKEN, response.data.accessToken)
       localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(response.data.user))
       this.isAuthenticatedSubject.next(true)
     }

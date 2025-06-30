@@ -34,8 +34,8 @@ export interface OrderResponse {
 export class OrderService {
   constructor(private http: HttpClient) {}
 
-  createOrder(orderData: OrderData): Observable<OrderResponse> {
-    return this.http.post<OrderResponse>(`${environment.backendApi}${API_ENDPOINTS.ORDERS.BASE}`, orderData)
+  createOrder(orderData: OrderData, userData: any): Observable<OrderResponse> {
+    return this.http.post<OrderResponse>(`${environment.backendApi}${API_ENDPOINTS.ORDERS.BASE}`, {orderData, userData})
   }
 
   validateCoupon(couponCode: string): Observable<any> {

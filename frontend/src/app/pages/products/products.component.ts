@@ -41,7 +41,6 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchProducts();
-    // this.fetchAllProducts();
   }
 
   fetchProducts() {
@@ -87,7 +86,7 @@ export class ProductsComponent implements OnInit {
   }
 
   onAddToCart(product: Product) {
-    const checkLoggedInUser = localStorage.getItem('token')
+    const checkLoggedInUser = localStorage.getItem('auth_token')
     if(checkLoggedInUser){ 
     const cartItem: CartItem = {
       productId: product._id,
@@ -96,18 +95,16 @@ export class ProductsComponent implements OnInit {
       quantity: 1,
       image: product.image_urls.find(() => true)
     };
-
     this.cartService.addToCart(cartItem);
-    // Product added to cart successfully
     } else this.router.navigate(['/login'])
   }
 
   onAddToWishlist(product: Product) {
-    // Implement wishlist logic here
+    // Implement wishlist logic
   }
 
   onQuickView(product: Product) {
-    // Implement modal logic here (e.g., open a dialog)
+    // Implement modal logic (e.g., open a dialog)
   }
 
   onPageChange(newPage: number) {

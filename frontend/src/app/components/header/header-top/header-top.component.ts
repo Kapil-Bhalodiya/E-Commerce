@@ -31,7 +31,7 @@ export class HeaderTopComponent implements OnInit {
   ) { }
   
   cratItems: number = 0;
-  checkLoggedInUser = localStorage.getItem('token')
+  checkLoggedInUser = localStorage.getItem('auth_token')
 
   ngOnInit() {
     this.cartService.cartItems$.subscribe(items => this.cratItems = items.length);
