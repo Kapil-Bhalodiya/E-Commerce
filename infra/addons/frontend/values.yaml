@@ -10,6 +10,7 @@ image:
 service:
   type: ClusterIP
   port: 80
+  targetPort: 8080  # nginx runs on 8080 as non-root
 
 # Minimal base resources
 resources:
@@ -24,27 +25,28 @@ resources:
 livenessProbe:
   httpGet:
     path: /
-    port: 80
+    port: 8080
   initialDelaySeconds: 30
   periodSeconds: 10
 
 readinessProbe:
   httpGet:
     path: /
-    port: 80
+    port: 8080
   initialDelaySeconds: 5
   periodSeconds: 5
 
-# Security
+# Security - nginx runs on port 8080 as non-root
 securityContext:
   runAsNonRoot: true
   runAsUser: 101  # nginx user
+  runAsGroup: 101
 
 # Monitoring
 metrics:
   enabled: true
   path: /metrics
-  port: 80
+  port: 8080
 
 # API configuration
 api:

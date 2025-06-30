@@ -33,10 +33,10 @@ features:
   gzip: true
   caching: true
 
-# Production security
+# Production security - remove readOnlyRootFilesystem for nginx
 securityContext:
   runAsNonRoot: true
   runAsUser: 101
-  readOnlyRootFilesystem: true
+  runAsGroup: 101
   capabilities:
     drop: ["ALL"]
