@@ -1,0 +1,33 @@
+# Production environment - prod-specific settings
+
+global:
+  env: prod
+  imagePullPolicy: "IfNotPresent"
+
+target:
+  address: https://kubernetes.default.svc
+  namespace: prod
+  project: default
+  branch: main
+
+# Prod-specific features
+features:
+  debug: false
+  logging:
+    level: "warn"
+    retention: "30d"
+
+# Prod database
+database:
+  persistence:
+    size: "100Gi"
+  backup:
+    enabled: true
+    schedule: "0 2 * * *"
+
+# Security
+security:
+  networkPolicy:
+    enabled: true
+  podSecurityPolicy:
+    enabled: true

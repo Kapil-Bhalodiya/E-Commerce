@@ -1,18 +1,22 @@
-# release:
-#   revision: main
-#   tag: HEAD
-# project: default
-# address: https://kubernetes.default.svc
+# Development environment - only dev-specific settings
+
 global:
   env: dev
+  imagePullPolicy: "Always"
+
 target:
   address: https://kubernetes.default.svc
   namespace: dev
   project: default
   branch: main
-loki:
-  storage:
-    bucketNames:
-      chunks: ""
-      ruler: ""
-      admin: ""
+
+# Dev-specific features
+features:
+  debug: true
+  logging:
+    level: "debug"
+
+# Dev database
+database:
+  persistence:
+    size: "5Gi"
