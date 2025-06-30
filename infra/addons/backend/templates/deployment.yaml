@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   name: {{ include "backend.fullname" . }}
   labels:
     {{- include "backend.labels" . | nindent 4 }}
@@ -15,6 +15,10 @@ spec:
       labels:
         {{- include "backend.selectorLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -24,41 +28,34 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
-            - name: MONGODB_URI
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: uri
             - name: NODE_ENV
               value: "{{ .Values.env.NODE_ENV }}"
             - name: PORT
-              value: "{{ .Values.service.port }}"
-            - name: CORS_ORIGIN
-              value: "http://www.sharkapp.local:8000,https://www.sharkapp.local:8000"
+              value: "{{ .Values.env.PORT }}"
+            - name: MONGODB_URI
+              value: "mongodb://{{ .Values.database.host }}:{{ .Values.database.port }}/{{ .Values.database.name }}"
+            {{- if .Values.external.stripe.enabled }}
             - name: STRIPE_SK
               valueFrom:
                 secretKeyRef:
                   name: backend-secrets
                   key: stripe-secret-key
-            # - name: CLOUDINARY_CLOUD_NAME
-            #   value: "dummy"
-            # - name: CLOUDINARY_API_KEY
-            #   value: "dummy"
-            # - name: CLOUDINARY_API_SECRET
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: backend-secrets
-            #       key: cloudinary-api-secret
+            {{- end }}
+            {{- if .Values.external.cloudinary.enabled }}
+            - name: CLOUDINARY_CLOUD_NAME
+              value: "dummy"
+            - name: CLOUDINARY_API_KEY
+              value: "dummy"
+            - name: CLOUDINARY_API_SECRET
+              value: "dummy"
+            {{- end }}
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
           resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
-        # {{- if .Values.tracing.enabled }}
-        # - name: JAEGER_AGENT_HOST
-        #   value: {{ .Values.tracing.jaegerAgentHost }}
-        # - name: JAEGER_AGENT_PORT
-        #   value: {{ .Values.tracing.jaegerAgentPort | quote }}
-        # {{- end }}
+            {{- toYaml .Values.resources | nindent 12 }}
