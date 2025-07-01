@@ -50,3 +50,7 @@ prometheus-node-exporter:
 # Enable kube-state-metrics for Kubernetes metrics  
 kube-state-metrics:
   enabled: true
+
+# Application monitoring configuration
+app:
+  serviceMonitors: []  # Empty by default, will be overridden per environment
