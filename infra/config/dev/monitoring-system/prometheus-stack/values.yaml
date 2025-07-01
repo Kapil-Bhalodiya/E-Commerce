@@ -1,10 +1,58 @@
-# Environment-specific overrides (if any)
+# Dev Environment Prometheus & Grafana Configuration
+# Line-by-line explanation:
+
+namespace: dev  # Deploy to dev namespace
+
+# Grafana specific settings for DEV
+grafana:
+  # Domain configuration for dev environment
+  grafana.ini:
+    server:
+      domain: "dev.grafana.local"  # Dev Grafana URL
+      root_url: "http://dev.grafana.local:8000/"  # Full URL with port
+  
+  # Ingress configuration to make Grafana accessible
+  ingress:
+    enabled: true  # Enable ingress for external access
+    ingressClassName: nginx  # Use nginx ingress controller
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"  # No HTTPS redirect in dev
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    hosts:
+      - dev.grafana.local  # Hostname for dev Grafana
+    paths:
+      - path: /  # Root path
+        pathType: Prefix  # Match all paths starting with /
+  
+  # Data sources - where Grafana gets data from
+  additionalDataSources:
+    - name: Prometheus  # Data source name
+      type: prometheus  # Prometheus type
+      url: http://prometheus-stack-dev-kube-prom-prometheus.dev.svc.cluster.local:9090  # Prometheus service URL
+      access: proxy  # Access through Grafana proxy
+      isDefault: true  # Make this the default data source
+
+# Prometheus specific settings for DEV  
 prometheus:
   prometheusSpec:
-    serviceMonitorNamespaceSelector:
+    # Service monitor selector - which services to monitor
+    serviceMonitorSelector:
       matchLabels:
-        kubernetes.io/metadata.name: dev
-grafana:
-  namespaceOverride: dev
-  fullnameOverride: grafana
-# grafanaHost: grafana.sharkapp.local
+        release: prometheus-stack-dev  # Only monitor services with this label
+    
+    # Relaxed resources for dev
+    resources:
+      requests:
+        cpu: "100m"  # Minimum CPU
+        memory: "512Mi"  # Minimum memory
+      limits:
+        cpu: "500m"  # Maximum CPU
+        memory: "1Gi"  # Maximum memory
+    
+    # Smaller storage for dev
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 5Gi  # 5GB storage for dev

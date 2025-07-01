@@ -1,57 +1,20 @@
-prometheusOperator:
-  enabled: true
+# Base Prometheus Stack Configuration
+# This file contains minimal defaults that work for both dev and prod
+
+# Prometheus Configuration
 prometheus:
   enabled: true
   prometheusSpec:
     replicas: 1
-    service:
-      type: ClusterIP
-      port: 9090
-    kubeControllerManager:
-      enabled: true
-      scheme: http
-      serviceMonitor:
-        scheme: http
-        insecureSkipVerify: true
-      endpoints:
-        - 10252
-    kubeScheduler:
-      enabled: true
-      scheme: http
-      serviceMonitor:
-        scheme: http
-        insecureSkipVerify: true
-      endpoints:
-        - 10249
-    kubeProxy:
-      enabled: true
-      scheme: http
-      serviceMonitor:
-        scheme: http
-        insecureSkipVerify: true
-      endpoints:
-        - 10249
-    kubeEtcd:
-      enabled: true
-      scheme: http
-      serviceMonitor:
-        scheme: http
-        insecureSkipVerify: true
-      endpoints:
-        - 2381
-    serviceMonitorSelectorNilUsesHelmValues: false
-    serviceMonitorSelector:
-      matchLabels:
-        release: prometheus-stack-dev
-    podMonitorSelector:
-      matchLabels:
-        prometheus: prometheus-stack
+    retention: "15d"  # Keep metrics for 15 days
     resources:
       requests:
         cpu: "200m"
         memory: "1Gi"
       limits:
+        cpu: "1000m"
         memory: "2Gi"
+    # Storage for metrics
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -61,108 +24,29 @@ prometheus:
             requests:
               storage: 10Gi
 
-
+# Grafana Configuration  
 grafana:
   enabled: true
-  adminPassword: newpassword123
+  adminPassword: "admin123"  # Change this in production
   persistence:
     enabled: true
     storageClassName: standard
-    accessModes: ["ReadWriteOnce"]
     size: 5Gi
+  # Basic Grafana settings
   grafana.ini:
     server:
-      domain: grafana.sharkapp.local
-      root_url: http://grafana.sharkapp.local:30931/
+      domain: "localhost"  # Will be overridden per environment
+      root_url: "http://localhost/"
     auth.anonymous:
-      enabled: true
-      org_role: Viewer
-  additionalDataSources:
-    - name: Prometheus
-      type: prometheus
-      url: http://prometheus-stack-dev-kube-prom-prometheus.dev.svc.cluster.local:9090
-      access: proxy
-      isDefault: true
-    - name: Loki
-      type: loki
-      url: http://loki-dev-gateway.dev.svc.cluster.local:80
-      access: proxy
-      isDefault: false
-    - name: Tempo
-      type: tempo
-      url: http://grafana-tempo-dev.dev.svc.cluster.local:3100
-      access: proxy
-      isDefault: false
-      jsonData:
-        httpMethod: GET
-        tracesToLogs:
-          datasourceUid: "loki"
-          spanStartTimeShift: "-1h"
-          spanEndTimeShift: "1h"
-        tracesToMetrics:
-          datasourceUid: "prometheus"
-  ingress:
-    enabled: true
-    ingressClassName: nginx
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /
-      nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
-      nginx.ingress.kubernetes.io/proxy-buffers: "4 256k"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-    hosts:
-      - grafana.sharkapp.local
-    paths:
-      - path: /
-        pathType: Prefix
+      enabled: false  # Require login
   service:
     type: ClusterIP
     port: 80
 
-kube-prometheus-stack:
-  crds:
-    enabled: true
-
+# Enable node exporter for system metrics
 prometheus-node-exporter:
   enabled: true
 
-
-app:
-  serviceMonitors:
-    - name: sharkapp-frontend
-      namespace: dev
-      selector:
-        matchLabels:
-          app.kubernetes.io/instance: frontend-dev
-          app.kubernetes.io/name: frontend
-      additionalLabels:
-        release: prometheus-stack-dev
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-          targetPort: 8000
-          relabelings:
-            - action: replace
-              sourceLabels:
-              - __meta_kubernetes_pod_namespace
-              targetLabel: namespace
-    - name: sharkapp-backend
-      namespace: dev
-      selector:
-        matchLabels:
-          app.kubernetes.io/instance: backend-dev
-          app.kubernetes.io/name: backend
-      additionalLabels:
-        release: prometheus-stack-dev
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-          targetPort: 8000
-          relabelings:
-            - action: replace
-              sourceLabels:
-              - __meta_kubernetes_pod_namespace
-              targetLabel: namespace
+# Enable kube-state-metrics for Kubernetes metrics  
+kube-state-metrics:
+  enabled: true
