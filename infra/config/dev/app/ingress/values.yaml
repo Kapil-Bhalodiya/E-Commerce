@@ -4,6 +4,7 @@ namespace: dev
 tls:
   enabled: false
 
+# Force override of services array
 services:
   - name: frontend
     serviceName: frontend-dev
@@ -25,3 +26,6 @@ annotations:
   nginx.ingress.kubernetes.io/ssl-redirect: "false"
   nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
   nginx.ingress.kubernetes.io/limit-rps: "100"
+
+# Force refresh
+_override: "dev-services"
