@@ -10,20 +10,20 @@ tls:
   secretName: "app-tls-cert"
   issuer: "letsencrypt-staging"
 
-# Service routing - using correct Helm-generated service names
+# Service routing - will be overridden per environment
 services:
   - name: frontend
-    serviceName: frontend-dev
+    serviceName: frontend
     servicePort: 80
     path: /
     pathType: Prefix
   - name: backend-api
-    serviceName: backend-dev
+    serviceName: backend
     servicePort: 8000
     path: /api
     pathType: Prefix
   - name: backend-uploads
-    serviceName: backend-dev
+    serviceName: backend
     servicePort: 8000
     path: /uploads
     pathType: Prefix
