@@ -1,13 +1,9 @@
-# Dev ingress - development overrides only
-
-namespace: dev
 domain: "dev.sharkapp.local"
+namespace: dev
 
-# TLS disabled for local dev
 tls:
   enabled: false
 
-# Dev-specific service names
 services:
   - name: frontend
     serviceName: frontend-dev
@@ -25,7 +21,6 @@ services:
     path: /uploads
     pathType: Prefix
 
-# Development annotations
 annotations:
   nginx.ingress.kubernetes.io/ssl-redirect: "false"
   nginx.ingress.kubernetes.io/force-ssl-redirect: "false"

@@ -1,15 +1,11 @@
-# Prod ingress - production overrides only
-
-namespace: prod
 domain: "prod.sharkapp.local"
+namespace: prod
 
-# TLS enabled for production
 tls:
   enabled: true
   secretName: "sharkapp-prod-tls"
   issuer: "letsencrypt-prod"
 
-# Prod-specific service names
 services:
   - name: frontend
     serviceName: frontend-prod
@@ -27,7 +23,6 @@ services:
     path: /uploads
     pathType: Prefix
 
-# Production annotations with security and performance
 annotations:
   nginx.ingress.kubernetes.io/ssl-redirect: "true"
   nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
@@ -36,7 +31,6 @@ annotations:
   nginx.ingress.kubernetes.io/limit-connections: "10"
   nginx.ingress.kubernetes.io/rate-limit: "100"
   nginx.ingress.kubernetes.io/rate-limit-window: "1m"
-  # Security headers
   nginx.ingress.kubernetes.io/configuration-snippet: |
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
