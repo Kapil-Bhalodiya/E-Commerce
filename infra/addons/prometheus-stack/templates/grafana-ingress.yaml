@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: {{ .Values.grafana.ingress.host | default "localhost" }}
+  - host: {{ .Values.grafanaHost | default "localhost" }}
     http:
       paths:
       - path: /

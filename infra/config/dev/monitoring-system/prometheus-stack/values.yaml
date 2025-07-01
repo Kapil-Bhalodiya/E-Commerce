@@ -1,5 +1,8 @@
 namespace: dev
 
+# Grafana host override
+grafanaHost: "dev.grafana.local"
+
 # Configuration for kube-prometheus-stack subchart
 kube-prometheus-stack:
   # Grafana configuration for DEV environment
@@ -44,19 +47,6 @@ kube-prometheus-stack:
   # Keep node-exporter enabled in dev
   prometheus-node-exporter:
     enabled: true
-
-# Manual Grafana ingress for dev
-grafana:
-  ingress:
-    enabled: true
-    ingressClassName: nginx
-    host: "dev.grafana.local"
-    path: "/"
-    pathType: "Prefix"
-    annotations:
-      nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 
 # Service monitors for dev
 app:
