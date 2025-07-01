@@ -1,58 +1,68 @@
 # Base Prometheus Stack Configuration
-# This file contains minimal defaults that work for both dev and prod
 
-# Prometheus Configuration
-prometheus:
-  enabled: true
-  prometheusSpec:
-    replicas: 1
-    retention: "15d"  # Keep metrics for 15 days
-    resources:
-      requests:
-        cpu: "200m"
-        memory: "1Gi"
-      limits:
-        cpu: "1000m"
-        memory: "2Gi"
-    # Storage for metrics
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: standard
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 10Gi
-
-# Grafana Configuration  
-grafana:
-  enabled: true
-  adminPassword: "admin123"  # Change this in production
-  persistence:
+# Configuration for kube-prometheus-stack subchart
+kube-prometheus-stack:
+  # Prometheus Configuration
+  prometheus:
     enabled: true
-    storageClassName: standard
-    size: 5Gi
-  grafana.ini:
-    server:
-      domain: "localhost"  # Will be overridden per environment
-      root_url: "http://localhost/"
-    auth.anonymous:
-      enabled: false  # Require login
-  service:
-    type: ClusterIP
-    port: 80
-  # Disable ingress in base - will be enabled per environment
-  ingress:
+    prometheusSpec:
+      replicas: 1
+      retention: "15d"
+      resources:
+        requests:
+          cpu: "200m"
+          memory: "1Gi"
+        limits:
+          cpu: "1000m"
+          memory: "2Gi"
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: standard
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 10Gi
+
+  # Grafana Configuration  
+  grafana:
+    enabled: true
+    adminPassword: "admin123"
+    persistence:
+      enabled: true
+      storageClassName: standard
+      size: 5Gi
+    grafana.ini:
+      server:
+        domain: "localhost"
+        root_url: "http://localhost/"
+      auth.anonymous:
+        enabled: false
+    service:
+      type: ClusterIP
+      port: 80
+
+  # Disable node-exporter by default to avoid conflicts
+  prometheus-node-exporter:
     enabled: false
 
-# Enable node exporter for system metrics
-prometheus-node-exporter:
-  enabled: true
+  # Enable kube-state-metrics for Kubernetes metrics  
+  kube-state-metrics:
+    enabled: true
 
-# Enable kube-state-metrics for Kubernetes metrics  
-kube-state-metrics:
-  enabled: true
+# Manual Grafana ingress configuration
+grafana:
+  ingress:
+    enabled: false  # Will be overridden per environment
+    ingressClassName: nginx
+    host: "localhost"
+    path: "/"
+    pathType: "Prefix"
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 
 # Application monitoring configuration
 app:
-  serviceMonitors: []  # Empty by default, will be overridden per environment
+  serviceMonitors: []

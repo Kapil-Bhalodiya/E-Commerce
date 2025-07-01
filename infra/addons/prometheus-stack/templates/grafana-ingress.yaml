@@ -1,0 +1,24 @@
+{{- if .Values.grafana.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "prometheus-stack.fullname" . }}-grafana
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  annotations:
+    {{- range $key, $value := .Values.grafana.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.grafana.ingress.ingressClassName }}
+  rules:
+  - host: {{ .Values.grafana.ingress.host }}
+    http:
+      paths:
+      - path: {{ .Values.grafana.ingress.path | default "/" }}
+        pathType: {{ .Values.grafana.ingress.pathType | default "Prefix" }}
+        backend:
+          service:
+            name: {{ include "prometheus-stack.fullname" . }}-grafana
+            port:
+              number: 80
+{{- end }}
