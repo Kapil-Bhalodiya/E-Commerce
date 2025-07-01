@@ -2,7 +2,7 @@
 
 # Basic ingress settings
 ingressClassName: nginx
-domain: "localhost"
+domain: "base.local"  # Will be overridden per environment
 
 # TLS settings
 tls:
