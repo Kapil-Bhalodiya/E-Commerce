@@ -26,6 +26,3 @@ annotations:
   nginx.ingress.kubernetes.io/ssl-redirect: "false"
   nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
   nginx.ingress.kubernetes.io/limit-rps: "100"
-
-# Force refresh
-_override: "dev-services"
