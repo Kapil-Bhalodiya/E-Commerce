@@ -2,7 +2,7 @@
 
 # Basic ingress settings
 ingressClassName: nginx
-domain: "www.sharkapp.local"
+domain: "localhost"
 
 # TLS settings
 tls:
@@ -10,20 +10,20 @@ tls:
   secretName: "app-tls-cert"
   issuer: "letsencrypt-staging"
 
-# Service routing
+# Service routing - using correct Helm-generated service names
 services:
   - name: frontend
-    serviceName: frontend
+    serviceName: frontend-dev
     servicePort: 80
     path: /
     pathType: Prefix
   - name: backend-api
-    serviceName: backend
+    serviceName: backend-dev
     servicePort: 8000
     path: /api
     pathType: Prefix
   - name: backend-uploads
-    serviceName: backend
+    serviceName: backend-dev
     servicePort: 8000
     path: /uploads
     pathType: Prefix
