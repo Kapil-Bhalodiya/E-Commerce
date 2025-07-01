@@ -1,99 +1,71 @@
-# Prod Environment Prometheus & Grafana Configuration
-# Production-ready settings with high availability
+namespace: prod
 
-namespace: prod  # Deploy to prod namespace
-
-# Grafana specific settings for PRODUCTION
-grafana:
-  adminPassword: "SecurePassword123!"  # Strong password for production
-  
-  # Domain configuration for production
-  grafana.ini:
-    server:
-      domain: "prod.grafana.local"  # Production Grafana URL
-      root_url: "https://prod.grafana.local/"  # HTTPS in production
-    security:
-      admin_user: "admin"  # Admin username
-      cookie_secure: true  # Secure cookies
-      cookie_samesite: "strict"  # CSRF protection
-  
-  # Production ingress with TLS
-  ingress:
-    enabled: true
-    ingressClassName: nginx
-    annotations:
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"  # Force HTTPS
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      cert-manager.io/cluster-issuer: "letsencrypt-prod"  # Auto TLS cert
-    hosts:
-      - prod.grafana.local
-    tls:  # TLS configuration
-      - secretName: prod-grafana-tls  # TLS certificate secret
-        hosts:
-          - prod.grafana.local
-  
-  # Production data sources
-  additionalDataSources:
-    - name: Prometheus
-      type: prometheus
-      url: http://prometheus-stack-prod-kube-prom-prometheus.prod.svc.cluster.local:9090
-      access: proxy
-      isDefault: true
-  
-  # High availability for Grafana
-  replicas: 2  # Run 2 Grafana instances
-  resources:
-    requests:
-      cpu: "200m"
-      memory: "256Mi"
-    limits:
-      cpu: "500m"
-      memory: "512Mi"
-
-# Prometheus production settings
-prometheus:
-  prometheusSpec:
-    replicas: 2  # High availability - 2 Prometheus instances
-    retention: "30d"  # Keep metrics for 30 days in production
+# Configuration for kube-prometheus-stack subchart
+kube-prometheus-stack:
+  # Grafana configuration for PRODUCTION
+  grafana:
+    adminPassword: "SecurePassword123!"
     
-    # Service monitor selector for production
-    serviceMonitorSelector:
-      matchLabels:
-        release: prometheus-stack-prod
+    grafana.ini:
+      server:
+        domain: "prod.grafana.local"
+        root_url: "http://prod.grafana.local:8000/"
+      security:
+        admin_user: "admin"
+        cookie_secure: false  # Changed to false for HTTP
+        cookie_samesite: "strict"
     
-    # Production resources
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Changed to false
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"  # Changed to false
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      hosts:
+        - "prod.grafana.local"
+      path: /
+    
+    additionalDataSources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-stack-prod-kube-prom-prometheus:9090
+        access: proxy
+        isDefault: true
+    
     resources:
       requests:
-        cpu: "500m"
-        memory: "2Gi"
-      limits:
-        cpu: "2000m"
-        memory: "4Gi"
-    
-    # Larger storage for production
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          resources:
-            requests:
-              storage: 50Gi  # 50GB storage for production
-    
-    # Security settings
-    securityContext:
-      runAsNonRoot: true
-      runAsUser: 1000
-      fsGroup: 2000
-prometheus-node-exporter:
-    enabled: false
-# Alerting configuration for production
-alertmanager:
-  enabled: true  # Enable alerting in production
-  alertmanagerSpec:
-    replicas: 2  # High availability
-    resources:
-      requests:
-        cpu: "100m"
-        memory: "128Mi"
-      limits:
         cpu: "200m"
         memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+
+  # Prometheus production settings
+  prometheus:
+    prometheusSpec:
+      retention: "30d"
+      serviceMonitorSelector:
+        matchLabels:
+          release: prometheus-stack-prod
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "2Gi"
+        limits:
+          cpu: "2000m"
+          memory: "4Gi"
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            resources:
+              requests:
+                storage: 50Gi
+
+  # DISABLE node-exporter in prod to avoid conflict
+  prometheus-node-exporter:
+    enabled: false
+
+  # Disable alertmanager for now
+  alertmanager:
+    enabled: false
