@@ -83,7 +83,8 @@ prometheus:
       runAsNonRoot: true
       runAsUser: 1000
       fsGroup: 2000
-
+prometheus-node-exporter:
+    enabled: false
 # Alerting configuration for production
 alertmanager:
   enabled: true  # Enable alerting in production
