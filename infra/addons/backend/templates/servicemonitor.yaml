@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "backend.labels" . | nindent 4 }}
-    release: prometheus-stack-dev
+    release: {{ (printf "prometheus-stack-%s" .Values.namespace) }}
 spec:
   selector:
     matchLabels:
