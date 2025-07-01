@@ -1,13 +1,31 @@
 # Prod ingress - production overrides only
 
 namespace: prod
-domain: "sharkapp.com"
+domain: "prod.sharkapp.local"
 
 # TLS enabled for production
 tls:
   enabled: true
   secretName: "sharkapp-prod-tls"
   issuer: "letsencrypt-prod"
+
+# Prod-specific service names
+services:
+  - name: frontend
+    serviceName: frontend-prod
+    servicePort: 80
+    path: /
+    pathType: Prefix
+  - name: backend-api
+    serviceName: backend-prod
+    servicePort: 8000
+    path: /api
+    pathType: Prefix
+  - name: backend-uploads
+    serviceName: backend-prod
+    servicePort: 8000
+    path: /uploads
+    pathType: Prefix
 
 # Production annotations with security and performance
 annotations:

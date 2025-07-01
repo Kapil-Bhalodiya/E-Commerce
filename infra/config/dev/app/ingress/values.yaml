@@ -7,8 +7,26 @@ domain: "www.sharkapp.local"
 tls:
   enabled: false
 
+# Dev-specific service names
+services:
+  - name: frontend
+    serviceName: frontend-dev
+    servicePort: 80
+    path: /
+    pathType: Prefix
+  - name: backend-api
+    serviceName: backend-dev
+    servicePort: 8000
+    path: /api
+    pathType: Prefix
+  - name: backend-uploads
+    serviceName: backend-dev
+    servicePort: 8000
+    path: /uploads
+    pathType: Prefix
+
 # Development annotations
 annotations:
   nginx.ingress.kubernetes.io/ssl-redirect: "false"
   nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-  nginx.ingress.kubernetes.io/limit-rps: "100"  # Relaxed for dev
+  nginx.ingress.kubernetes.io/limit-rps: "100"
