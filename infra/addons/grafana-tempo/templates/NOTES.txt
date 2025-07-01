@@ -1,8 +1,0 @@
-Thank you for installing the {{ .Chart.Name }} chart!
-
-Your Tempo instance is deployed in the {{ .Release.Namespace }} namespace with the name {{ .Values.tempo.fullnameOverride | default "tempo" }}.
-
-To access Tempo, you can port-forward the service:
-  kubectl port-forward svc/{{ .Values.tempo.fullnameOverride | default "tempo" }} -n {{ .Release.Namespace }} 3100:3100
-
-For more information, visit: https://grafana.com/docs/tempo/latest/

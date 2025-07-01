@@ -32,7 +32,6 @@ grafana:
     enabled: true
     storageClassName: standard
     size: 5Gi
-  # Basic Grafana settings
   grafana.ini:
     server:
       domain: "localhost"  # Will be overridden per environment
@@ -42,6 +41,9 @@ grafana:
   service:
     type: ClusterIP
     port: 80
+  # Disable ingress in base - will be enabled per environment
+  ingress:
+    enabled: false
 
 # Enable node exporter for system metrics
 prometheus-node-exporter:

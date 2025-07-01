@@ -1,17 +1,17 @@
-# Dev Environment Prometheus & Grafana Configuration
-# Line-by-line explanation:
+namespace: dev
 
-namespace: dev  # Deploy to dev namespace
-
-# Grafana specific settings for DEV
+# Grafana configuration for DEV environment
 grafana:
-  # Domain configuration for dev environment
+  adminPassword: "devadmin123"
+  
   grafana.ini:
     server:
-      domain: "dev.grafana.local"  # Dev Grafana URL
-      root_url: "http://dev.grafana.local:8000/"  # Full URL with port
+      domain: "dev.grafana.local"
+      root_url: "http://dev.grafana.local:8000/"
+      serve_from_sub_path: false
+    auth.anonymous:
+      enabled: false
   
-  # Ingress configuration to make Grafana accessible
   ingress:
     enabled: true  # Enable ingress for external access
     ingressClassName: nginx  # Use nginx ingress controller
@@ -19,37 +19,34 @@ grafana:
       nginx.ingress.kubernetes.io/ssl-redirect: "false"  # No HTTPS redirect in dev
       nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
     hosts:
-      - dev.grafana.local  # Hostname for dev Grafana
-    paths:
-      - path: /  # Root path
-        pathType: Prefix  # Match all paths starting with /
+      - host: dev.grafana.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
   
-  # Data sources - where Grafana gets data from
+  # Fixed Prometheus service URL
   additionalDataSources:
-    - name: Prometheus  # Data source name
-      type: prometheus  # Prometheus type
-      url: http://prometheus-stack-dev-kube-prom-prometheus.dev.svc.cluster.local:9090  # Prometheus service URL
-      access: proxy  # Access through Grafana proxy
-      isDefault: true  # Make this the default data source
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-stack-dev-prometheus:9090
+      access: proxy
+      isDefault: true
 
-# Prometheus specific settings for DEV  
+# Prometheus dev settings
 prometheus:
   prometheusSpec:
     # Service monitor selector - which services to monitor
     serviceMonitorSelector:
       matchLabels:
-        release: prometheus-stack-dev  # Only monitor services with this label
-    
-    # Relaxed resources for dev
+        release: prometheus-stack-dev
     resources:
       requests:
-        cpu: "100m"  # Minimum CPU
-        memory: "512Mi"  # Minimum memory
+        cpu: "100m"
+        memory: "512Mi"
       limits:
-        cpu: "500m"  # Maximum CPU
-        memory: "1Gi"  # Maximum memory
-    
-    # Smaller storage for dev
+        cpu: "500m"
+        memory: "1Gi"
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -57,17 +54,14 @@ prometheus:
             requests:
               storage: 5Gi
 
-# Fix node-exporter port conflict
+# Fix node-exporter for dev
 prometheus-node-exporter:
   hostNetwork: false  # Don't use host network
   service:
     port: 9100
     targetPort: 9100
-  # Remove host port binding
-  extraArgs:
-    - --web.listen-address=0.0.0.0:9100
 
-# Service monitors for dev applications
+# Service monitors for dev
 app:
   serviceMonitors:
     - name: backend-dev-monitor
