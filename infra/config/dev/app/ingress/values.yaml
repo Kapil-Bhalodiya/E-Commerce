@@ -4,7 +4,6 @@ namespace: dev
 tls:
   enabled: false
 
-# Force override of services array
 services:
   - name: frontend
     serviceName: frontend-dev

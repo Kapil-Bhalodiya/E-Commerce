@@ -48,24 +48,6 @@ spec:
               environment: {{target.path.basename}}
               service: {{app.path.basename}}
             namespace: {{target.path.basename}}
-            {{- if eq "{{app.path.basename}}" "ingress" }}
-            services:
-              - name: frontend
-                serviceName: frontend-{{target.path.basename}}
-                servicePort: 80
-                path: /
-                pathType: Prefix
-              - name: backend-api
-                serviceName: backend-{{target.path.basename}}
-                servicePort: 8000
-                path: /api
-                pathType: Prefix
-              - name: backend-uploads
-                serviceName: backend-{{target.path.basename}}
-                servicePort: 8000
-                path: /uploads
-                pathType: Prefix
-            {{- end }}
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: '{{target.path.basename}}'
