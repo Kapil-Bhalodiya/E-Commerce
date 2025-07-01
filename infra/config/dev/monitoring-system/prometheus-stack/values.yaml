@@ -14,6 +14,7 @@ kube-prometheus-stack:
       auth.anonymous:
         enabled: false
     
+    # Correct ingress structure for kube-prometheus-stack
     ingress:
       enabled: true
       ingressClassName: nginx
@@ -21,9 +22,8 @@ kube-prometheus-stack:
         nginx.ingress.kubernetes.io/ssl-redirect: "false"
         nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
       hosts:
-        - dev.grafana.local
-      paths:
-        - /
+        - "dev.grafana.local"
+      path: /
       pathType: Prefix
     
     additionalDataSources:
@@ -53,12 +53,9 @@ kube-prometheus-stack:
               requests:
                 storage: 5Gi
 
-# Fix node-exporter for dev
-prometheus-node-exporter:
-  hostNetwork: false  # Don't use host network
-  service:
-    port: 9100
-    targetPort: 9100
+  # Enable node-exporter in dev
+  prometheus-node-exporter:
+    enabled: true
 
 # Service monitors for dev
 app:
