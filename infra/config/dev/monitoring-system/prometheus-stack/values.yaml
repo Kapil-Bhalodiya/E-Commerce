@@ -55,12 +55,22 @@ prometheus:
         spec:
           resources:
             requests:
-              storage: 5Gi  # 5GB storage for dev
+              storage: 5Gi
+
+# Fix node-exporter port conflict
+prometheus-node-exporter:
+  hostNetwork: false  # Don't use host network
+  service:
+    port: 9100
+    targetPort: 9100
+  # Remove host port binding
+  extraArgs:
+    - --web.listen-address=0.0.0.0:9100
 
 # Service monitors for dev applications
 app:
   serviceMonitors:
-    - name: backend-dev
+    - name: backend-dev-monitor
       namespace: dev
       selector:
         matchLabels:
@@ -70,7 +80,7 @@ app:
         - port: http
           path: /metrics
           interval: 15s
-    - name: frontend-dev 
+    - name: frontend-dev-monitor  
       namespace: dev
       selector:
         matchLabels:
