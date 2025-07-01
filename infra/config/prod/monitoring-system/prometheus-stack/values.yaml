@@ -1,5 +1,7 @@
 namespace: prod
 
+# Grafana host override
+
 # Configuration for kube-prometheus-stack subchart
 kube-prometheus-stack:
   # Grafana configuration for PRODUCTION
@@ -69,3 +71,4 @@ kube-prometheus-stack:
   # Disable alertmanager for now
   alertmanager:
     enabled: false
+grafanaHost: "prod.grafana.local"
