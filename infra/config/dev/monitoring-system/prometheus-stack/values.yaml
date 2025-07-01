@@ -1,7 +1,6 @@
 namespace: dev
 
 # Grafana host override
-grafanaHost: "dev.grafana.local"
 
 # Configuration for kube-prometheus-stack subchart
 kube-prometheus-stack:
@@ -71,3 +70,4 @@ app:
         - port: http
           path: /metrics
           interval: 15s
+grafanaHost: "dev.grafana.local"
