@@ -56,3 +56,27 @@ prometheus:
           resources:
             requests:
               storage: 5Gi  # 5GB storage for dev
+
+# Service monitors for dev applications
+app:
+  serviceMonitors:
+    - name: backend-dev
+      namespace: dev
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: backend-dev
+          app.kubernetes.io/name: backend
+      endpoints:
+        - port: http
+          path: /metrics
+          interval: 15s
+    - name: frontend-dev 
+      namespace: dev
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: frontend-dev
+          app.kubernetes.io/name: frontend
+      endpoints:
+        - port: http
+          path: /metrics
+          interval: 15s
