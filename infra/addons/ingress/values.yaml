@@ -13,17 +13,17 @@ tls:
 # Service routing - will be overridden per environment
 services:
   - name: frontend
-    serviceName: frontend
+    serviceName: frontend-dev
     servicePort: 80
     path: /
     pathType: Prefix
   - name: backend-api
-    serviceName: backend
+    serviceName: backend-dev
     servicePort: 8000
     path: /api
     pathType: Prefix
   - name: backend-uploads
-    serviceName: backend
+    serviceName: backend-dev
     servicePort: 8000
     path: /uploads
     pathType: Prefix
