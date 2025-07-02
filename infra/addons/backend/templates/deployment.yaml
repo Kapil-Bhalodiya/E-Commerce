@@ -19,6 +19,29 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if .Values.persistence.enabled }}
+      initContainers:
+        - name: copy-uploads
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ['sh', '-c']
+          args:
+            - |
+              if [ ! "$(ls -A /persistent-uploads)" ]; then
+                echo "Copying initial uploads to persistent volume..."
+                cp -r /app/public/uploads/* /persistent-uploads/ 2>/dev/null || true
+                cp -r /app/uploads/* /persistent-uploads/ 2>/dev/null || true
+                echo "Copy completed"
+              else
+                echo "Persistent volume already has data, skipping copy"
+              fi
+          volumeMounts:
+            - name: uploads-storage
+              mountPath: /persistent-uploads
+      volumes:
+        - name: uploads-storage
+          persistentVolumeClaim:
+            claimName: {{ include "backend.fullname" . }}-uploads
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -62,3 +85,8 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: uploads-storage
+              mountPath: /app/public/uploads
+          {{- end }}
