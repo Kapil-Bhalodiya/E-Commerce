@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://dev.sharkapp.local:8000/',
+  apiUrl: 'http://dev.sharkapp.local:8000',
   backendApi: 'http://dev.sharkapp.local:8000/api',
   enableLogging: false,
   enableDebug: false,
