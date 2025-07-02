@@ -12,7 +12,7 @@ RUN npm ci --only=production
 RUN npm rebuild bcrypt
 
 # Copy your app source code and public folder
-COPY ../public ./public
+COPY public ./public
 
 
 # (Optional) Copy other important files if needed
