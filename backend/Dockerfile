@@ -11,11 +11,9 @@ COPY package*.json ./
 RUN npm ci --only=production
 RUN npm rebuild bcrypt
 
-# ✅ Copy your public folder
-COPY public ./public
-
-# ✅ Copy your source code
+# Copy your app source code and public folder
 COPY src ./src
+COPY public ./public
 
 # (Optional) Copy other important files if needed
 # COPY . .
