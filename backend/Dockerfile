@@ -12,8 +12,6 @@ RUN npm ci --only=production
 RUN npm rebuild bcrypt
 
 COPY . .
-
-
 # Ensure logs and public dirs exist with correct permissions
 RUN mkdir -p /app/logs /app/public && chown -R node:node /app/logs /app/public
 

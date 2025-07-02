@@ -37,22 +37,22 @@ build/
 Thumbs.db
 
 # Uploads and media (should be in cloud storage)
-uploads/
-backend/uploads/
-backend/public/product/
-backend/public/banner/
-backend/public/slider/
-backend/public/subcategory/
-backend/public/banners/
-frontend/public/product/
-frontend/public/banner/
-frontend/public/slider/
-frontend/public/subcategory/
-frontend/public/Men/
-frontend/public/Women/
-frontend/public/other/
-frontend/public/*.jpg
-frontend/public/*.png
+# uploads/
+# backend/uploads/
+# backend/public/product/
+# backend/public/banner/
+# backend/public/slider/
+# backend/public/subcategory/
+# backend/public/banners/
+# frontend/public/product/
+# frontend/public/banner/
+# frontend/public/slider/
+# frontend/public/subcategory/
+# frontend/public/Men/
+# frontend/public/Women/
+# frontend/public/other/
+# frontend/public/*.jpg
+# frontend/public/*.png
 
 # Helm charts (downloaded dependencies)
 charts/*.tgz
