@@ -58,7 +58,7 @@ external:
 
 # Persistence for uploads
 persistence:
-  enabled: false
+  enabled: true
   size: 5Gi
   accessMode: ReadWriteOnce
   # storageClass: ""
