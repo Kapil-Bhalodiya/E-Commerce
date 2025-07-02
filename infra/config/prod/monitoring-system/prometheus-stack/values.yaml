@@ -1,40 +1,15 @@
+# PROD Environment Configuration for Prometheus Stack
 namespace: prod
+grafanaHost: "prod-grafana.local"
 
-# Grafana host override
-
-# Configuration for kube-prometheus-stack subchart
 kube-prometheus-stack:
-  # Grafana configuration for PRODUCTION
+  # Grafana settings for PROD
   grafana:
     adminPassword: "SecurePassword123!"
-    
     grafana.ini:
       server:
-        domain: "prod.grafana.local"
-        root_url: "http://prod.grafana.local:8000/"
-      security:
-        admin_user: "admin"
-        cookie_secure: false  # Changed to false for HTTP
-        cookie_samesite: "strict"
-    
-    ingress:
-      enabled: true
-      ingressClassName: nginx
-      annotations:
-        nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Changed to false
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"  # Changed to false
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      hosts:
-        - "prod.grafana.local"
-      path: /
-    
-    additionalDataSources:
-      - name: Prometheus
-        type: prometheus
-        url: http://prometheus-stack-prod-kube-prom-prometheus:9090
-        access: proxy
-        isDefault: true
-    
+        domain: "prod-grafana.local"
+        root_url: "http://prod-grafana.local/"
     resources:
       requests:
         cpu: "200m"
@@ -42,14 +17,11 @@ kube-prometheus-stack:
       limits:
         cpu: "500m"
         memory: "512Mi"
-
-  # Prometheus production settings
+  
+  # Prometheus settings for PROD (larger resources)
   prometheus:
     prometheusSpec:
       retention: "30d"
-      serviceMonitorSelector:
-        matchLabels:
-          release: prometheus-stack-prod
       resources:
         requests:
           cpu: "500m"
@@ -63,12 +35,3 @@ kube-prometheus-stack:
             resources:
               requests:
                 storage: 50Gi
-
-  # DISABLE node-exporter in prod to avoid conflict
-  prometheus-node-exporter:
-    enabled: false
-
-  # Disable alertmanager for now
-  alertmanager:
-    enabled: false
-grafanaHost: "prod.grafana.local"

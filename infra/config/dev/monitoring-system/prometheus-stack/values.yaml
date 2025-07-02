@@ -1,34 +1,19 @@
+# DEV Environment Configuration for Prometheus Stack
 namespace: dev
+grafanaHost: "dev-grafana.local"
 
-# Grafana host override
-
-# Configuration for kube-prometheus-stack subchart
 kube-prometheus-stack:
-  # Grafana configuration for DEV environment
+  # Grafana settings for DEV
   grafana:
     adminPassword: "devadmin123"
-    
     grafana.ini:
       server:
-        domain: "dev.grafana.local"
-        root_url: "http://dev.grafana.local:8000/"
-        serve_from_sub_path: false
-      auth.anonymous:
-        enabled: false
-    
-    additionalDataSources:
-      - name: Prometheus
-        type: prometheus
-        url: http://prometheus-stack-dev-kube-prom-prometheus:9090
-        access: proxy
-        isDefault: true
-
-  # Prometheus dev settings
+        domain: "dev-grafana.local"
+        root_url: "http://dev-grafana.local/"
+  
+  # Prometheus settings for DEV (smaller resources)
   prometheus:
     prometheusSpec:
-      serviceMonitorSelector:
-        matchLabels:
-          release: prometheus-stack-dev
       resources:
         requests:
           cpu: "100m"
@@ -36,38 +21,5 @@ kube-prometheus-stack:
         limits:
           cpu: "500m"
           memory: "1Gi"
-      storageSpec:
-        volumeClaimTemplate:
-          spec:
-            resources:
-              requests:
-                storage: 5Gi
-
-  # Keep node-exporter enabled in dev
-  prometheus-node-exporter:
-    enabled: true
-
-# Service monitors for dev
-app:
-  serviceMonitors:
-    - name: backend-dev-monitor
-      namespace: dev
-      selector:
-        matchLabels:
-          app.kubernetes.io/instance: backend-dev
-          app.kubernetes.io/name: backend
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-    - name: frontend-dev-monitor  
-      namespace: dev
-      selector:
-        matchLabels:
-          app.kubernetes.io/instance: frontend-dev
-          app.kubernetes.io/name: frontend
-      endpoints:
-        - port: http
-          path: /metrics
-          interval: 15s
-grafanaHost: "dev.grafana.local"
+      # Disable persistent storage
+      storageSpec: {}
