@@ -6,6 +6,8 @@ kube-prometheus-stack:
   # Grafana settings for PROD
   grafana:
     adminPassword: "SecurePassword123!"
+    persistence:
+      enabled: false
     grafana.ini:
       server:
         domain: "prod.grafana.local"
