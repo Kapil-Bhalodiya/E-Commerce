@@ -18,6 +18,9 @@ RUN npm rebuild bcrypt
 # Copy application code
 COPY . .
 
+# Explicitly copy public directory
+COPY public/ ./public/
+
 # Create directories and set permissions
 RUN mkdir -p /app/logs /app/public && chown -R node:node /app/logs /app/public
 
