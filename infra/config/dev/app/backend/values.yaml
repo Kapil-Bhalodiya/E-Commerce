@@ -20,3 +20,8 @@ resources:
 
 database:
   host: mongodb.dev.svc.cluster.local
+
+# Enable persistence for uploads in dev
+persistence:
+  enabled: true
+  size: 2Gi

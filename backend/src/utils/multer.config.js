@@ -18,7 +18,7 @@ const createUpload = (folder) => {
     return multer({
         storage: multer.diskStorage({
             destination: (req, file, cb) => {
-                cb(null, `uploads/${folder}/`);
+                cb(null, `public/uploads/${folder}/`);
             },
             filename: (req, file, cb) => {
                 const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
