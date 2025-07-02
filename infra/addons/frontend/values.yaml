@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: kapilbhalodiya/ecom-frontend
-  tag: "21-b880adb"
+  tag: "22-15a2bbd"
   pullPolicy: IfNotPresent
 
 service:
