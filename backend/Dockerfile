@@ -18,6 +18,9 @@ RUN npm rebuild bcrypt
 # Copy application code
 COPY . .
 
+# Ensure uploads directories exist
+RUN mkdir -p /app/public/uploads /app/uploads
+
 RUN mkdir -p /app/logs && chown node:node /app/logs
 
 # Non-root user for security
