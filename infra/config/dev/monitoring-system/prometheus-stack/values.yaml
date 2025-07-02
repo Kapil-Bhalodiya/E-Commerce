@@ -1,6 +1,6 @@
 # DEV Environment Configuration for Prometheus Stack
 namespace: dev
-grafanaHost: "dev-grafana.local"
+grafanaHost: "dev.grafana.local"
 
 kube-prometheus-stack:
   # Grafana settings for DEV
