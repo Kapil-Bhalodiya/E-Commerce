@@ -11,8 +11,7 @@ COPY package*.json ./
 RUN npm ci --only=production
 RUN npm rebuild bcrypt
 
-COPY src ./src
-COPY public ./public
+COPY . .
 
 
 # Ensure logs and public dirs exist with correct permissions
