@@ -18,8 +18,8 @@ RUN npm rebuild bcrypt
 # Copy application code
 COPY . .
 
-# Create logs directory and set permissions
-RUN mkdir -p /app/logs && chown -R node:node /app/logs /app/public
+# Create directories and set permissions
+RUN mkdir -p /app/logs /app/public && chown -R node:node /app/logs /app/public
 
 # Non-root user for security
 USER node
