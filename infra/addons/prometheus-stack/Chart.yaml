@@ -1,8 +1,7 @@
 apiVersion: v2
 name: prometheus-stack
-description: A Helm chart for deploying kube-prometheus-stack in Kubernetes
-version: 0.1.0
-appVersion: "62.5.0"
+description: Simple Prometheus monitoring stack
+version: 1.0.0
 dependencies:
   - name: kube-prometheus-stack
     version: 62.5.0

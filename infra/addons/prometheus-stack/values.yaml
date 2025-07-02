@@ -1,68 +1,48 @@
-# Base Prometheus Stack Configuration
+# Default configuration for prometheus-stack
+# This will be overridden by environment-specific values
 
-# Configuration for kube-prometheus-stack subchart
+# Grafana hostname - will be overridden per environment
+grafanaHost: "localhost"
+
+# Application monitoring (empty by default)
+app:
+  serviceMonitors: []
+
+# Configuration for the kube-prometheus-stack subchart
 kube-prometheus-stack:
-  # Prometheus Configuration
+  # Prometheus server configuration
   prometheus:
     enabled: true
     prometheusSpec:
-      replicas: 1
-      retention: "15d"
+      retention: "15d"  # Keep metrics for 15 days
       resources:
         requests:
-          cpu: "200m"
-          memory: "1Gi"
+          cpu: "100m"
+          memory: "512Mi"
         limits:
-          cpu: "1000m"
-          memory: "2Gi"
-      storageSpec:
-        volumeClaimTemplate:
-          spec:
-            storageClassName: standard
-            accessModes: ["ReadWriteOnce"]
-            resources:
-              requests:
-                storage: 10Gi
-
-  # Grafana Configuration  
+          cpu: "500m"
+          memory: "1Gi"
+  
+  # Grafana dashboard configuration
   grafana:
     enabled: true
-    adminPassword: "admin123"
-    persistence:
-      enabled: true
-      storageClassName: standard
-      size: 5Gi
+    adminPassword: "admin123"  # Will be overridden per environment
+    service:
+      type: ClusterIP
+      port: 80
     grafana.ini:
       server:
         domain: "localhost"
         root_url: "http://localhost/"
-      auth.anonymous:
-        enabled: false
-    service:
-      type: ClusterIP
-      port: 80
-
-  # Disable node-exporter by default to avoid conflicts
-  prometheus-node-exporter:
+  
+  # Disable alertmanager for simplicity
+  alertmanager:
     enabled: false
-
-  # Enable kube-state-metrics for Kubernetes metrics  
+  
+  # Enable node metrics collection
+  prometheus-node-exporter:
+    enabled: true
+  
+  # Enable Kubernetes state metrics
   kube-state-metrics:
     enabled: true
-
-# Manual Grafana ingress configuration
-grafana:
-  ingress:
-    enabled: false  # Will be overridden per environment
-    ingressClassName: nginx
-    host: "localhost"
-    path: "/"
-    pathType: "Prefix"
-    annotations:
-      nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-
-# Application monitoring configuration
-app:
-  serviceMonitors: []
