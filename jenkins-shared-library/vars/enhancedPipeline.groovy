@@ -3,7 +3,7 @@ def call(Map config) {
         agent any
         
         environment {
-            IMAGE_TAG = "${BUILD_NUMBER}-${GIT_COMMIT?.take(7) ?: 'latest'}"
+            IMAGE_TAG = "${BUILD_NUMBER}-latest"
         }
         
         options {
@@ -28,9 +28,9 @@ def call(Map config) {
             }
             
             stage('Test & Lint') {
-                parallel {
-                    stage('Tests') { steps { runTests(config.servicePath) } }
-                    stage('Lint') { steps { runLint(config.servicePath) } }
+                steps {
+                    runTests(config.servicePath)
+                    runLint(config.servicePath)
                 }
             }
             

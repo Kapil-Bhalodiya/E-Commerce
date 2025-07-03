@@ -15,7 +15,7 @@ def call(String status, Map config) {
             }
             
             // Email notification (failures only)
-            if (status != 'SUCCESS' && config.emailRecipients) {
+            if (config.emailRecipients) {
                 emailext(
                     subject: message,
                     body: "Build URL: ${BUILD_URL}",
