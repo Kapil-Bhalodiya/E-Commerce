@@ -44,10 +44,8 @@ def call(String imageName, String imageTag) {
             
             // Hadolint for Dockerfile linting
             sh '''
-                if command -v hadolint &> /dev/null; then
-                    echo "Running Hadolint for Dockerfile..."
-                    find . -name "Dockerfile*" -exec hadolint {} \\; > reports/hadolint-report.txt || true
-                fi
+                echo "Running Hadolint for Dockerfile..."
+                find . -name "Dockerfile*" -exec hadolint {} \\; > reports/hadolint-report.txt || true
             '''
             
             echo "✅ Container security scan completed"
