@@ -9,7 +9,7 @@ def config = [
     namespace: 'dev',
     registryCredentials: 'Dockerhub-creds',
     sonarProjectKey: 'ecommerce-backend',
-    // slackChannel: '#deployments', // Disabled due to config issues
+    slackChannel: '#deployments',
     emailRecipients: 'kapilbhalodiya.dcs22@vnsgu.ac.in',
     gitConfig: [
         url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
