@@ -35,7 +35,7 @@ def call(Map config) {
                             gitCommit = "latest"
                         }
 
-                        env.IMAGE_TAG = "${env.BUILD_NUMBER}-${gitCommit}"
+                        env.IMAGE_TAG = gitCommit ? "${env.BUILD_NUMBER}-${gitCommit}" : "${env.BUILD_NUMBER}-latest"
                         buildDocker(SERVICE_PATH, IMAGE_NAME, env.IMAGE_TAG)
                     }
                 }
