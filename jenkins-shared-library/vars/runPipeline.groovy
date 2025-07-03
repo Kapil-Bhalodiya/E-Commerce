@@ -46,7 +46,6 @@ def call(Map config) {
         
         post {
             always { 
-                publishReports()
                 sendNotification(currentBuild.result ?: 'SUCCESS', config)
             }
         }
