@@ -1,12 +1,51 @@
 
 Report Summary
 
-┌───────────────────┬──────┬─────────────────┬─────────┐
-│      Target       │ Type │ Vulnerabilities │ Secrets │
-├───────────────────┼──────┼─────────────────┼─────────┤
-│ package-lock.json │ npm  │        0        │    -    │
-└───────────────────┴──────┴─────────────────┴─────────┘
+┌──────────────────────────────────────┬──────┬─────────────────┬─────────┐
+│                Target                │ Type │ Vulnerabilities │ Secrets │
+├──────────────────────────────────────┼──────┼─────────────────┼─────────┤
+│ package-lock.json                    │ npm  │        0        │    -    │
+├──────────────────────────────────────┼──────┼─────────────────┼─────────┤
+│ src/environments/environment.prod.ts │ text │        -        │    1    │
+├──────────────────────────────────────┼──────┼─────────────────┼─────────┤
+│ src/environments/environment.ts      │ text │        -        │    1    │
+└──────────────────────────────────────┴──────┴─────────────────┴─────────┘
 Legend:
 - '-': Not scanned
 - '0': Clean (no security findings detected)
+
+
+src/environments/environment.prod.ts (secrets)
+==============================================
+Total: 1 (UNKNOWN: 0, LOW: 1, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
+
+LOW: Stripe (stripe-publishable-token)
+════════════════════════════════════════
+Stripe Publishable Key
+────────────────────────────────────────
+ src/environments/environment.prod.ts:12
+────────────────────────────────────────
+  10   
+  11   // Use environment variable or secure config service in production
+  12 [ export const STRIPE_PK = "****************************************nP9SbsYouNdlkZPK8GRh
+  13   
+────────────────────────────────────────
+
+
+
+src/environments/environment.ts (secrets)
+=========================================
+Total: 1 (UNKNOWN: 0, LOW: 1, MEDIUM: 0, HIGH: 0, CRITICAL: 0)
+
+LOW: Stripe (stripe-publishable-token)
+════════════════════════════════════════
+Stripe Publishable Key
+────────────────────────────────────────
+ src/environments/environment.ts:11
+────────────────────────────────────────
+   9   }
+  10   
+  11 [ export const STRIPE_PK = "****************************************nP9SbsYouNdlkZPK8GRh
+────────────────────────────────────────
+
 
