@@ -2,5 +2,5 @@ projectKey=ecommerce-backend
 serverUrl=http://host.docker.internal:9000
 serverVersion=25.6.0.109173
 dashboardUrl=http://host.docker.internal:9000/dashboard?id=ecommerce-backend
-ceTaskId=f0ce18c9-6002-48f2-93e9-98e73dd5adf7
-ceTaskUrl=http://host.docker.internal:9000/api/ce/task?id=f0ce18c9-6002-48f2-93e9-98e73dd5adf7
+ceTaskId=8dfacef3-958f-4ac0-8a03-f7fa5b6e1195
+ceTaskUrl=http://host.docker.internal:9000/api/ce/task?id=8dfacef3-958f-4ac0-8a03-f7fa5b6e1195
