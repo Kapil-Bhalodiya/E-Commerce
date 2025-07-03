@@ -22,6 +22,8 @@ loki:
             period: 24h
   singleBinary:
     replicas: 1
+    persistence:
+      enabled: false
     resources:
       requests:
         cpu: 100m
