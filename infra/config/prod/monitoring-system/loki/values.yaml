@@ -1,0 +1,39 @@
+# PROD Environment Configuration for Loki Stack
+namespace: prod
+
+loki:
+  loki:
+    storage:
+      bucketNames:
+        chunks: loki-chunks-prod
+        ruler: loki-ruler-prod
+        admin: loki-admin-prod
+    limits_config:
+      retention_period: 30d
+      ingestion_rate_mb: 16
+      ingestion_burst_size_mb: 32
+  singleBinary:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+    persistence:
+      enabled: false
+  monitoring:
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: prometheus-stack
+
+promtail:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
