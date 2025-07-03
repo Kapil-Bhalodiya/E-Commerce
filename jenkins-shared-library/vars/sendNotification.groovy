@@ -5,32 +5,36 @@ def call(String status, Map config) {
         
         try {
             if (config.slackChannel) {
-                def duration = currentBuild.durationString
+                def buildNum = env.BUILD_NUMBER ?: 'Unknown'
+                def buildUrl = env.BUILD_URL ?: 'N/A'
+                def imageTag = env.IMAGE_TAG ?: 'latest'
+                def duration = currentBuild?.durationString ?: 'N/A'
+                def branch = env.BRANCH_NAME ?: 'main'
+                
                 def slackMessage = """
                 *${emoji} ${config.serviceName} Pipeline ${status}*
 
-                📊 *Build:* #${BUILD_NUMBER}
+                📊 *Build:* #${buildNum}
                 ⏱️ *Duration:* ${duration}
-                🏷️ *Image:* ${env.IMAGE_TAG}
+                🏷️ *Image:* ${imageTag}
                 🌍 *Environment:* ${config.namespace}
+                🌿 *Branch:* ${branch}
 
-                *Pipeline Stages:*
-                • ✅ Setup & Checkout
-                • 🔍 Code Quality (SonarQube)
-                • 🔒 Security Scan (Trivy)
-                • 📦 Dependency Check (OWASP)
-                • 🧪 Tests & Linting
-                • 🐳 Docker Build & Push
-                • 🚀 Kubernetes Deploy
+                *Pipeline Summary:*
+                • ✅ Code checkout & setup
+                • 🔍 Quality analysis
+                • 🔒 Security scanning  
+                • 🧪 Testing & linting
+                • 🐳 Docker build & push
+                • 🚀 Kubernetes deployment
 
-                <${BUILD_URL}|View Build Details> | <${BUILD_URL}console|Console Output>
+                <${buildUrl}|📊 View Build> | <${buildUrl}console|📋 Console>
                 """.trim()
                 
                 slackSend(
                     channel: config.slackChannel,
                     color: status == 'SUCCESS' ? 'good' : 'danger',
-                    message: slackMessage,
-                    tokenCredentialId: 'SlackToken'
+                    message: slackMessage
                 )
             }
             
@@ -55,7 +59,9 @@ def call(String status, Map config) {
                                 <tr><td style="padding: 8px; font-weight: bold;">Service:</td><td style="padding: 8px;">${config.serviceName}</td></tr>
                                 <tr><td style="padding: 8px; font-weight: bold;">Duration:</td><td style="padding: 8px;">${duration}</td></tr>
                                 <tr><td style="padding: 8px; font-weight: bold;">Environment:</td><td style="padding: 8px;">${config.namespace}</td></tr>
-                                <tr><td style="padding: 8px; font-weight: bold;">Image Tag:</td><td style="padding: 8px;">${env.IMAGE_TAG}</td></tr>
+                                <tr><td style="padding: 8px; font-weight: bold;">Image Tag:</td><td style="padding: 8px;">${env.IMAGE_TAG ?: 'latest'}</td></tr>
+                                <tr><td style="padding: 8px; font-weight: bold;">Branch:</td><td style="padding: 8px;">${env.BRANCH_NAME ?: 'main'}</td></tr>
+                                <tr><td style="padding: 8px; font-weight: bold;">Commit:</td><td style="padding: 8px;">${env.GIT_COMMIT?.take(8) ?: 'N/A'}</td></tr>
                             </table>
                             
                             <h3>Pipeline Stages:</h3>
