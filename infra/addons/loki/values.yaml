@@ -46,7 +46,7 @@ promtail:
   enabled: true
   config:
     clients:
-      - url: http://{{ include "loki.serviceName" .Subcharts.loki }}:3100/loki/api/v1/push
+      - url: http://loki:3100/loki/api/v1/push
         tenant_id: 1
   resources:
     requests:
