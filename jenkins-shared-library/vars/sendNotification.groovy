@@ -37,13 +37,13 @@ def call(String status, Map config) {
                     channel: config.slackChannel ?: '#ci-cd',
                     color: color,
                     message: """
-${emoji} *${config.serviceName} Pipeline ${status}*
-*Build:* <${buildUrl}|#${env.BUILD_NUMBER}>
-*Branch:* ${env.BRANCH_NAME ?: 'main'}
-*Commit:* ${gitCommit}
-*Duration:* ${buildDuration}
-*Message:* ${message}
-*Environment:* ${config.namespace}
+                        ${emoji} *${config.serviceName} Pipeline ${status}*
+                        *Build:* <${buildUrl}|#${env.BUILD_NUMBER}>
+                        *Branch:* ${env.BRANCH_NAME ?: 'main'}
+                        *Commit:* ${gitCommit}
+                        *Duration:* ${buildDuration}
+                        *Message:* ${message}
+                        *Environment:* ${config.namespace}
                     """.trim()
                 )
                 echo "✅ Slack notification sent"
@@ -55,26 +55,26 @@ ${emoji} *${config.serviceName} Pipeline ${status}*
             try {
                 def emailSubject = "${emoji} ${config.serviceName} Pipeline ${status} - Build #${env.BUILD_NUMBER}"
                 def emailBody = """
-<h2>${config.serviceName} Pipeline ${status}</h2>
-<p><strong>Build:</strong> <a href="${buildUrl}">#${env.BUILD_NUMBER}</a></p>
-<p><strong>Branch:</strong> ${env.BRANCH_NAME ?: 'main'}</p>
-<p><strong>Commit:</strong> ${gitCommit}</p>
-<p><strong>Duration:</strong> ${buildDuration}</p>
-<p><strong>Environment:</strong> ${config.namespace}</p>
-<p><strong>Status:</strong> ${message}</p>
+                    <h2>${config.serviceName} Pipeline ${status}</h2>
+                    <p><strong>Build:</strong> <a href="${buildUrl}">#${env.BUILD_NUMBER}</a></p>
+                    <p><strong>Branch:</strong> ${env.BRANCH_NAME ?: 'main'}</p>
+                    <p><strong>Commit:</strong> ${gitCommit}</p>
+                    <p><strong>Duration:</strong> ${buildDuration}</p>
+                    <p><strong>Environment:</strong> ${config.namespace}</p>
+                    <p><strong>Status:</strong> ${message}</p>
 
-<h3>Pipeline Stages:</h3>
-<ul>
-    <li>Code Quality Analysis (SonarQube)</li>
-    <li>Security Scanning (Trivy)</li>
-    <li>Dependency Check (OWASP)</li>
-    <li>Unit Tests & Linting</li>
-    <li>Container Security Scan</li>
-    <li>Deployment</li>
-    <li>Post-Deploy Tests</li>
-</ul>
+                    <h3>Pipeline Stages:</h3>
+                    <ul>
+                        <li>Code Quality Analysis (SonarQube)</li>
+                        <li>Security Scanning (Trivy)</li>
+                        <li>Dependency Check (OWASP)</li>
+                        <li>Unit Tests & Linting</li>
+                        <li>Container Security Scan</li>
+                        <li>Deployment</li>
+                        <li>Post-Deploy Tests</li>
+                    </ul>
 
-<p>View detailed reports: <a href="${buildUrl}">Jenkins Build</a></p>
+                    <p>View detailed reports: <a href="${buildUrl}">Jenkins Build</a></p>
                 """.trim()
                 
                 emailext(

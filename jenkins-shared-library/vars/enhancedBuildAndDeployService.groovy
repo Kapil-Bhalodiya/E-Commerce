@@ -24,6 +24,7 @@ def call(Map config) {
             stage('Checkout & Setup') {
                 steps {
                     checkoutCode(config.gitConfig)
+                    installSecurityTools()
                     script {
                         env.GIT_COMMIT = sh(script: "git rev-parse --short HEAD", returnStdout: true).trim()
                         env.IMAGE_TAG = "${env.BUILD_NUMBER}-${env.GIT_COMMIT}"
