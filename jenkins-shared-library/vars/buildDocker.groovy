@@ -4,14 +4,11 @@ def call(String path, String imageName, String tag) {
         sh """
             # Configure DNS for Docker build
             export DOCKER_BUILDKIT=0
-            
-            # Build with network host and retry
-            for i in {1..3}; do
+
+            for i in \$(seq 1 3); do
                 echo "Build attempt \$i..."
                 if docker build \
                     --network=host \
-                    --dns=8.8.8.8 \
-                    --dns=1.1.1.1 \
                     --build-arg BUILD_DATE=\$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
                     --build-arg VCS_REF=${env.GIT_COMMIT ?: 'latest'} \
                     --build-arg VERSION=${tag} \
