@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: kapilbhalodiya/ecom-frontend
-  tag: "22-15a2bbd"
+  tag: "26-latest"
   pullPolicy: IfNotPresent
 
 service:
