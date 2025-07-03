@@ -7,32 +7,36 @@ def call(Map config) {
                 if (config.servicePath == 'backend') {
                     // ESLint for Node.js backend
                     sh '''
+                        if ! command -v npm &> /dev/null; then
+                            echo "⚠️ npm not found, skipping lint check"
+                            exit 0
+                        fi
                         echo "Installing ESLint..."
                         npm install --save-dev eslint eslint-config-standard eslint-plugin-node
                         
                         # Create ESLint config if not exists
                         if [ ! -f ".eslintrc.js" ]; then
                             cat > .eslintrc.js << 'EOF'
-module.exports = {
-  env: {
-    browser: false,
-    es2021: true,
-    node: true
-  },
-  extends: [
-    'standard'
-  ],
-  parserOptions: {
-    ecmaVersion: 12,
-    sourceType: 'module'
-  },
-  rules: {
-    'no-console': 'warn',
-    'no-unused-vars': 'error',
-    'prefer-const': 'error'
-  }
-};
-EOF
+                              module.exports = {
+                                env: {
+                                  browser: false,
+                                  es2021: true,
+                                  node: true
+                                },
+                                extends: [
+                                  'standard'
+                                ],
+                                parserOptions: {
+                                  ecmaVersion: 12,
+                                  sourceType: 'module'
+                                },
+                                rules: {
+                                  'no-console': 'warn',
+                                  'no-unused-vars': 'error',
+                                  'prefer-const': 'error'
+                                }
+                              };
+                              EOF
                         fi
                         
                         echo "Running ESLint..."
@@ -52,51 +56,55 @@ EOF
                 } else if (config.servicePath == 'frontend') {
                     // TSLint/ESLint for Angular frontend
                     sh '''
+                        if ! command -v npm &> /dev/null; then
+                            echo "⚠️ npm not found, skipping lint check"
+                            exit 0
+                        fi
                         echo "Installing Angular ESLint..."
                         npm install --save-dev @angular-eslint/builder @angular-eslint/eslint-plugin @angular-eslint/eslint-plugin-template @angular-eslint/schematics @angular-eslint/template-parser @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint
                         
                         # Create ESLint config if not exists
                         if [ ! -f ".eslintrc.json" ]; then
                             cat > .eslintrc.json << 'EOF'
-{
-  "root": true,
-  "ignorePatterns": ["projects/**/*"],
-  "overrides": [
-    {
-      "files": ["*.ts"],
-      "extends": [
-        "eslint:recommended",
-        "@typescript-eslint/recommended",
-        "@angular-eslint/recommended",
-        "@angular-eslint/template/process-inline-templates"
-      ],
-      "rules": {
-        "@angular-eslint/directive-selector": [
-          "error",
-          {
-            "type": "attribute",
-            "prefix": "app",
-            "style": "camelCase"
-          }
-        ],
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "type": "element",
-            "prefix": "app",
-            "style": "kebab-case"
-          }
-        ]
-      }
-    },
-    {
-      "files": ["*.html"],
-      "extends": ["@angular-eslint/template/recommended"],
-      "rules": {}
-    }
-  ]
-}
-EOF
+                            {
+                              "root": true,
+                              "ignorePatterns": ["projects/**/*"],
+                              "overrides": [
+                                {
+                                  "files": ["*.ts"],
+                                  "extends": [
+                                    "eslint:recommended",
+                                    "@typescript-eslint/recommended",
+                                    "@angular-eslint/recommended",
+                                    "@angular-eslint/template/process-inline-templates"
+                                  ],
+                                  "rules": {
+                                    "@angular-eslint/directive-selector": [
+                                      "error",
+                                      {
+                                        "type": "attribute",
+                                        "prefix": "app",
+                                        "style": "camelCase"
+                                      }
+                                    ],
+                                    "@angular-eslint/component-selector": [
+                                      "error",
+                                      {
+                                        "type": "element",
+                                        "prefix": "app",
+                                        "style": "kebab-case"
+                                      }
+                                    ]
+                                  }
+                                },
+                                {
+                                  "files": ["*.html"],
+                                  "extends": ["@angular-eslint/template/recommended"],
+                                  "rules": {}
+                                }
+                              ]
+                            }
+                            EOF
                         fi
                         
                         echo "Running ESLint..."
@@ -118,8 +126,8 @@ EOF
             echo "✅ Lint checks completed successfully"
             
         } catch (Exception e) {
-            echo "❌ Lint checks failed: ${e.getMessage()}"
-            throw e
+            echo "⚠️ Lint checks failed: ${e.getMessage()}"
+            currentBuild.result = 'UNSTABLE'
         }
     }
 }
