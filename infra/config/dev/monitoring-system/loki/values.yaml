@@ -1,0 +1,35 @@
+# DEV Environment Configuration for Loki Stack
+namespace: dev
+
+loki:
+  loki:
+    storage:
+      bucketNames:
+        chunks: loki-chunks-dev
+        ruler: loki-ruler-dev
+        admin: loki-admin-dev
+  singleBinary:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 256Mi
+    persistence:
+      enabled: false
+  monitoring:
+    serviceMonitor:
+      enabled: true
+      labels:
+        release: prometheus-stack
+
+promtail:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
