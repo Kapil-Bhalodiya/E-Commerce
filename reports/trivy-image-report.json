@@ -1,0 +1,1832 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2025-07-03T08:44:19.471687057Z",
+  "ArtifactName": "docker.io/kapilbhalodiya/ecom-backend:46-fc9c49ccc9383e9fb83a276fcd2b0172e5b8b344",
+  "ArtifactType": "container_image",
+  "Metadata": {
+    "Size": 465602048,
+    "OS": {
+      "Family": "alpine",
+      "Name": "3.21.3"
+    },
+    "ImageID": "sha256:edc80b9cd02e1f04beb1c540569a69e50329a04dee4fda6c5c07d6c0af3cb04e",
+    "DiffIDs": [
+      "sha256:08000c18d16dadf9553d747a58cf44023423a9ab010aab96cf263d2216b8b350",
+      "sha256:0b1f26057bd0491a50f56fd7f2983bd3ad478511f12fff2b361a97c50cb5828b",
+      "sha256:f3b40b0cdb1caad1db11b8589c814f85b3e69f3ed33f64a686e465e74a47c9f0",
+      "sha256:82140d9a70a706b719632fec8e4d083419fc62159f94afec80dcabc52e0ed0d2",
+      "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5",
+      "sha256:62c6d89241b680040e1fec5bbcaa1ae678d5d2480d3e9bb91e3080904b4e5f52",
+      "sha256:1221cb54742baddb457c7b3947b3da3ce568d9c4f5437ff8359d3c27e40bd04a",
+      "sha256:82ffa029485bee0888405e7d38740f3b99fdc61d07c8ffa651ce653ebf13da50",
+      "sha256:ad994e2f430904ab5fd5e32a7870a35d33a9e686ba974aba0c8c81184dbe8a23",
+      "sha256:b58ed704d071fdc22708218b8e39c4d81434bc472412a90c5ce38a93cdb746f1",
+      "sha256:239cdcb5520f3eae4a8af7bebbdc491c5cf44a2bb9f0c69934aad72ce9080378"
+    ],
+    "RepoTags": [
+      "kapilbhalodiya/ecom-backend:46-fc9c49ccc9383e9fb83a276fcd2b0172e5b8b344"
+    ],
+    "RepoDigests": [
+      "kapilbhalodiya/ecom-backend@sha256:edc80b9cd02e1f04beb1c540569a69e50329a04dee4fda6c5c07d6c0af3cb04e"
+    ],
+    "ImageConfig": {
+      "architecture": "amd64",
+      "created": "2025-07-03T08:44:09.47588462Z",
+      "history": [
+        {
+          "created": "2025-02-14T03:28:36Z",
+          "created_by": "ADD alpine-minirootfs-3.21.3-x86_64.tar.gz / # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-02-14T03:28:36Z",
+          "created_by": "CMD [\"/bin/sh\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-03-27T14:23:08Z",
+          "created_by": "ENV NODE_VERSION=18.20.8",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-03-27T14:23:08Z",
+          "created_by": "RUN /bin/sh -c addgroup -g 1000 node     \u0026\u0026 adduser -u 1000 -G node -s /bin/sh -D node     \u0026\u0026 apk add --no-cache         libstdc++     \u0026\u0026 apk add --no-cache --virtual .build-deps         curl     \u0026\u0026 ARCH= OPENSSL_ARCH='linux*' \u0026\u0026 alpineArch=\"$(apk --print-arch)\"       \u0026\u0026 case \"${alpineArch##*-}\" in         x86_64) ARCH='x64' CHECKSUM=\"2c75d5d562d3ffc049ca1bbea65b68ae6bd0ec50ed04b1f606e065eaf35e8599\" OPENSSL_ARCH=linux-x86_64;;         x86) OPENSSL_ARCH=linux-elf;;         aarch64) OPENSSL_ARCH=linux-aarch64;;         arm*) OPENSSL_ARCH=linux-armv4;;         ppc64le) OPENSSL_ARCH=linux-ppc64le;;         s390x) OPENSSL_ARCH=linux-s390x;;         *) ;;       esac   \u0026\u0026 if [ -n \"${CHECKSUM}\" ]; then     set -eu;     curl -fsSLO --compressed \"https://unofficial-builds.nodejs.org/download/release/v$NODE_VERSION/node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz\";     echo \"$CHECKSUM  node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz\" | sha256sum -c -       \u0026\u0026 tar -xJf \"node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz\" -C /usr/local --strip-components=1 --no-same-owner       \u0026\u0026 ln -s /usr/local/bin/node /usr/local/bin/nodejs;   else     echo \"Building from source\"     \u0026\u0026 apk add --no-cache --virtual .build-deps-full         binutils-gold         g++         gcc         gnupg         libgcc         linux-headers         make         python3         py-setuptools     \u0026\u0026 export GNUPGHOME=\"$(mktemp -d)\"     \u0026\u0026 for key in       C0D6248439F1D5604AAFFB4021D900FFDB233756       DD792F5973C6DE52C432CBDAC77ABFA00DDBF2B7       CC68F5A3106FF448322E48ED27F5E38D5B0A215F       8FCCA13FEF1D0C2E91008E09770F7A9A5AE15600       890C08DB8579162FEE0DF9DB8BEAB4DFCF555EF4       C82FA3AE1CBEDC6BE46B9360C43CEC45C17AB93C       108F52B48DB57BB0CC439B2997B01419BD92F80A       A363A499291CBBC940DD62E41F10027AF002F8B0     ; do       gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys \"$key\" ||       gpg --batch --keyserver keyserver.ubuntu.com --recv-keys \"$key\" ;     done     \u0026\u0026 curl -fsSLO --compressed \"https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz\"     \u0026\u0026 curl -fsSLO --compressed \"https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc\"     \u0026\u0026 gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc     \u0026\u0026 gpgconf --kill all     \u0026\u0026 rm -rf \"$GNUPGHOME\"     \u0026\u0026 grep \" node-v$NODE_VERSION.tar.xz\\$\" SHASUMS256.txt | sha256sum -c -     \u0026\u0026 tar -xf \"node-v$NODE_VERSION.tar.xz\"     \u0026\u0026 cd \"node-v$NODE_VERSION\"     \u0026\u0026 ./configure     \u0026\u0026 make -j$(getconf _NPROCESSORS_ONLN) V=     \u0026\u0026 make install     \u0026\u0026 apk del .build-deps-full     \u0026\u0026 cd ..     \u0026\u0026 rm -Rf \"node-v$NODE_VERSION\"     \u0026\u0026 rm \"node-v$NODE_VERSION.tar.xz\" SHASUMS256.txt.asc SHASUMS256.txt;   fi   \u0026\u0026 rm -f \"node-v$NODE_VERSION-linux-$ARCH-musl.tar.xz\"   \u0026\u0026 find /usr/local/include/node/openssl/archs -mindepth 1 -maxdepth 1 ! -name \"$OPENSSL_ARCH\" -exec rm -rf {} \\;   \u0026\u0026 apk del .build-deps   \u0026\u0026 node --version   \u0026\u0026 npm --version # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-03-27T14:23:08Z",
+          "created_by": "ENV YARN_VERSION=1.22.22",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-03-27T14:23:08Z",
+          "created_by": "RUN /bin/sh -c apk add --no-cache --virtual .build-deps-yarn curl gnupg tar   \u0026\u0026 export GNUPGHOME=\"$(mktemp -d)\"   \u0026\u0026 for key in     6A010C5166006599AA17F08146C2130DFD2497F5   ; do     gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys \"$key\" ||     gpg --batch --keyserver keyserver.ubuntu.com --recv-keys \"$key\" ;   done   \u0026\u0026 curl -fsSLO --compressed \"https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz\"   \u0026\u0026 curl -fsSLO --compressed \"https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc\"   \u0026\u0026 gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz   \u0026\u0026 gpgconf --kill all   \u0026\u0026 rm -rf \"$GNUPGHOME\"   \u0026\u0026 mkdir -p /opt   \u0026\u0026 tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/   \u0026\u0026 ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn   \u0026\u0026 ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg   \u0026\u0026 rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz   \u0026\u0026 apk del .build-deps-yarn   \u0026\u0026 yarn --version   \u0026\u0026 rm -rf /tmp/* # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-03-27T14:23:08Z",
+          "created_by": "COPY docker-entrypoint.sh /usr/local/bin/ # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-03-27T14:23:08Z",
+          "created_by": "ENTRYPOINT [\"docker-entrypoint.sh\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-03-27T14:23:08Z",
+          "created_by": "CMD [\"node\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-04-21T14:52:59Z",
+          "created_by": "RUN /bin/sh -c apk add --no-cache python3 make g++ # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-04-21T14:52:59Z",
+          "created_by": "ENV NODE_ENV=production",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-04-21T14:52:59Z",
+          "created_by": "WORKDIR /app",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-06-29T18:25:49Z",
+          "created_by": "COPY package*.json ./ # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-06-29T18:25:52Z",
+          "created_by": "RUN /bin/sh -c npm ci --only=production # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-06-29T18:25:53Z",
+          "created_by": "RUN /bin/sh -c npm rebuild bcrypt # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-07-03T08:44:08Z",
+          "created_by": "COPY . . # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-07-03T08:44:09Z",
+          "created_by": "RUN /bin/sh -c mkdir -p /app/logs /app/public \u0026\u0026 chown -R node:node /app/logs /app/public # buildkit",
+          "comment": "buildkit.dockerfile.v0"
+        },
+        {
+          "created": "2025-07-03T08:44:09Z",
+          "created_by": "USER node",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-07-03T08:44:09Z",
+          "created_by": "EXPOSE map[8000/tcp:{}]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-07-03T08:44:09Z",
+          "created_by": "HEALTHCHECK \u0026{[\"CMD-SHELL\" \"wget --quiet --tries=1 --spider http://localhost:8000/health || exit 1\"] \"30s\" \"5s\" \"5s\" \"0s\" '\\x03'}",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        },
+        {
+          "created": "2025-07-03T08:44:09Z",
+          "created_by": "CMD [\"node\" \"src/index.js\"]",
+          "comment": "buildkit.dockerfile.v0",
+          "empty_layer": true
+        }
+      ],
+      "os": "linux",
+      "rootfs": {
+        "type": "layers",
+        "diff_ids": [
+          "sha256:08000c18d16dadf9553d747a58cf44023423a9ab010aab96cf263d2216b8b350",
+          "sha256:0b1f26057bd0491a50f56fd7f2983bd3ad478511f12fff2b361a97c50cb5828b",
+          "sha256:f3b40b0cdb1caad1db11b8589c814f85b3e69f3ed33f64a686e465e74a47c9f0",
+          "sha256:82140d9a70a706b719632fec8e4d083419fc62159f94afec80dcabc52e0ed0d2",
+          "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5",
+          "sha256:62c6d89241b680040e1fec5bbcaa1ae678d5d2480d3e9bb91e3080904b4e5f52",
+          "sha256:1221cb54742baddb457c7b3947b3da3ce568d9c4f5437ff8359d3c27e40bd04a",
+          "sha256:82ffa029485bee0888405e7d38740f3b99fdc61d07c8ffa651ce653ebf13da50",
+          "sha256:ad994e2f430904ab5fd5e32a7870a35d33a9e686ba974aba0c8c81184dbe8a23",
+          "sha256:b58ed704d071fdc22708218b8e39c4d81434bc472412a90c5ce38a93cdb746f1",
+          "sha256:239cdcb5520f3eae4a8af7bebbdc491c5cf44a2bb9f0c69934aad72ce9080378"
+        ]
+      },
+      "config": {
+        "Cmd": [
+          "node",
+          "src/index.js"
+        ],
+        "Healthcheck": {
+          "Test": [
+            "CMD-SHELL",
+            "wget --quiet --tries=1 --spider http://localhost:8000/health || exit 1"
+          ],
+          "Interval": 30000000000,
+          "Timeout": 5000000000,
+          "StartPeriod": 5000000000,
+          "Retries": 3
+        },
+        "Entrypoint": [
+          "docker-entrypoint.sh"
+        ],
+        "Env": [
+          "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+          "NODE_VERSION=18.20.8",
+          "YARN_VERSION=1.22.22",
+          "NODE_ENV=production"
+        ],
+        "User": "node",
+        "WorkingDir": "/app",
+        "ExposedPorts": {
+          "8000/tcp": {}
+        },
+        "ArgsEscaped": true
+      }
+    },
+    "Layers": [
+      {
+        "Size": 8120832,
+        "Digest": "sha256:f18232174bc91741fdf3da96d85011092101a032a93a388b79e99e69c2d5c870",
+        "DiffID": "sha256:08000c18d16dadf9553d747a58cf44023423a9ab010aab96cf263d2216b8b350"
+      },
+      {
+        "Size": 115915776,
+        "Digest": "sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e",
+        "DiffID": "sha256:0b1f26057bd0491a50f56fd7f2983bd3ad478511f12fff2b361a97c50cb5828b"
+      },
+      {
+        "Size": 5389312,
+        "Digest": "sha256:1e5a4c89cee5c0826c540ab06d4b6b491c96eda01837f430bd47f0d26702d6e3",
+        "DiffID": "sha256:f3b40b0cdb1caad1db11b8589c814f85b3e69f3ed33f64a686e465e74a47c9f0"
+      },
+      {
+        "Size": 3584,
+        "Digest": "sha256:25ff2da83641908f65c3a74d80409d6b1b62ccfaab220b9ea70b80df5a2e0549",
+        "DiffID": "sha256:82140d9a70a706b719632fec8e4d083419fc62159f94afec80dcabc52e0ed0d2"
+      },
+      {
+        "Size": 275057152,
+        "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+        "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+      },
+      {
+        "Size": 1536,
+        "Digest": "sha256:969f3f27c54e67096f9acf0fc0d19d6b7d5b5836b4ae32c0e535a374303dc3a7",
+        "DiffID": "sha256:62c6d89241b680040e1fec5bbcaa1ae678d5d2480d3e9bb91e3080904b4e5f52"
+      },
+      {
+        "Size": 80896,
+        "Digest": "sha256:82ce1a8ddc05dd1d44915a57755734153078cd2e1fbf23490fc5383314b63ba4",
+        "DiffID": "sha256:1221cb54742baddb457c7b3947b3da3ce568d9c4f5437ff8359d3c27e40bd04a"
+      },
+      {
+        "Size": 42524672,
+        "Digest": "sha256:cbae427f1eb69c938abf510d2cb6fdc6e45ac3e18ebfaf442f280992f43a53c5",
+        "DiffID": "sha256:82ffa029485bee0888405e7d38740f3b99fdc61d07c8ffa651ce653ebf13da50"
+      },
+      {
+        "Size": 4096,
+        "Digest": "sha256:fefa4200ef169858956592d0db03b4a1c816e3f105703998a9638aa7ac7ab50e",
+        "DiffID": "sha256:ad994e2f430904ab5fd5e32a7870a35d33a9e686ba974aba0c8c81184dbe8a23"
+      },
+      {
+        "Size": 9345536,
+        "Digest": "sha256:86ece92389452ec6e1a30ad61ea7847e68cfe0ab674e9cb5f9251e9aae1e1d36",
+        "DiffID": "sha256:b58ed704d071fdc22708218b8e39c4d81434bc472412a90c5ce38a93cdb746f1"
+      },
+      {
+        "Size": 9158656,
+        "Digest": "sha256:8dff804b09bc9605f09973b8021193d630814c1299c4ef4f6f6a055404ff2823",
+        "DiffID": "sha256:239cdcb5520f3eae4a8af7bebbdc491c5cf44a2bb9f0c69934aad72ce9080378"
+      }
+    ]
+  },
+  "Results": [
+    {
+      "Target": "docker.io/kapilbhalodiya/ecom-backend:46-fc9c49ccc9383e9fb83a276fcd2b0172e5b8b344 (alpine 3.21.3)",
+      "Class": "os-pkgs",
+      "Type": "alpine",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2024-12718",
+          "PkgID": "pyc@3.12.10-r0",
+          "PkgName": "pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "f1a1ebf9779cbf5e"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-12718",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Bypass extraction filter to modify file metadata outside extraction directory",
+          "Description": "Allows modifying some file metadata (e.g. last modified) with filter=\"data\" or file permissions (chmod) with filter=\"tar\" of files outside the extraction directory.\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information. Only Python versions 3.12 or later are affected by these vulnerabilities, earlier versions don't include the extraction filter feature.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 2,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 5.3
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:L",
+              "V3Score": 7.6
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2024-12718",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/127987",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2024-12718.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-12718",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2024-12718"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.183Z",
+          "LastModifiedDate": "2025-06-04T14:54:33.783Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4138",
+          "PkgID": "pyc@3.12.10-r0",
+          "PkgName": "pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "f1a1ebf9779cbf5e"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4138",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Bypassing extraction filter to create symlinks to arbitrary targets outside extraction directory",
+          "Description": "Allows the extraction filter to be ignored, allowing symlink targets to point outside the destination directory, and the modification of some file metadata.\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4138",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4138.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4138",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4138"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.377Z",
+          "LastModifiedDate": "2025-06-05T14:15:32.767Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4330",
+          "PkgID": "pyc@3.12.10-r0",
+          "PkgName": "pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "f1a1ebf9779cbf5e"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4330",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Extraction filter bypass for linking outside extraction directory",
+          "Description": "Allows the extraction filter to be ignored, allowing symlink targets to point outside the destination directory, and the modification of some file metadata.\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 3,
+            "oracle-oval": 3,
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:N",
+              "V3Score": 7.3
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4330",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4330.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4330",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4330"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.503Z",
+          "LastModifiedDate": "2025-06-05T14:15:32.91Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4517",
+          "PkgID": "pyc@3.12.10-r0",
+          "PkgName": "pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "f1a1ebf9779cbf5e"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4517",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "python: cpython: Arbitrary writes via tarfile realpath overflow",
+          "Description": "Allows arbitrary filesystem writes outside the extraction directory during extraction with filter=\"data\".\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 4,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+              "V3Score": 9.4
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:L",
+              "V3Score": 7.6
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4517",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4517.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4517",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4517"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.837Z",
+          "LastModifiedDate": "2025-06-05T14:15:33.05Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4516",
+          "PkgID": "pyc@3.12.10-r0",
+          "PkgName": "pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "f1a1ebf9779cbf5e"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.10-r1",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4516",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "There is an issue in CPython when using `bytes.decode(\"unicode_escape\" ...",
+          "Description": "There is an issue in CPython when using `bytes.decode(\"unicode_escape\", error=\"ignore|replace\")`. If you are not using the \"unicode_escape\" encoding or an error handler your usage is not affected. To work-around this issue you may stop using the error= handler and instead wrap the bytes.decode() call in a try-except catching the DecodeError.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-416"
+          ],
+          "VendorSeverity": {
+            "amazon": 3,
+            "ubuntu": 2
+          },
+          "References": [
+            "http://www.openwall.com/lists/oss-security/2025/05/16/4",
+            "http://www.openwall.com/lists/oss-security/2025/05/19/1",
+            "https://github.com/python/cpython/commit/4398b788ffc1f954a2c552da285477d42a571292",
+            "https://github.com/python/cpython/commit/5646648678295a44aa82636c6e92826651baf33a",
+            "https://github.com/python/cpython/commit/6279eb8c076d89d3739a6edb393e43c7929b429d",
+            "https://github.com/python/cpython/commit/69b4387f78f413e8c47572a85b3478c47eba8142",
+            "https://github.com/python/cpython/commit/73b3040f592436385007918887b7e2132aa8431f",
+            "https://github.com/python/cpython/commit/8d35fd1b34935221aff23a1ab69a429dd156be77",
+            "https://github.com/python/cpython/commit/9f69a58623bd01349a18ba0c7a9cb1dad6a51e8e",
+            "https://github.com/python/cpython/commit/9f69a58623bd01349a18ba0c7a9cb1dad6a51e8e (main)",
+            "https://github.com/python/cpython/commit/ab9893c40609935e0d40a6d2a7307ea51aec598b",
+            "https://github.com/python/cpython/issues/133767",
+            "https://github.com/python/cpython/pull/129648",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/L75IPBBTSCYEF56I2M4KIW353BB3AY74/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4516",
+            "https://ubuntu.com/security/notices/USN-7570-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4516"
+          ],
+          "PublishedDate": "2025-05-15T14:15:31.753Z",
+          "LastModifiedDate": "2025-06-03T14:15:49.697Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-12718",
+          "PkgID": "python3@3.12.10-r0",
+          "PkgName": "python3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "bc4d2983fa1ead0c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-12718",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Bypass extraction filter to modify file metadata outside extraction directory",
+          "Description": "Allows modifying some file metadata (e.g. last modified) with filter=\"data\" or file permissions (chmod) with filter=\"tar\" of files outside the extraction directory.\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information. Only Python versions 3.12 or later are affected by these vulnerabilities, earlier versions don't include the extraction filter feature.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 2,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 5.3
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:L",
+              "V3Score": 7.6
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2024-12718",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/127987",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2024-12718.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-12718",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2024-12718"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.183Z",
+          "LastModifiedDate": "2025-06-04T14:54:33.783Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4138",
+          "PkgID": "python3@3.12.10-r0",
+          "PkgName": "python3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "bc4d2983fa1ead0c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4138",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Bypassing extraction filter to create symlinks to arbitrary targets outside extraction directory",
+          "Description": "Allows the extraction filter to be ignored, allowing symlink targets to point outside the destination directory, and the modification of some file metadata.\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4138",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4138.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4138",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4138"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.377Z",
+          "LastModifiedDate": "2025-06-05T14:15:32.767Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4330",
+          "PkgID": "python3@3.12.10-r0",
+          "PkgName": "python3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "bc4d2983fa1ead0c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4330",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Extraction filter bypass for linking outside extraction directory",
+          "Description": "Allows the extraction filter to be ignored, allowing symlink targets to point outside the destination directory, and the modification of some file metadata.\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 3,
+            "oracle-oval": 3,
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:N",
+              "V3Score": 7.3
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4330",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4330.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4330",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4330"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.503Z",
+          "LastModifiedDate": "2025-06-05T14:15:32.91Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4517",
+          "PkgID": "python3@3.12.10-r0",
+          "PkgName": "python3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "bc4d2983fa1ead0c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4517",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "python: cpython: Arbitrary writes via tarfile realpath overflow",
+          "Description": "Allows arbitrary filesystem writes outside the extraction directory during extraction with filter=\"data\".\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 4,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+              "V3Score": 9.4
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:L",
+              "V3Score": 7.6
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4517",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4517.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4517",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4517"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.837Z",
+          "LastModifiedDate": "2025-06-05T14:15:33.05Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4516",
+          "PkgID": "python3@3.12.10-r0",
+          "PkgName": "python3",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "bc4d2983fa1ead0c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.10-r1",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4516",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "There is an issue in CPython when using `bytes.decode(\"unicode_escape\" ...",
+          "Description": "There is an issue in CPython when using `bytes.decode(\"unicode_escape\", error=\"ignore|replace\")`. If you are not using the \"unicode_escape\" encoding or an error handler your usage is not affected. To work-around this issue you may stop using the error= handler and instead wrap the bytes.decode() call in a try-except catching the DecodeError.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-416"
+          ],
+          "VendorSeverity": {
+            "amazon": 3,
+            "ubuntu": 2
+          },
+          "References": [
+            "http://www.openwall.com/lists/oss-security/2025/05/16/4",
+            "http://www.openwall.com/lists/oss-security/2025/05/19/1",
+            "https://github.com/python/cpython/commit/4398b788ffc1f954a2c552da285477d42a571292",
+            "https://github.com/python/cpython/commit/5646648678295a44aa82636c6e92826651baf33a",
+            "https://github.com/python/cpython/commit/6279eb8c076d89d3739a6edb393e43c7929b429d",
+            "https://github.com/python/cpython/commit/69b4387f78f413e8c47572a85b3478c47eba8142",
+            "https://github.com/python/cpython/commit/73b3040f592436385007918887b7e2132aa8431f",
+            "https://github.com/python/cpython/commit/8d35fd1b34935221aff23a1ab69a429dd156be77",
+            "https://github.com/python/cpython/commit/9f69a58623bd01349a18ba0c7a9cb1dad6a51e8e",
+            "https://github.com/python/cpython/commit/9f69a58623bd01349a18ba0c7a9cb1dad6a51e8e (main)",
+            "https://github.com/python/cpython/commit/ab9893c40609935e0d40a6d2a7307ea51aec598b",
+            "https://github.com/python/cpython/issues/133767",
+            "https://github.com/python/cpython/pull/129648",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/L75IPBBTSCYEF56I2M4KIW353BB3AY74/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4516",
+            "https://ubuntu.com/security/notices/USN-7570-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4516"
+          ],
+          "PublishedDate": "2025-05-15T14:15:31.753Z",
+          "LastModifiedDate": "2025-06-03T14:15:49.697Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-12718",
+          "PkgID": "python3-pyc@3.12.10-r0",
+          "PkgName": "python3-pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "c15c93897a12cd7c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-12718",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Bypass extraction filter to modify file metadata outside extraction directory",
+          "Description": "Allows modifying some file metadata (e.g. last modified) with filter=\"data\" or file permissions (chmod) with filter=\"tar\" of files outside the extraction directory.\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information. Only Python versions 3.12 or later are affected by these vulnerabilities, earlier versions don't include the extraction filter feature.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 2,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 5.3
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:L",
+              "V3Score": 7.6
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2024-12718",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/127987",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2024-12718.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-12718",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2024-12718"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.183Z",
+          "LastModifiedDate": "2025-06-04T14:54:33.783Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4138",
+          "PkgID": "python3-pyc@3.12.10-r0",
+          "PkgName": "python3-pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "c15c93897a12cd7c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4138",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Bypassing extraction filter to create symlinks to arbitrary targets outside extraction directory",
+          "Description": "Allows the extraction filter to be ignored, allowing symlink targets to point outside the destination directory, and the modification of some file metadata.\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4138",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4138.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4138",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4138"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.377Z",
+          "LastModifiedDate": "2025-06-05T14:15:32.767Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4330",
+          "PkgID": "python3-pyc@3.12.10-r0",
+          "PkgName": "python3-pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "c15c93897a12cd7c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4330",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Extraction filter bypass for linking outside extraction directory",
+          "Description": "Allows the extraction filter to be ignored, allowing symlink targets to point outside the destination directory, and the modification of some file metadata.\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 3,
+            "oracle-oval": 3,
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:N",
+              "V3Score": 7.3
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4330",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4330.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4330",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4330"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.503Z",
+          "LastModifiedDate": "2025-06-05T14:15:32.91Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4517",
+          "PkgID": "python3-pyc@3.12.10-r0",
+          "PkgName": "python3-pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "c15c93897a12cd7c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4517",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "python: cpython: Arbitrary writes via tarfile realpath overflow",
+          "Description": "Allows arbitrary filesystem writes outside the extraction directory during extraction with filter=\"data\".\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 4,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+              "V3Score": 9.4
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:L",
+              "V3Score": 7.6
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4517",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4517.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4517",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4517"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.837Z",
+          "LastModifiedDate": "2025-06-05T14:15:33.05Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4516",
+          "PkgID": "python3-pyc@3.12.10-r0",
+          "PkgName": "python3-pyc",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pyc@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "c15c93897a12cd7c"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.10-r1",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4516",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "There is an issue in CPython when using `bytes.decode(\"unicode_escape\" ...",
+          "Description": "There is an issue in CPython when using `bytes.decode(\"unicode_escape\", error=\"ignore|replace\")`. If you are not using the \"unicode_escape\" encoding or an error handler your usage is not affected. To work-around this issue you may stop using the error= handler and instead wrap the bytes.decode() call in a try-except catching the DecodeError.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-416"
+          ],
+          "VendorSeverity": {
+            "amazon": 3,
+            "ubuntu": 2
+          },
+          "References": [
+            "http://www.openwall.com/lists/oss-security/2025/05/16/4",
+            "http://www.openwall.com/lists/oss-security/2025/05/19/1",
+            "https://github.com/python/cpython/commit/4398b788ffc1f954a2c552da285477d42a571292",
+            "https://github.com/python/cpython/commit/5646648678295a44aa82636c6e92826651baf33a",
+            "https://github.com/python/cpython/commit/6279eb8c076d89d3739a6edb393e43c7929b429d",
+            "https://github.com/python/cpython/commit/69b4387f78f413e8c47572a85b3478c47eba8142",
+            "https://github.com/python/cpython/commit/73b3040f592436385007918887b7e2132aa8431f",
+            "https://github.com/python/cpython/commit/8d35fd1b34935221aff23a1ab69a429dd156be77",
+            "https://github.com/python/cpython/commit/9f69a58623bd01349a18ba0c7a9cb1dad6a51e8e",
+            "https://github.com/python/cpython/commit/9f69a58623bd01349a18ba0c7a9cb1dad6a51e8e (main)",
+            "https://github.com/python/cpython/commit/ab9893c40609935e0d40a6d2a7307ea51aec598b",
+            "https://github.com/python/cpython/issues/133767",
+            "https://github.com/python/cpython/pull/129648",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/L75IPBBTSCYEF56I2M4KIW353BB3AY74/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4516",
+            "https://ubuntu.com/security/notices/USN-7570-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4516"
+          ],
+          "PublishedDate": "2025-05-15T14:15:31.753Z",
+          "LastModifiedDate": "2025-06-03T14:15:49.697Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-12718",
+          "PkgID": "python3-pycache-pyc0@3.12.10-r0",
+          "PkgName": "python3-pycache-pyc0",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pycache-pyc0@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "5705996736887805"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-12718",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Bypass extraction filter to modify file metadata outside extraction directory",
+          "Description": "Allows modifying some file metadata (e.g. last modified) with filter=\"data\" or file permissions (chmod) with filter=\"tar\" of files outside the extraction directory.\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information. Only Python versions 3.12 or later are affected by these vulnerabilities, earlier versions don't include the extraction filter feature.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 2,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+              "V3Score": 5.3
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:L",
+              "V3Score": 7.6
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2024-12718",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/127987",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2024-12718.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-12718",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2024-12718"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.183Z",
+          "LastModifiedDate": "2025-06-04T14:54:33.783Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4138",
+          "PkgID": "python3-pycache-pyc0@3.12.10-r0",
+          "PkgName": "python3-pycache-pyc0",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pycache-pyc0@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "5705996736887805"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4138",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Bypassing extraction filter to create symlinks to arbitrary targets outside extraction directory",
+          "Description": "Allows the extraction filter to be ignored, allowing symlink targets to point outside the destination directory, and the modification of some file metadata.\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 3,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+              "V3Score": 7.5
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4138",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4138.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4138",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4138"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.377Z",
+          "LastModifiedDate": "2025-06-05T14:15:32.767Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4330",
+          "PkgID": "python3-pycache-pyc0@3.12.10-r0",
+          "PkgName": "python3-pycache-pyc0",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pycache-pyc0@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "5705996736887805"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4330",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "cpython: python: Extraction filter bypass for linking outside extraction directory",
+          "Description": "Allows the extraction filter to be ignored, allowing symlink targets to point outside the destination directory, and the modification of some file metadata.\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 3,
+            "oracle-oval": 3,
+            "redhat": 2,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:N",
+              "V3Score": 7.3
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4330",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4330.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4330",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4330"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.503Z",
+          "LastModifiedDate": "2025-06-05T14:15:32.91Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4517",
+          "PkgID": "python3-pycache-pyc0@3.12.10-r0",
+          "PkgName": "python3-pycache-pyc0",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pycache-pyc0@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "5705996736887805"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.11-r0",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4517",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "python: cpython: Arbitrary writes via tarfile realpath overflow",
+          "Description": "Allows arbitrary filesystem writes outside the extraction directory during extraction with filter=\"data\".\n\n\nYou are affected by this vulnerability if using the tarfile module to extract untrusted tar archives using TarFile.extractall() or TarFile.extract() using the filter= parameter with a value of \"data\" or \"tar\". See the tarfile  extraction filters documentation https://docs.python.org/3/library/tarfile.html#tarfile-extraction-filter  for more information.\n\nNote that for Python 3.14 or later the default value of filter= changed from \"no filtering\" to `\"data\", so if you are relying on this new default behavior then your usage is also affected.\n\nNote that none of these vulnerabilities significantly affect the installation of source distributions which are tar archives as source distributions already allow arbitrary code execution during the build process. However when evaluating source distributions it's important to avoid installing source distributions with suspicious links.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-22"
+          ],
+          "VendorSeverity": {
+            "alma": 3,
+            "amazon": 3,
+            "bitnami": 4,
+            "oracle-oval": 3,
+            "redhat": 3,
+            "ubuntu": 2
+          },
+          "CVSS": {
+            "bitnami": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+              "V3Score": 9.4
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:L",
+              "V3Score": 7.6
+            }
+          },
+          "References": [
+            "https://access.redhat.com/errata/RHSA-2025:10128",
+            "https://access.redhat.com/security/cve/CVE-2025-4517",
+            "https://bugzilla.redhat.com/2370010",
+            "https://bugzilla.redhat.com/2370013",
+            "https://bugzilla.redhat.com/2370014",
+            "https://bugzilla.redhat.com/2370016",
+            "https://bugzilla.redhat.com/2372426",
+            "https://errata.almalinux.org/8/ALSA-2025-10128.html",
+            "https://gist.github.com/sethmlarson/52398e33eff261329a0180ac1d54f42f",
+            "https://github.com/python/cpython/commit/19de092debb3d7e832e5672cc2f7b788d35951da",
+            "https://github.com/python/cpython/commit/28463dba112af719df1e8b0391c46787ad756dd9",
+            "https://github.com/python/cpython/commit/3612d8f51741b11f36f8fb0494d79086bac9390a",
+            "https://github.com/python/cpython/commit/4633f3f497b1ff70e4a35b6fe2c907cbe2d4cb2e",
+            "https://github.com/python/cpython/commit/98016f7c92aa4c1232c68bac1ed6646db31782ec",
+            "https://github.com/python/cpython/commit/9c1110ef6652687d7c55f590f909720eddde965a",
+            "https://github.com/python/cpython/commit/9e0ac76d96cf80b49055f6d6b9a6763fb9215c2a",
+            "https://github.com/python/cpython/commit/aa9eb5f757ceff461e6e996f12c89e5d9b583b01",
+            "https://github.com/python/cpython/commit/dd8f187d0746da151e0025c51680979ac5b4cfb1",
+            "https://github.com/python/cpython/issues/135034",
+            "https://github.com/python/cpython/pull/135037",
+            "https://linux.oracle.com/cve/CVE-2025-4517.html",
+            "https://linux.oracle.com/errata/ELSA-2025-10189.html",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/MAXIJJCUUMCL7ATZNDVEGGHUMQMUUKLG/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4517",
+            "https://ubuntu.com/security/notices/USN-7583-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4517"
+          ],
+          "PublishedDate": "2025-06-03T13:15:20.837Z",
+          "LastModifiedDate": "2025-06-05T14:15:33.05Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2025-4516",
+          "PkgID": "python3-pycache-pyc0@3.12.10-r0",
+          "PkgName": "python3-pycache-pyc0",
+          "PkgIdentifier": {
+            "PURL": "pkg:apk/alpine/python3-pycache-pyc0@3.12.10-r0?arch=x86_64\u0026distro=3.21.3",
+            "UID": "5705996736887805"
+          },
+          "InstalledVersion": "3.12.10-r0",
+          "FixedVersion": "3.12.10-r1",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:383c6e0e944292c7b649d04e29baf85fe216c7df5fd9da08f164ddd5e2fb1be9",
+            "DiffID": "sha256:4847fe18082cf046bd0e71358ea840ffa6d0802455ababf490d90cb4d645cde5"
+          },
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-4516",
+          "DataSource": {
+            "ID": "alpine",
+            "Name": "Alpine Secdb",
+            "URL": "https://secdb.alpinelinux.org/"
+          },
+          "Title": "There is an issue in CPython when using `bytes.decode(\"unicode_escape\" ...",
+          "Description": "There is an issue in CPython when using `bytes.decode(\"unicode_escape\", error=\"ignore|replace\")`. If you are not using the \"unicode_escape\" encoding or an error handler your usage is not affected. To work-around this issue you may stop using the error= handler and instead wrap the bytes.decode() call in a try-except catching the DecodeError.",
+          "Severity": "MEDIUM",
+          "CweIDs": [
+            "CWE-416"
+          ],
+          "VendorSeverity": {
+            "amazon": 3,
+            "ubuntu": 2
+          },
+          "References": [
+            "http://www.openwall.com/lists/oss-security/2025/05/16/4",
+            "http://www.openwall.com/lists/oss-security/2025/05/19/1",
+            "https://github.com/python/cpython/commit/4398b788ffc1f954a2c552da285477d42a571292",
+            "https://github.com/python/cpython/commit/5646648678295a44aa82636c6e92826651baf33a",
+            "https://github.com/python/cpython/commit/6279eb8c076d89d3739a6edb393e43c7929b429d",
+            "https://github.com/python/cpython/commit/69b4387f78f413e8c47572a85b3478c47eba8142",
+            "https://github.com/python/cpython/commit/73b3040f592436385007918887b7e2132aa8431f",
+            "https://github.com/python/cpython/commit/8d35fd1b34935221aff23a1ab69a429dd156be77",
+            "https://github.com/python/cpython/commit/9f69a58623bd01349a18ba0c7a9cb1dad6a51e8e",
+            "https://github.com/python/cpython/commit/9f69a58623bd01349a18ba0c7a9cb1dad6a51e8e (main)",
+            "https://github.com/python/cpython/commit/ab9893c40609935e0d40a6d2a7307ea51aec598b",
+            "https://github.com/python/cpython/issues/133767",
+            "https://github.com/python/cpython/pull/129648",
+            "https://mail.python.org/archives/list/security-announce@python.org/thread/L75IPBBTSCYEF56I2M4KIW353BB3AY74/",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-4516",
+            "https://ubuntu.com/security/notices/USN-7570-1",
+            "https://www.cve.org/CVERecord?id=CVE-2025-4516"
+          ],
+          "PublishedDate": "2025-05-15T14:15:31.753Z",
+          "LastModifiedDate": "2025-06-03T14:15:49.697Z"
+        }
+      ]
+    },
+    {
+      "Target": "Node.js",
+      "Class": "lang-pkgs",
+      "Type": "node-pkg",
+      "Vulnerabilities": [
+        {
+          "VulnerabilityID": "CVE-2025-5889",
+          "PkgID": "brace-expansion@2.0.1",
+          "PkgName": "brace-expansion",
+          "PkgPath": "usr/local/lib/node_modules/npm/node_modules/brace-expansion/package.json",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/brace-expansion@2.0.1",
+            "UID": "5312e61c89337017"
+          },
+          "InstalledVersion": "2.0.1",
+          "FixedVersion": "2.0.2, 1.1.12, 3.0.1, 4.0.1",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e",
+            "DiffID": "sha256:0b1f26057bd0491a50f56fd7f2983bd3ad478511f12fff2b361a97c50cb5828b"
+          },
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2025-5889",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Title": "brace-expansion: juliangruber brace-expansion index.js expand redos",
+          "Description": "A vulnerability was found in juliangruber brace-expansion up to 1.1.11/2.0.1/3.0.0/4.0.0. It has been rated as problematic. Affected by this issue is the function expand of the file index.js. The manipulation leads to inefficient regular expression complexity. The attack may be launched remotely. The complexity of an attack is rather high. The exploitation is known to be difficult. The exploit has been disclosed to the public and may be used. Upgrading to version 1.1.12, 2.0.2, 3.0.1 and 4.0.1 is able to address this issue. The name of the patch is a5b98a4f30d7813266b221435e1eaaf25a1b0ac5. It is recommended to upgrade the affected component.",
+          "Severity": "LOW",
+          "CweIDs": [
+            "CWE-400",
+            "CWE-1333"
+          ],
+          "VendorSeverity": {
+            "ghsa": 1,
+            "redhat": 1
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+              "V3Score": 3.1
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L",
+              "V3Score": 3.1
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2025-5889",
+            "https://gist.github.com/mmmsssttt404/37a40ce7d6e5ca604858fe30814d9466",
+            "https://github.com/juliangruber/brace-expansion",
+            "https://github.com/juliangruber/brace-expansion/commit/0b6a9781e18e9d2769bb2931f4856d1360243ed2",
+            "https://github.com/juliangruber/brace-expansion/commit/15f9b3c75ebf5988198241fecaebdc45eff28a9f",
+            "https://github.com/juliangruber/brace-expansion/commit/36603d5f3599a37af9e85eda30acd7d28599c36e",
+            "https://github.com/juliangruber/brace-expansion/commit/c3c73c8b088defc70851843be88ccc3af08e7217",
+            "https://github.com/juliangruber/brace-expansion/pull/65/commits/a5b98a4f30d7813266b221435e1eaaf25a1b0ac5",
+            "https://github.com/juliangruber/brace-expansion/releases/tag/v4.0.1",
+            "https://nvd.nist.gov/vuln/detail/CVE-2025-5889",
+            "https://vuldb.com/?ctiid.311660",
+            "https://vuldb.com/?id.311660",
+            "https://vuldb.com/?submit.585717",
+            "https://www.cve.org/CVERecord?id=CVE-2025-5889"
+          ],
+          "PublishedDate": "2025-06-09T19:15:25.46Z",
+          "LastModifiedDate": "2025-06-12T16:06:47.857Z"
+        },
+        {
+          "VulnerabilityID": "CVE-2024-21538",
+          "PkgID": "cross-spawn@7.0.3",
+          "PkgName": "cross-spawn",
+          "PkgPath": "usr/local/lib/node_modules/npm/node_modules/cross-spawn/package.json",
+          "PkgIdentifier": {
+            "PURL": "pkg:npm/cross-spawn@7.0.3",
+            "UID": "480da04347e2e299"
+          },
+          "InstalledVersion": "7.0.3",
+          "FixedVersion": "7.0.5, 6.0.6",
+          "Status": "fixed",
+          "Layer": {
+            "Digest": "sha256:dd71dde834b5c203d162902e6b8994cb2309ae049a0eabc4efea161b2b5a3d0e",
+            "DiffID": "sha256:0b1f26057bd0491a50f56fd7f2983bd3ad478511f12fff2b361a97c50cb5828b"
+          },
+          "SeveritySource": "ghsa",
+          "PrimaryURL": "https://avd.aquasec.com/nvd/cve-2024-21538",
+          "DataSource": {
+            "ID": "ghsa",
+            "Name": "GitHub Security Advisory npm",
+            "URL": "https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm"
+          },
+          "Title": "cross-spawn: regular expression denial of service",
+          "Description": "Versions of the package cross-spawn before 6.0.6, from 7.0.0 and before 7.0.5 are vulnerable to Regular Expression Denial of Service (ReDoS) due to improper input sanitization. An attacker can increase the CPU usage and crash the program by crafting a very large and well crafted string.",
+          "Severity": "HIGH",
+          "CweIDs": [
+            "CWE-1333"
+          ],
+          "VendorSeverity": {
+            "amazon": 2,
+            "azure": 3,
+            "cbl-mariner": 3,
+            "ghsa": 3,
+            "redhat": 1
+          },
+          "CVSS": {
+            "ghsa": {
+              "V3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+              "V3Score": 7.5
+            },
+            "redhat": {
+              "V3Vector": "CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:H",
+              "V3Score": 4.4
+            }
+          },
+          "References": [
+            "https://access.redhat.com/security/cve/CVE-2024-21538",
+            "https://github.com/moxystudio/node-cross-spawn",
+            "https://github.com/moxystudio/node-cross-spawn/commit/5ff3a07d9add449021d806e45c4168203aa833ff",
+            "https://github.com/moxystudio/node-cross-spawn/commit/640d391fde65388548601d95abedccc12943374f",
+            "https://github.com/moxystudio/node-cross-spawn/commit/d35c865b877d2f9ded7c1ed87521c2fdb689c8dd",
+            "https://github.com/moxystudio/node-cross-spawn/issues/165",
+            "https://github.com/moxystudio/node-cross-spawn/pull/160",
+            "https://nvd.nist.gov/vuln/detail/CVE-2024-21538",
+            "https://security.snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-8366349",
+            "https://security.snyk.io/vuln/SNYK-JS-CROSSSPAWN-8303230",
+            "https://www.cve.org/CVERecord?id=CVE-2024-21538"
+          ],
+          "PublishedDate": "2024-11-08T05:15:06.453Z",
+          "LastModifiedDate": "2025-05-20T15:16:03.53Z"
+        }
+      ]
+    }
+  ]
+}
