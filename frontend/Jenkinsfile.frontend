@@ -4,11 +4,13 @@ def config = [
     serviceName: 'Frontend',
     imageName: 'docker.io/kapilbhalodiya/ecom-frontend',
     servicePath: 'frontend',
-    changesetPattern: '**/frontend/**',
     helmPath: 'infra/addons/frontend',
     helmRelease: 'frontend-dev',
     namespace: 'dev',
     registryCredentials: 'Dockerhub-creds',
+    sonarProjectKey: 'ecommerce-frontend',
+    slackChannel: '#deployments',
+    emailRecipients: 'kapilbhalodiya.dcs22@vnsgu.ac.in',
     gitConfig: [
         url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
         credentialsId: 'Github_Cred',
@@ -16,4 +18,4 @@ def config = [
     ]
 ]
 
-buildAndDeployService(config)
+enhancedPipeline(config)
