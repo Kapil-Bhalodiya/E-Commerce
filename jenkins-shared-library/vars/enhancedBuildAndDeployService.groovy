@@ -61,10 +61,25 @@ def call(Map config) {
                         }
                         post {
                             always {
-                                publishTestResults testResultsPattern: '**/test-results.xml'
-                                publishCoverage adapters: [
-                                    jacocoAdapter('**/coverage.xml')
-                                ], sourceFileResolver: sourceFiles('STORE_LAST_BUILD')
+                                script {
+                                    try {
+                                        if (fileExists('**/test-results.xml')) {
+                                            junit '**/test-results.xml'
+                                        }
+                                        if (fileExists('**/coverage/lcov.info')) {
+                                            publishHTML([
+                                                allowMissing: true,
+                                                alwaysLinkToLastBuild: true,
+                                                keepAll: true,
+                                                reportDir: 'coverage',
+                                                reportFiles: 'index.html',
+                                                reportName: 'Coverage Report'
+                                            ])
+                                        }
+                                    } catch (Exception e) {
+                                        echo "⚠️ Failed to publish test results: ${e.getMessage()}"
+                                    }
+                                }
                             }
                         }
                     }
@@ -110,15 +125,23 @@ def call(Map config) {
 
         post {
             always {
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'reports',
-                    reportFiles: '*.html',
-                    reportName: 'Security & Quality Report'
-                ])
-                archiveArtifacts artifacts: 'reports/**/*', allowEmptyArchive: true
+                script {
+                    try {
+                        if (fileExists('reports')) {
+                            publishHTML([
+                                allowMissing: true,
+                                alwaysLinkToLastBuild: true,
+                                keepAll: true,
+                                reportDir: 'reports',
+                                reportFiles: '*.html,*.txt',
+                                reportName: 'Security & Quality Report'
+                            ])
+                            archiveArtifacts artifacts: 'reports/**/*', allowEmptyArchive: true
+                        }
+                    } catch (Exception e) {
+                        echo "⚠️ Failed to publish reports: ${e.getMessage()}"
+                    }
+                }
             }
             success {
                 sendNotification('SUCCESS', config)
