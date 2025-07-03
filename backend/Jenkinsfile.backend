@@ -9,6 +9,9 @@ def config = [
     helmRelease: 'backend-dev',
     namespace: 'dev',
     registryCredentials: 'Dockerhub-creds',
+    sonarProjectKey: 'ecommerce-backend',
+    slackChannel: '#backend-deployments',
+    emailRecipients: 'kapilbhalodiya.dcs22@vnsgu.ac.in',
     gitConfig: [
         url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
         credentialsId: 'Github_Cred',
@@ -16,4 +19,4 @@ def config = [
     ]
 ]
 
-buildAndDeployService(config)
+enhancedBuildAndDeployService(config)
