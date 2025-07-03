@@ -9,7 +9,8 @@ def call(String status, Map config) {
                 slackSend(
                     channel: config.slackChannel,
                     color: status == 'SUCCESS' ? 'good' : 'danger',
-                    message: message
+                    message: message,
+                    tokenCredentialId: 'SlackToken'
                 )
             }
             
