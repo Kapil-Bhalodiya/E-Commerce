@@ -39,6 +39,9 @@ def call(Map config) {
                     buildDocker(config.servicePath, config.imageName, env.IMAGE_TAG)
                     pushDocker(config.imageName, env.IMAGE_TAG, config.registryCredentials)
                     updateK8sManifest(config.helmPath, env.IMAGE_TAG)
+                    script {
+                        sh 'rm -f dependency-check-*.* || true'
+                    }
                     commitManifestChanges(config.serviceName, env.IMAGE_TAG, config.gitConfig.credentialsId)
                 }
             }

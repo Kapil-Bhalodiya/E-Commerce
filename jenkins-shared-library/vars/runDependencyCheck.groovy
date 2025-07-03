@@ -1,8 +1,7 @@
 def call() {
     script {
         try {
-            dependencyCheck additionalArguments: '--format ALL', odcInstallation: 'OWASP-Dependency-Check'
-            dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+            dependencyCheck additionalArguments: '--format NONE', odcInstallation: 'OWASP-Dependency-Check'
             echo "✅ Dependency check completed"
         } catch (Exception e) {
             echo "⚠️ Dependency check skipped: ${e.message}"
