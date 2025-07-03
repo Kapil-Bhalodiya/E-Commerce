@@ -1,1 +1,0 @@
-/var/jenkins_home/workspace/Backend-PipelLine/backend@tmp/durable-490e96b5/script.sh.copy: 4: npm: not found
