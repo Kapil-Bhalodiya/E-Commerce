@@ -11,13 +11,6 @@
 npm-debug.log
 yarn-error.log
 
-
-# .gitignore
-# .gitignore
-src/environments/environment.ts
-src/environments/environment.prod.ts
-
-
 # IDEs and editors
 .idea/
 .project
@@ -26,7 +19,6 @@ src/environments/environment.prod.ts
 *.launch
 .settings/
 *.sublime-workspace
-public
 
 # Visual Studio Code
 .vscode/*
@@ -37,14 +29,19 @@ public
 .history/*
 
 # Miscellaneous
-/.angular/cache
+/.angular/
 .sass-cache/
 /connect.lock
 /coverage
 /libpeerconnection.log
 testem.log
 /typings
+.scannerwork/
 
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment files
+src/environments/environment.ts
+src/environments/environment.prod.ts
