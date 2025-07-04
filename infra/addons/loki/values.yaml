@@ -16,6 +16,13 @@ loki:
         admin: admin
       filesystem:
         directory: /tmp/loki/chunks
+    rulerConfig:
+      enable_api: false
+      enable_alertmanager_v2: false
+      storage:
+        type: local
+        local:
+          directory: /tmp/loki/rules
   singleBinary:
     replicas: 1
     persistence:
