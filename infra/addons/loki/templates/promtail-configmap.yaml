@@ -20,6 +20,21 @@ data:
     scrape_configs:
 {{- range .Values.promtail.config.scrape_configs }}
       - job_name: {{ .job_name }}
+{{- if .static_configs }}
+        static_configs:
+{{- range .static_configs }}
+          - targets:
+{{- range .targets }}
+              - {{ . }}
+{{- end }}
+{{- if .labels }}
+            labels:
+{{- range $key, $value := .labels }}
+              {{ $key }}: {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
 {{- if .kubernetes_sd_configs }}
         kubernetes_sd_configs:
 {{- range .kubernetes_sd_configs }}
