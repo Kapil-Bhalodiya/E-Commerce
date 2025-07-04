@@ -38,8 +38,7 @@ loki:
   singleBinary:
     replicas: 1
     persistence:
-      enabled: true
-      size: 10Gi
+      enabled: false
     extraVolumes:
       - name: loki-storage
         emptyDir: {}
