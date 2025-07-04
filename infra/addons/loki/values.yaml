@@ -7,6 +7,16 @@ loki:
     commonConfig:
       replication_factor: 1
       path_prefix: /tmp/loki
+    server:
+      http_listen_port: 3100
+      grpc_listen_port: 9095
+    common:
+      path_prefix: /tmp/loki
+      storage:
+        filesystem:
+          chunks_directory: /tmp/loki/chunks
+          rules_directory: /tmp/loki/rules
+      compactor_address: http://loki:3100
     storage:
       type: 'filesystem'
       filesystem:
