@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: promtail
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Values.Namespace }}
 spec:
   selector:
     matchLabels:
