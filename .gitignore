@@ -1,30 +1,7 @@
-# Security files
-*.key
-*.crt
-*.pem
-
-# Logs
+# Build artifacts
 *.log
-logs/
-backend/logs/
-
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build outputs
-dist/
-build/
-.angular/cache/
-.angular/
-
-# Environment files
-.env
-.env.local
-.env.production
-.env.development
+*.tmp
+*.cache
 
 # IDE files
 .vscode/
@@ -36,37 +13,19 @@ build/
 .DS_Store
 Thumbs.db
 
-# Uploads and media (should be in cloud storage)
-# uploads/
-# backend/uploads/
-# backend/public/product/
-# backend/public/banner/
-# backend/public/slider/
-# backend/public/subcategory/
-# backend/public/banners/
-# frontend/public/product/
-# frontend/public/banner/
-# frontend/public/slider/
-# frontend/public/subcategory/
-# frontend/public/Men/
-# frontend/public/Women/
-# frontend/public/other/
-# frontend/public/*.jpg
-# frontend/public/*.png
-
-# Helm charts (downloaded dependencies)
-charts/*.tgz
-infra/addons/*/charts/*.tgz
-
 # Temporary files
-*.tmp
-*.temp
-temp.yaml
-fix_imports.bat
+*.html
+*.gif
+*.ps1
 
-# Cache directories
-.angular/cache/
+# Scanner work directories
+.scannerwork/
+
+# Log directories
+logs/
+
+# Upload directories
+public/uploads/
+
+# Angular cache
 .angular/
-
-# TypeScript build info
-*.tsbuildinfo
