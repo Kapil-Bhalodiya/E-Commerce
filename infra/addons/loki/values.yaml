@@ -1,59 +1,39 @@
-# Final attempt - exact Helm chart requirements
 loki:
   enabled: true
-  deploymentMode: SingleBinary
-  
-  loki:
-    auth_enabled: false
-    useTestSchema: true
-    
-    # Required storage structure for Helm chart
-    storage:
-      type: filesystem
-      bucketNames:
-        chunks: chunks
-        ruler: ruler
-        admin: admin
-      filesystem:
-        directory: /tmp/loki/chunks
-    
-    # Required commonConfig structure
+  config:
     commonConfig:
       path_prefix: /tmp/loki
-      replication_factor: 1
+    storage_config:
+      boltdb_shipper:
+        active_index_directory: /tmp/loki/index
+        cache_location: /tmp/loki/boltdb-cache
+        shared_store: filesystem
+      filesystem:
+        directory: /tmp/loki/chunks
+    schema_config:
+      configs:
+        - from: "2022-01-01"
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
 
-  singleBinary:
-    replicas: 1
-    persistence:
-      enabled: false
-    extraVolumes:
-      - name: storage
-        emptyDir: {}
-    extraVolumeMounts:
-      - name: storage
-        mountPath: /tmp/loki
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
+  persistence:
+    enabled: false
 
-  read:
-    replicas: 0
-  write:
-    replicas: 0
-  backend:
-    replicas: 0
-  gateway:
-    enabled: false
-  lokiCanary:
-    enabled: true
-  chunksCache:
-    enabled: false
-  resultsCache:
-    enabled: false
+  service:
+    type: ClusterIP
+    port: 3100
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
 
 promtail:
   enabled: true
