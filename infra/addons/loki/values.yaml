@@ -49,7 +49,7 @@ promtail:
               - localhost
             labels:
               job: test
-              __path__: /var/log/pods/dev_backend-dev-fccb5db8-bvcng_9b30c26a-1bc5-4beb-beb9-0165477197d7/backend/*.log
+              __path__: /var/log/pods/dev_backend-dev-fccb5db8-bvcng_9b30c26a-1bc5-4beb-beb9-0165477197d7/backend/0.log
       - job_name: kubernetes-pods
         kubernetes_sd_configs:
           - role: pod
