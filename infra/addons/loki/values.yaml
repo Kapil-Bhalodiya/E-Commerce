@@ -50,29 +50,25 @@ promtail:
             labels:
               job: static
               __path__: /var/log/pods/dev_backend-dev-fccb5db8-bvcng_9b30c26a-1bc5-4beb-beb9-0165477197d7/backend/0.log
-      - job_name: kubernetes-pods
-        kubernetes_sd_configs:
-          - role: pod
-        pipeline_stages:
-          - cri: true
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_pod_phase]
-            action: keep
-            regex: Running
-          - source_labels: [__meta_kubernetes_namespace]
-            action: replace
-            target_label: namespace
-          - source_labels: [__meta_kubernetes_pod_name]
-            action: replace
-            target_label: pod
-          - source_labels: [__meta_kubernetes_pod_container_name]
-            action: replace
-            target_label: container
-          - source_labels: [__meta_kubernetes_pod_label_app]
-            action: replace
-            target_label: app
-          - source_labels: [__meta_kubernetes_pod_uid, __meta_kubernetes_pod_container_name]
-            action: replace
-            separator: /
-            target_label: __path__
-            replacement: /var/log/pods/*$1*/$2/0.log
+      - job_name: backend-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: backend
+              namespace: dev
+              pod: backend-dev-fccb5db8-bvcng
+              container: backend
+              app: backend
+              __path__: /var/log/pods/dev_backend-dev-fccb5db8-bvcng_9b30c26a-1bc5-4beb-beb9-0165477197d7/backend/0.log
+      - job_name: frontend-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: frontend
+              namespace: dev
+              pod: frontend-dev-64b88db8b9-ttmmj
+              container: frontend
+              app: frontend
+              __path__: /var/log/pods/dev_frontend-dev-64b88db8b9-ttmmj_03a44bff-ffd7-4fd0-b619-0177fcfc55d9/frontend/0.log
