@@ -28,7 +28,14 @@ loki:
   singleBinary:
     replicas: 1
     persistence:
-      enabled: false
+      enabled: true
+      size: 10Gi
+    extraVolumes:
+      - name: loki-storage
+        emptyDir: {}
+    extraVolumeMounts:
+      - name: loki-storage
+        mountPath: /tmp/loki
     resources:
       requests:
         cpu: 100m
