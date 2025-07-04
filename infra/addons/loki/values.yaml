@@ -4,18 +4,18 @@ loki:
   deploymentMode: SingleBinary
   loki:
     auth_enabled: false
-    server:
-      http_listen_port: 3100
-      grpc_listen_port: 9095
-    common:
+    commonConfig:
       path_prefix: /tmp/loki
-      storage:
-        filesystem:
-          chunks_directory: /tmp/loki/chunks
-          rules_directory: /tmp/loki/rules
-      compactor_address: http://loki:3100
       replication_factor: 1
-    schema_config:
+    storage:
+      type: 'filesystem'
+      filesystem:
+        directory: /tmp/loki/chunks
+      bucketNames:
+        chunks: chunks
+        ruler: ruler
+        admin: admin
+    schemaConfig:
       configs:
         - from: "2024-01-01"
           store: tsdb
@@ -24,10 +24,7 @@ loki:
           index:
             prefix: loki_index_
             period: 24h
-    storage_config:
-      filesystem:
-        directory: /tmp/loki/chunks
-    ruler:
+    rulerConfig:
       storage:
         type: local
         local:
