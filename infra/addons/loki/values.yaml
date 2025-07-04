@@ -29,31 +29,64 @@ loki:
     type: ClusterIP
     port: 3100
 
-resources:
-  limits:
-    cpu: 100m
-    memory: 256Mi
-  requests:
-    cpu: 50m
-    memory: 128Mi
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 promtail:
   enabled: true
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
   config:
     clients:
       - url: http://loki:3100/loki/api/v1/push
     scrape_configs:
-      - job_name: static-test
+      # Backend logs
+      - job_name: backend-logs
         static_configs:
           - targets:
               - localhost
             labels:
               job: backend
-              __path__: /var/log/pods/dev_backend-dev-fccb5db8-bvcng_9b30c26a-1bc5-4beb-beb9-0165477197d7/backend/0.log
+              namespace: dev
+              app: backend
+              __path__: /var/log/pods/dev_backend-dev-*/*backend*/0.log
+      # Frontend logs
       - job_name: frontend-logs
         static_configs:
           - targets:
               - localhost
             labels:
               job: frontend
-              __path__: /var/log/pods/dev_frontend-dev-64b88db8b9-ttmmj_03a44bff-ffd7-4fd0-b619-0177fcfc55d9/frontend/0.log
+              namespace: dev
+              app: frontend
+              __path__: /var/log/pods/dev_frontend-dev-*/*frontend*/0.log
+      # Prometheus logs
+      - job_name: prometheus-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: prometheus
+              namespace: dev
+              app: prometheus
+              __path__: /var/log/pods/dev_prometheus-*/*prometheus*/0.log
+      # Grafana logs
+      - job_name: grafana-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: grafana
+              namespace: dev
+              app: grafana
+              __path__: /var/log/pods/dev_*grafana*/*grafana*/0.log
