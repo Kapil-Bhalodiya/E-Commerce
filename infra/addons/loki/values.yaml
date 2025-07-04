@@ -81,7 +81,7 @@ loki:
   resultsCache:
     enabled: false
   lokiCanary:
-    enabled: false
+    enabled: true
   gateway:
     enabled: false
   monitoring:
