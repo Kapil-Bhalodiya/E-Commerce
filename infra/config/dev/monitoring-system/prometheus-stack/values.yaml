@@ -10,6 +10,16 @@ kube-prometheus-stack:
       server:
         domain: "dev-grafana.local"
         root_url: "http://dev-grafana.local/"
+    # Add Loki datasource
+    additionalDataSources:
+      - name: Loki
+        type: loki
+        url: http://loki:3100
+        access: proxy
+        isDefault: false
+        jsonData:
+          maxLines: 1000
+        editable: true
   
   # Prometheus settings for DEV (smaller resources)
   prometheus:
