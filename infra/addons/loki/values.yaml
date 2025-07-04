@@ -7,6 +7,10 @@ loki:
     commonConfig:
       path_prefix: /tmp/loki
       replication_factor: 1
+      storage:
+        filesystem:
+          chunks_directory: /tmp/loki/chunks
+          rules_directory: /tmp/loki/rules
     storage:
       type: 'filesystem'
       filesystem:
@@ -31,9 +35,6 @@ loki:
           directory: /tmp/loki/rules
     compactor:
       working_directory: /tmp/loki/compactor
-      shared_store: filesystem
-      compaction_interval: 10m
-      retention_enabled: false
   singleBinary:
     replicas: 1
     persistence:
