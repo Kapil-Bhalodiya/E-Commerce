@@ -1,45 +1,37 @@
-# Working Loki configuration - Fresh start
+# Final attempt - exact Helm chart requirements
 loki:
   enabled: true
   deploymentMode: SingleBinary
   
-  # Use test schema to avoid configuration issues
   loki:
     auth_enabled: false
     useTestSchema: true
     
-    # Override default storage paths
-    storage_config:
+    # Required storage structure for Helm chart
+    storage:
+      type: filesystem
+      bucketNames:
+        chunks: chunks
+        ruler: ruler
+        admin: admin
       filesystem:
         directory: /tmp/loki/chunks
     
-    # Disable ruler to avoid /var/loki issues
-    ruler:
-      enable_api: false
-      
-    # Set working directory
-    compactor:
-      working_directory: /tmp/loki
-      
-    # Common config
-    common:
+    # Required commonConfig structure
+    commonConfig:
       path_prefix: /tmp/loki
       replication_factor: 1
 
-  # Single binary configuration
   singleBinary:
     replicas: 1
     persistence:
       enabled: false
-    
-    # Mount writable volume
     extraVolumes:
-      - name: tmp-storage
+      - name: storage
         emptyDir: {}
     extraVolumeMounts:
-      - name: tmp-storage
+      - name: storage
         mountPath: /tmp/loki
-        
     resources:
       requests:
         cpu: 100m
@@ -48,7 +40,6 @@ loki:
         cpu: 500m
         memory: 512Mi
 
-  # Disable all other components
   read:
     replicas: 0
   write:
@@ -63,20 +54,9 @@ loki:
     enabled: false
   resultsCache:
     enabled: false
-  monitoring:
-    serviceMonitor:
-      enabled: false
 
-# Promtail for log collection
 promtail:
   enabled: true
   config:
     clients:
       - url: http://loki:3100/loki/api/v1/push
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      cpu: 100m
-      memory: 128Mi
