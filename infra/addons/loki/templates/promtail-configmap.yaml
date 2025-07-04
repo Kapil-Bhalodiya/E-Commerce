@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: promtail-config
-  namespace: {{ .Values.Namespace }}
+  namespace: {{ .Values.namespace }}
 data:
   config.yaml: |
     server:
