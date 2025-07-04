@@ -13,13 +13,44 @@ data:
       filename: /tmp/positions.yaml
 
     clients:
-      - url: http://loki:3100/loki/api/v1/push
+{{- range .Values.promtail.config.clients }}
+      - url: {{ .url }}
+{{- end }}
 
     scrape_configs:
-      - job_name: kubernetes-pods
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: varlogs
-              __path__: /var/log/*log
+{{- range .Values.promtail.config.scrape_configs }}
+      - job_name: {{ .job_name }}
+{{- if .kubernetes_sd_configs }}
+        kubernetes_sd_configs:
+{{- range .kubernetes_sd_configs }}
+          - role: {{ .role }}
+{{- end }}
+{{- end }}
+{{- if .pipeline_stages }}
+        pipeline_stages:
+{{- range .pipeline_stages }}
+{{- if .cri }}
+          - cri: {}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if .relabel_configs }}
+        relabel_configs:
+{{- range .relabel_configs }}
+          - source_labels: {{ .source_labels | toJson }}
+            action: {{ .action }}
+{{- if .regex }}
+            regex: {{ .regex }}
+{{- end }}
+{{- if .target_label }}
+            target_label: {{ .target_label }}
+{{- end }}
+{{- if .separator }}
+            separator: {{ .separator }}
+{{- end }}
+{{- if .replacement }}
+            replacement: {{ .replacement }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
