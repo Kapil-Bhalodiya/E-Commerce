@@ -12,6 +12,7 @@ spec:
       labels:
         app: promtail
     spec:
+      serviceAccountName: promtail
       containers:
         - name: promtail
           image: grafana/promtail:2.9.0
