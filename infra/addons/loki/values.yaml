@@ -1,7 +1,4 @@
-# Default configuration for Loki stack
-# This will be overridden by environment-specific values
-
-# Loki configuration
+# Loki configuration - Force recreation: 2025-01-03-v2
 loki:
   enabled: true
   deploymentMode: SingleBinary
@@ -9,8 +6,11 @@ loki:
     auth_enabled: false
     commonConfig:
       replication_factor: 1
+      path_prefix: /tmp/loki
     storage:
       type: 'filesystem'
+      filesystem:
+        directory: /tmp/loki/chunks
     schemaConfig:
       configs:
         - from: "2024-01-01"
@@ -20,6 +20,11 @@ loki:
           index:
             prefix: loki_index_
             period: 24h
+    rulerConfig:
+      storage:
+        type: filesystem
+        filesystem:
+          directory: /tmp/loki/rules
   singleBinary:
     replicas: 1
     persistence:
