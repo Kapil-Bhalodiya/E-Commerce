@@ -8,6 +8,14 @@ loki:
     commonConfig:
       path_prefix: /tmp/loki
       replication_factor: 1
+    storage:
+      type: filesystem
+      bucketNames:
+        chunks: chunks
+        ruler: ruler
+        admin: admin
+      filesystem:
+        directory: /tmp/loki/chunks
   singleBinary:
     replicas: 1
     persistence:
