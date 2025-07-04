@@ -48,18 +48,7 @@ promtail:
           - targets:
               - localhost
             labels:
-              job: static
-              __path__: /var/log/pods/dev_backend-dev-fccb5db8-bvcng_9b30c26a-1bc5-4beb-beb9-0165477197d7/backend/0.log
-      - job_name: backend-logs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
               job: backend
-              namespace: dev
-              pod: backend-dev-fccb5db8-bvcng
-              container: backend
-              app: backend
               __path__: /var/log/pods/dev_backend-dev-fccb5db8-bvcng_9b30c26a-1bc5-4beb-beb9-0165477197d7/backend/0.log
       - job_name: frontend-logs
         static_configs:
@@ -67,8 +56,4 @@ promtail:
               - localhost
             labels:
               job: frontend
-              namespace: dev
-              pod: frontend-dev-64b88db8b9-ttmmj
-              container: frontend
-              app: frontend
               __path__: /var/log/pods/dev_frontend-dev-64b88db8b9-ttmmj_03a44bff-ffd7-4fd0-b619-0177fcfc55d9/frontend/0.log
