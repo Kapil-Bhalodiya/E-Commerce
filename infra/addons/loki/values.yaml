@@ -43,6 +43,13 @@ promtail:
     clients:
       - url: http://loki:3100/loki/api/v1/push
     scrape_configs:
+      - job_name: test-static
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: test
+              __path__: /var/log/pods/dev_backend-dev-fccb5db8-bvcng_9b30c26a-1bc5-4beb-beb9-0165477197d7/backend/*.log
       - job_name: kubernetes-pods
         kubernetes_sd_configs:
           - role: pod
