@@ -47,7 +47,7 @@ promtail:
         kubernetes_sd_configs:
           - role: pod
         pipeline_stages:
-          - cri: {}
+          - cri: true
         relabel_configs:
           - source_labels: [__meta_kubernetes_pod_phase]
             action: keep
