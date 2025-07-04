@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: loki
-  namespace: {{ .Values.Namespace }}
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
     app: loki
