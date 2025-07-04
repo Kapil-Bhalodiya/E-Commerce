@@ -1,42 +1,45 @@
-# Loki configuration - Minimal working setup
+# Working Loki configuration - Fresh start
 loki:
   enabled: true
   deploymentMode: SingleBinary
+  
+  # Use test schema to avoid configuration issues
   loki:
     auth_enabled: false
     useTestSchema: true
-    commonConfig:
-      path_prefix: /tmp/loki
-      replication_factor: 1
-      storage:
-        filesystem:
-          chunks_directory: /tmp/loki/chunks
-          rules_directory: /tmp/loki/rules
-    storage:
-      type: filesystem
-      bucketNames:
-        chunks: chunks
-        ruler: ruler
-        admin: admin
+    
+    # Override default storage paths
+    storage_config:
       filesystem:
         directory: /tmp/loki/chunks
-    rulerConfig:
+    
+    # Disable ruler to avoid /var/loki issues
+    ruler:
       enable_api: false
-      enable_alertmanager_v2: false
-      storage:
-        type: local
-        local:
-          directory: /tmp/loki/rules
+      
+    # Set working directory
+    compactor:
+      working_directory: /tmp/loki
+      
+    # Common config
+    common:
+      path_prefix: /tmp/loki
+      replication_factor: 1
+
+  # Single binary configuration
   singleBinary:
     replicas: 1
     persistence:
       enabled: false
+    
+    # Mount writable volume
     extraVolumes:
-      - name: loki-storage
+      - name: tmp-storage
         emptyDir: {}
     extraVolumeMounts:
-      - name: loki-storage
+      - name: tmp-storage
         mountPath: /tmp/loki
+        
     resources:
       requests:
         cpu: 100m
@@ -44,35 +47,36 @@ loki:
       limits:
         cpu: 500m
         memory: 512Mi
+
+  # Disable all other components
   read:
     replicas: 0
   write:
     replicas: 0
   backend:
     replicas: 0
-  chunksCache:
-    enabled: false
-  resultsCache:
+  gateway:
     enabled: false
   lokiCanary:
     enabled: true
-  gateway:
+  chunksCache:
+    enabled: false
+  resultsCache:
     enabled: false
   monitoring:
     serviceMonitor:
       enabled: false
 
-# Promtail configuration
+# Promtail for log collection
 promtail:
   enabled: true
   config:
     clients:
       - url: http://loki:3100/loki/api/v1/push
-        tenant_id: 1
   resources:
     requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
       cpu: 100m
       memory: 128Mi
-    limits:
-      cpu: 200m
-      memory: 256Mi
