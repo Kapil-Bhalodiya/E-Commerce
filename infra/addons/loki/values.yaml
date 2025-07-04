@@ -22,8 +22,8 @@ loki:
             period: 24h
     rulerConfig:
       storage:
-        type: filesystem
-        filesystem:
+        type: local
+        local:
           directory: /tmp/loki/rules
   singleBinary:
     replicas: 1
