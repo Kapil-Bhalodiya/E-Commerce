@@ -7,7 +7,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: promtail
+  name: promtail-{{ .Values.Namespace }}
 rules:
   - apiGroups: [""]
     resources: ["pods", "nodes", "nodes/proxy", "services", "endpoints"]
@@ -16,11 +16,11 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: promtail
+  name: promtail-{{ .Values.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: promtail
+  name: promtail-{{ .Values.Namespace }}
 subjects:
   - kind: ServiceAccount
     name: promtail
