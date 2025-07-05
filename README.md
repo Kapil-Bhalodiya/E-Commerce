@@ -1,4 +1,14 @@
-# E-Commerce Platform with Observability
+# E-Commerce Platform with DevSecOps + GitOps Pipeline
+
+## DevSecOps + GitOps Pipeline Overview
+
+![DevSecOps GitOps Pipeline](Final-DevSecOps-GitOps-Pipeline.gif)
+
+Our comprehensive DevSecOps + GitOps pipeline integrates security, automation, and observability throughout the entire software delivery lifecycle. The pipeline includes:
+
+- **🔄 CI Pipeline**: Developer → GitHub → Jenkins CI → OWASP → SonarQube → Trivy → Docker
+- **🚀 CD Pipeline**: Jenkins CD → GitHub → ArgoCD → Kubernetes
+- **📊 Monitoring & Alerting**: Prometheus/Grafana/Loki → Alertmanager → Email/Slack
 
 ## Table of Contents
 
