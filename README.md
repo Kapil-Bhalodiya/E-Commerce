@@ -2,7 +2,7 @@
 
 ## DevSecOps + GitOps Pipeline Overview
 
-![DevSecOps GitOps Pipeline](Final-DevSecOps-GitOps-Pipeline.gif)
+![DevSecOps GitOps Pipeline](DevSecOps-GitOps-Pipeline.gif)
 
 Our comprehensive DevSecOps + GitOps pipeline integrates security, automation, and observability throughout the entire software delivery lifecycle. The pipeline includes:
 
