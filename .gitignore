@@ -21,12 +21,6 @@ Thumbs.db
 # Scanner work directories
 .scannerwork/
 
-# Log directories
-logs/
-
-# Upload directories
-public/uploads/
-
 # Angular cache
 .angular/
 
@@ -39,8 +33,6 @@ public/uploads/
 *.cer
 .env
 .env.*
-secrets/
-config/secrets/
 
 # Jenkins & CI/CD
 dependency-check-*
@@ -56,9 +48,8 @@ docker-compose.override.yml
 .dockerignore
 
 # Kubernetes secrets
-*-secret.yaml
-*-secrets.yaml
 kustomization.yaml
+infra/addons/*/templates/secret.yaml
 
 # Database
 *.db
