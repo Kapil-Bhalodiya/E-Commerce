@@ -29,3 +29,45 @@ public/uploads/
 
 # Angular cache
 .angular/
+
+# Security & Secrets
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+.env
+.env.*
+secrets/
+config/secrets/
+
+# Jenkins & CI/CD
+dependency-check-*
+*.sarif
+*.xml
+*.json
+*.csv
+reports/
+.jenkins/
+
+# Docker secrets
+docker-compose.override.yml
+.dockerignore
+
+# Kubernetes secrets
+*-secret.yaml
+*-secrets.yaml
+kustomization.yaml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Credentials
+credentials.json
+service-account.json
+aws-credentials
+.aws/
+.kube/config
