@@ -22,7 +22,7 @@
     "bootstrap": "^5.3.5",
     "chart.js": "^4.4.9",
     "ngx-owl-carousel-o": "^19.0.0",
-    "ngx-stripe": "^17.2.0",
+    "ngx-stripe": "^20.7.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
