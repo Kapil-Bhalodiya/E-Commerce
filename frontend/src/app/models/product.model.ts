@@ -3,18 +3,18 @@ import { Variant } from './productvariant.model'
 export interface Product {
   _id: string
   name: string
-  description: string
+  description?: string
   brand: string
-  subcategory: string
+  subcategory: any
   base_price: number
   sale_price?: number
   stock?: number
   rating?: number
   review_count?: number
-  tags: string[]
-  dietary_needs: string[]
-  image_urls: string[]
-  variant_ids: Variant[]
+  tags?: string[]
+  dietary_needs?: string[]
+  image_urls?: string[]
+  variant_ids?: Variant[]
   category?: string
   sku?: string
   weight?: number
@@ -24,8 +24,8 @@ export interface Product {
     height: number
   }
   is_active?: boolean
-  created_at?: string
-  updated_at?: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface ProductListResponse {

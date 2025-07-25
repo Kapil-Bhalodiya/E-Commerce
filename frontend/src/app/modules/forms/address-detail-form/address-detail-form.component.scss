@@ -45,13 +45,21 @@
 	border-color: var(--secondary-color)
 }
 
+.checkout__input--field.error,
+.checkout__input--select__field.error {
+	border-color: #dc3545 !important;
+	box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
 .checkout__input--list{
 	margin-bottom: 10px;
 }
 
 .checkout__input--list .form-error{
-	color: red;
-	font-size: small;
+	color: #dc3545;
+	font-size: 0.875rem;
+	margin-top: 0.25rem;
+	display: block;
 }
 
 .checkout__select--label {

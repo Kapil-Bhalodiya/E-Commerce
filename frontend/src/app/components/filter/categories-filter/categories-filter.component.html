@@ -3,7 +3,7 @@
         <a
           class="widget__tagcloud--link"
           [class.active]="isSelected(item)"
-          [attr.aria-label]="'Select brand ' + item"
+          [attr.aria-label]="'Select item ' + item"
           (click)="onBrandClick(item); $event.preventDefault()"
         >
           {{ item }}

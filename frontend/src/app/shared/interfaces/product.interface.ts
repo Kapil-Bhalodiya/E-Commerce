@@ -2,9 +2,9 @@ export interface ProductFilters {
   minPrice?: number;
   maxPrice?: number;
   brands?: string[];
-  occasion?: string[];
   search?: string;
   tags?: string[];
+  category?: string[];
   sortBy?: string;
   page?: number;
   limit?: number;

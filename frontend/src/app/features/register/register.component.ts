@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -17,6 +17,7 @@ export class RegisterComponent implements OnDestroy {
   successMessage = '';
   isLoading = false;
   showPassword = false;
+  showConfirmPassword = false;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -29,28 +30,44 @@ export class RegisterComponent implements OnDestroy {
 
   private initializeForm(): void {
     this.formGroup = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      lastName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\s]*$/)]],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)]],
-      contact: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]]
-    });
+      confirmPassword: ['', [Validators.required]],
+      contact: ['', [Validators.required, Validators.pattern(/^[0-9]\d{9}$/)]]
+    }, { validators: this.passwordMatchValidator });
   }
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
 
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  private passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (!password || !confirmPassword) {
+      return null;
+    }
+
+    return password.value === confirmPassword.value ? null : { passwordMismatch: true };
+  }
+
   getPasswordStrength(): string {
     const password = this.formGroup.get('password')?.value || '';
     let score = 0;
-    
+
     if (password.length >= 6) score++;
     if (/[a-z]/.test(password)) score++;
     if (/[A-Z]/.test(password)) score++;
     if (/\d/.test(password)) score++;
     if (/[@$!%*?&]/.test(password)) score++;
-    
+
     if (score <= 2) return 'weak';
     if (score === 3) return 'fair';
     if (score === 4) return 'good';
@@ -77,14 +94,14 @@ export class RegisterComponent implements OnDestroy {
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-    
+
     const formData = {
       ...this.formGroup.value,
       firstName: this.formGroup.value.firstName.trim(),
       lastName: this.formGroup.value.lastName.trim(),
       email: this.formGroup.value.email.toLowerCase().trim()
     };
-    
+
     this.authService.register(formData)
       .pipe(takeUntil(this.destroy$))
       .subscribe({

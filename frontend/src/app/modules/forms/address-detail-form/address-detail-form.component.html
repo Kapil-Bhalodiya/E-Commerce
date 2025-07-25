@@ -9,7 +9,8 @@
             <div class="checkout__input--list">
               <label>
                 <input class="checkout__input--field border-radius-5" placeholder="First name" type="text" 
-                  formControlName="firstName" />
+                  formControlName="firstName" 
+                  [class.error]="formGroup.get('firstName')?.touched && formGroup.get('firstName')?.invalid" />
                 <div class="form-error" *ngIf="formGroup.get('firstName')?.touched && formGroup.get('firstName')?.hasError('required')">
                   First name is required.
                 </div>
@@ -17,17 +18,20 @@
             </div>
             <div class="checkout__input--list">
               <label>
-                <input class="checkout__input--field border-radius-5" placeholder="Contact" type="text"
-                  formControlName="phone" />
-                <div class="form-error" *ngIf="formGroup.get('phone')?.touched && formGroup.get('phone')?.hasError('required')">
-                  Phone is required.
+                <input class="checkout__input--field border-radius-5" placeholder="Contact" type="number"
+                  formControlName="phone" 
+                  [class.error]="formGroup.get('phone')?.touched && formGroup.get('phone')?.invalid" />
+                <div class="form-error" *ngIf="formGroup.get('phone')?.touched && formGroup.get('phone')?.invalid">
+                  <span *ngIf="formGroup.get('phone')?.hasError('required')">Phone number is required.</span>
+                  <span *ngIf="formGroup.get('phone')?.hasError('pattern')">Please enter a valid 10-digit phone number.</span>
                 </div>
               </label>
             </div>
             <div class="checkout__input--list">
               <label>
                 <input class="checkout__input--field border-radius-5" placeholder="Address1" type="text"
-                  formControlName="address1" />
+                  formControlName="address1" 
+                  [class.error]="formGroup.get('address1')?.touched && formGroup.get('address1')?.invalid" />
                 <div class="form-error" *ngIf="formGroup.get('address1')?.touched && formGroup.get('address1')?.hasError('required')">
                   Address line 1 is required.
                 </div>
@@ -37,9 +41,7 @@
               <label>
                 <input class="checkout__input--field border-radius-5" placeholder="Apartment, suite, etc. (optional)" type="text" 
                   formControlName="address2" />
-                <div class="form-error" *ngIf="formGroup.get('address2')?.touched && formGroup.get('address2')?.hasError('required')">
-                  Address line 2 is required.
-                </div>
+
               </label>
             </div>
           </div>
@@ -47,7 +49,8 @@
             <div class="checkout__input--list">
               <label>
                 <input class="checkout__input--field border-radius-5" placeholder="Last name" type="text"
-                  formControlName="lastName" />
+                  formControlName="lastName" 
+                  [class.error]="formGroup.get('lastName')?.touched && formGroup.get('lastName')?.invalid" />
                 <div class="form-error" *ngIf="formGroup.get('lastName')?.touched && formGroup.get('lastName')?.hasError('required')">
                   Last name is required.
                 </div>
@@ -55,34 +58,35 @@
             </div>
             <div class="checkout__input--list checkout__input--select select">
               <select class="checkout__input--select__field border-radius-5" id="label"
-                formControlName="addressType">
+                formControlName="addressType" 
+                [class.error]="formGroup.get('addressType')?.touched && formGroup.get('addressType')?.invalid">
                 <option value="" disabled [selected]="true">Select Address Type</option>
                 <option value="home">Home</option>
                 <option value="work">Work</option>
                 <option value="other">Other</option>
               </select>
-              <div class="form-error" *ngIf="formGroup.get('addressType')?.touched && formGroup.get('addressType')?.hasError('required')">
-                Address type is required.
-              </div>
-              <div class="form-error" *ngIf="formGroup.get('addressType')?.touched && formGroup.get('addressType')?.hasError('invalidAddressType')">
-                Please select a valid address type.
+              <div class="form-error" *ngIf="formGroup.get('addressType')?.touched && formGroup.get('addressType')?.invalid">
+                <span *ngIf="formGroup.get('addressType')?.hasError('required')">Please select an address type.</span>
+                <span *ngIf="formGroup.get('addressType')?.hasError('invalidAddressType')">Please select a valid address type.</span>
               </div>
             </div>
             <div class="checkout__input--list checkout__input--select select">
               <select class="checkout__input--select__field border-radius-5" id="country"
-                    formControlName="country">
+                    formControlName="country" 
+                    [class.error]="formGroup.get('country')?.touched && formGroup.get('country')?.invalid">
                 <option value="" disabled [selected]="true">Select country</option>
                 <option value="India">India</option>
                 <option value="United States">United States</option>
               </select>
-              <div class="form-error" *ngIf="formGroup.get('country')?.touched && formGroup.get('country')?.hasError('required')">
-                Country is required.
+              <div class="form-error" *ngIf="formGroup.get('country')?.touched && formGroup.get('country')?.invalid">
+                <span *ngIf="formGroup.get('country')?.hasError('required')">Please select a country.</span>
               </div>
             </div>
             <div class="checkout__input--list">
               <label>
                 <input class="checkout__input--field border-radius-5" placeholder="City" type="text"
-                  formControlName="city" />
+                  formControlName="city" 
+                  [class.error]="formGroup.get('city')?.touched && formGroup.get('city')?.invalid" />
                 <div class="form-error" *ngIf="formGroup.get('city')?.touched && formGroup.get('city')?.hasError('required')">
                   City is required.
                 </div>
@@ -91,12 +95,11 @@
             <div class="checkout__input--list">
               <label>
                 <input class="checkout__input--field border-radius-5" placeholder="Postal code" type="text"
-                  formControlName="postalCode" />
-                <div class="form-error" *ngIf="formGroup.get('postalCode')?.touched && formGroup.get('postalCode')?.hasError('required')">
-                  Postal code is required.
-                </div>
-                <div class="form-error" *ngIf="formGroup.get('postalCode')?.touched && formGroup.get('postalCode')?.hasError('pattern')">
-                  Postal code must be 4-6 digits.
+                  formControlName="postalCode" 
+                  [class.error]="formGroup.get('postalCode')?.touched && formGroup.get('postalCode')?.invalid" />
+                <div class="form-error" *ngIf="formGroup.get('postalCode')?.touched && formGroup.get('postalCode')?.invalid">
+                  <span *ngIf="formGroup.get('postalCode')?.hasError('required')">Postal code is required.</span>
+                  <span *ngIf="formGroup.get('postalCode')?.hasError('pattern')">Postal code must be 4-6 digits only.</span>
                 </div>
               </label>
             </div>

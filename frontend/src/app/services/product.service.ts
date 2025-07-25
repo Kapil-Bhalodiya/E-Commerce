@@ -10,9 +10,8 @@ export interface ProductFilters {
   minPrice?: number
   maxPrice?: number
   brands?: string[]
-  occasion?: string[]
   tags?: string[]
-  category?: string
+  categories?: string[]
   subcategory?: string
   search?: string
   sortBy?: string

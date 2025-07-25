@@ -77,7 +77,7 @@
             <i class="bi bi-phone input-icon"></i>
             <input 
               id="contact" 
-              type="tel" 
+              type="number" 
               formControlName="contact" 
               class="form-input with-prefix" 
               placeholder="Enter mobile number"
@@ -114,6 +114,27 @@
               <div class="strength-fill" [ngClass]="getPasswordStrength()"></div>
             </div>
             <span class="strength-text">{{ getPasswordStrengthText() }}</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="input-wrapper">
+            <i class="bi bi-lock input-icon"></i>
+            <input 
+              id="confirmPassword" 
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              formControlName="confirmPassword" 
+              class="form-input" 
+              placeholder="Re-enter password"
+              [class.error]="(formGroup.get('confirmPassword')?.invalid && formGroup.get('confirmPassword')?.touched) || (formGroup.hasError('passwordMismatch') && formGroup.get('confirmPassword')?.touched)"
+            />
+            <button type="button" class="password-toggle" (click)="toggleConfirmPassword()">
+              <i [class]="showConfirmPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
+          <div *ngIf="(formGroup.get('confirmPassword')?.invalid && formGroup.get('confirmPassword')?.touched) || (formGroup.hasError('passwordMismatch') && formGroup.get('confirmPassword')?.touched)" class="error-message">
+            <span *ngIf="formGroup.get('confirmPassword')?.hasError('required')">Please confirm your password</span>
+            <span *ngIf="formGroup.hasError('passwordMismatch')">Passwords do not match</span>
           </div>
         </div>
         
