@@ -45,4 +45,10 @@ export class OrderService {
   createPaymentSession(): Observable<any> {
     return this.http.post(`${environment.backendApi}${API_ENDPOINTS.PAYMENTS.BASE}/create-checkout-session`, {})
   }
+
+  getAllOrders(page: number = 1, limit: number = 5): Observable<any> {
+    return this.http.get(`${environment.backendApi}/order`, {
+      params: { page, limit }
+    });
+  }
 }

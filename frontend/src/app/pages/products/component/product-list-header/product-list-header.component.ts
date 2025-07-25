@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { SearchBoxComponent } from "../../../../components/search-box/search-box.component";
 import { DropdownFilterComponent } from "../../../../components/filter/dropdown-filter/dropdown-filter.component";
 import { PRODUCT_DATA } from '../../../../shared/data/product.data';
 
 @Component({
   selector: 'app-product-list-header',
-  imports: [SearchBoxComponent, DropdownFilterComponent],
+  imports: [CommonModule, SearchBoxComponent, DropdownFilterComponent],
   templateUrl: './product-list-header.component.html',
   styleUrl: './product-list-header.component.scss'
 })
@@ -16,6 +17,9 @@ export class ProductListHeaderComponent {
   @Output() search = new EventEmitter<string>();
   @Output() sortChange = new EventEmitter<string>();
   @Output() pageSizeChange = new EventEmitter<number>();
+  @Output() viewModeChange = new EventEmitter<'grid' | 'list'>();
+
+  viewMode: 'grid' | 'list' = 'grid';
 
   readonly dropDownSort = PRODUCT_DATA.sortOptions;
   readonly dropPageSort = PRODUCT_DATA.pageSizeOptions;
@@ -30,6 +34,12 @@ export class ProductListHeaderComponent {
 
   onPageSizeChange(pageSize: string): void {
     this.pageSizeChange.emit(parseInt(pageSize, 10));
+  }
+
+  onViewModeChange(mode: 'grid' | 'list'): void {
+    console.log('View mode changed to:', mode);
+    this.viewMode = mode;
+    this.viewModeChange.emit(mode);
   }
 
   getShowingText(): string {

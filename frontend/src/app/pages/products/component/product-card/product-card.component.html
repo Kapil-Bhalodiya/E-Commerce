@@ -6,9 +6,10 @@
           [src]="getProductImage()"
           [alt]="product.name"
         />
+        <!-- [src]="product.image_urls[1] ? imageURL + '/' + product.image_urls[1] : getProductImage()" -->
         <img class="product__items--img product__secondary--img" 
-             [src]="product.image_urls[1] ? imageURL + '/' + product.image_urls[1] : getProductImage()"
-             [alt]="product.name">
+            [src]="getProductImage()"
+            [alt]="product.name">
       </a>
       <!-- <div class="product__badge" *ngIf="product.isOnSale">
         <span class="product__badge--items sale">Sale</span>

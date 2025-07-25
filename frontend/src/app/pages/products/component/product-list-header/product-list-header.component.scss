@@ -153,6 +153,12 @@
 
 
 
+.product__search {
+	min-width: 300px;
+	flex: 1;
+	max-width: 400px;
+}
+
 .product__showing--count {
 	font-weight: 500;
 	letter-spacing: .5px

@@ -15,6 +15,7 @@ import { environment } from '../../../../../environments/environment'
 })
 export class ProductCardComponent {
   @Input({ required: true }) product!: Product
+  @Input() viewMode: 'grid' | 'list' = 'grid';
   @Output() addToCart = new EventEmitter<Product>()
   @Output() addToWishlist = new EventEmitter<Product>()
   @Output() quickView = new EventEmitter<Product>()
@@ -49,7 +50,9 @@ export class ProductCardComponent {
   }
 
   getProductImage(): string {
-    return `${this.imageURL}/${this.product.image_urls?.[0]}`
+    return this.product?.image_urls
+      ? `${this.imageURL}/${this.product.image_urls[0]}`
+      : 'assets/images/no-image.png'
   }
 
   trackByProductId(index: number, product: Product): string {

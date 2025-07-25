@@ -50,14 +50,14 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
     const newAddressValidators = {
       firstName: [Validators.required],
       lastName: [Validators.required],
-      phone: [Validators.required],
+      phone: [Validators.required, Validators.pattern('^[0-9]{10}$')],
       addressType: [Validators.required, this.addressTypeValidator.bind(this)],
-      addressLine1: [Validators.required],
-      addressLine2: [],
+      address1: [Validators.required],
+      address2: [],
       city: [Validators.required],
       country: [Validators.required],
-      postalCode: [Validators.required, Validators.pattern('^[0-9]{6}$')],
-      isDefault: [Validators.required]
+      postalCode: [Validators.required, Validators.pattern('^[0-9]{4,6}$')],
+      isDefault: []
     };
 
     if (this.addresses.length === 0) {
@@ -94,7 +94,10 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
       newAddressGroup.updateValueAndValidity({ emitEvent: false });
     });
 
-    this.formGroup.get('deliveryOption')?.updateValueAndValidity({ emitEvent: false });
+    // Trigger initial validation setup
+    const currentDeliveryOption = this.formGroup.get('deliveryOption')?.value || 'existing';
+    this.formGroup.get('deliveryOption')?.setValue(currentDeliveryOption);
+    this.formGroup.get('deliveryOption')?.updateValueAndValidity({ emitEvent: true });
   }
 
   private addressTypeValidator(control: AbstractControl): { [key: string]: boolean } | null {

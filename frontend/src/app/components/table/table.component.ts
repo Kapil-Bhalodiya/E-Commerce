@@ -13,9 +13,14 @@ export class TableComponent {
   @Input() columns: string[] = [];
   @Input() data: any[] = [];
   @Output() remove = new EventEmitter<string>();
+  @Output() quantityChange = new EventEmitter<{productId: string, quantity: number}>();
   imageURL: string = environment.apiUrl;
 
   onRemove(id: string) {
     this.remove.emit(id);
+  }
+
+  onQuantityChange(productId: string, quantity: number) {
+    this.quantityChange.emit({productId, quantity});
   }
 }

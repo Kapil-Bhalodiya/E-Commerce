@@ -2,23 +2,36 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
 import { CommonModule } from '@angular/common';
 import { Product } from '../../../models/product.model';
 import { ProductCardComponent } from '../../../pages/products/component/product-card/product-card.component';
+import { RatingComponent } from '../../../components/rating/rating.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-grid',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent],
+  imports: [CommonModule, ProductCardComponent, RatingComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="product__section--inner product__grid--inner">
-      <div class="row" [ngClass]="gridClass">
+      <div class="row" [ngClass]="gridClass" *ngIf="viewMode === 'grid'">
         <div class="col mb-30" *ngFor="let product of products; trackBy: trackByProduct">
           <app-product-card 
             [product]="product"
+            [viewMode]="'grid'"
             (addToCart)="addToCart.emit($event)"
             (addToWishlist)="addToWishlist.emit($event)"
             (quickView)="quickView.emit($event)">
           </app-product-card>
         </div>
+      </div>
+      <div *ngIf="viewMode === 'list'">
+        <app-product-card 
+          *ngFor="let product of products; trackBy: trackByProduct"
+          [product]="product"
+          [viewMode]="'list'"
+          (addToCart)="addToCart.emit($event)"
+          (addToWishlist)="addToWishlist.emit($event)"
+          (quickView)="quickView.emit($event)">
+        </app-product-card>
       </div>
     </div>
   `
@@ -26,9 +39,12 @@ import { ProductCardComponent } from '../../../pages/products/component/product-
 export class ProductGridComponent {
   @Input() products: Product[] = [];
   @Input() columns = 4;
+  @Input() viewMode: 'grid' | 'list' = 'grid';
   @Output() addToCart = new EventEmitter<Product>();
   @Output() addToWishlist = new EventEmitter<Product>();
   @Output() quickView = new EventEmitter<Product>();
+
+  constructor(private router: Router) {}
 
   get gridClass(): string {
     const colMap: Record<number, string> = {
@@ -42,5 +58,14 @@ export class ProductGridComponent {
 
   trackByProduct(index: number, product: Product): string {
     return product._id;
+  }
+
+  navigateToProduct(product: Product): void {
+    this.router.navigate(['/product/product-detail', product._id]);
+  }
+
+  onImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'https://via.placeholder.com/120x120?text=No+Image';
   }
 }

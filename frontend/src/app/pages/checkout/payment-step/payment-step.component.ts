@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, inject, signal } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { environment,STRIPE_PK } from '../../../../environments/environment';
 import { loadStripe, Stripe, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
 import { PaymentService } from '../../../services/payment.service';
@@ -15,7 +16,7 @@ import { ToastComponent } from '../../../shared/components/toast/toast.component
   templateUrl: './payment-step.component.html',
   styleUrls: ['./payment-step.component.scss']
 })
-export class PaymentStepComponent implements OnInit {
+export class PaymentStepComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   
   @Input() formGroup!: FormGroup;
@@ -29,16 +30,25 @@ export class PaymentStepComponent implements OnInit {
   elements: StripeElements | null = null;
   paymentElement: any = null;
   clientSecret: string | null = null;
+  private isInitialized = false;
+  private static paymentIntentCreated = false;
 
   constructor(
     private paymentService: PaymentService
   ){}
 
   async ngOnInit() {
-    await this.loadStripe();
+    if (!this.isInitialized) {
+      this.isInitialized = true;
+      await this.loadStripe();
+    }
   }
 
   async loadStripe() {
+    if (this.stripe) {
+      return; // Already loaded
+    }
+    
     this.loading.set(true)
     try {
       this.stripe = await loadStripe(STRIPE_PK);
@@ -56,42 +66,33 @@ export class PaymentStepComponent implements OnInit {
   }
 
   async createPaymentIntentAndInitializeElements() {
+    if (this.clientSecret || PaymentStepComponent.paymentIntentCreated) {
+      return;
+    }
+    
+    PaymentStepComponent.paymentIntentCreated = true;
+    
     try {
       this.loading.set(true);
       
-      // Get the amount from the form
       const itemsString = localStorage.getItem('cart');
       const items = itemsString ? JSON.parse(itemsString) : [];
 
-      // Now items is an array, so you can safely use map
-      const amount = items.map((element: any) => element.price)
-                         .reduce((acc: number, val: number) => acc + val, 0);
-      console.log(amount)
+      const amount = items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0);
       
-      // Create payment intent on your backend
-      const response = await this.paymentService.createPaymentIntent(amount).subscribe({
-        next: async (res: any) => {
-          console.log("res: ",res)
-          this.loading.set(false);
-          this.clientSecret = res;
-          console.log("formGrp :",this.formGroup)
-          this.formGroup.get('stripePaymentIntentId')?.setValue(res);
-          console.log("formGrp :",this.formGroup)
-          await this.initializeStripeElements();
-        },
-        error: (err: any) => console.error("Invalid response from server :",err)
-      })
-      console.log("response : ",response)
-      if (!response) {
-        throw new Error('Invalid response from server');
-      }
+      const res = await firstValueFrom(this.paymentService.createPaymentIntent(amount));
       
-      // Now initialize Elements with the client secret
+      this.clientSecret = res;
+      this.formGroup.get('stripePaymentIntentId')?.setValue(res);
+      
+      await this.initializeStripeElements();
+      this.loading.set(false);
+      
     } catch (error) {
+      PaymentStepComponent.paymentIntentCreated = false;
       this.loading.set(false);
       console.error('Error creating payment intent:', error);
       this.paymentError.set('Failed to prepare payment. Please try again later.');
-    } finally {
     }
   }
 
@@ -215,6 +216,12 @@ export class PaymentStepComponent implements OnInit {
       this.paymentError.set(error.message || 'An error occurred during payment processing');
     } finally {
       this.loading.set(false);
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.paymentElement) {
+      this.paymentElement.unmount();
     }
   }
 }

@@ -140,6 +140,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
   
   nextClickHandler(): void {
+    if (this.currentIndex === 0 && this.cartItems.length === 0) {
+      this.showToastMessage('Your cart is empty. Please add items to continue.', 'warning');
+      return;
+    }
+    
     const currentForm = this.formGroup.get(this.steps[this.currentIndex].index);
     if (currentForm?.invalid) {
       currentForm.markAllAsTouched();
@@ -196,7 +201,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getGrandTotal(): number {
     const subtotal = this.cartService.getSubtotal();
     const tax = subtotal * 0.1;
-    return subtotal + tax + this.shippingCost - this.discountAmount;
+    const shipping = this.cartItems.length > 0 ? this.shippingCost : 0;
+    return Math.round((subtotal + tax + shipping - this.discountAmount) * 100) / 100;
+  }
+
+  getShippingCost(): number {
+    return this.cartItems.length > 0 ? this.shippingCost : 0;
   }
   
   proceedToCheckout(): void {
