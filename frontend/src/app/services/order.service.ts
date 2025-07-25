@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { environment } from '../../environments/environment'
-import { API_ENDPOINTS } from '../core/constants/api.constants'
+import { API_ENDPOINTS, STORAGE_KEYS } from '../core/constants/api.constants'
 
 export interface OrderData {
   cartForm: {
@@ -32,10 +32,11 @@ export interface OrderResponse {
   providedIn: 'root'
 })
 export class OrderService {
+  userData = localStorage.getItem(STORAGE_KEYS.USER) ? JSON.parse(localStorage.getItem(STORAGE_KEYS.USER) || '{}') : null;
   constructor(private http: HttpClient) {}
 
-  createOrder(orderData: OrderData, userData: any): Observable<OrderResponse> {
-    return this.http.post<OrderResponse>(`${environment.backendApi}${API_ENDPOINTS.ORDERS.BASE}`, {orderData, userData})
+  createOrder(orderData: OrderData): Observable<OrderResponse> {
+    return this.http.post<OrderResponse>(`${environment.backendApi}${API_ENDPOINTS.ORDERS.BASE}`, {orderData, userData: this.userData})
   }
 
   validateCoupon(couponCode: string): Observable<any> {

@@ -2,13 +2,12 @@ import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from 
 import { CommonModule } from '@angular/common';
 import { Product } from '../../../models/product.model';
 import { ProductCardComponent } from '../../../pages/products/component/product-card/product-card.component';
-import { RatingComponent } from '../../../components/rating/rating.component';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-grid',
   standalone: true,
-  imports: [CommonModule, ProductCardComponent, RatingComponent],
+  imports: [CommonModule, ProductCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="product__section--inner product__grid--inner">
@@ -23,7 +22,7 @@ import { Router } from '@angular/router';
           </app-product-card>
         </div>
       </div>
-      <div *ngIf="viewMode === 'list'">
+      <div *ngIf="viewMode === 'list'" class="product-list-card" >
         <app-product-card 
           *ngFor="let product of products; trackBy: trackByProduct"
           [product]="product"

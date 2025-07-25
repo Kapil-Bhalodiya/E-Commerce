@@ -12,10 +12,10 @@ const createOrder = async (req, res, next) => {
 
   const session = await mongoose.startSession();
   let isTransactionCommitted = false;
-  
+
   try {
     session.startTransaction();
-    
+
     const userId = req.body.userData?._id || req.userId;
     const { cartForm, deliveryAddressForm, paymentDetailForm, couponCode } = req.body.orderData;
 
@@ -151,7 +151,15 @@ const createOrder = async (req, res, next) => {
     let populatedOrder;
     try {
       populatedOrder = await Order.findById(order._id)
-        .populate('orderItems deliveryAddressId payment')
+        .populate({
+          path: 'orderItems',
+          populate: {
+            path: 'productId',
+            model: 'Product'
+          }
+        })
+        .populate('deliveryAddressId')
+        .populate('payment')
         .exec();
       if (!populatedOrder) {
         throw new Error('Failed to populate order');

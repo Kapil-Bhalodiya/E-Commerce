@@ -53,7 +53,7 @@
                     <div *ngIf="error && !isLoading" class="error-state text-center py-5">
                         <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
                         <p class="mt-3 text-danger">{{ error }}</p>
-                        <app-primary-button label="Try Again" (click)="fetchProducts()"></app-primary-button>
+                        <app-primary-button label="Try Again" (click)="fetchAllProducts()"></app-primary-button>
                     </div>
 
                     <!-- Products Display -->

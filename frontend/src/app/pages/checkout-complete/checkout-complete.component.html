@@ -16,10 +16,7 @@
       <div class="col-lg-8">
         <div class="order__summary-card">
           <div class="card__header">
-            <h2 class="card__title">
-              <i class="bi bi-receipt"></i>
-              Order Summary
-            </h2>
+            <h2 class="card__title"><i class="bi bi-receipt"></i>Order Summary</h2>
             <div class="order__actions">
               <button class="action__btn" (click)="downloadInvoice()" title="Download Invoice">
                 <i class="bi bi-download"></i>
@@ -29,38 +26,38 @@
               </button>
             </div>
           </div>
-          
+
           <div class="order__details">
             <div class="detail__row">
               <span class="detail__label">Order Number:</span>
-              <span class="detail__value order__number">{{ orderDetails.orderNumber }}</span>
+              <span class="detail__value order__number">{{ orderDetails._id }}</span>
             </div>
             <div class="detail__row">
               <span class="detail__label">Order Date:</span>
-              <span class="detail__value">{{ orderDetails.orderDate | date:'MMM dd, yyyy - HH:mm' }}</span>
+              <span class="detail__value">{{ orderDetails.createdAt | date:'MMM dd, yyyy - HH:mm' }}</span>
             </div>
             <div class="detail__row">
               <span class="detail__label">Estimated Delivery:</span>
-              <span class="detail__value">{{ orderDetails.estimatedDelivery | date:'MMM dd, yyyy' }}</span>
+              <span class="detail__value">{{ orderDetails.createdAt | date:'MMM dd, yyyy' }}</span>
             </div>
             <div class="detail__row">
               <span class="detail__label">Payment Method:</span>
-              <span class="detail__value">{{ orderDetails.paymentMethod }}</span>
+              <span class="detail__value">{{ orderDetails.payment.provider}} - {{orderDetails.payment.method}}</span>
             </div>
             <div class="detail__row total">
               <span class="detail__label">Total Amount:</span>
-              <span class="detail__value">${{ orderDetails.total | number:'1.2-2' }}</span>
+              <span class="detail__value">${{ orderDetails.totalAmount | number:'1.2-2' }}</span>
             </div>
           </div>
 
-          <!-- Order Items -->
-          <div class="order__items" *ngIf="orderDetails.items.length > 0">
+          <!-- Order Items "-->
+          <div class="order__items" *ngIf="orderDetails.orderItems.length > 0">
             <h3 class="items__title">Order Items</h3>
             <div class="item__list">
-              <div class="order__item" *ngFor="let item of orderDetails.items">
-                <img [src]="item.image || 'https://via.placeholder.com/60x60'" [alt]="item.name" class="item__image">
+              <div class="order__item" *ngFor="let item of orderDetails.orderItems">
+                <img [src]="imageURL+'/'+item.productId.image_urls[0] || 'https://via.placeholder.com/60x60'" [alt]="item.name" class="item__image">
                 <div class="item__details">
-                  <h4 class="item__name">{{ item.name }}</h4>
+                  <h4 class="item__name">{{ item.productId.name }}</h4>
                   <p class="item__quantity">Qty: {{ item.quantity }}</p>
                 </div>
                 <div class="item__price">
@@ -79,12 +76,10 @@
               Order Tracking
             </h2>
           </div>
-          
+
           <div class="tracking__timeline">
-            <div class="timeline__item" 
-                 *ngFor="let step of trackingSteps; let i = index"
-                 [class.completed]="step.completed"
-                 [class.active]="step.active">
+            <div class="timeline__item" *ngFor="let step of trackingSteps; let i = index"
+              [class.completed]="step.completed" [class.active]="step.active">
               <div class="timeline__marker">
                 <i class="bi" [ngClass]="step.icon"></i>
               </div>
@@ -109,12 +104,13 @@
             </h3>
           </div>
           <div class="address__content">
-            <p class="address__name">{{ orderDetails.shippingAddress.name }}</p>
-            <p class="address__line">{{ orderDetails.shippingAddress.address }}</p>
+            <p class="address__name">{{ orderDetails.deliveryAddressId?.addressLine1 }}</p>
+            <p class="address__line">{{ orderDetails.deliveryAddressId?.addressLine2 }}</p>
             <p class="address__line">
-              {{ orderDetails.shippingAddress.city }}, {{ orderDetails.shippingAddress.state }} {{ orderDetails.shippingAddress.zipCode }}
+              {{ orderDetails.deliveryAddressId?.city }}, {{ orderDetails.deliveryAddressId?.state }} {{
+              orderDetails.deliveryAddressId?.zipCode }}
             </p>
-            <p class="address__country">{{ orderDetails.shippingAddress.country }}</p>
+            <p class="address__country">{{ orderDetails.deliveryAddressId?.country }}</p>
           </div>
         </div>
 
@@ -171,7 +167,7 @@
           You Might Also Like
         </h2>
       </div>
-      
+
       <div class="recommendations__grid">
         <div class="recommendation__card" *ngFor="let product of recommendations">
           <img [src]="product.image" [alt]="product.name" class="product__image">
@@ -179,8 +175,8 @@
             <h4 class="product__name">{{ product.name }}</h4>
             <div class="product__rating">
               <div class="stars">
-                <i class="bi bi-star-fill" *ngFor="let star of [1,2,3,4,5]; let i = index" 
-                   [class.active]="i < product.rating"></i>
+                <i class="bi bi-star-fill" *ngFor="let star of [1,2,3,4,5]; let i = index"
+                  [class.active]="i < product.rating"></i>
               </div>
               <span class="rating__value">({{ product.rating }})</span>
             </div>

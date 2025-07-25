@@ -38,5 +38,6 @@ export const STORAGE_KEYS = {
   TOKEN: 'auth_token',
   USER: 'user_data',
   CART: 'cart',
+  ORDER: 'order',
   THEME: 'theme_preference'
 } as const

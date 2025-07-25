@@ -69,25 +69,22 @@ export class ProductsComponent implements OnInit {
     this.fetchAllProducts();
   }
 
-  fetchProducts() {
-    this.isLoading = true;
-    this.error = null;
-    
-    console.log('Fetching products with filters:', this.filters);
-    this.productService.fetchProducts(this.page, this.filters.limit || 4, this.filters).subscribe({
-      next: (response: any) => {
-        this.products = response.data.products || [];
-        this.totalPages = response.data.pages || 1;
-        this.totalCount = response.data.total || 0;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.error = 'Failed to load products. Please try again.';
-        this.isLoading = false;
-        console.error('Error fetching products:', error);
-      }
-    });
-  }
+  // fetchProducts() {
+  //   this.isLoading = true;
+  //   this.error = null;
+  //   this.productService.fetchProducts(this.page, this.filters.limit || 4, this.filters).subscribe({
+  //     next: (response: any) => {
+  //       this.products = response.data.products || [];
+  //       this.totalPages = response.data.pages || 1;
+  //       this.totalCount = response.data.total || 0;
+  //       this.isLoading = false;
+  //     },
+  //     error: (error) => {
+  //       this.isLoading = false;
+  //       console.error('Error fetching products:', error);
+  //     }
+  //   });
+  // }
 
   fetchAllProducts() {
     this.isLoading = true;
@@ -95,13 +92,10 @@ export class ProductsComponent implements OnInit {
       next: (response) => {
         this.allProducts = response.data.products || [];
         this.filteredProducts = [...this.allProducts];
-        console.log('Sample product structure:', this.allProducts[0]);
-        console.log('Available categories:', this.categories);
         this.applyClientSideFilters();
         this.isLoading = false;
       },
       error: (error) => {
-        this.error = 'Failed to load products. Please try again.';
         this.isLoading = false;
         console.error('Error fetching all products:', error);
       }
@@ -112,15 +106,10 @@ export class ProductsComponent implements OnInit {
     let filtered = [...this.allProducts];
     
     if (this.filters.categories && this.filters.categories.length) {
-      console.log("Categories : ", this.filters.categories)
-      
-      // Get all subcategory IDs for selected categories
       let allSubcategoryIds: string[] = [];
-      
       this.filters.categories.forEach(categoryName => {
         const selectedCategory = this.categories.find(cat => cat.name === categoryName);
         if (selectedCategory) {
-          // Use populated subcategory data from products
           const categoryProducts = this.allProducts.filter(product => 
             product.subcategory?.category_id?._id === selectedCategory._id ||
             product.subcategory?.category_id === selectedCategory._id
@@ -129,12 +118,7 @@ export class ProductsComponent implements OnInit {
           allSubcategoryIds = [...allSubcategoryIds, ...subcategoryIds];
         }
       });
-      
-      // Remove duplicates
       allSubcategoryIds = [...new Set(allSubcategoryIds)];
-      
-      console.log('All subcategory IDs for selected categories:', allSubcategoryIds);
-      
       filtered = filtered.filter(product => {
         return allSubcategoryIds.includes(product.subcategory);
       });
@@ -161,22 +145,16 @@ export class ProductsComponent implements OnInit {
     
     if (this.filters.search) {
       const searchTerm = this.filters.search.toLowerCase();
-      console.log('Searching for:', searchTerm);
       filtered = filtered.filter(product => {
         const nameMatch = product.name?.toLowerCase().includes(searchTerm);
         const descMatch = product.description?.toLowerCase().includes(searchTerm);
         return nameMatch || descMatch;
       });
-      console.log('Search results:', filtered.length);
     }
     
     // Apply sorting
     if (this.filters.sortBy) {
-      console.log('Sorting by:', this.filters.sortBy);
-      console.log('Products before sorting:', filtered.length);
-      console.log('First product before sort:', filtered[0]?.name, filtered[0]?.createdAt);
       filtered = this.applySorting(filtered, this.filters.sortBy);
-      console.log('First product after sort:', filtered[0]?.name, filtered[0]?.createdAt);
     }
     
     this.filteredProducts = filtered;

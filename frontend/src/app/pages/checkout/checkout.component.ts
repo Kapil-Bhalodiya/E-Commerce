@@ -15,6 +15,7 @@ import { AddressService } from '../../services/address.service';
 import { Address } from '../../models/address.model';
 import { SpinnerComponent } from "../../components/spinner/spinner.component";
 import { ToastComponent } from '../../shared/components/toast/toast.component';
+import { STORAGE_KEYS } from '../../core/constants/api.constants';
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
@@ -34,7 +35,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   steps: StepConfig[] = [];
 
   currentIndex: number = 0;
-  isLoading:boolean = false;
+  isLoading: boolean = false;
   cartItems!: CartItem[];
   couponCode: string = '';
   couponError: string = '';
@@ -43,7 +44,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   addresses: Address[] = [];
   selectedAddressId: string | null = null;
-  
+
   showToast = false;
   toastMessage = '';
   toastType: 'success' | 'error' | 'warning' = 'success';
@@ -114,7 +115,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       }),
     };
   }
-  
+
   fetchAddresses() {
     this.isLoading = true;
     this.errorMessage = null;
@@ -138,20 +139,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   addressTypeValidator(control: AbstractControl) {
     return control.value === '-1' ? { invalidAddressType: true } : null;
   }
-  
+
   nextClickHandler(): void {
     if (this.currentIndex === 0 && this.cartItems.length === 0) {
       this.showToastMessage('Your cart is empty. Please add items to continue.', 'warning');
       return;
     }
-    
+
     const currentForm = this.formGroup.get(this.steps[this.currentIndex].index);
     if (currentForm?.invalid) {
       currentForm.markAllAsTouched();
       this.showToastMessage('Please complete all required fields.', 'warning');
       return;
     }
-    
+
     // Special validation for payment step
     if (this.currentIndex === this.steps.length - 1) {
       if (!this.validatePayment()) {
@@ -164,7 +165,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.formStepper.nextStep();
     }
   }
-  
+
   previousClickHandler(): void {
     if (this.formStepper) {
       this.formStepper.previousStep();
@@ -174,7 +175,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   onTransitionCompleteHandler(ev: FormGroup): void {
     this.currentFormGroup = ev;
   }
-  
+
   onSelectedIndexChangedHandler(index: number): void {
     this.currentIndex = index;
   }
@@ -208,14 +209,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getShippingCost(): number {
     return this.cartItems.length > 0 ? this.shippingCost : 0;
   }
-  
+
   proceedToCheckout(): void {
     const cartItems = this.cartService.getCartItems()
     if (!cartItems.length) {
       this.showToastMessage('Cart is empty', 'error');
       return
     }
-    
+
     const orderData = {
       cartForm: { items: cartItems },
       deliveryAddressForm: {
@@ -223,29 +224,41 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         newAddress: this.formGroup.get('deliveryForm.newAddress')?.value
       },
       paymentDetailForm: this.formGroup.get('paymentForm')?.value,
-      couponCode: this.couponCode || null
+      couponCode: this.couponCode || undefined
     }
-    
-    localStorage.setItem('orderForm', JSON.stringify(orderData))
-    this.showToastMessage('Order placed successfully!', 'success');
-    this.router.navigate(['/checkout-complete'])
+    this.isLoading = true;
+    this.orderService.createOrder(orderData).pipe(
+      takeUntil(this.ngUnsubscribe),
+      catchError(err => {
+        this.isLoading = false;
+        this.showToastMessage('Failed to place order. Please try again.', 'error');
+        return of(null);
+      })
+    ).subscribe((orderResponse) => {
+      if (!orderResponse) return;
+      this.showToastMessage('Order placed successfully!', 'success');
+      this.cartService.clearCart()
+      localStorage.setItem(STORAGE_KEYS.ORDER, JSON.stringify(orderResponse));
+      this.isLoading = false;
+      this.router.navigate(['/checkout-complete']);
+    });
   }
 
   validatePayment(): boolean {
     const paymentForm = this.formGroup.get('paymentForm');
     const stripePaymentIntentId = paymentForm?.get('stripePaymentIntentId')?.value;
     const paymentCompleted = paymentForm?.get('paymentCompleted')?.value;
-    
+
     // Check if payment is completed
     if (!paymentCompleted) {
       return false;
     }
-    
+
     // Check if payment intent exists and is valid
     if (!stripePaymentIntentId || stripePaymentIntentId.trim() === '') {
       return false;
     }
-    
+
     return true;
   }
 
@@ -253,7 +266,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.toastMessage = message;
     this.toastType = type;
     this.showToast = true;
-    
+
     setTimeout(() => {
       this.showToast = false;
     }, 3000);

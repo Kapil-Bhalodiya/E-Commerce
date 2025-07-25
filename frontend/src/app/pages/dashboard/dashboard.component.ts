@@ -156,6 +156,7 @@ generateInitialsAvatar(initials: string): string {
           // Optionally, calculate pending/completed orders from the fetched orders
           this.stats.pendingOrders = this.recentOrders.filter((o: any) => o.status === 'pending').length;
           this.stats.completedOrders = this.recentOrders.filter((o: any) => o.status === 'delivered').length;
+          this.stats.totalSpent = this.recentOrders.reduce((acc: number, curr: any) => acc + curr.total, 0);
         }
       },
       error: (err) => {
