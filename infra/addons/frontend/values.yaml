@@ -4,7 +4,11 @@ replicaCount: 1
 
 image:
   repository: kapilbhalodiya/ecom-frontend
+<<<<<<< Updated upstream
   tag: "35-latest"
+=======
+  tag: "36-latest"
+>>>>>>> Stashed changes
   pullPolicy: IfNotPresent
 
 service:
