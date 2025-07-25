@@ -1,18 +1,15 @@
 import { Component, Input, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { environment,STRIPE_PK } from '../../../../environments/environment';
+import { STRIPE_PK } from '../../../../environments/environment';
 import { loadStripe, Stripe, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
 import { PaymentService } from '../../../services/payment.service';
 import { SpinnerComponent } from "../../../components/spinner/spinner.component";
-import { ToastComponent } from '../../../shared/components/toast/toast.component';
-
 @Component({
   selector: 'app-payment-step',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent, ToastComponent],
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
   templateUrl: './payment-step.component.html',
   styleUrls: ['./payment-step.component.scss']
 })

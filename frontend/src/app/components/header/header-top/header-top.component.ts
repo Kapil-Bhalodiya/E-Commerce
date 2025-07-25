@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header-top',
-  imports: [SearchBoxComponent, DropdownFilterComponent],
   templateUrl: './header-top.component.html',
   styleUrl: './header-top.component.scss'
 })

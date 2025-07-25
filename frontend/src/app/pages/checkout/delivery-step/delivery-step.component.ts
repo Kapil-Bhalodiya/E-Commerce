@@ -4,12 +4,11 @@ import { Address } from '../../../models/address.model';
 import { FormStepComponent } from '../../../components/stepper/models/form-step-cponent.model';
 import { CommonModule } from '@angular/common';
 import { AddressDetailFormComponent } from '../../../modules/forms/address-detail-form/address-detail-form.component';
-import { AccordionRadioComponent } from "../../../components/accordion-radio/accordion-radio.component";
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-delivery-address',
-  imports: [CommonModule, AddressDetailFormComponent, FormsModule, ReactiveFormsModule, AccordionRadioComponent],
+  imports: [CommonModule, AddressDetailFormComponent, FormsModule, ReactiveFormsModule],
   templateUrl: './delivery-step.component.html',
   styleUrls: ['./delivery-step.component.scss'],
 })

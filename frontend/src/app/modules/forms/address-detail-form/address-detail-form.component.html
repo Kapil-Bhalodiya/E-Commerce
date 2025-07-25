@@ -18,7 +18,7 @@
             </div>
             <div class="checkout__input--list">
               <label>
-                <input class="checkout__input--field border-radius-5" placeholder="Contact" type="number"
+                <input class="checkout__input--field border-radius-5" placeholder="Contact" type="tel"
                   formControlName="phone" 
                   [class.error]="formGroup.get('phone')?.touched && formGroup.get('phone')?.invalid" />
                 <div class="form-error" *ngIf="formGroup.get('phone')?.touched && formGroup.get('phone')?.invalid">

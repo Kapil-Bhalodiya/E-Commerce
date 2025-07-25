@@ -13,7 +13,7 @@ export interface Product {
   review_count?: number
   tags?: string[]
   dietary_needs?: string[]
-  image_urls?: string[]
+  image_urls: string[]
   variant_ids?: Variant[]
   category?: string
   sku?: string
