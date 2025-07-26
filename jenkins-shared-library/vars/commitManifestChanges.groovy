@@ -3,17 +3,19 @@ def call(String serviceName, String imageTag, String credentialsId) {
         sh """
             git config --global user.email "ci@example.com"
             git config --global user.name "CI Bot"
-            git config --global pull.rebase false 
+            git config --global pull.rebase true
 
-            git stash || echo "Nothing to stash"
-            git checkout main || echo "Already on main"
-            git pull origin main
-            git stash pop || echo "Nothing to pop"
+            # Clean checkout main
+            git fetch origin main
+            git checkout main
+            git reset --hard origin/main
 
+            # Apply changes
             git add .
-            git commit -m "Update ${serviceName} image to ${imageTag}" || echo "No changes to commit"
+            git diff --cached --quiet || git commit -m "Update ${serviceName} image to ${imageTag}"
 
-            git push https://\${GIT_USER}:\${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce.git main
+            # Push using token
+            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce.git main
         """
     }
 }
