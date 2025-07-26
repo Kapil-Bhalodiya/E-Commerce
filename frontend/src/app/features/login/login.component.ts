@@ -53,15 +53,11 @@ export class LoginComponent implements OnDestroy {
       .subscribe({
         next: (response) => {
           this.isLoading = false;
-<<<<<<< HEAD
-          this.router.navigate(['/']);
-=======
           this.authService.isAuthenticated$.subscribe(isAuth => {
             if (isAuth) {
               this.router.navigate(['/']);
             }
           });
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         },
         error: (err) => {
           this.isLoading = false;

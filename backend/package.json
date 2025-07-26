@@ -11,10 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-=======
     "axios": "^1.11.0",
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.6.0",
     "cookie-parser": "^1.4.7",

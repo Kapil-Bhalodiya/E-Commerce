@@ -4,19 +4,11 @@ import { Address } from '../../../models/address.model';
 import { FormStepComponent } from '../../../components/stepper/models/form-step-cponent.model';
 import { CommonModule } from '@angular/common';
 import { AddressDetailFormComponent } from '../../../modules/forms/address-detail-form/address-detail-form.component';
-<<<<<<< HEAD
-import { AccordionRadioComponent } from "../../../components/accordion-radio/accordion-radio.component";
-=======
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-delivery-address',
-<<<<<<< HEAD
-  imports: [CommonModule, AddressDetailFormComponent, FormsModule, ReactiveFormsModule, AccordionRadioComponent],
-=======
   imports: [CommonModule, AddressDetailFormComponent, FormsModule, ReactiveFormsModule],
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   templateUrl: './delivery-step.component.html',
   styleUrls: ['./delivery-step.component.scss'],
 })
@@ -57,16 +49,6 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
     const newAddressValidators = {
       firstName: [Validators.required],
       lastName: [Validators.required],
-<<<<<<< HEAD
-      phone: [Validators.required],
-      addressType: [Validators.required, this.addressTypeValidator.bind(this)],
-      addressLine1: [Validators.required],
-      addressLine2: [],
-      city: [Validators.required],
-      country: [Validators.required],
-      postalCode: [Validators.required, Validators.pattern('^[0-9]{6}$')],
-      isDefault: [Validators.required]
-=======
       phone: [Validators.required, Validators.pattern('^[0-9]{10}$')],
       addressType: [Validators.required, this.addressTypeValidator.bind(this)],
       address1: [Validators.required],
@@ -75,7 +57,6 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
       country: [Validators.required],
       postalCode: [Validators.required, Validators.pattern('^[0-9]{4,6}$')],
       isDefault: []
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     };
 
     if (this.addresses.length === 0) {
@@ -112,14 +93,10 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
       newAddressGroup.updateValueAndValidity({ emitEvent: false });
     });
 
-<<<<<<< HEAD
-    this.formGroup.get('deliveryOption')?.updateValueAndValidity({ emitEvent: false });
-=======
     // Trigger initial validation setup
     const currentDeliveryOption = this.formGroup.get('deliveryOption')?.value || 'existing';
     this.formGroup.get('deliveryOption')?.setValue(currentDeliveryOption);
     this.formGroup.get('deliveryOption')?.updateValueAndValidity({ emitEvent: true });
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   private addressTypeValidator(control: AbstractControl): { [key: string]: boolean } | null {

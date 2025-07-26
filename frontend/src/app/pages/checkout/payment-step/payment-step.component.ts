@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-import { Component, Input, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { environment,STRIPE_PK } from '../../../../environments/environment';
-import { loadStripe, Stripe, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
-import { PaymentService } from '../../../services/payment.service';
-import { SpinnerComponent } from "../../../components/spinner/spinner.component";
-import { ToastComponent } from '../../../shared/components/toast/toast.component';
-
-@Component({
-  selector: 'app-payment-step',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent, ToastComponent],
-  templateUrl: './payment-step.component.html',
-  styleUrls: ['./payment-step.component.scss']
-})
-export class PaymentStepComponent implements OnInit {
-=======
 import { Component, Input, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -34,7 +14,6 @@ import { SpinnerComponent } from "../../../components/spinner/spinner.component"
   styleUrls: ['./payment-step.component.scss']
 })
 export class PaymentStepComponent implements OnInit, OnDestroy {
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   private fb = inject(FormBuilder);
   
   @Input() formGroup!: FormGroup;
@@ -48,23 +27,14 @@ export class PaymentStepComponent implements OnInit, OnDestroy {
   elements: StripeElements | null = null;
   paymentElement: any = null;
   clientSecret: string | null = null;
-<<<<<<< HEAD
-=======
   private isInitialized = false;
   private static paymentIntentCreated = false;
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
   constructor(
     private paymentService: PaymentService
   ){}
 
   async ngOnInit() {
-<<<<<<< HEAD
-    await this.loadStripe();
-  }
-
-  async loadStripe() {
-=======
     if (!this.isInitialized) {
       this.isInitialized = true;
       await this.loadStripe();
@@ -76,7 +46,6 @@ export class PaymentStepComponent implements OnInit, OnDestroy {
       return; // Already loaded
     }
     
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     this.loading.set(true)
     try {
       this.stripe = await loadStripe(STRIPE_PK);
@@ -94,44 +63,6 @@ export class PaymentStepComponent implements OnInit, OnDestroy {
   }
 
   async createPaymentIntentAndInitializeElements() {
-<<<<<<< HEAD
-    try {
-      this.loading.set(true);
-      
-      // Get the amount from the form
-      const itemsString = localStorage.getItem('cart');
-      const items = itemsString ? JSON.parse(itemsString) : [];
-
-      // Now items is an array, so you can safely use map
-      const amount = items.map((element: any) => element.price)
-                         .reduce((acc: number, val: number) => acc + val, 0);
-      console.log(amount)
-      
-      // Create payment intent on your backend
-      const response = await this.paymentService.createPaymentIntent(amount).subscribe({
-        next: async (res: any) => {
-          console.log("res: ",res)
-          this.loading.set(false);
-          this.clientSecret = res;
-          console.log("formGrp :",this.formGroup)
-          this.formGroup.get('stripePaymentIntentId')?.setValue(res);
-          console.log("formGrp :",this.formGroup)
-          await this.initializeStripeElements();
-        },
-        error: (err: any) => console.error("Invalid response from server :",err)
-      })
-      console.log("response : ",response)
-      if (!response) {
-        throw new Error('Invalid response from server');
-      }
-      
-      // Now initialize Elements with the client secret
-    } catch (error) {
-      this.loading.set(false);
-      console.error('Error creating payment intent:', error);
-      this.paymentError.set('Failed to prepare payment. Please try again later.');
-    } finally {
-=======
     if (this.clientSecret || PaymentStepComponent.paymentIntentCreated) {
       return;
     }
@@ -159,7 +90,6 @@ export class PaymentStepComponent implements OnInit, OnDestroy {
       this.loading.set(false);
       console.error('Error creating payment intent:', error);
       this.paymentError.set('Failed to prepare payment. Please try again later.');
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     }
   }
 
@@ -285,13 +215,10 @@ export class PaymentStepComponent implements OnInit, OnDestroy {
       this.loading.set(false);
     }
   }
-<<<<<<< HEAD
-=======
 
   ngOnDestroy() {
     if (this.paymentElement) {
       this.paymentElement.unmount();
     }
   }
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 }

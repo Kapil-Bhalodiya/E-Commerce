@@ -2,11 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
-<<<<<<< HEAD
-=======
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
 @Component({
   selector: 'app-dashboard',
@@ -17,46 +14,6 @@ import { AuthService } from '../../services/auth.service';
 })
 export class DashboardComponent implements OnInit {
   user = {
-<<<<<<< HEAD
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    avatar: 'https://via.placeholder.com/100x100/007bff/ffffff?text=JD'
-  };
-
-  stats = {
-    totalOrders: 12,
-    pendingOrders: 3,
-    completedOrders: 9,
-    totalSpent: 1250.00,
-    cartItems: 0,
-    wishlistItems: 5
-  };
-
-  recentOrders = [
-    {
-      id: '#ORD-001',
-      date: '2024-01-15',
-      status: 'Delivered',
-      total: 299.99,
-      items: 3
-    },
-    {
-      id: '#ORD-002',
-      date: '2024-01-10',
-      status: 'Processing',
-      total: 149.50,
-      items: 2
-    },
-    {
-      id: '#ORD-003',
-      date: '2024-01-05',
-      status: 'Shipped',
-      total: 89.99,
-      items: 1
-    }
-  ];
-
-=======
     name: '',
     email: '',
     avatar: '' // this will hold the initials image
@@ -96,39 +53,26 @@ export class DashboardComponent implements OnInit {
       items: 3
     }
   ];
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   quickActions = [
     {
       title: 'Browse Products',
       description: 'Explore our latest collection',
       icon: 'bi-shop',
-<<<<<<< HEAD
-      route: '/products',
-=======
       route: '/product',
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       color: 'primary'
     },
     {
       title: 'View Cart',
       description: 'Review items in your cart',
       icon: 'bi-cart3',
-<<<<<<< HEAD
-      route: '/cart',
-=======
       route: '/checkout',
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       color: 'success'
     },
     {
       title: 'Order History',
       description: 'Track your past orders',
       icon: 'bi-clock-history',
-<<<<<<< HEAD
-      route: '/orders',
-=======
       route: '/checkout-complete',
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       color: 'info'
     },
     {
@@ -156,36 +100,14 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private router: Router,
-<<<<<<< HEAD
-    private cartService: CartService
-=======
     private cartService: CartService,
     private orderService: OrderService,
     private authService: AuthService
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   ) {}
 
   ngOnInit(): void {
     this.loadUserData();
     this.loadStats();
-<<<<<<< HEAD
-  }
-
-  loadUserData(): void {
-    // Load user data from service/localStorage
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      this.user = { ...this.user, ...JSON.parse(userData) };
-    }
-  }
-
-  loadStats(): void {
-    // Load cart items count
-    this.stats.cartItems = this.cartService.getCartItems().length;
-    
-    // Load other stats from services
-    // This would typically come from API calls
-=======
     this.loadRecentOrders();
   }
 
@@ -242,7 +164,6 @@ generateInitialsAvatar(initials: string): string {
         console.error('Failed to fetch recent orders', err);
       }
     });
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   navigateTo(route: string): void {
@@ -260,13 +181,6 @@ generateInitialsAvatar(initials: string): string {
   }
 
   logout(): void {
-<<<<<<< HEAD
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user');
-    this.router.navigate(['/login']);
-  }
-}
-=======
     this.authService.logout().subscribe({
       next: () => {
         this.router.navigate(['/login']);
@@ -275,4 +189,3 @@ generateInitialsAvatar(initials: string): string {
   }
 }
 
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

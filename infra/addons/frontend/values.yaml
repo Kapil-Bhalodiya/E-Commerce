@@ -1,32 +1,3 @@
-<<<<<<< HEAD
-# Frontend base configuration - minimal defaults only
-
-replicaCount: 1
-
-image:
-  repository: kapilbhalodiya/ecom-frontend
-<<<<<<< Updated upstream
-  tag: "35-latest"
-=======
-  tag: "36-latest"
->>>>>>> Stashed changes
-  pullPolicy: IfNotPresent
-
-service:
-  type: ClusterIP
-  port: 80
-
-# Minimal base resources
-resources:
-  requests:
-    cpu: "50m"
-    memory: "64Mi"
-  limits:
-    cpu: "200m"
-    memory: "128Mi"
-
-# Health checks
-=======
 ---
 replicaCount: 1
 image:
@@ -43,38 +14,21 @@ resources:
   limits:
     cpu: 200m
     memory: 128Mi
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 livenessProbe:
   httpGet:
     path: /
     port: 80
   initialDelaySeconds: 30
   periodSeconds: 10
-<<<<<<< HEAD
-
-=======
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 readinessProbe:
   httpGet:
     path: /
     port: 80
   initialDelaySeconds: 5
   periodSeconds: 5
-<<<<<<< HEAD
-
-# Monitoring
-=======
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 metrics:
   enabled: true
   path: /metrics
   port: 80
-<<<<<<< HEAD
-
-# API configuration
-api:
-  baseUrl: "http://backend:8000"
-=======
 api:
   baseUrl: http://backend:8000
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

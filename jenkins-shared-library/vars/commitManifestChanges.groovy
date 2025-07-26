@@ -1,21 +1,8 @@
 def call(String serviceName, String imageTag, String credentialsId) {
     withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
         sh """
-            git config --global user.email "ci@example.com"
-            git config --global user.name "CI Bot"
-<<<<<<< HEAD
-            git config --global pull.rebase false 
-
-            git stash || echo "Nothing to stash"
-            git checkout main || echo "Already on main"
-            git pull origin main
-            git stash pop || echo "Nothing to pop"
-
-            git add .
-            git commit -m "Update ${serviceName} image to ${imageTag}" || echo "No changes to commit"
-
-            git push https://\${GIT_USER}:\${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
-=======
+            git config --global user.email "Jenkins@bot.com"
+            git config --global user.name "Jenkins Bot"
             git config --global pull.rebase false
 
             # Stash any local changes
@@ -38,7 +25,6 @@ def call(String serviceName, String imageTag, String credentialsId) {
 
             # Push to remote
             git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce.git main || echo "Push failed"
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         """
     }
 }

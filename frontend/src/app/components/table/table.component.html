@@ -25,12 +25,7 @@
                 <span class="cart__price">{{ row.price }}</span>
             </td>
             <td class="cart__table--body__list">
-<<<<<<< HEAD
-                <!-- <app-quantity-box [quantity]="row.quantity"></app-quantity-box> -->
-                <app-quantity-box></app-quantity-box>
-=======
                 <app-quantity-box [quantity]="row.quantity" (quantityChange)="onQuantityChange(row.product.productId, $event)"></app-quantity-box>
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
             </td>
             <td class="cart__table--body__list">
                 <span class="cart__price end">{{ row.total }}</span>

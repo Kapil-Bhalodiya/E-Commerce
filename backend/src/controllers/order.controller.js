@@ -12,17 +12,10 @@ const createOrder = async (req, res, next) => {
 
   const session = await mongoose.startSession();
   let isTransactionCommitted = false;
-<<<<<<< HEAD
-  
-  try {
-    session.startTransaction();
-    
-=======
 
   try {
     session.startTransaction();
 
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     const userId = req.body.userData?._id || req.userId;
     const { cartForm, deliveryAddressForm, paymentDetailForm, couponCode } = req.body.orderData;
 
@@ -158,9 +151,6 @@ const createOrder = async (req, res, next) => {
     let populatedOrder;
     try {
       populatedOrder = await Order.findById(order._id)
-<<<<<<< HEAD
-        .populate('orderItems deliveryAddressId payment')
-=======
         .populate({
           path: 'orderItems',
           populate: {
@@ -170,7 +160,6 @@ const createOrder = async (req, res, next) => {
         })
         .populate('deliveryAddressId')
         .populate('payment')
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         .exec();
       if (!populatedOrder) {
         throw new Error('Failed to populate order');
@@ -240,9 +229,6 @@ const updateOrderStatus = async (req, res, next) => {
   }
 };
 
-<<<<<<< HEAD
-module.exports = { createOrder, getOrder, updateOrderStatus };
-=======
 // List all orders (for dashboard, admin, etc.)
 const listOrders = async (req, res, next) => {
   try {
@@ -283,4 +269,3 @@ const listOrders = async (req, res, next) => {
 };
 
 module.exports = { createOrder, getOrder, updateOrderStatus, listOrders };
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

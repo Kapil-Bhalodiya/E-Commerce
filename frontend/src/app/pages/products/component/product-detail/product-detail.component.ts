@@ -12,11 +12,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../../../../services/product.service';
 import { Product } from '../../../../models/product.model';
 import { Variant } from '../../../../models/productvariant.model';
-<<<<<<< HEAD
-=======
 import { CartService } from '../../../../services/cart.service';
 import { CartItem } from '../../../../models/cartItem.model';
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
 @Component({
   selector: 'app-product-detail',
@@ -36,13 +33,6 @@ import { CartItem } from '../../../../models/cartItem.model';
 export class ProductDetailComponent implements OnInit {
   product!: Product;
   selectedVariant: Variant | null = null;
-<<<<<<< HEAD
-  productImages = [
-    { id: '1', src: 'Men/Tshirt/Whale Shark/Whale Shark - Blue.webp' },
-    { id: '2', src: 'Men/Tshirt/Whale Shark/Whale Shark - Blue.webp' }
-  ];
-=======
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
   productColors = [
     '#FFB6C1',
@@ -64,12 +54,8 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-<<<<<<< HEAD
-    private productService: ProductService
-=======
     private productService: ProductService,
     private cartService: CartService
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   ) {}
 
   ngOnInit(): void {
@@ -145,9 +131,6 @@ export class ProductDetailComponent implements OnInit {
       this.showToastMessage('Sorry, this variant is out of stock!', 'error');
       return;
     }
-<<<<<<< HEAD
-    
-=======
     const cartItem: CartItem = {
       productId: this.product._id,
       name: this.product.name,
@@ -156,7 +139,6 @@ export class ProductDetailComponent implements OnInit {
       image: this.product.image_urls?.[0]
     };
     this.cartService.addToCart(cartItem)
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     this.showToastMessage(`Added ${this.product.name} (${this.selectedColor} - ${this.selectedSize}) to cart!`, 'success');
   }
 

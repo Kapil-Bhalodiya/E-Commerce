@@ -40,46 +40,6 @@ exports.createProduct = async (req, res) => {
 };
 
 exports.getAllProducts = async (req, res) => {
-<<<<<<< HEAD
-    // try {
-    //     const products = await Product.find().populate('subcategory');
-    //     return res.status(200).json(new ApiResponse(200, products, 'Products fetched successfully!', true));
-    // } catch (error) {
-    //     logger.error(`Error fetching products: ${error.message}`);
-    //     throw new ApiError(500, 'Error fetching products');
-    // }
-    try {
-        const { page = 1, limit = 2, minPrice, maxPrice, brands, occasion } = req.query;
-        const query = {};
-    
-        if (minPrice && maxPrice) {
-          query.base_price = { $gte: Number(minPrice), $lte: Number(maxPrice) };
-        }
-        if (brands) {
-          query.brand = { $in: brands.split(',') };
-        }
-        if (occasion) {
-          query.occasion = { $in: occasion.split(',') };
-        }
-    
-        const products = await Product.find(query)
-          .populate('variant_ids')
-          .skip((page - 1) * limit)
-          .limit(Number(limit));
-    
-        const total = await Product.countDocuments(query);
-    
-        return res.status(200).json(new ApiResponse(200, {
-          products,
-          total,
-          page: Number(page),
-          pages: Math.ceil(total / limit)
-        }, 'Products fetched successfully!', true));
-      } catch (error) {
-        logger.error(`Error fetching products: ${error.message}`);
-        return res.status(500).json(new ApiResponse(500, null, 'Error fetching products', false));
-      }
-=======
   // try {
   //     const products = await Product.find().populate('subcategory');
   //     return res.status(200).json(new ApiResponse(200, products, 'Products fetched successfully!', true));
@@ -117,7 +77,6 @@ exports.getAllProducts = async (req, res) => {
     logger.error(`Error fetching products: ${error.message}`);
     return res.status(500).json(new ApiResponse(500, null, 'Error fetching products', false));
   }
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 };
 
 exports.getProductById = async (req, res) => {

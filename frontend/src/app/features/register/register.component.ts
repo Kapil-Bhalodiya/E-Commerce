@@ -1,11 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
-<<<<<<< HEAD
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-=======
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -21,10 +17,7 @@ export class RegisterComponent implements OnDestroy {
   successMessage = '';
   isLoading = false;
   showPassword = false;
-<<<<<<< HEAD
-=======
   showConfirmPassword = false;
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -37,14 +30,6 @@ export class RegisterComponent implements OnDestroy {
 
   private initializeForm(): void {
     this.formGroup = this.fb.group({
-<<<<<<< HEAD
-      firstName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      lastName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\s]*$/)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/)]],
-      contact: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]]
-    });
-=======
       firstName: ['', [Validators.required, Validators.minLength(2)]],
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
@@ -52,19 +37,12 @@ export class RegisterComponent implements OnDestroy {
       confirmPassword: ['', [Validators.required]],
       contact: ['', [Validators.required, Validators.pattern(/^[0-9]\d{9}$/)]]
     }, { validators: this.passwordMatchValidator });
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
 
-<<<<<<< HEAD
-  getPasswordStrength(): string {
-    const password = this.formGroup.get('password')?.value || '';
-    let score = 0;
-    
-=======
   toggleConfirmPassword(): void {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
@@ -84,17 +62,11 @@ export class RegisterComponent implements OnDestroy {
     const password = this.formGroup.get('password')?.value || '';
     let score = 0;
 
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     if (password.length >= 6) score++;
     if (/[a-z]/.test(password)) score++;
     if (/[A-Z]/.test(password)) score++;
     if (/\d/.test(password)) score++;
     if (/[@$!%*?&]/.test(password)) score++;
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     if (score <= 2) return 'weak';
     if (score === 3) return 'fair';
     if (score === 4) return 'good';
@@ -121,22 +93,12 @@ export class RegisterComponent implements OnDestroy {
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     const formData = {
       ...this.formGroup.value,
       firstName: this.formGroup.value.firstName.trim(),
       lastName: this.formGroup.value.lastName.trim(),
       email: this.formGroup.value.email.toLowerCase().trim()
     };
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     this.authService.register(formData)
       .pipe(takeUntil(this.destroy$))
       .subscribe({

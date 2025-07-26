@@ -4,21 +4,12 @@ import { CommonModule } from '@angular/common';
 import { ProductGridComponent } from '../../shared/components/product-grid/product-grid.component';
 import { PrimaryButtonComponent } from '../../components/primary-button/primary-button.component';
 import { ToastComponent } from '../../shared/components/toast/toast.component';
-<<<<<<< HEAD
-import { ProductFilters } from '../../shared/interfaces/product.interface';
-import { PRODUCT_DATA } from '../../shared/data/product.data';
-=======
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 import { BreadcrumbComponent } from "../../components/breadcrumb/breadcrumb.component";
 import { ProductListHeaderComponent } from "./component/product-list-header/product-list-header.component";
 import { CategoriesFilterComponent } from "../../components/filter/categories-filter/categories-filter.component";
 import { RangeFilterComponent } from "../../components/filter/range-filter/range-filter.component";
-<<<<<<< HEAD
-import { ProductService } from '../../services/product.service';
-=======
 import { ProductService, ProductFilters } from '../../services/product.service';
 import { CategoryService, Category } from '../../services/category.service';
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cartItem.model';
 import { PaginationComponent } from "../../components/pagination/pagination.component";
@@ -34,9 +25,6 @@ import { Router } from '@angular/router';
 export class ProductsComponent implements OnInit {
 
   products: Product[] = [];
-<<<<<<< HEAD
-  page = 1;
-=======
   allProducts: Product[] = [];
   filteredProducts: Product[] = [];
   categories: Category[] = [];
@@ -47,29 +35,17 @@ export class ProductsComponent implements OnInit {
     return this.categories.map(category => category.name);
   }
   
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   totalPages = 1;
   totalCount = 0;
   isLoading = false;
   error: string | null = null;
   filters: ProductFilters = { limit: 4 };
-<<<<<<< HEAD
-=======
   viewMode: 'grid' | 'list' = 'grid';
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   
   // Toast properties
   showToast = false;
   toastMessage = '';
   toastType: 'success' | 'error' | 'warning' = 'success';
-<<<<<<< HEAD
-  readonly occasionFilters = PRODUCT_DATA.occasionFilters;
-  readonly brandFilters = PRODUCT_DATA.brandFilters.map(b => b.label);
-  readonly tagFilters = PRODUCT_DATA.tagFilters.map(t => t.label);
-
-  constructor(
-    private productService: ProductService,
-=======
 
   get brandFilters(): string[] {
     const brands = this.allProducts.map(product => product.brand).filter(Boolean);
@@ -84,52 +60,11 @@ export class ProductsComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     private cartService: CartService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-<<<<<<< HEAD
-    this.fetchProducts();
-  }
-
-  fetchProducts() {
-    this.isLoading = true;
-    this.error = null;
-    
-    this.productService.fetchProducts(this.page, this.filters.limit || 4, this.filters).subscribe({
-      next: (response: any) => {
-        this.products = response.data.products || [];
-        this.totalPages = response.data.pages || 1;
-        this.totalCount = response.data.total || 0;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.error = 'Failed to load products. Please try again.';
-        this.isLoading = false;
-        console.error('Error fetching products:', error);
-      }
-    });
-  }
-
-  fetchAllProducts() {
-    this.productService.fetchAllProducts().subscribe({
-      next: (response) => {
-        this.products = response.data.products;
-      },
-      error: (error) => {
-        // Handle error appropriately
-      }
-    });
-  }
-
-  onCheckboxChange(selected: string[]) {
-    this.filters.occasion = selected.length ? selected : undefined;
-    this.page = 1;
-    this.fetchProducts();
-  }
-=======
     this.fetchCategories();
     this.fetchAllProducts();
   }
@@ -268,21 +203,11 @@ export class ProductsComponent implements OnInit {
   }
   
 
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
   onPriceFilterApplied(range: { from: number; to: number }) {
     this.filters.minPrice = range.from;
     this.filters.maxPrice = range.to;
     this.page = 1;
-<<<<<<< HEAD
-    this.fetchProducts();
-  }
-
-  onCategoriesChange(selected: string[]) {
-    this.filters.brands = selected;
-    this.page = 1;
-    this.fetchProducts();
-=======
     this.applyClientSideFilters();
   }
 
@@ -297,7 +222,6 @@ export class ProductsComponent implements OnInit {
     this.filters.brands = selected.length ? selected : undefined;
     this.page = 1;
     this.applyClientSideFilters();
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   onAddToCart(product: Product) {
@@ -305,12 +229,7 @@ export class ProductsComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-<<<<<<< HEAD
-
-    // Check if product has stock
-=======
     console.log("Cart Product : ",product)
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     const hasStock = product.variant_ids?.some((variant: any) => variant.stock_quantity > 0);
     if (!hasStock) {
       this.showToastMessage('Sorry, this product is out of stock!', 'error');
@@ -338,35 +257,18 @@ export class ProductsComponent implements OnInit {
 
   onPageChange(newPage: number) {
     this.page = newPage;
-<<<<<<< HEAD
-    this.fetchProducts();
-=======
     this.updateDisplayedProducts();
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   onSearch(searchTerm: string) {
     this.filters.search = searchTerm || undefined;
     this.page = 1;
-<<<<<<< HEAD
-    this.fetchProducts();
-=======
     this.applyClientSideFilters();
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   onSortChange(sortValue: string) {
     this.filters.sortBy = sortValue;
     this.page = 1;
-<<<<<<< HEAD
-    this.fetchProducts();
-  }
-
-  onPageSizeChange(pageSize: number) {
-    this.filters.limit = pageSize;
-    this.page = 1;
-    this.fetchProducts();
-=======
     this.applyClientSideFilters();
   }
 
@@ -379,17 +281,12 @@ export class ProductsComponent implements OnInit {
   onViewModeChange(mode: 'grid' | 'list') {
     console.log('Products component view mode:', mode);
     this.viewMode = mode;
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   onTagsChange(selected: string[]) {
     this.filters.tags = selected.length ? selected : undefined;
     this.page = 1;
-<<<<<<< HEAD
-    this.fetchProducts();
-=======
     this.applyClientSideFilters();
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   showToastMessage(message: string, type: 'success' | 'error' | 'warning') {
