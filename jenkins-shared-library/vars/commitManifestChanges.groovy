@@ -1,6 +1,5 @@
 def call(String serviceName, String imageTag, String credentialsId) {
     withCredentials([usernamePassword(credentialsId: credentialsId, usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-        dir("${baseDir}") {
             sh """
                 echo 🔧 Setting Git config
                 git config --global user.email "ci@example.com"
@@ -26,5 +25,4 @@ def call(String serviceName, String imageTag, String credentialsId) {
                 git push https://${GIT_USER}:${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce.git main
             """
         }
-    }
 }
