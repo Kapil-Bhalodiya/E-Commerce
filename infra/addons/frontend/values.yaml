@@ -2,7 +2,11 @@
 replicaCount: 1
 image:
   repository: kapilbhalodiya/ecom-frontend
+<<<<<<< Updated upstream
   tag: "1-latest"
+=======
+  tag: "2-latest"
+>>>>>>> Stashed changes
   pullPolicy: IfNotPresent
 service:
   type: ClusterIP
