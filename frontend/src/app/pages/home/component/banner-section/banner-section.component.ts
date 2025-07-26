@@ -2,6 +2,10 @@ import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
 import { CommonModule } from '@angular/common';
+<<<<<<< HEAD
+=======
+import { Banner, ContentSection } from '../../../../shared/interfaces/home.interface';
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
 @Component({
   selector: 'app-banner-section',
@@ -12,6 +16,7 @@ import { CommonModule } from '@angular/common';
 })
 export class BannerSectionComponent {
   @Input() type: 'categories' | 'discount' = 'categories';
+<<<<<<< HEAD
   @Input() banners: {
     image: string;
     title?: string;
@@ -27,4 +32,9 @@ export class BannerSectionComponent {
     ctaLink: string;
   };
   imageURL: string = environment.apiUrl;
+=======
+  @Input() banners: Banner[] = [];
+  @Input() discountContent?: ContentSection;
+  readonly imageURL = environment.apiUrl;
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 }

@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+<<<<<<< HEAD
 import { CarouselsComponent } from '../../../../compoments/carousel/carousel.component';
+=======
+import { CarouselsComponent } from '../../../../components/carousel/carousel.component';
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 import { environment } from '../../../../../environments/environment';
 
 @Component({
@@ -32,4 +36,8 @@ export class HeroSliderComponent implements OnInit {
     const index = this.slideImages.indexOf(image);
     this.currentSlide = this.slides[index] || null;
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

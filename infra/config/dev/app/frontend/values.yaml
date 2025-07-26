@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 replicaCount: 1
 
 namespace: dev
@@ -15,3 +16,20 @@ resources:
   limits:
     cpu: 200m
     memory: 128Mi
+=======
+# Dev frontend - only dev-specific overrides
+
+namespace: dev
+
+image:
+  tag: "dev-latest"
+
+# API configuration for dev
+api:
+  baseUrl: "http://backend.dev.svc.cluster.local:8000"
+
+# Development features
+features:
+  hotReload: true
+  sourceMap: true
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

@@ -1,30 +1,65 @@
 <app-breadcrumb></app-breadcrumb>
 <section class="shop__section section--padding">
     <div class="container-fluid">
+<<<<<<< HEAD
         <app-product-list-header />
+=======
+        <app-product-list-header 
+            [currentPage]="page"
+            [pageSize]="pageSize"
+            [totalCount]="totalCount"
+            (search)="onSearch($event)"
+            (sortChange)="onSortChange($event)"
+            (pageSizeChange)="onPageSizeChange($event)"
+            (viewModeChange)="onViewModeChange($event)" />
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         <div class="row">
             <div class="col-xl-3 col-lg-4">
                 <div class="shop__sidebar--widget widget__area d-none d-lg-block">
                     <div class="single__widget widget__bg">
+<<<<<<< HEAD
                         <h2 class="widget__title h3">Occasions</h2>
                         <!-- <app-list-filter [checkboxItems]="checkboxItems"
                             (checkboxChange)="onCheckboxChange($event)"></app-list-filter> -->
+=======
+                        <h2 class="widget__title h3">Categories</h2>
+                        <app-categories-filter 
+                            [items]="categoryNames"
+                            (selectionChange)="onCategoriesChange($event)"></app-categories-filter>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                     </div>
 
                     <div class="single__widget price__filter widget__bg">
                         <h2 class="widget__title h3">Filter By Price</h2>
 
+<<<<<<< HEAD
                         <app-range-filter [minValue]="0" [maxValue]="250"
+=======
+                        <app-range-filter [minValue]="0" [maxValue]="5000"
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                             (filterApplied)="onPriceFilterApplied($event)"></app-range-filter>
                     </div>
                     <div class="single__widget widget__bg">
                         <h2 class="widget__title h3">Brands</h2>
+<<<<<<< HEAD
                         <app-categories-filter [items]="brands"></app-categories-filter>
+=======
+                        <app-categories-filter 
+                            [items]="brandFilters"
+                            (selectionChange)="onBrandsChange($event)"></app-categories-filter>
+                    </div>
+                    <div class="single__widget widget__bg">
+                        <h2 class="widget__title h3">Tags</h2>
+                        <app-categories-filter 
+                            [items]="tagFilters"
+                            (selectionChange)="onTagsChange($event)"></app-categories-filter>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                     </div>
                 </div>
             </div>
             <div class="col-xl-9 col-lg-8">
                 <div class="shop__product--wrapper">
+<<<<<<< HEAD
                     <div class="d-block">
                         <div id="product_grid" class="tab_pane active show">
                             <div class="product__section--inner product__grid--inner">
@@ -44,3 +79,56 @@
         </div>
     </div>
 </section>
+=======
+                    <!-- Loading State -->
+                    <div *ngIf="isLoading" class="loading-state text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-3 text-muted">Loading products...</p>
+                    </div>
+
+                    <!-- Error State -->
+                    <div *ngIf="error && !isLoading" class="error-state text-center py-5">
+                        <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                        <p class="mt-3 text-danger">{{ error }}</p>
+                        <app-primary-button label="Try Again" (click)="fetchAllProducts()"></app-primary-button>
+                    </div>
+
+                    <!-- Products Display -->
+                    <div *ngIf="!isLoading && !error" class="d-block">
+                        <app-product-grid 
+                            [products]="products"
+                            [columns]="4"
+                            [viewMode]="viewMode"
+                            (addToCart)="onAddToCart($event)"
+                            (addToWishlist)="onAddToWishlist($event)"
+                            (quickView)="onQuickView($event)">
+                        </app-product-grid>
+                    </div>
+                    
+                    <!-- No Products Found -->
+                    <div *ngIf="products.length === 0" class="no-products text-center py-5">
+                        <i class="bi bi-search text-muted" style="font-size: 3rem;"></i>
+                        <p class="mt-3 text-muted">No products found matching your criteria.</p>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <app-pagination 
+                    *ngIf="!isLoading && !error && totalCount > 0"
+                    [currentPage]="page" 
+                    [totalPages]="totalPages" 
+                    (pageChange)="onPageChange($event)">
+                </app-pagination>
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-toast 
+    [show]="showToast" 
+    [message]="toastMessage" 
+    [type]="toastType">
+</app-toast>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

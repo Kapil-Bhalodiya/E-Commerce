@@ -1,0 +1,34 @@
+# Prod frontend - production overrides only
+
+namespace: prod
+replicaCount: 3
+
+image:
+  tag: "prod-stable"
+
+# Production resources
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+
+# High availability
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+# API configuration for prod
+api:
+  baseUrl: "http://backend.prod.svc.cluster.local:8000"
+
+# Production features
+features:
+  hotReload: false
+  sourceMap: false
+  gzip: true
+  caching: true

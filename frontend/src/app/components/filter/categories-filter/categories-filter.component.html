@@ -1,0 +1,12 @@
+<ul class="widget__tagcloud">
+    <li class="widget__tagcloud--list" *ngFor="let item of items; let i = index">
+        <a
+          class="widget__tagcloud--link"
+          [class.active]="isSelected(item)"
+          [attr.aria-label]="'Select item ' + item"
+          (click)="onBrandClick(item); $event.preventDefault()"
+        >
+          {{ item }}
+        </a>
+      </li>
+</ul>

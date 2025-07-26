@@ -32,11 +32,14 @@ const addressSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+<<<<<<< HEAD
   state: {
     type: String,
     required: true,
     trim: true
   },
+=======
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   country: {
     type: String,
     required: true,

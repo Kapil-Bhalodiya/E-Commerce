@@ -4,16 +4,31 @@ def config = [
     serviceName: 'Backend',
     imageName: 'docker.io/kapilbhalodiya/ecom-backend',
     servicePath: 'backend',
+<<<<<<< HEAD
     changesetPattern: '**/backend/**',
+=======
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     helmPath: 'infra/addons/backend',
     helmRelease: 'backend-dev',
     namespace: 'dev',
     registryCredentials: 'Dockerhub-creds',
+<<<<<<< HEAD
     gitConfig: [
         url: 'https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git',
+=======
+    sonarProjectKey: 'ecommerce-backend',
+    slackChannel: '#ci-cd',
+    emailRecipients: 'kapilbhalodiya.dcs22@vnsgu.ac.in',
+    gitConfig: [
+        url: 'https://github.com/Kapil-Bhalodiya/E-commerce.git',
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         credentialsId: 'Github_Cred',
         branch: '*/main'
     ]
 ]
 
+<<<<<<< HEAD
 buildAndDeployService(config)
+=======
+runPipeline(config)
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

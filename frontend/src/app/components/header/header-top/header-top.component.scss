@@ -1,0 +1,150 @@
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #fff;
+}
+
+.logo img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.logo span {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a0dab;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.search-bar select,
+.search-bar input {
+    border: none;
+    padding: 8px 10px;
+    outline: none;
+}
+
+.search-bar button {
+    background: #ff3366;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    background-color: black;
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin: 2px 0;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+    .search-bar{
+        display: none;
+    }
+}
+// Header Accounts 
+
+.header__account--items {
+    margin-right: 2rem
+}
+
+.header__account--items:last-child {
+    margin-right: 0
+}
+
+@media only screen and (min-width:992px) {
+    .header__account--items {
+        margin-right: 2rem
+    }
+}
+
+@media only screen and (min-width:1200px) {
+    .header__account--items {
+        margin-right: 3rem
+    }
+}
+
+@media only screen and (max-width:575px) {
+    .header__account--items {
+        margin-right: 1rem
+    }
+}
+
+@media only screen and (min-width:992px) {
+    .header__account--search__items.mobile__d--block {
+        display: none
+    }
+}
+
+.header__account--btn {
+    position: relative;
+    color: var(--text-gray-color);
+    text-align: center
+}
+
+.header__account--btn>* {
+    pointer-events: none
+}
+
+.header__account--btn:hover {
+    color: var(--secondary-color)
+}
+
+.header__account--btn__text {
+    display: block;
+    margin-top: .1rem;
+    font-size: 1.5rem;
+    line-height: 2.4rem
+}
+
+@media only screen and (min-width:1200px) {
+    .header__account--btn__text {
+        font-size: 1.6rem
+    }
+}
+
+@media only screen and (max-width:575px) {
+    .header__account--btn__text {
+        display: none
+    }
+}
+
+.items__count {
+	position: absolute;
+	right: -.5rem;
+	top: -1.3rem;
+	width: 2rem;
+	height: 2rem;
+	font-size: 1rem;
+	line-height: 2rem;
+	background: var(--secondary-color);
+	text-align: center;
+	border-radius: 50%;
+	color: var(--white-color)
+}
+
+@media only screen and (min-width:992px) {
+	.items__count {
+		right: -.2rem;
+		top: -1rem
+	}
+}

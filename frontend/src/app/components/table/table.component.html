@@ -1,0 +1,35 @@
+<table class="cart__table--inner">
+    <thead class="cart__table--header">
+        <tr class="cart__table--header__items">
+            <th *ngFor="let col of columns" class="cart__table--header__list">{{ col }}</th>
+        </tr>
+    </thead>
+    <tbody class="cart__table--body">
+        <tr *ngFor="let row of data" class="cart__table--body__items">
+            <td class="cart__table--body__list">
+                <div class="cart__product d-flex align-items-center">
+                    <button class="cart__remove--btn" aria-label="search button" type="button" (click)="onRemove(row.product.productId)">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                    <div class="cart__thumbnail">
+                        <a href="product-details.html"><img class="border-radius-5" [src]="imageURL+'/'+row.product.image" alt="cart-product"></a>
+                    </div>
+                    <div class="cart__content">
+                        <h4 class="cart__content--title"><a href="product-details.html">{{ row.product.name }}</a></h4>
+                        <span class="cart__content--variant">COLOR: Blue</span>
+                        <span class="cart__content--variant">WEIGHT: 2 Kg</span>
+                    </div>
+                </div>
+            </td>
+            <td class="cart__table--body__list">
+                <span class="cart__price">{{ row.price }}</span>
+            </td>
+            <td class="cart__table--body__list">
+                <app-quantity-box [quantity]="row.quantity" (quantityChange)="onQuantityChange(row.product.productId, $event)"></app-quantity-box>
+            </td>
+            <td class="cart__table--body__list">
+                <span class="cart__price end">{{ row.total }}</span>
+            </td>
+        </tr>
+    </tbody>
+</table>

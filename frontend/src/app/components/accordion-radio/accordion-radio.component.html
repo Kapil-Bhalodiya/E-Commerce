@@ -1,0 +1,16 @@
+<div class="accordion-radio">
+    <div *ngFor="let option of options" class="accordion-item">
+        <label class="accordion-label">
+            <input type="radio" [name]="name" [value]="option.value" [(ngModel)]="selectedValue"
+                (ngModelChange)="onValueChange($event)" />
+            {{ option.label }}
+            <span class="arrow" [class.rotate]="selectedValue === option.value"><i class="bi bi-arrow-down-circle-fill"></i></span>
+        </label>
+
+        <div class="accordion-content" *ngIf="selectedValue === option.value">
+            <ng-container *ngIf="option.content">
+                <ng-container *ngTemplateOutlet="option.content"></ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>

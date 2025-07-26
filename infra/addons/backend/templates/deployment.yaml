@@ -1,7 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+<<<<<<< HEAD
   namespace: {{ .Values.namespace }}
+=======
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   name: {{ include "backend.fullname" . }}
   labels:
     {{- include "backend.labels" . | nindent 4 }}
@@ -15,6 +19,36 @@ spec:
       labels:
         {{- include "backend.selectorLabels" . | nindent 8 }}
     spec:
+<<<<<<< HEAD
+=======
+      {{- with .Values.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.persistence.enabled }}
+      initContainers:
+        - name: copy-uploads
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: ['sh', '-c']
+          args:
+            - |
+              if [ ! "$(ls -A /persistent-uploads)" ]; then
+                echo "Copying initial uploads to persistent volume..."
+                cp -r /app/public/uploads/* /persistent-uploads/ 2>/dev/null || true
+                cp -r /app/uploads/* /persistent-uploads/ 2>/dev/null || true
+                echo "Copy completed"
+              else
+                echo "Persistent volume already has data, skipping copy"
+              fi
+          volumeMounts:
+            - name: uploads-storage
+              mountPath: /persistent-uploads
+      volumes:
+        - name: uploads-storage
+          persistentVolumeClaim:
+            claimName: {{ include "backend.fullname" . }}-uploads
+      {{- end }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -23,6 +57,7 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+<<<<<<< HEAD
           resources:
             requests:
               cpu: "100m"
@@ -36,3 +71,45 @@ spec:
         # - name: JAEGER_AGENT_PORT
         #   value: {{ .Values.tracing.jaegerAgentPort | quote }}
         # {{- end }}
+=======
+          env:
+            - name: NODE_ENV
+              value: "{{ .Values.env.NODE_ENV }}"
+            - name: PORT
+              value: "{{ .Values.env.PORT }}"
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: uri
+            {{- if .Values.external.stripe.enabled }}
+            - name: STRIPE_SK
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: stripe-secret-key
+            {{- end }}
+            {{- if .Values.external.cloudinary.enabled }}
+            - name: CLOUDINARY_CLOUD_NAME
+              value: "dummy"
+            - name: CLOUDINARY_API_KEY
+              value: "dummy"
+            - name: CLOUDINARY_API_SECRET
+              value: "dummy"
+            {{- end }}
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.persistence.enabled }}
+          volumeMounts:
+            - name: uploads-storage
+              mountPath: /app/public/uploads
+          {{- end }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

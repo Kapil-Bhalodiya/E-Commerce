@@ -1,23 +1,36 @@
 const mongoose = require('mongoose');
+<<<<<<< HEAD
 const Stripe = require('stripe');
 const stripe = new Stripe(process.env.STRIPE_SK);
 const Order = require('../models/orders.model');
 const OrderItem = require('../models/order-item.model');
 const Address = require('../models/addresses.model');
+=======
+const Order = require('../models/orders.model');
+const OrderItem = require('../models/order-item.model');
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 const Payment = require('../models/payments.model');
 const Product = require('../models/product.model');
 const Coupon = require('../models/coupons.model');
 const logger = require('../utils/logger');
 const { ApiError } = require('../utils/ApiError');
+<<<<<<< HEAD
 const { createAddress } = require('./addresses.contoller');
 
 
 const createOrder = async (req, res, next) => {
+=======
+const { createAddress } = require('./addresses.controller');
+
+const createOrder = async (req, res, next) => {
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   const session = await mongoose.startSession();
   let isTransactionCommitted = false;
 
   try {
     session.startTransaction();
+<<<<<<< HEAD
     const userId = '67fca190b5799c577b4b06bc'; // From auth middleware
     // const { items, shippingAddressId, paymentMethod, couponCode, notes } = req.body;
     const { cartForm, deliveryAddressForm, paymentDetailForm, couponCode } = req.body;
@@ -38,6 +51,22 @@ const createOrder = async (req, res, next) => {
       const createdAddress = await createAddress(deliveryAddressForm.newAddress);
       console.log("createdAddress : ", createAddress)
       deliveryAddressId = createdAddress.data._id;  // You can then use the _id of the created address
+=======
+
+    const userId = req.body.userData?._id || req.userId;
+    const { cartForm, deliveryAddressForm, paymentDetailForm, couponCode } = req.body.orderData;
+
+    let deliveryAddressId;
+
+    if (deliveryAddressForm.deliveryAddressId) {
+      logger.info('Using existing deliveryAddressId', { deliveryAddressId: deliveryAddressForm.deliveryAddressId });
+      deliveryAddressId = deliveryAddressForm.deliveryAddressId;
+    } else {
+      logger.info('Creating new address with input', deliveryAddressForm.newAddress);
+      const address = await createAddress(userId, deliveryAddressForm.newAddress, session);
+      logger.info('New address created', { addressId: address._id });
+      deliveryAddressId = address._id;
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     }
 
     // Create order items
@@ -49,7 +78,11 @@ const createOrder = async (req, res, next) => {
       if (!product || product.stock < item.quantity) {
         throw new ApiError(`Product ${item.productId} is unavailable or out of stock`, 400);
       }
+<<<<<<< HEAD
       console.log("product : ",product);
+=======
+      logger.debug('Processing product', { productId: product._id, stock: product.stock });
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       const orderItem = new OrderItem({
         productId: item.productId,
         quantity: item.quantity,
@@ -67,9 +100,15 @@ const createOrder = async (req, res, next) => {
     }
 
     // Calculate taxes and shipping
+<<<<<<< HEAD
     const taxRate = 0.1; // 10% tax
     const taxAmount = subTotal * taxRate;
     const shippingCost = 10; // Fixed shipping cost
+=======
+    const taxRate = 0.1;
+    const taxAmount = subTotal * taxRate;
+    const shippingCost = 10;
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
     // Apply coupon if provided
     let discountAmount = 0;
@@ -122,7 +161,11 @@ const createOrder = async (req, res, next) => {
     const order = new Order({
       userId,
       orderItems,
+<<<<<<< HEAD
       deliveryAddressId, // Add snapshot of the address here
+=======
+      deliveryAddressId,
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       payment: null,
       totalAmount,
       subTotal,
@@ -146,7 +189,11 @@ const createOrder = async (req, res, next) => {
       stripePaymentIntentId: paymentDetailForm.stripePaymentIntentId,
     });
 
+<<<<<<< HEAD
     console.log('Payment before save:', payment);
+=======
+    logger.debug('Creating payment', { orderId: order._id, amount: totalAmount });
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     await payment.validate();
     await payment.save({ session });
 
@@ -160,7 +207,19 @@ const createOrder = async (req, res, next) => {
     let populatedOrder;
     try {
       populatedOrder = await Order.findById(order._id)
+<<<<<<< HEAD
         .populate('orderItems deliveryAddressId payment')
+=======
+        .populate({
+          path: 'orderItems',
+          populate: {
+            path: 'productId',
+            model: 'Product'
+          }
+        })
+        .populate('deliveryAddressId')
+        .populate('payment')
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         .exec();
       if (!populatedOrder) {
         throw new Error('Failed to populate order');
@@ -230,4 +289,47 @@ const updateOrderStatus = async (req, res, next) => {
   }
 };
 
+<<<<<<< HEAD
 module.exports = { createOrder, getOrder, updateOrderStatus };
+=======
+// List all orders (for dashboard, admin, etc.)
+const listOrders = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const orders = await Order.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .select('userId status totalAmount createdAt orderItems')
+      .populate('userId', 'fullName email')
+      .populate({ path: 'orderItems', select: 'quantity' });
+
+    const totalOrders = await Order.countDocuments();
+
+    // Format for dashboard: id, date, status, total, items
+    const formattedOrders = orders.map(order => ({
+      id: order._id,
+      user: order.userId,
+      date: order.createdAt,
+      status: order.status,
+      total: order.totalAmount,
+      items: order.orderItems.reduce((sum, item) => sum + (item.quantity || 0), 0)
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        orders: formattedOrders,
+        totalOrders
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createOrder, getOrder, updateOrderStatus, listOrders };
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

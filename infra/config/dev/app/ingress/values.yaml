@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # clusterIssuer: letsencrypt-dev
 # tls:
 #   enabled: true
@@ -10,3 +11,32 @@ tls:
 annotations:
   nginx.ingress.kubernetes.io/ssl-redirect: "false"
   nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+=======
+domain: "dev.sharkapp.local"
+namespace: dev
+
+tls:
+  enabled: false
+
+services:
+  - name: frontend
+    serviceName: frontend-dev
+    servicePort: 80
+    path: /
+    pathType: Prefix
+  - name: backend-api
+    serviceName: backend-dev
+    servicePort: 8000
+    path: /api
+    pathType: Prefix
+  - name: backend-uploads
+    serviceName: backend-dev
+    servicePort: 8000
+    path: /uploads
+    pathType: Prefix
+
+annotations:
+  nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+  nginx.ingress.kubernetes.io/limit-rps: "100"
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

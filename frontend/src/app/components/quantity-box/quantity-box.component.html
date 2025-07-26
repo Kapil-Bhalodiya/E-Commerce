@@ -1,0 +1,28 @@
+<div class="quantity__box">
+    <button 
+        type="button" 
+        class="quantity__btn decrease"
+        (click)="decrease()"
+        [disabled]="quantity <= 1"
+        aria-label="Decrease quantity">
+        <i class="bi bi-dash"></i>
+    </button>
+    
+    <input 
+        type="number" 
+        class="quantity__input"
+        [(ngModel)]="quantity"
+        [min]="1"
+        [max]="maxQuantity"
+        (change)="onQuantityChange($event)"
+        readonly>
+    
+    <button 
+        type="button" 
+        class="quantity__btn increase"
+        (click)="increase()"
+        [disabled]="quantity >= maxQuantity"
+        aria-label="Increase quantity">
+        <i class="bi bi-plus"></i>
+    </button>
+</div>

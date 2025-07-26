@@ -1,7 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+<<<<<<< HEAD
   namespace: {{ .Values.namespace }}
+=======
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   name: {{ include "frontend.fullname" . }}
   labels:
     {{- include "frontend.labels" . | nindent 4 }}
@@ -24,6 +28,7 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           env:
+<<<<<<< HEAD
             {{- if .Values.tracing.enabled }}
             - name: JAEGER_AGENT_HOST
               value: {{ .Values.tracing.jaegerAgentHost }}
@@ -37,3 +42,17 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
+=======
+            - name: API_BASE_URL
+              value: "{{ .Values.api.baseUrl }}"
+          {{- if .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

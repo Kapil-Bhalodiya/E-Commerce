@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <section class="login-section d-flex align-items-center justify-content-center">
     <div class="container">
         <div class="login-form card shadow-lg">
@@ -32,4 +33,73 @@
             </div>
         </div>
     </div>
+=======
+<section class="auth-section">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="auth-icon">
+          <i class="bi bi-person-circle"></i>
+        </div>
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Sign in to your account</p>
+      </div>
+      
+      <form [formGroup]="formGroup" (ngSubmit)="loginHandle()" class="auth-form">
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>{{ errorMessage }}
+        </div>
+        
+        <div class="form-group">
+          <div class="input-wrapper">
+            <i class="bi bi-envelope input-icon"></i>
+            <input 
+              id="email" 
+              type="email" 
+              formControlName="email" 
+              class="form-input" 
+              placeholder="Enter your email"
+              [class.error]="formGroup.get('email')?.invalid && formGroup.get('email')?.touched"
+            />
+          </div>
+          <div *ngIf="formGroup.get('email')?.invalid && formGroup.get('email')?.touched" class="error-message">
+            <span *ngIf="formGroup.get('email')?.hasError('required')">Email is required</span>
+            <span *ngIf="formGroup.get('email')?.hasError('email')">Please enter a valid email</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="input-wrapper">
+            <i class="bi bi-lock input-icon"></i>
+            <input 
+              id="password" 
+              [type]="showPassword ? 'text' : 'password'" 
+              formControlName="password" 
+              class="form-input" 
+              placeholder="Enter your password"
+              [class.error]="formGroup.get('password')?.invalid && formGroup.get('password')?.touched"
+            />
+            <button type="button" class="password-toggle" (click)="togglePassword()">
+              <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+          </div>
+          <div *ngIf="formGroup.get('password')?.invalid && formGroup.get('password')?.touched" class="error-message">
+            Password is required
+          </div>
+        </div>
+        
+        <button type="submit" class="auth-btn" [disabled]="formGroup.invalid || isLoading">
+          <span *ngIf="!isLoading">Sign In</span>
+          <span *ngIf="isLoading" class="loading-spinner">
+            <i class="bi bi-arrow-clockwise spin"></i> Signing in...
+          </span>
+        </button>
+      </form>
+      
+      <div class="auth-footer">
+        <p>Don't have an account? <a routerLink="/register" class="auth-link">Create one</a></p>
+      </div>
+    </div>
+  </div>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 </section>

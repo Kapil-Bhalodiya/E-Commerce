@@ -1,0 +1,138 @@
+.product__gallery {
+  background: var(--white-color);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(6, 23, 56, 0.1);
+}
+
+.main__image-container {
+  position: relative;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  overflow: hidden;
+  
+  .main__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  .image__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+  
+  .zoom__btn {
+    background: var(--white-color);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: var(--secondary-color);
+      color: var(--white-color);
+      transform: scale(1.1);
+    }
+    
+    i {
+      font-size: 1.8rem;
+    }
+  }
+}
+
+.thumbnail__container {
+  padding: 1.5rem;
+  background: var(--ofwhite-color);
+}
+
+.thumbnail__grid {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(6, 23, 56, 0.1);
+    border-radius: 2px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 2px;
+  }
+}
+
+.thumbnail__item {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+  }
+  
+  &.active {
+    border-color: var(--secondary-color);
+    box-shadow: 0 4px 15px rgba(238, 39, 97, 0.3);
+  }
+  
+  .thumbnail__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover .thumbnail__image {
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .thumbnail__item {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .thumbnail__container {
+    padding: 1rem;
+  }
+  
+  .thumbnail__grid {
+    gap: 0.8rem;
+  }
+}

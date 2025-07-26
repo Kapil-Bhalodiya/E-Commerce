@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+<<<<<<< HEAD
 import { HeroSliderComponent } from './component/hero-slider/hero-slider.component';
 import { BannerSectionComponent } from './component/banner-section/banner-section.component';
 import { BrandLogosComponent } from './component/brand-logos/brand-logos.component';
@@ -6,11 +7,20 @@ import { ShopCardsComponent } from './component/shop-cards/shop-cards.component'
 import { TestimonialComponent } from './component/testimonial/testimonial.component';
 import { ContactSectionComponent } from './component/contact-section/contact-section.component';
 import { HeaderComponent } from "../../compoments/header/header.component";
+=======
+import { BannerSectionComponent } from './component/banner-section/banner-section.component';
+import { ShopCardsComponent } from './component/shop-cards/shop-cards.component';
+import { TestimonialComponent } from './component/testimonial/testimonial.component';
+import { ContactSectionComponent } from './component/contact-section/contact-section.component';
+import { HOME_DATA } from '../../shared/data/home.data';
+import { Banner, ContentSection, Testimonial } from '../../shared/interfaces/home.interface';
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
+<<<<<<< HEAD
     HeroSliderComponent,
     BannerSectionComponent,
     BrandLogosComponent,
@@ -112,3 +122,20 @@ export class HomeComponent {
     }
   ];
 }
+=======
+    BannerSectionComponent,
+    ShopCardsComponent,
+    TestimonialComponent,
+    ContactSectionComponent
+  ],
+  templateUrl: './home.component.html'
+})
+export class HomeComponent {
+  readonly categoryBanners: Banner[] = HOME_DATA.categoryBanners;
+  readonly discountBanners: Banner[] = HOME_DATA.discountBanners;
+  readonly discountContent: ContentSection = HOME_DATA.discountContent;
+  readonly shopCardContent: ContentSection = HOME_DATA.shopCardContent;
+  readonly shopCardBanners: Banner[] = HOME_DATA.shopCardBanners;
+  readonly testimonials: Testimonial[] = HOME_DATA.testimonials;
+}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

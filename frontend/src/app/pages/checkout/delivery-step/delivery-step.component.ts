@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+<<<<<<< HEAD
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AddressService } from '../../../services/address.service';
 import { Address } from '../../../models/address.model';
@@ -6,11 +7,22 @@ import { FormStepComponent } from '../../../compoments/stepper/models/form-step-
 import { CommonModule } from '@angular/common';
 import { AddressDetailFormComponent } from '../../../modules/forms/address-detail-form/address-detail-form.component';
 import { AccordionRadioComponent } from "../../../compoments/accordion-radio/accordion-radio.component";
+=======
+import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Address } from '../../../models/address.model';
+import { FormStepComponent } from '../../../components/stepper/models/form-step-cponent.model';
+import { CommonModule } from '@angular/common';
+import { AddressDetailFormComponent } from '../../../modules/forms/address-detail-form/address-detail-form.component';
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-delivery-address',
+<<<<<<< HEAD
   imports: [CommonModule, AddressDetailFormComponent, FormsModule, ReactiveFormsModule, AccordionRadioComponent],
+=======
+  imports: [CommonModule, AddressDetailFormComponent, FormsModule, ReactiveFormsModule],
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   templateUrl: './delivery-step.component.html',
   styleUrls: ['./delivery-step.component.scss'],
 })
@@ -51,6 +63,7 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
     const newAddressValidators = {
       firstName: [Validators.required],
       lastName: [Validators.required],
+<<<<<<< HEAD
       phone: [Validators.required],
       addressType: [Validators.required, this.addressTypeValidator.bind(this)],
       addressLine1: [Validators.required],
@@ -58,6 +71,15 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
       city: [Validators.required],
       country: [Validators.required],
       postalCode: [Validators.required, Validators.pattern('^[0-9]{6}$')],
+=======
+      phone: [Validators.required, Validators.pattern('^[0-9]{10}$')],
+      addressType: [Validators.required, this.addressTypeValidator.bind(this)],
+      address1: [Validators.required],
+      address2: [],
+      city: [Validators.required],
+      country: [Validators.required],
+      postalCode: [Validators.required, Validators.pattern('^[0-9]{4,6}$')],
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       isDefault: []
     };
 
@@ -95,7 +117,14 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
       newAddressGroup.updateValueAndValidity({ emitEvent: false });
     });
 
+<<<<<<< HEAD
     this.formGroup.get('deliveryOption')?.updateValueAndValidity({ emitEvent: false });
+=======
+    // Trigger initial validation setup
+    const currentDeliveryOption = this.formGroup.get('deliveryOption')?.value || 'existing';
+    this.formGroup.get('deliveryOption')?.setValue(currentDeliveryOption);
+    this.formGroup.get('deliveryOption')?.updateValueAndValidity({ emitEvent: true });
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   private addressTypeValidator(control: AbstractControl): { [key: string]: boolean } | null {
@@ -112,8 +141,35 @@ export class DeliveryAddressStepComponent implements FormStepComponent, OnInit {
     return this.formGroup.get('newAddress') as FormGroup;
   }
 
+<<<<<<< HEAD
+=======
+  setDeliveryOption(option: string): void {
+    this.formGroup.patchValue({ deliveryOption: option });
+    this.formGroup.get('deliveryOption')?.markAsTouched();
+  }
+
+  getAddressIcon(type: string): string {
+    switch (type?.toLowerCase()) {
+      case 'home': return 'bi-house';
+      case 'office': return 'bi-building';
+      case 'work': return 'bi-briefcase';
+      default: return 'bi-geo-alt';
+    }
+  }
+
+  editAddress(addressId: string, event: Event): void {
+    event.stopPropagation();
+    // Implement edit address functionality
+    console.log('Edit address:', addressId);
+  }
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

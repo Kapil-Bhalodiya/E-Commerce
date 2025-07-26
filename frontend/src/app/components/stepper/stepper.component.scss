@@ -1,0 +1,277 @@
+.modern-stepper {
+  margin-bottom: 3rem;
+}
+
+// Progress Bar
+.progress-container {
+  margin-bottom: 3rem;
+  
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(6, 23, 56, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+      border-radius: 3px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 2s infinite;
+      }
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+// Steps Container
+.steps-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  position: relative;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  flex: 1;
+  cursor: default;
+  
+  &.clickable {
+    cursor: pointer;
+    
+    &:hover .step-circle {
+      transform: scale(1.1);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
+  }
+}
+
+.step-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 23, 56, 0.1);
+  border: 3px solid rgba(6, 23, 56, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+  
+  @media (max-width: 768px) {
+    margin-bottom: 0;
+    margin-right: 1.5rem;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .step-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-gray-color);
+    
+    @media (max-width: 768px) {
+      font-size: 1.6rem;
+    }
+  }
+  
+  i {
+    font-size: 2rem;
+    color: var(--white-color);
+    
+    @media (max-width: 768px) {
+      font-size: 1.8rem;
+    }
+  }
+}
+
+.step-content {
+  max-width: 200px;
+  
+  @media (max-width: 768px) {
+    max-width: none;
+    flex: 1;
+  }
+  
+  .step-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-gray-color);
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+    
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+  }
+  
+  .step-description {
+    font-size: 1.3rem;
+    color: var(--text-gray-color);
+    margin: 0;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    
+    @media (max-width: 768px) {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.step-connector {
+  position: absolute;
+  top: 30px;
+  left: calc(50% + 30px);
+  right: calc(-50% + 30px);
+  height: 3px;
+  background: rgba(6, 23, 56, 0.1);
+  z-index: 1;
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+// Step States
+.step-item.active {
+  .step-circle {
+    background: linear-gradient(135deg, var(--secondary-color), #ff4081);
+    border-color: var(--secondary-color);
+    box-shadow: 0 8px 25px rgba(238, 39, 97, 0.3);
+    
+    .step-number {
+      color: var(--white-color);
+    }
+  }
+  
+  .step-content {
+    .step-title {
+      color: var(--secondary-color);
+    }
+    
+    .step-description {
+      opacity: 1;
+    }
+  }
+}
+
+.step-item.completed {
+  .step-circle {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border-color: #28a745;
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+  }
+  
+  .step-content {
+    .step-title {
+      color: #28a745;
+    }
+    
+    .step-description {
+      opacity: 1;
+    }
+  }
+  
+  .step-connector {
+    background: linear-gradient(90deg, #28a745, var(--secondary-color));
+  }
+}
+
+// Content Wrapper
+.step-content-wrapper {
+  background: var(--white-color);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(6, 23, 56, 0.08);
+  border: 1px solid rgba(6, 23, 56, 0.05);
+  min-height: 400px;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+}
+
+// Animations
+.slide-left {
+  animation: slideInLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-right {
+  animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Mobile Responsive
+@media (max-width: 576px) {
+  .modern-stepper {
+    margin-bottom: 2rem;
+  }
+  
+  .progress-container {
+    margin-bottom: 2rem;
+  }
+  
+  .steps-container {
+    margin-bottom: 2rem;
+  }
+  
+  .step-content-wrapper {
+    padding: 1rem;
+    min-height: 300px;
+  }
+}

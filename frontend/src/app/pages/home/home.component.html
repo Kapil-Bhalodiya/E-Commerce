@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- <app-hero-slider [slides]="slides"></app-hero-slider> -->
 <h1>This is Home Page</h1>
 <app-banner-section type="categories" [banners]="categoryBanners"></app-banner-section>
@@ -5,4 +6,26 @@
 <!-- <app-brand-logos [logos]="brandLogos"></app-brand-logos> -->
 <app-shop-cards [content]="shopCardContent" [banners]="shopCardBanners" [videoUrl]="shopCardVideoUrl"></app-shop-cards>
 <app-testimonial [testimonials]="testimonials"></app-testimonial>
+=======
+<app-banner-section 
+  type="categories" 
+  [banners]="categoryBanners">
+</app-banner-section>
+
+<app-banner-section 
+  type="discount" 
+  [banners]="discountBanners" 
+  [discountContent]="discountContent">
+</app-banner-section>
+
+<app-shop-cards 
+  [content]="shopCardContent" 
+  [banners]="shopCardBanners">
+</app-shop-cards>
+
+<app-testimonial 
+  [testimonials]="testimonials">
+</app-testimonial>
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 <app-contact-section></app-contact-section>

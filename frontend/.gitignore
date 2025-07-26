@@ -11,6 +11,7 @@
 npm-debug.log
 yarn-error.log
 
+<<<<<<< HEAD
 
 # .gitignore
 # .gitignore
@@ -18,6 +19,8 @@ src/environments/environment.ts
 src/environments/environment.prod.ts
 
 
+=======
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 # IDEs and editors
 .idea/
 .project
@@ -26,7 +29,10 @@ src/environments/environment.prod.ts
 *.launch
 .settings/
 *.sublime-workspace
+<<<<<<< HEAD
 public
+=======
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
 # Visual Studio Code
 .vscode/*
@@ -37,14 +43,29 @@ public
 .history/*
 
 # Miscellaneous
+<<<<<<< HEAD
 /.angular/cache
+=======
+/.angular/
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 .sass-cache/
 /connect.lock
 /coverage
 /libpeerconnection.log
 testem.log
 /typings
+<<<<<<< HEAD
+=======
+.scannerwork/
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
 # System files
 .DS_Store
 Thumbs.db
+<<<<<<< HEAD
+=======
+
+# Environment files
+src/environments/environment.ts
+src/environments/environment.prod.ts
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

@@ -1,10 +1,19 @@
+<<<<<<< HEAD
 # Global settings
 domain: www.sharkapp.local
 clusterIssuer: 'letsencrypt-dev'
+=======
+# Ingress base configuration - minimal defaults only
+
+# Basic ingress settings
+ingressClassName: nginx
+domain: "base.local"  # Will be overridden per environment
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
 # TLS settings
 tls:
   enabled: false
+<<<<<<< HEAD
   secretName: sharkapp-tls-cert
 
 # Services mapping
@@ -16,15 +25,34 @@ services:
     pathType: Prefix
   - name: backend
     serviceName: backend
+=======
+  secretName: "app-tls-cert"
+  issuer: "letsencrypt-staging"
+
+# Service routing - will be overridden per environment
+services:
+  - name: frontend
+    serviceName: frontend-dev
+    servicePort: 80
+    path: /
+    pathType: Prefix
+  - name: backend-api
+    serviceName: backend-dev
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     servicePort: 8000
     path: /api
     pathType: Prefix
   - name: backend-uploads
+<<<<<<< HEAD
     serviceName: backend
+=======
+    serviceName: backend-dev
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     servicePort: 8000
     path: /uploads
     pathType: Prefix
 
+<<<<<<< HEAD
 # Ingress controller settings
 ingressClass: nginx
 
@@ -38,3 +66,11 @@ annotations:
   nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
   nginx.ingress.kubernetes.io/limit-rps: "10"
   nginx.ingress.kubernetes.io/limit-connections: "5"
+=======
+# Basic annotations
+annotations:
+  nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+  nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+  nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+  nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

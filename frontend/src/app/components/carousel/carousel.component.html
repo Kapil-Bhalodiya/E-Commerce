@@ -1,0 +1,29 @@
+<div class="product__gallery">
+  <div class="main__image-container">
+    <img 
+      class="main__image" 
+      [src]="imageURL + '/' + selectedImage" 
+      [alt]="'Product image'"
+      *ngIf="selectedImage">
+    <div class="image__overlay">
+      <button class="zoom__btn" title="Zoom image" (click)="openImageModal()">
+        <i class="bi bi-zoom-in"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="thumbnail__container">
+    <div class="thumbnail__grid">
+      <div 
+        class="thumbnail__item" 
+        *ngFor="let image of images; let i = index"
+        [class.active]="image === selectedImage"
+        (click)="onThumbnailClick(image)">
+        <img 
+          [src]="imageURL + '/' + image" 
+          [alt]="'Product thumbnail ' + (i + 1)"
+          class="thumbnail__image">
+      </div>
+    </div>
+  </div>
+</div>

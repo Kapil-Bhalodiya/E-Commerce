@@ -1,9 +1,17 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+<<<<<<< HEAD
 import { StepperComponent } from '../../compoments/stepper/stepper.component'; // Fixed typo in path
 import { catchError, of, Subject, takeUntil } from 'rxjs';
 import { CartService } from '../../services/cart.service';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { StepConfig } from '../../compoments/stepper/models/step-config.model';
+=======
+import { StepperComponent } from '../../components/stepper/stepper.component'; // Fixed typo in path
+import { catchError, of, Subject, takeUntil } from 'rxjs';
+import { CartService } from '../../services/cart.service';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { StepConfig } from '../../components/stepper/models/step-config.model';
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 import { OrderService } from '../../services/order.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -13,12 +21,22 @@ import { PaymentStepComponent } from './payment-step/payment-step.component';
 import { CartItem } from '../../models/cartItem.model';
 import { AddressService } from '../../services/address.service';
 import { Address } from '../../models/address.model';
+<<<<<<< HEAD
 import { SpinnerComponent } from "../../compoments/spinner/spinner.component";
+=======
+import { SpinnerComponent } from "../../components/spinner/spinner.component";
+import { ToastComponent } from '../../shared/components/toast/toast.component';
+import { STORAGE_KEYS } from '../../core/constants/api.constants';
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.scss'],
+<<<<<<< HEAD
   imports: [StepperComponent, CommonModule, FormsModule, SpinnerComponent],
+=======
+  imports: [StepperComponent, CommonModule, FormsModule, SpinnerComponent, ToastComponent],
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   @ViewChild(StepperComponent) formStepper!: StepperComponent;
@@ -33,7 +51,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   steps: StepConfig[] = [];
 
   currentIndex: number = 0;
+<<<<<<< HEAD
   isLoading:boolean = false;
+=======
+  isLoading: boolean = false;
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   cartItems!: CartItem[];
   couponCode: string = '';
   couponError: string = '';
@@ -43,6 +65,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   addresses: Address[] = [];
   selectedAddressId: string | null = null;
 
+<<<<<<< HEAD
+=======
+  showToast = false;
+  toastMessage = '';
+  toastType: 'success' | 'error' | 'warning' = 'success';
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -61,6 +90,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
     this.initializeForm();
     this.fetchAddresses();
+<<<<<<< HEAD
     // this.fetchProvinces();
     this.formGroup?.get('cartForm')?.get('items')?.updateValueAndValidity({ onlySelf: true });
     this.cartService.getCartItems$()
@@ -78,6 +108,23 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
       console.log("currentFormGroup : ",this.currentFormGroup?.valid)
       console.log("currentFormGroup : ",this.currentFormGroup?.value)
+=======
+
+    this.formGroup?.get('cartForm')?.get('items')?.updateValueAndValidity({ onlySelf: true });
+    this.cartService.getCartItems$()
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        catchError(error => {
+          this.errorMessage = 'Failed to load cart items'
+          this.cartItems = []
+          return of([])
+        })
+      )
+      .subscribe((items: CartItem[]) => {
+        this.cartItems = items || []
+        this.referenceData.cartItems = items
+      })
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   initializeForm() {
@@ -106,11 +153,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         method: ['card'],
         provider: ['Stripe'],
         stripePaymentIntentId: [''],
+<<<<<<< HEAD
+=======
+        paymentCompleted: [false],
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         saveCard: [false],
       }),
     };
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   fetchAddresses() {
     this.isLoading = true;
     this.errorMessage = null;
@@ -134,6 +189,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   addressTypeValidator(control: AbstractControl) {
     return control.value === '-1' ? { invalidAddressType: true } : null;
   }
+<<<<<<< HEAD
   
   nextClickHandler(): void {
     const currentForm = this.formGroup.get(this.steps[this.currentIndex].index);
@@ -143,13 +199,39 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.currentIndex === this.steps.length - 1) {
+=======
+
+  nextClickHandler(): void {
+    if (this.currentIndex === 0 && this.cartItems.length === 0) {
+      this.showToastMessage('Your cart is empty. Please add items to continue.', 'warning');
+      return;
+    }
+
+    const currentForm = this.formGroup.get(this.steps[this.currentIndex].index);
+    if (currentForm?.invalid) {
+      currentForm.markAllAsTouched();
+      this.showToastMessage('Please complete all required fields.', 'warning');
+      return;
+    }
+
+    // Special validation for payment step
+    if (this.currentIndex === this.steps.length - 1) {
+      if (!this.validatePayment()) {
+        this.showToastMessage('Please complete payment before placing order.', 'error');
+        return;
+      }
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       this.proceedToCheckout();
     } else {
       this.currentIndex++;
       this.formStepper.nextStep();
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   previousClickHandler(): void {
     if (this.formStepper) {
       this.formStepper.previousStep();
@@ -159,7 +241,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   onTransitionCompleteHandler(ev: FormGroup): void {
     this.currentFormGroup = ev;
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   onSelectedIndexChangedHandler(index: number): void {
     this.currentIndex = index;
   }
@@ -182,6 +268,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       }
     });
   }
+<<<<<<< HEAD
   
   proceedToCheckout(): void {
     if (!this.cartService.getCartItems().length) {
@@ -203,6 +290,80 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     console.log("orderData : ",orderData);
     localStorage.setItem('orderForm', JSON.stringify(orderData));
     this.router.navigateByUrl('/checkout-complete');
+=======
+
+  getGrandTotal(): number {
+    const subtotal = this.cartService.getSubtotal();
+    const tax = subtotal * 0.1;
+    const shipping = this.cartItems.length > 0 ? this.shippingCost : 0;
+    return Math.round((subtotal + tax + shipping - this.discountAmount) * 100) / 100;
+  }
+
+  getShippingCost(): number {
+    return this.cartItems.length > 0 ? this.shippingCost : 0;
+  }
+
+  proceedToCheckout(): void {
+    const cartItems = this.cartService.getCartItems()
+    if (!cartItems.length) {
+      this.showToastMessage('Cart is empty', 'error');
+      return
+    }
+
+    const orderData = {
+      cartForm: { items: cartItems },
+      deliveryAddressForm: {
+        deliveryAddressId: this.formGroup.get('deliveryForm.addressId')?.value,
+        newAddress: this.formGroup.get('deliveryForm.newAddress')?.value
+      },
+      paymentDetailForm: this.formGroup.get('paymentForm')?.value,
+      couponCode: this.couponCode || undefined
+    }
+    this.isLoading = true;
+    this.orderService.createOrder(orderData).pipe(
+      takeUntil(this.ngUnsubscribe),
+      catchError(err => {
+        this.isLoading = false;
+        this.showToastMessage('Failed to place order. Please try again.', 'error');
+        return of(null);
+      })
+    ).subscribe((orderResponse) => {
+      if (!orderResponse) return;
+      this.showToastMessage('Order placed successfully!', 'success');
+      this.cartService.clearCart()
+      localStorage.setItem(STORAGE_KEYS.ORDER, JSON.stringify(orderResponse));
+      this.isLoading = false;
+      this.router.navigate(['/checkout-complete']);
+    });
+  }
+
+  validatePayment(): boolean {
+    const paymentForm = this.formGroup.get('paymentForm');
+    const stripePaymentIntentId = paymentForm?.get('stripePaymentIntentId')?.value;
+    const paymentCompleted = paymentForm?.get('paymentCompleted')?.value;
+
+    // Check if payment is completed
+    if (!paymentCompleted) {
+      return false;
+    }
+
+    // Check if payment intent exists and is valid
+    if (!stripePaymentIntentId || stripePaymentIntentId.trim() === '') {
+      return false;
+    }
+
+    return true;
+  }
+
+  showToastMessage(message: string, type: 'success' | 'error' | 'warning') {
+    this.toastMessage = message;
+    this.toastType = type;
+    this.showToast = true;
+
+    setTimeout(() => {
+      this.showToast = false;
+    }, 3000);
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   ngOnDestroy(): void {
@@ -211,6 +372,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 }
 
+<<<<<<< HEAD
 
 
 // import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
@@ -365,3 +527,5 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 //     this.ngUnsubscribe.complete();
 //   }
 // }
+=======
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

@@ -1,0 +1,287 @@
+// // .offcanvas__header--menu__open {
+// // 	line-height: 1;
+// // 	display: none
+// // }
+
+// // .offcanvas__header--menu__open--btn>* {
+// // 	pointer-events: none
+// // }
+
+// // @media only screen and (max-width:991px) {
+// // 	.offcanvas__header--menu__open {
+// // 		display: block
+// // 	}
+// // }
+
+// // .offcanvas__header--menu__open--svg {
+// // 	width: 32px
+// // }
+
+// // .offcanvas__header {
+// // 	position: fixed;
+// // 	z-index: 9999;
+// // 	top: 0;
+// // 	left: 0;
+// // 	width: 100%;
+// // 	max-width: 300px;
+// // 	height: 100vh;
+// // 	-webkit-transition: var(--transition);
+// // 	transition: var(--transition);
+// // 	-webkit-transform: translateX(-100%);
+// // 	transform: translateX(-100%);
+// // 	background-color: var(--white-color);
+// // 	-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+// // 	box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+// // 	opacity: 0;
+// // 	visibility: hidden
+// // }
+
+// // @media only screen and (min-width:480px) {
+// // 	.offcanvas__header {
+// // 		max-width: 320px
+// // 	}
+// // }
+
+// // .offcanvas__header.open {
+// // 	-webkit-transform: translateX(0);
+// // 	transform: translateX(0);
+// // 	opacity: 1;
+// // 	visibility: visible
+// // }
+
+// // .offcanvas__header.open~.offcanvas-overlay {
+// // 	visibility: visible;
+// // 	opacity: .75
+// // }
+
+// // .offcanvas__inner {
+// // 	position: relative;
+// // 	height: 100%
+// // }
+
+// // .offcanvas__logo {
+// // 	display: -webkit-box;
+// // 	display: -ms-flexbox;
+// // 	display: flex;
+// // 	-webkit-box-align: center;
+// // 	-ms-flex-align: center;
+// // 	align-items: center;
+// // 	-webkit-box-pack: justify;
+// // 	-ms-flex-pack: justify;
+// // 	justify-content: space-between;
+// // 	padding: 20px 15px
+// // }
+
+// // .offcanvas__close--btn {
+// // 	position: relative;
+// // 	-ms-flex-item-align: center;
+// // 	-ms-grid-row-align: center;
+// // 	align-self: center;
+// // 	width: 2rem;
+// // 	height: 2rem;
+// // 	padding: 0;
+// // 	text-indent: -9999px;
+// // 	border: none;
+// // 	background-color: transparent
+// // }
+
+// // .offcanvas__close--btn::after,
+// // .offcanvas__close--btn::before {
+// // 	position: absolute;
+// // 	top: 50%;
+// // 	left: 0;
+// // 	width: 100%;
+// // 	height: 2px;
+// // 	margin-top: -1px;
+// // 	content: "";
+// // 	-webkit-transform: rotate(45deg);
+// // 	transform: rotate(45deg);
+// // 	background-color: var(--black-color)
+// // }
+
+
+// // .offcanvas {
+// //     background-color: #fff;
+// //     z-index: 1050; // Ensure it's above other components
+// //   }
+  
+
+// // .offcanvas__close--btn::after {
+// // 	-webkit-transform: rotate(-45deg);
+// // 	transform: rotate(-45deg)
+// // }
+
+// // .offcanvas__menu {
+// // 	overflow-y: auto;
+// // 	height: 100%
+// // }
+
+// // .offcanvas__menu_ul {
+// // 	overflow: auto;
+// // 	margin: 0;
+// // 	padding: 0;
+// // 	list-style: none;
+// // 	max-height: 300px
+// // }
+
+// // .offcanvas__menu_li {
+// // 	position: relative;
+// // 	border-bottom: 1px solid var(--border-color2)
+// // }
+
+// // .offcanvas__menu_li:first-child {
+// // 	border-top: 1px solid var(--border-color2)
+// // }
+
+// // .offcanvas__menu_item {
+// // 	line-height: 1;
+// // 	display: block;
+// // 	padding: 15px 20px;
+// // 	text-transform: uppercase
+// // }
+
+
+// // .offcanvas__sub_menu {
+// // 	display: none;
+// // 	margin: 0;
+// // 	padding: 0;
+// // 	list-style: none
+// // }
+
+// // .offcanvas__sub_menu_li {
+// // 	position: relative;
+// // 	border-top: 1px solid var(--border-color2)
+// // }
+
+// // .offcanvas__sub_menu_item {
+// // 	line-height: 1;
+// // 	display: block;
+// // 	padding: 15px 0 15px 30px
+// // }
+
+// // .offcanvas__sub_menu_item~.offcanvas__sub_menu .offcanvas__sub_menu_item {
+// // 	padding-left: 40px
+// // }
+
+// // .offcanvas__sub_menu_toggle {
+// // 	font-size: 20px;
+// // 	position: absolute;
+// // 	z-index: 9;
+// // 	top: 0;
+// // 	right: 0;
+// // 	width: 4rem;
+// // 	height: 4.6rem;
+// // 	padding: 0;
+// // 	border: none;
+// // 	border-radius: 0;
+// // 	background-color: transparent
+// // }
+
+// // .offcanvas__sub_menu_toggle::after,
+// // .offcanvas__sub_menu_toggle::before {
+// // 	position: absolute;
+// // 	top: 50%;
+// // 	left: 50%;
+// // 	width: 12px;
+// // 	height: 2px;
+// // 	content: "";
+// // 	-webkit-transition: var(--transition);
+// // 	transition: var(--transition);
+// // 	-webkit-transform: translateX(-50%) translateY(-50%);
+// // 	transform: translateX(-50%) translateY(-50%);
+// // 	background-color: var(--black-color)
+// // }
+
+// // .offcanvas__sub_menu_toggle:not(.active)::after {
+// // 	-webkit-transform: translateX(-50%) translateY(-50%) rotate(90deg);
+// // 	transform: translateX(-50%) translateY(-50%) rotate(90deg)
+// // }
+
+
+// // .offcanvas__account--items {
+// // 	padding: 28px 17px 20px
+// // }
+
+// // .offcanvas__account--items__icon {
+// // 	width: 3rem;
+// // 	height: 3rem;
+// // 	text-align: center;
+// // 	background: var(--secondary-color);
+// // 	line-height: 2.8rem;
+// // 	border-radius: 50%;
+// // 	color: var(--white-color)
+// // }
+
+// // .offcanvas__account--items__label {
+// // 	font-size: 1.5rem;
+// // 	font-weight: 600;
+// // 	margin-left: 6px
+// // }
+
+
+// .mobile-nav .btn {
+//     background-color: var(--primary-color);
+//     font-size: 1.25rem;
+//   }
+  
+//   .offcanvas {
+//     background-color: #fff;
+//     z-index: 1050;
+//   }
+  
+//   .offcanvas-header {
+//     border-bottom: 1px solid #eaeaea;
+//   }
+  
+//   .nav-link {
+//     font-size: 1rem;
+//     color: #333;
+//     padding: 10px 0;
+//   }
+//   .btn-outline-dark {
+//     font-size: 1.25rem;
+//     padding: 0.5rem 1rem;
+//   }
+
+// .offcanvas-menu {
+//     animation: slideIn 0.3s ease-in-out;
+//   }
+//   @keyframes slideIn {
+//     from {
+//       transform: translateX(-100%);
+//     }
+//     to {
+//       transform: translateX(0);
+//     }
+//   }
+
+
+/* offcanvas-header.component.css */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .mobile-menu.show {
+    display: block;
+  }
+  
+  /* header-top.component.css (ensure media query is correct) */
+  @media (max-width: 768px) {
+    .search-bar,
+    .user-actions {
+      display: none;
+    }
+    .menu-toggle {
+      display: flex;
+    }
+  }
+  

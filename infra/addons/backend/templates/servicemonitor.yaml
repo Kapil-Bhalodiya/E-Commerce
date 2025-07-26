@@ -3,10 +3,17 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "backend.fullname" . }}
+<<<<<<< HEAD
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "backend.labels" . | nindent 4 }}
     release: prometheus-stack-dev
+=======
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "backend.labels" . | nindent 4 }}
+    release: prometheus-stack-{{ .Values.namespace | default "dev" }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 spec:
   selector:
     matchLabels:

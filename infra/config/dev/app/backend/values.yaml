@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 replicaCount: 1
 
 namespace: dev
@@ -15,3 +16,32 @@ resources:
   limits:
     cpu: 300m
     memory: 256Mi
+=======
+# Dev backend - only dev-specific overrides
+
+namespace: dev
+
+image:
+  tag: "dev-latest"
+
+env:
+  NODE_ENV: "development"
+  LOG_LEVEL: "debug"
+
+# Lower resources for dev
+resources:
+  requests:
+    cpu: "50m"
+    memory: "64Mi"
+  limits:
+    cpu: "200m"
+    memory: "256Mi"
+
+database:
+  host: mongodb.dev.svc.cluster.local
+
+# Enable persistence for uploads in dev
+persistence:
+  enabled: true
+  size: 2Gi
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

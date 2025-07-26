@@ -1,4 +1,10 @@
 node_modules/
 .env
+<<<<<<< HEAD
 uploads
+=======
+logs/
+.scannerwork/
+public/uploads/
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 

@@ -104,4 +104,67 @@
 	.product__grid--inner .product__items--action__btn.add__to--cart {
 		padding: 0 .6rem
 	}
+<<<<<<< HEAD
+=======
+}
+
+// Product List View Custom Styles
+.product-list-card {
+  background: #fff;
+  transition: box-shadow 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border: 1px solid #f0f0f0;
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+    transform: translateY(-2px) scale(1.01);
+    border-color: #007bff33;
+  }
+  .product-list-img {
+    border-radius: 0.5rem;
+    border: 1px solid #eee;
+    background: #fafbfc;
+    transition: box-shadow 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  }
+  .btn {
+    margin-left: 0.5rem;
+    transition: background 0.2s, color 0.2s;
+    &:hover {
+      background: #007bff;
+      color: #fff;
+    }
+  }
+  .btn-outline-danger {
+    border-color: #ff4d4f;
+    color: #ff4d4f;
+    &:hover {
+      background: #ff4d4f;
+      color: #fff;
+    }
+  }
+  .btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+    &:hover {
+      background: #6c757d;
+      color: #fff;
+    }
+  }
+  .fw-bold.fs-5.text-primary {
+    font-size: 1.25rem;
+    color: #007bff !important;
+  }
+  .text-warning {
+    color: #ffc107 !important;
+    font-size: 1rem;
+  }
+  .mb-1 {
+    margin-bottom: 0.25rem !important;
+  }
+  .small {
+    font-size: 0.95rem;
+  }
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 }

@@ -1,0 +1,108 @@
+.primary__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  height: 48px;
+  padding: 0 2rem;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--secondary-color), #ff4081);
+  color: var(--white-color);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(238, 39, 97, 0.3);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  &:hover::before {
+    left: 100%;
+  }
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(238, 39, 97, 0.4);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(238, 39, 97, 0.3);
+  }
+}
+
+// Size variants
+.primary__btn--sm {
+  font-size: 1.3rem;
+  height: 40px;
+  padding: 0 1.5rem;
+}
+
+.primary__btn--md {
+  font-size: 1.4rem;
+  height: 44px;
+  padding: 0 1.8rem;
+}
+
+.primary__btn--lg {
+  font-size: 1.6rem;
+  height: 52px;
+  padding: 0 2.5rem;
+  width: -webkit-fill-available;
+}
+
+.primary__btn--xl {
+  font-size: 1.8rem;
+  height: 56px;
+  padding: 0 3rem;
+}
+
+@media only screen and (min-width:768px) {
+	.primary__btn {
+		font-size: 1.5rem;
+		line-height: 4rem;
+		height: 4rem;
+		padding: 0 2rem
+	}
+}
+
+@media only screen and (min-width:992px) {
+	.primary__btn {
+		font-size: 1.6rem;
+		line-height: 4.5rem;
+		height: 4.5rem
+	}
+}
+
+@media only screen and (min-width:1200px) {
+	.primary__btn {
+		font-size: 1.7rem;
+		line-height: 4.8rem;
+		height: 4.8rem;
+		padding: 0 2.3rem
+	}
+}
+
+@media only screen and (min-width:1600px) {
+	.primary__btn {
+		font-size: 1.8rem;
+		line-height: 5.2rem;
+		height: 5.2rem;
+		padding: 0 2.5rem
+	}
+}

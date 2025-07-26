@@ -1,0 +1,13 @@
+<div
+      class="spinner-border"
+      [ngClass]="{
+        'spinner-border-sm': size === 'small',
+        'spinner-border-md': size === 'medium',
+        'spinner-border-lg': size === 'large'
+      }"
+      [ngStyle]="{'--loader-color': color === 'white' ? '#ffffff' : 'var(--secondary-color)'}"
+      role="status"
+      aria-hidden="true"
+    >
+      <span class="visually-hidden">Loading...</span>
+    </div>

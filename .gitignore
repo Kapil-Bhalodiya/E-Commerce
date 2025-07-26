@@ -1,2 +1,69 @@
+<<<<<<< HEAD
 *.key
 *.crt
+=======
+# Build artifacts
+*.log
+*.tmp
+*.cache
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.html
+*.gif
+*.ps1
+
+# Scanner work directories
+.scannerwork/
+
+# Angular cache
+.angular/
+
+# Security & Secrets
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+.env
+.env.*
+
+# Jenkins & CI/CD
+dependency-check-*
+*.sarif
+*.xml
+*.json
+*.csv
+reports/
+.jenkins/
+
+# Docker secrets
+docker-compose.override.yml
+.dockerignore
+
+# Kubernetes secrets
+kustomization.yaml
+infra/addons/*/templates/secret.yaml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Credentials
+credentials.json
+service-account.json
+aws-credentials
+.aws/
+.kube/config
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

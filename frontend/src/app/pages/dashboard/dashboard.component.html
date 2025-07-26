@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- <div class="container-fluid dashboard-container"> -->
 <!-- <h2 class="mb-4">Dashboard</h2> -->
 <!-- <div class="row kpi-grid mb-4">
@@ -77,3 +78,181 @@
         </div>
     </div>
 </section>
+=======
+<div class="dashboard__container">
+  <div class="container">
+    <!-- Dashboard Header -->
+    <div class="dashboard__header">
+      <div class="header__content">
+        <div class="user__info">
+          <div class="user__avatar-wrapper">
+            <img [src]="user.avatar" [alt]="user.name" class="user__avatar" />
+          </div>
+          <div class="user__details">
+            <h1 class="user__name">Welcome back, {{ user.name }}!</h1>
+            <p class="user__email">{{ user.email }}</p>
+          </div>
+        </div>
+        <button class="logout__btn" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats__section">
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+          <div class="stat__card primary">
+            <div class="stat__icon">
+              <i class="bi bi-bag-check"></i>
+            </div>
+            <div class="stat__content">
+              <h3 class="stat__number">{{ stats.totalOrders }}</h3>
+              <p class="stat__label">Total Orders</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="stat__card warning">
+            <div class="stat__icon">
+              <i class="bi bi-clock"></i>
+            </div>
+            <div class="stat__content">
+              <h3 class="stat__number">{{ stats.pendingOrders }}</h3>
+              <p class="stat__label">Pending Orders</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="stat__card success">
+            <div class="stat__icon">
+              <i class="bi bi-currency-dollar"></i>
+            </div>
+            <div class="stat__content">
+              <h3 class="stat__number">${{ stats.totalSpent | number:'1.2-2' }}</h3>
+              <p class="stat__label">Total Spent</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="stat__card info">
+            <div class="stat__icon">
+              <i class="bi bi-cart3"></i>
+            </div>
+            <div class="stat__content">
+              <h3 class="stat__number">{{ stats.cartItems }}</h3>
+              <p class="stat__label">Cart Items</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Quick Actions -->
+      <div class="col-lg-8">
+        <div class="section__card">
+          <div class="section__header">
+            <h2 class="section__title">
+              <i class="bi bi-lightning"></i>
+              Quick Actions
+            </h2>
+          </div>
+
+          <div class="quick__actions">
+            <div class="row g-3">
+              <div class="col-md-6" *ngFor="let action of quickActions">
+                <div class="action__card" [ngClass]="action.color" (click)="navigateTo(action.route)">
+                  <div class="action__icon">
+                    <i class="bi" [ngClass]="action.icon"></i>
+                  </div>
+                  <div class="action__content">
+                    <h4 class="action__title">{{ action.title }}</h4>
+                    <p class="action__description">{{ action.description }}</p>
+                  </div>
+                  <div class="action__arrow">
+                    <i class="bi bi-arrow-right"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="col-lg-4">
+        <div class="section__card">
+          <div class="section__header">
+            <h2 class="section__title">
+              <i class="bi bi-clock-history"></i>
+              Recent Orders
+            </h2>
+            <button class="view__all-btn" (click)="navigateTo('/orders')">
+              View All
+            </button>
+          </div>
+
+          <div class="orders__list">
+            <div class="order__item" *ngFor="let order of recentOrders">
+              <div class="order__header">
+                <span class="order__id">{{ order.id }}</span>
+                <span class="order__status" [ngClass]="getStatusClass(order.status)">
+                  {{ order.status }}
+                </span>
+              </div>
+              <div class="order__details">
+                <p class="order__date">{{ order.date | date:'MMM dd, yyyy' }}</p>
+                <p class="order__total">${{ order.total | number:'1.2-2' }}</p>
+              </div>
+              <div class="order__meta">
+                <span class="order__items">{{ order.items }} items</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Features -->
+    <div class="features__section">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature__card">
+            <div class="feature__icon">
+              <i class="bi bi-truck"></i>
+            </div>
+            <h3 class="feature__title">Free Shipping</h3>
+            <p class="feature__description">On orders over $50</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="feature__card">
+            <div class="feature__icon">
+              <i class="bi bi-arrow-clockwise"></i>
+            </div>
+            <h3 class="feature__title">Easy Returns</h3>
+            <p class="feature__description">30-day return policy</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="feature__card">
+            <div class="feature__icon">
+              <i class="bi bi-headset"></i>
+            </div>
+            <h3 class="feature__title">24/7 Support</h3>
+            <p class="feature__description">Always here to help</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

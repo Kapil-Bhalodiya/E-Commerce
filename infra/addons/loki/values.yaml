@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 loki:
   isDefault: false
   auth_enabled: false
@@ -274,3 +275,97 @@ grafanaAgent:  # Explicitly disable at the chart level
 #     periodSeconds: 10
 #     successThreshold: 1
 #     failureThreshold: 5
+=======
+namespace: dev
+
+loki:
+  enabled: true
+  config:
+    commonConfig:
+      path_prefix: /tmp/loki
+    storage_config:
+      boltdb_shipper:
+        active_index_directory: /tmp/loki/index
+        cache_location: /tmp/loki/boltdb-cache
+        shared_store: filesystem
+      filesystem:
+        directory: /tmp/loki/chunks
+    schema_config:
+      configs:
+        - from: "2022-01-01"
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
+
+  persistence:
+    enabled: false
+
+  service:
+    type: ClusterIP
+    port: 3100
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+promtail:
+  enabled: true
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  config:
+    clients:
+      - url: http://loki:3100/loki/api/v1/push
+    scrape_configs:
+      # Backend logs
+      - job_name: backend-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: backend
+              namespace: dev
+              app: backend
+              __path__: /var/log/pods/dev_backend-dev-*/*backend*/0.log
+      # Frontend logs
+      - job_name: frontend-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: frontend
+              namespace: dev
+              app: frontend
+              __path__: /var/log/pods/dev_frontend-dev-*/*frontend*/0.log
+      # Prometheus logs
+      - job_name: prometheus-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: prometheus
+              namespace: dev
+              app: prometheus
+              __path__: /var/log/pods/dev_prometheus-*/*prometheus*/0.log
+      # Grafana logs
+      - job_name: grafana-logs
+        static_configs:
+          - targets:
+              - localhost
+            labels:
+              job: grafana
+              namespace: dev
+              app: grafana
+              __path__: /var/log/pods/dev_*grafana*/*grafana*/0.log
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

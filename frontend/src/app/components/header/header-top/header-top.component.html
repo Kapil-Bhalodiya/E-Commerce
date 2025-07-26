@@ -1,0 +1,47 @@
+<div class="header-top">
+    <div class="container-fluid">
+        <div class="main__header--inner position__relative d-flex justify-content-between align-items-center">
+        <div class="menu-toggle" (click)="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="logo">
+            <!-- <img src="assets/logo.png" alt="SHARKCART Logo" /> -->
+            <span>SHARKCART</span>
+        </div>
+
+        <!-- <div class="search-bar">
+            <app-dropdown-filter [items]="dropDownList" [defaultOption]="dropDownList[0]"></app-dropdown-filter>
+            <app-search-box [placeholder]="'Keyword Here..'" [size]="'large'"
+                (search)="onSearch($event)"></app-search-box>
+        </div> -->
+
+        <div class="header__account header__sticky--none">
+            <ul class="d-flex">
+                <li class="header__account--items">
+                    <a class="header__account--btn" (click)="goToAccount()">
+                        <i class="bi bi-person" style="font-size: 24px;"></i>
+                        <span class="header__account--btn__text">My Account</span>
+                    </a>
+                </li>
+                <li class="header__account--items">
+                    <a class="header__account--btn" href="my-account.html">
+                        <i class="bi bi-heart" style="font-size: 24px;"></i>
+                        <span class="header__account--btn__text">wish List</span>
+                        <span class="items__count wishlist">0</span>
+                    </a>
+                </li>
+                <li class="header__account--items">
+                    <a class="header__account--btn" (click)="goToCart()">
+                        <i class="bi bi-cart4" style="font-size: 24px;"></i>
+                        <span class="header__account--btn__text">My Cart</span>
+                        <span class="items__count wishlist">{{ cratItems }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </div>
+</div>

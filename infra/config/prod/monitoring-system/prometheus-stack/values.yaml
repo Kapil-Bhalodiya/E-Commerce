@@ -1,0 +1,35 @@
+# PROD Environment Configuration for Prometheus Stack
+namespace: prod
+grafanaHost: "prod.grafana.local"
+
+kube-prometheus-stack:
+  # Grafana settings for PROD
+  grafana:
+    adminPassword: "SecurePassword123!"
+    persistence:
+      enabled: false
+    grafana.ini:
+      server:
+        domain: "prod.grafana.local"
+        root_url: "http://prod.grafana.local/"
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+  
+  # Prometheus settings for PROD (larger resources)
+  prometheus:
+    prometheusSpec:
+      retention: "30d"
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "2Gi"
+        limits:
+          cpu: "2000m"
+          memory: "4Gi"
+      # Disable persistent storage
+      storageSpec: {}

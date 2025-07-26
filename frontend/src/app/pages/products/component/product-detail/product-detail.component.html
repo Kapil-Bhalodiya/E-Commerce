@@ -1,4 +1,5 @@
 <app-breadcrumb></app-breadcrumb>
+<<<<<<< HEAD
 <section class="product__details--section section--padding">
     <div class="container">
         <div class="row row-cols-lg-2 row-cols-md-2">
@@ -55,8 +56,150 @@
                             <img class="guarantee__safe--checkout__img" src="safe-checkout.png" alt="Payment Image">
                         </div>
                     </form>
+=======
+<section *ngIf="product" class="product__details--section section--padding">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Product Images -->
+            <div class="col-lg-6">
+                <div class="product__details--media sticky-top">
+                    <app-carousel [images]="product.image_urls"></app-carousel>
+                </div>
+            </div>
+            
+            <!-- Product Info -->
+            <div class="col-lg-6">
+                <div class="product__details--info">
+                    <!-- Product Title & Price -->
+                    <div class="product__header mb-4">
+                        <h1 class="product__title">{{ product.name }}</h1>
+                        <div class="product__price-section">
+                            <div class="price__wrapper">
+                                <span class="current__price">${{ getCurrentPrice() }}</span>
+                                <span class="old__price" *ngIf="product.sale_price">${{ product.sale_price }}</span>
+                            </div>
+                            <div class="product__rating">
+                                <app-rating></app-rating>
+                                <span class="rating__text">(4.5 stars)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stock Status -->
+                    <div class="stock__status-wrapper mb-3" *ngIf="selectedVariant">
+                        <span class="stock-badge" [ngClass]="getStockStatusClass()">
+                            <i class="bi" [ngClass]="getStockIcon()"></i>
+                            {{ getStockStatusText() }}
+                        </span>
+                    </div>
+
+                    <!-- Product Description -->
+                    <div class="product__description mb-4">
+                        <p>{{ product.description }}</p>
+                    </div>
+
+                    <!-- Variants Selection -->
+                    <div class="product__variants mb-4">
+                        <app-radio-variant 
+                            [options]="productColors"
+                            [selectedValue]="selectedColor" 
+                            [name]="'Color'" 
+                            [isColor]="true" 
+                            (valueChange)="onColorChange($event)">
+                        </app-radio-variant>
+                        
+                        <app-radio-variant 
+                            [options]="productSizes"
+                            [selectedValue]="selectedSize" 
+                            [name]="'Size'" 
+                            (valueChange)="onSizeChange($event)">
+                        </app-radio-variant>
+                    </div>
+
+                    <!-- Purchase Actions -->
+                    <div class="purchase__section mb-4">
+                        <!-- Quantity & Wishlist Row -->
+                        <div class="quantity__row">
+                            <div class="quantity__wrapper">
+                                <label class="quantity__label">Qty:</label>
+                                <app-quantity-box 
+                                    [quantity]="selectedQuantity"
+                                    [maxQuantity]="getMaxQuantity()"
+                                    (quantityChange)="onQuantityChange($event)">
+                                </app-quantity-box>
+                            </div>
+                            
+                            <button class="wishlist__btn" (click)="addToWishlist()" title="Add to Wishlist">
+                                <i class="bi bi-heart"></i>
+                                <span>Wishlist</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="action__buttons">
+                            <app-primary-button 
+                                size="lg"
+                                class="add-cart-btn" 
+                                label="Add to Cart" 
+                                (click)="addToCart()">
+                            </app-primary-button>
+                            
+                            <app-primary-button 
+                                size="lg"
+                                class="buy-now-btn" 
+                                label="Buy Now" 
+                                (click)="buyNow()">
+                            </app-primary-button>
+                        </div>
+                    </div>
+
+                    <!-- Product Meta Info -->
+                    <div class="product__meta">
+                        <div class="meta__item" *ngIf="product.brand">
+                            <strong>Brand:</strong> <span>{{ product.brand }}</span>
+                        </div>
+                        <div class="meta__item" *ngIf="product.tags?.length">
+                            <strong>Tags:</strong> 
+                            <span class="tag" *ngFor="let tag of product.tags">{{ tag }}</span>
+                        </div>
+                        <div class="meta__item" *ngIf="selectedVariant">
+                            <strong>Selected:</strong> <span>{{ selectedColor }} - {{ selectedSize }}</span>
+                        </div>
+                        <div class="meta__item">
+                            <strong>SKU:</strong> <span>{{ product._id.slice(-8).toUpperCase() }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Social Share -->
+                    <div class="social__share mb-4">
+                        <h6>Share this product:</h6>
+                        <app-social-share></app-social-share>
+                    </div>
+
+                    <!-- Safe Checkout -->
+                    <div class="safe__checkout">
+                        <div class="checkout__header">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Guaranteed Safe Checkout</span>
+                        </div>
+                        <div class="payment__methods">
+                            <span class="payment__text">Secure payment methods</span>
+                        </div>
+                    </div>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                 </div>
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 </section>
+=======
+</section>
+
+<!-- Toast Notifications -->
+<app-toast 
+    [show]="showToast" 
+    [message]="toastMessage" 
+    [type]="toastType">
+</app-toast>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

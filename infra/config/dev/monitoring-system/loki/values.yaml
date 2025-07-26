@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 loki:
   SimpleScalable:
     read:
@@ -98,3 +99,73 @@ promtail:
 # promtail:
 #   config:
 #     logLevel: debug
+=======
+# DEV Environment Configuration for Loki Stack
+namespace: dev
+
+loki:
+  enabled: true
+  deploymentMode: SingleBinary
+  loki:
+    auth_enabled: false
+    useTestSchema: true
+  singleBinary:
+    replicas: 1
+    persistence:
+      enabled: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+# Promtail configuration for Kubernetes log collection
+promtail:
+  enabled: true
+  config:
+    clients:
+      - url: http://loki:3100/loki/api/v1/push
+    scrape_configs:
+      # Kubernetes pod logs
+      - job_name: kubernetes-pods
+        kubernetes_sd_configs:
+          - role: pod
+        pipeline_stages:
+          - cri: {}
+        relabel_configs:
+          # Only scrape pods that are running
+          - source_labels: [__meta_kubernetes_pod_phase]
+            action: keep
+            regex: Running
+          # Add namespace label
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: namespace
+          # Add pod label
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: pod
+          # Add container label
+          - source_labels: [__meta_kubernetes_pod_container_name]
+            action: replace
+            target_label: container
+          # Add app label from pod labels
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: replace
+            target_label: app
+          # Set the log path
+          - source_labels: [__meta_kubernetes_pod_uid, __meta_kubernetes_pod_container_name]
+            action: replace
+            separator: /
+            target_label: __path__
+            replacement: /var/log/pods/*$1/*.log
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

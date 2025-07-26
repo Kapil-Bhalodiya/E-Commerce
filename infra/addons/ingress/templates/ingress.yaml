@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "ingress.fullname" . }}
+<<<<<<< HEAD
   labels:
     app.kubernetes.io/name: {{ include "ingress.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -9,12 +10,24 @@ metadata:
   annotations:
     {{- if .Values.tls.enabled }}
     cert-manager.io/cluster-issuer: {{ .Values.clusterIssuer | quote }}
+=======
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "ingress.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.tls.enabled }}
+    cert-manager.io/cluster-issuer: {{ .Values.tls.issuer | quote }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     {{- end }}
     {{- range $key, $value := .Values.annotations }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
 spec:
+<<<<<<< HEAD
   ingressClassName: {{ .Values.ingressClass | quote }}
+=======
+  ingressClassName: {{ .Values.ingressClassName | quote }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   {{- if .Values.tls.enabled }}
   tls:
   - hosts:
@@ -30,7 +43,11 @@ spec:
         pathType: {{ .pathType }}
         backend:
           service:
+<<<<<<< HEAD
             name: '{{ .serviceName }}-dev'
+=======
+            name: {{ .serviceName }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
             port:
               number: {{ .servicePort }}
       {{- end }}

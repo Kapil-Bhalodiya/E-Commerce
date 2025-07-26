@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # release:
 #   revision: main
 #   tag: HEAD
@@ -5,10 +6,19 @@
 # address: https://kubernetes.default.svc
 global:
   env: dev
+=======
+# Development environment - only dev-specific settings
+
+global:
+  env: dev
+  imagePullPolicy: "Always"
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 target:
   address: https://kubernetes.default.svc
   namespace: dev
   project: default
+<<<<<<< HEAD
   branch: Dev-Metrics-Alternative-Monitoring-Approaches
 loki:
   storage:
@@ -16,3 +26,20 @@ loki:
       chunks: ""
       ruler: ""
       admin: ""
+=======
+  branch: main
+
+# Dev-specific features
+features:
+  debug: true
+  logging:
+    level: "debug"
+
+# Dev database
+database:
+  persistence:
+    size: "5Gi"
+
+# Dev ingress domain override
+domain: "dev.sharkapp.local"
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

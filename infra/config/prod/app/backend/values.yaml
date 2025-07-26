@@ -1,0 +1,46 @@
+# Prod backend - production overrides only
+
+namespace: prod
+replicaCount: 3
+
+image:
+  tag: "prod-stable"
+
+env:
+  NODE_ENV: "production"
+  LOG_LEVEL: "warn"
+
+# Production resources
+resources:
+  requests:
+    cpu: "500m"
+    memory: "512Mi"
+  limits:
+    cpu: "2000m"
+    memory: "2Gi"
+
+# High availability
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+# Production database
+database:
+  host: mongodb.prod.svc.cluster.local
+
+# Enable external services in prod
+external:
+  stripe:
+    enabled: true
+  cloudinary:
+    enabled: true
+
+# Production security
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]

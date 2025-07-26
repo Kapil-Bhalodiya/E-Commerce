@@ -1,0 +1,27 @@
+.widget__tagcloud--list {
+	display: inline-block;
+	margin: 0 8px 8px 0
+}
+
+.widget__tagcloud--link {
+	border: 1px solid var(--border-color2);
+	background: var(--white-color);
+	padding: .5rem 1.2rem;
+	line-height: 2.5rem;
+	border-radius: .3rem
+}
+
+.widget__tagcloud--link:hover {
+	background: var(--secondary-color);
+	border-color: var(--secondary-color);
+	color: var(--white-color)
+}
+
+.widget__tagcloud--link.active {
+	background: var(--primary-color);
+	border-color: var(--primary-color);
+	color: var(--white-color);
+	font-weight: 600;
+	transform: scale(1.02);
+	box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}

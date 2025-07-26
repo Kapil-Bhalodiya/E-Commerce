@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 prometheusOperator:
   enabled: true
 prometheus:
@@ -184,3 +185,53 @@ app:
 #               sourceLabels:
 #               - __meta_kubernetes_pod_namespace
 #               targetLabel: namespace
+=======
+# Default configuration for prometheus-stack
+# This will be overridden by environment-specific values
+
+# Grafana hostname - will be overridden per environment
+grafanaHost: "localhost"
+
+# Application monitoring (empty by default)
+app:
+  serviceMonitors: []
+
+# Configuration for the kube-prometheus-stack subchart
+kube-prometheus-stack:
+  # Prometheus server configuration
+  prometheus:
+    enabled: true
+    prometheusSpec:
+      retention: "15d"  # Keep metrics for 15 days
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "512Mi"
+        limits:
+          cpu: "500m"
+          memory: "1Gi"
+  
+  # Grafana dashboard configuration
+  grafana:
+    enabled: true
+    adminPassword: "admin123"  # Will be overridden per environment
+    service:
+      type: ClusterIP
+      port: 80
+    grafana.ini:
+      server:
+        domain: "localhost"
+        root_url: "http://localhost/"
+  
+  # Disable alertmanager for simplicity
+  alertmanager:
+    enabled: false
+  
+  # Enable node metrics collection
+  prometheus-node-exporter:
+    enabled: true
+  
+  # Enable Kubernetes state metrics
+  kube-state-metrics:
+    enabled: true
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

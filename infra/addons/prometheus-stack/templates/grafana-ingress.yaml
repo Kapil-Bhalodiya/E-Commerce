@@ -1,6 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+<<<<<<< HEAD
   name: prometheus-stack-dev-grafana
   namespace: dev
   annotations:
@@ -14,13 +15,31 @@ spec:
   ingressClassName: nginx
   rules:
   - host: grafana.sharkapp.local
+=======
+  name: {{ include "prometheus-stack.fullname" . }}-grafana
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.grafanaHost }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
+<<<<<<< HEAD
             name: prometheus-stack-dev-grafana
             port:
               number: 80
   # Removed TLS section to disable HTTPS
+=======
+            name: {{ include "prometheus-stack.fullname" . }}-grafana
+            port:
+              number: 80
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

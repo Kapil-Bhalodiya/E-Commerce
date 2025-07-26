@@ -1,0 +1,13 @@
+<div class="header--select">
+  <select
+    class="product__view--select"
+    [ngClass]="size"
+    [(ngModel)]="selectedOption"
+    (ngModelChange)="onSortChange()"
+  >
+    <option disabled>- Select -</option>
+    <option *ngFor="let item of items" [value]="item.value || item.id">
+      {{ item.label }}
+    </option>
+  </select>
+</div>
