@@ -13,7 +13,7 @@ def call(String serviceName, String imageTag, String credentialsId) {
             git add .
             git commit -m "Update ${serviceName} image to ${imageTag}" || echo "No changes to commit"
 
-            git push https://\${GIT_USER}:\${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce-Platform.git main
+            git push https://\${GIT_USER}:\${GIT_TOKEN}@github.com/Kapil-Bhalodiya/E-commerce.git main
         """
     }
 }
