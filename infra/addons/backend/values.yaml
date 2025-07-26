@@ -4,7 +4,11 @@ replicaCount: 1
 
 image:
   repository: kapilbhalodiya/ecom-backend
-  tag: "58-latest"
+<<<<<<< Updated upstream
+  tag: "1-latest"
+=======
+  tag: "2-latest"
+>>>>>>> Stashed changes
 
 env:
   NODE_ENV: "development"
