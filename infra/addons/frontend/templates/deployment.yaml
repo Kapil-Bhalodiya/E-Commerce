@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: dev
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
   name: {{ include "frontend.fullname" . }}
   labels:
     {{- include "frontend.labels" . | nindent 4 }}
@@ -25,7 +25,7 @@ spec:
               protocol: TCP
           env:
             - name: API_BASE_URL
-              value: "{{ .Values.api.baseUrl | default 'http://localhost:8000' }}"
+              value: "{{ .Values.api.baseUrl }}"
           {{- if .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
