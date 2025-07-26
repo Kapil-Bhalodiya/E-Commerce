@@ -60,6 +60,11 @@ spec:
                 secretKeyRef:
                   name: backend-secrets
                   key: uri
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: dbname
             {{- if .Values.external.stripe.enabled }}
             - name: STRIPE_SK
               valueFrom:
