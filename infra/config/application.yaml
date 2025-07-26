@@ -12,13 +12,13 @@ spec:
         generators:
           - git:
               pathParamPrefix: target
-              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
               revision: main
               files:
                 - path: infra/config/*/values.yaml
           - git:
               pathParamPrefix: app
-              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
               revision: main
               directories:
                 - path: infra/config/{{target.path.basename}}/*/*
@@ -34,7 +34,7 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+        repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
         targetRevision: main
         path: 'infra/addons/{{app.path.basename}}'
         helm:
