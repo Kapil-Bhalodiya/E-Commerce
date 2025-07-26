@@ -4,7 +4,7 @@ replicaCount: 1
 
 image:
   repository: kapilbhalodiya/ecom-backend
-  tag: "58-latest"
+  tag: "1-latest"
 
 env:
   NODE_ENV: "development"
