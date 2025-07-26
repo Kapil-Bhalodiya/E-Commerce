@@ -471,4 +471,3 @@ e-commerce/
             ├── app/            # Application configs
             └── monitoring-system/ # Observability configs
 ```
->>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
