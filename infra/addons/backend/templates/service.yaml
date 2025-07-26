@@ -1,7 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
+<<<<<<< HEAD
   namespace: {{ .Values.namespace }}
+=======
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   name: {{ include "backend.fullname" . }}
   labels:
     {{- include "backend.labels" . | nindent 4 }}

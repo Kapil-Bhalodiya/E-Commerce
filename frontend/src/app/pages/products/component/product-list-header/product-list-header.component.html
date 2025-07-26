@@ -14,18 +14,35 @@
         </div>
         <div class="product__view--mode__list">
             <div class="product__grid--column__buttons d-flex justify-content-center">
+<<<<<<< HEAD
                 <button class="product__grid--column__buttons--icons active" aria-label="product grid button"
                     data-toggle="tab" data-target="#product_grid">
                     <i class="bi bi-grid" style="color: black;"></i>
                 </button>
                 <button class="product__grid--column__buttons--icons" aria-label="product list button" data-toggle="tab"
                     data-target="#product_list">
+=======
+                <button class="product__grid--column__buttons--icons" 
+                    [class.active]="viewMode === 'grid'"
+                    aria-label="product grid button"
+                    (click)="onViewModeChange('grid')">
+                    <i class="bi bi-grid"></i>
+                </button>
+                <button class="product__grid--column__buttons--icons" 
+                    [class.active]="viewMode === 'list'"
+                    aria-label="product list button" 
+                    (click)="onViewModeChange('list')">
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                     <i class="bi bi-list-task"></i>
                 </button>
             </div>
         </div>
         <div class="product__view--mode__list product__search align-items-center d-none d-lg-flex">
+<<<<<<< HEAD
             <app-search-box placeholder="Search products..." size="medium" (search)="onSearch($event)"></app-search-box>
+=======
+            <app-search-box placeholder="Search products..." size="large" (search)="onSearch($event)"></app-search-box>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         </div>
     </div>
     <p class="product__showing--count">Showing {{ getShowingText() }}</p>

@@ -15,6 +15,10 @@ import { AddressService } from '../../services/address.service';
 import { Address } from '../../models/address.model';
 import { SpinnerComponent } from "../../components/spinner/spinner.component";
 import { ToastComponent } from '../../shared/components/toast/toast.component';
+<<<<<<< HEAD
+=======
+import { STORAGE_KEYS } from '../../core/constants/api.constants';
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
@@ -34,7 +38,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   steps: StepConfig[] = [];
 
   currentIndex: number = 0;
+<<<<<<< HEAD
   isLoading:boolean = false;
+=======
+  isLoading: boolean = false;
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   cartItems!: CartItem[];
   couponCode: string = '';
   couponError: string = '';
@@ -43,7 +51,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   errorMessage: string | null = null;
   addresses: Address[] = [];
   selectedAddressId: string | null = null;
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   showToast = false;
   toastMessage = '';
   toastType: 'success' | 'error' | 'warning' = 'success';
@@ -114,7 +126,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       }),
     };
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   fetchAddresses() {
     this.isLoading = true;
     this.errorMessage = null;
@@ -138,15 +154,29 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   addressTypeValidator(control: AbstractControl) {
     return control.value === '-1' ? { invalidAddressType: true } : null;
   }
+<<<<<<< HEAD
   
   nextClickHandler(): void {
+=======
+
+  nextClickHandler(): void {
+    if (this.currentIndex === 0 && this.cartItems.length === 0) {
+      this.showToastMessage('Your cart is empty. Please add items to continue.', 'warning');
+      return;
+    }
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     const currentForm = this.formGroup.get(this.steps[this.currentIndex].index);
     if (currentForm?.invalid) {
       currentForm.markAllAsTouched();
       this.showToastMessage('Please complete all required fields.', 'warning');
       return;
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     // Special validation for payment step
     if (this.currentIndex === this.steps.length - 1) {
       if (!this.validatePayment()) {
@@ -159,7 +189,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.formStepper.nextStep();
     }
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   previousClickHandler(): void {
     if (this.formStepper) {
       this.formStepper.previousStep();
@@ -169,7 +203,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   onTransitionCompleteHandler(ev: FormGroup): void {
     this.currentFormGroup = ev;
   }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   onSelectedIndexChangedHandler(index: number): void {
     this.currentIndex = index;
   }
@@ -196,16 +234,31 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getGrandTotal(): number {
     const subtotal = this.cartService.getSubtotal();
     const tax = subtotal * 0.1;
+<<<<<<< HEAD
     return subtotal + tax + this.shippingCost - this.discountAmount;
   }
   
+=======
+    const shipping = this.cartItems.length > 0 ? this.shippingCost : 0;
+    return Math.round((subtotal + tax + shipping - this.discountAmount) * 100) / 100;
+  }
+
+  getShippingCost(): number {
+    return this.cartItems.length > 0 ? this.shippingCost : 0;
+  }
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   proceedToCheckout(): void {
     const cartItems = this.cartService.getCartItems()
     if (!cartItems.length) {
       this.showToastMessage('Cart is empty', 'error');
       return
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     const orderData = {
       cartForm: { items: cartItems },
       deliveryAddressForm: {
@@ -213,29 +266,62 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         newAddress: this.formGroup.get('deliveryForm.newAddress')?.value
       },
       paymentDetailForm: this.formGroup.get('paymentForm')?.value,
+<<<<<<< HEAD
       couponCode: this.couponCode || null
     }
     
     localStorage.setItem('orderForm', JSON.stringify(orderData))
     this.showToastMessage('Order placed successfully!', 'success');
     this.router.navigate(['/checkout-complete'])
+=======
+      couponCode: this.couponCode || undefined
+    }
+    this.isLoading = true;
+    this.orderService.createOrder(orderData).pipe(
+      takeUntil(this.ngUnsubscribe),
+      catchError(err => {
+        this.isLoading = false;
+        this.showToastMessage('Failed to place order. Please try again.', 'error');
+        return of(null);
+      })
+    ).subscribe((orderResponse) => {
+      if (!orderResponse) return;
+      this.showToastMessage('Order placed successfully!', 'success');
+      this.cartService.clearCart()
+      localStorage.setItem(STORAGE_KEYS.ORDER, JSON.stringify(orderResponse));
+      this.isLoading = false;
+      this.router.navigate(['/checkout-complete']);
+    });
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   }
 
   validatePayment(): boolean {
     const paymentForm = this.formGroup.get('paymentForm');
     const stripePaymentIntentId = paymentForm?.get('stripePaymentIntentId')?.value;
     const paymentCompleted = paymentForm?.get('paymentCompleted')?.value;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     // Check if payment is completed
     if (!paymentCompleted) {
       return false;
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     // Check if payment intent exists and is valid
     if (!stripePaymentIntentId || stripePaymentIntentId.trim() === '') {
       return false;
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     return true;
   }
 
@@ -243,7 +329,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.toastMessage = message;
     this.toastType = type;
     this.showToast = true;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     setTimeout(() => {
       this.showToast = false;
     }, 3000);

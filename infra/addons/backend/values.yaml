@@ -4,7 +4,11 @@ replicaCount: 1
 
 image:
   repository: kapilbhalodiya/ecom-backend
+<<<<<<< HEAD
   tag: "58-latest"
+=======
+  tag: "56-latest"
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   pullPolicy: IfNotPresent
 
 env:

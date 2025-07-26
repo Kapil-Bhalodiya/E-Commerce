@@ -10,6 +10,7 @@
             <!-- Main Checkout Form -->
             <div class="col-lg-8">
                 <div class="checkout__form-wrapper">
+<<<<<<< HEAD
                     <app-stepper 
                         id="formStepper" 
                         class="modern-stepper" 
@@ -21,6 +22,22 @@
                         (onSelectedIndexChanged)="onSelectedIndexChangedHandler($event)">
                     </app-stepper>
                     <ng-container #dynamicComponentContainer></ng-container>
+=======
+                    <div *ngIf="cartItems.length === 0" class="empty-checkout-message text-center py-5">
+                        <i class="bi bi-cart-x" style="font-size: 4rem; color: #6c757d;"></i>
+                        <h3 class="mt-3 text-muted">Your cart is empty</h3>
+                        <p class="text-muted">Add some products to start the checkout process</p>
+                        <button class="btn primary__btn">Start Shopping</button>
+                    </div> 
+                    <div *ngIf="cartItems.length > 0">
+                        <app-stepper id="formStepper" class="modern-stepper" [steps]="steps" [data]="referenceData"
+                            [formGroup]="formGroup" [formGroupConfigs]="formGroupConfigs"
+                            (onTransitionComplete)="onTransitionCompleteHandler($event)"
+                            (onSelectedIndexChanged)="onSelectedIndexChangedHandler($event)">
+                        </app-stepper>
+                        <ng-container #dynamicComponentContainer></ng-container>
+                    </div>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                 </div>
             </div>
 
@@ -42,6 +59,7 @@
                             Promo Code
                         </h4>
                         <div class="coupon__input-group">
+<<<<<<< HEAD
                             <input 
                                 class="coupon__input" 
                                 placeholder="Enter coupon code"
@@ -52,6 +70,11 @@
                                 class="coupon__apply-btn" 
                                 type="button"
                                 (click)="applyCoupon()"
+=======
+                            <input class="coupon__input" placeholder="Enter coupon code" type="text"
+                                [(ngModel)]="couponCode" name="couponCode">
+                            <button class="coupon__apply-btn" type="button" (click)="applyCoupon()"
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                                 [disabled]="!couponCode">
                                 Apply
                             </button>
@@ -78,7 +101,11 @@
                         </div>
                         <div class="price__item">
                             <span class="price__label">Shipping</span>
+<<<<<<< HEAD
                             <span class="price__value">${{ shippingCost | number:'1.2-2' }}</span>
+=======
+                            <span class="price__value">${{ getShippingCost() | number:'1.2-2' }}</span>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                         </div>
                         <div class="price__divider"></div>
                         <div class="price__item total">
@@ -88,14 +115,20 @@
                     </div>
 
                     <!-- Action Buttons -->
+<<<<<<< HEAD
                     <div class="checkout__actions">
                         <button 
                             class="btn btn-outline" 
                             (click)="previousClickHandler()"
+=======
+                    <div class="checkout__actions" *ngIf="cartItems.length > 0">
+                        <button class="btn btn-outline" (click)="previousClickHandler()"
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                             [disabled]="currentIndex === 0">
                             <i class="bi bi-arrow-left"></i>
                             Back
                         </button>
+<<<<<<< HEAD
                         
                         <button 
                             class="btn btn-primary" 
@@ -105,6 +138,15 @@
                             <span *ngIf="!isLoading">
                                 {{ currentIndex === steps.length - 1 ? 'Place Order' : 'Continue' }}
                                 <i class="bi" [ngClass]="currentIndex === steps.length - 1 ? 'bi-check-circle' : 'bi-arrow-right'"></i>
+=======
+
+                        <button class="btn btn-primary" (click)="nextClickHandler()" [disabled]="isLoading">
+                            <app-spinner *ngIf="isLoading"></app-spinner>
+                            <span *ngIf="!isLoading">
+                                {{ currentIndex === steps.length - 1 ? 'Place Order' : 'Continue' }}
+                                <i class="bi"
+                                    [ngClass]="currentIndex === steps.length - 1 ? 'bi-check-circle' : 'bi-arrow-right'"></i>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
                             </span>
                         </button>
                     </div>
@@ -123,8 +165,12 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 <app-toast 
     [show]="showToast" 
     [message]="toastMessage" 
     [type]="toastType">
+=======
+<app-toast [show]="showToast" [message]="toastMessage" [type]="toastType">
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 </app-toast>

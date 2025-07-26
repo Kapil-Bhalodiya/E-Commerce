@@ -9,9 +9,16 @@
     <div class="step-item" 
          *ngFor="let step of steps; let i = index"
          [class.active]="currentIndex === i"
+<<<<<<< HEAD
          [class.completed]="currentIndex > i"
          [class.clickable]="currentIndex > i"
          (click)="goToStep(i)">
+=======
+         [class.completed]="visitedSteps.has(i) && currentIndex > i"
+         [class.clickable]="isStepClickable(i)"
+         [style.cursor]="isStepClickable(i) ? 'pointer' : 'default'"
+         (click)="isStepClickable(i) ? goToStep(i) : null">
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       
       <div class="step-circle">
         <span class="step-number" *ngIf="currentIndex < i || currentIndex === i">{{ i + 1 }}</span>

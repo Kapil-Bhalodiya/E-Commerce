@@ -2,12 +2,23 @@
     <h3 class="cart__title mt-5 mb-5">Shopping Cart</h3>
     <div class="row">
         <div class="col">
+<<<<<<< HEAD
             <app-table [columns]="tableColumns" [data]="tableData" (remove)="removeItem($event)"></app-table>
             <div class="continue__shopping d-flex justify-content-between">
                 <button class="continue__shopping--clear" type="button" (click)="continueShopping()">Continue
                     shopping</button>
                 <button class="continue__shopping--clear" type="button" (click)="cartService.clearCart()">Clear
                     Cart</button>
+=======
+            <div *ngIf="cartItems.length > 0">
+                <app-table [columns]="tableColumns" [data]="tableData" (remove)="removeItem($event)" (quantityChange)="updateQuantity($event)"></app-table>
+                <div class="continue__shopping d-flex justify-content-between">
+                    <button class="continue__shopping--clear" type="button" (click)="continueShopping()">Continue
+                        shopping</button>
+                    <button class="continue__shopping--clear" type="button" (click)="cartService.clearCart()">Clear
+                        Cart</button>
+                </div>
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
             </div>
         </div>
     </div>

@@ -331,8 +331,13 @@ Common issues and solutions:
 
 ```
 e-commerce/
+<<<<<<< HEAD
 ├── frontend/                    # React frontend application
 ├── backend/                     # Node.js API backend
+=======
+├── frontend/                   # Angular frontend application
+├── backend/                    # Node.js API backend
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 ├── setup.sh                    # One-click deployment script
 ├── docs/                       # Documentation
 │   └── infrastructure-diagram.md   # Detailed architecture diagrams

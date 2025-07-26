@@ -12,10 +12,17 @@ const createOrder = async (req, res, next) => {
 
   const session = await mongoose.startSession();
   let isTransactionCommitted = false;
+<<<<<<< HEAD
   
   try {
     session.startTransaction();
     
+=======
+
+  try {
+    session.startTransaction();
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     const userId = req.body.userData?._id || req.userId;
     const { cartForm, deliveryAddressForm, paymentDetailForm, couponCode } = req.body.orderData;
 
@@ -151,7 +158,19 @@ const createOrder = async (req, res, next) => {
     let populatedOrder;
     try {
       populatedOrder = await Order.findById(order._id)
+<<<<<<< HEAD
         .populate('orderItems deliveryAddressId payment')
+=======
+        .populate({
+          path: 'orderItems',
+          populate: {
+            path: 'productId',
+            model: 'Product'
+          }
+        })
+        .populate('deliveryAddressId')
+        .populate('payment')
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         .exec();
       if (!populatedOrder) {
         throw new Error('Failed to populate order');
@@ -221,4 +240,47 @@ const updateOrderStatus = async (req, res, next) => {
   }
 };
 
+<<<<<<< HEAD
 module.exports = { createOrder, getOrder, updateOrderStatus };
+=======
+// List all orders (for dashboard, admin, etc.)
+const listOrders = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const orders = await Order.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .select('userId status totalAmount createdAt orderItems')
+      .populate('userId', 'fullName email')
+      .populate({ path: 'orderItems', select: 'quantity' });
+
+    const totalOrders = await Order.countDocuments();
+
+    // Format for dashboard: id, date, status, total, items
+    const formattedOrders = orders.map(order => ({
+      id: order._id,
+      user: order.userId,
+      date: order.createdAt,
+      status: order.status,
+      total: order.totalAmount,
+      items: order.orderItems.reduce((sum, item) => sum + (item.quantity || 0), 0)
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        orders: formattedOrders,
+        totalOrders
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createOrder, getOrder, updateOrderStatus, listOrders };
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

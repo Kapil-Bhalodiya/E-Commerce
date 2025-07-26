@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -6,11 +7,21 @@ import { CartService } from '../../services/cart.service';
 @Component({
   selector: 'app-checkout-complete',
   standalone: true,
+=======
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+
+@Component({
+  selector: 'app-checkout-complete',
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   imports: [CommonModule],
   templateUrl: './checkout-complete.component.html',
   styleUrls: ['./checkout-complete.component.scss']
 })
 export class CheckoutCompleteComponent implements OnInit {
+<<<<<<< HEAD
   orderDetails = {
     orderNumber: '#ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
     orderDate: new Date(),
@@ -33,27 +44,50 @@ export class CheckoutCompleteComponent implements OnInit {
       title: 'Order Confirmed',
       description: 'Your order has been placed successfully',
       icon: 'bi-check-circle-fill',
+=======
+  orderDetails: any = null;
+  imageURL: string = environment.apiUrl; // Replace with actual CDN/base URL
+  trackingSteps = [
+    {
+      title: 'Order Placed',
+      description: 'We have received your order.',
+      icon: 'bi-cart-check',
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       completed: true,
       active: false
     },
     {
       title: 'Processing',
+<<<<<<< HEAD
       description: 'We are preparing your items',
       icon: 'bi-gear-fill',
+=======
+      description: 'Your order is being prepared.',
+      icon: 'bi-gear',
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       completed: false,
       active: true
     },
     {
       title: 'Shipped',
+<<<<<<< HEAD
       description: 'Your order is on the way',
+=======
+      description: 'Your order is on the way.',
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       icon: 'bi-truck',
       completed: false,
       active: false
     },
     {
       title: 'Delivered',
+<<<<<<< HEAD
       description: 'Package delivered to your address',
       icon: 'bi-house-fill',
+=======
+      description: 'Order delivered to your address.',
+      icon: 'bi-box',
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       completed: false,
       active: false
     }
@@ -61,6 +95,7 @@ export class CheckoutCompleteComponent implements OnInit {
 
   recommendations = [
     {
+<<<<<<< HEAD
       id: 1,
       name: 'Wireless Headphones',
       price: 99.99,
@@ -134,6 +169,52 @@ export class CheckoutCompleteComponent implements OnInit {
       date: this.orderDetails.orderDate,
       items: this.orderDetails.items,
       total: this.orderDetails.total
+=======
+      name: 'Bluetooth Headphones',
+      image: 'https://via.placeholder.com/150',
+      rating: 4,
+      price: 49.99
+    },
+    {
+      name: 'Smart Watch',
+      image: 'https://via.placeholder.com/150',
+      rating: 5,
+      price: 99.99
+    },
+    {
+      name: 'Wireless Mouse',
+      image: 'https://via.placeholder.com/150',
+      rating: 3,
+      price: 19.99
+    }
+  ];
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    const orderData = localStorage.getItem('orderFormRes');
+    if (orderData) {
+      try {
+        const parsed = JSON.parse(orderData);
+        this.orderDetails = parsed.order || parsed;
+        this.orderDetails = this.orderDetails.data.order
+      } catch (error) {
+        console.error('Error parsing orderFormRes:', error);
+        this.router.navigate(['/']);
+      }
+    } else {
+      this.router.navigate(['/']);
+    }
+  }
+
+  downloadInvoice(): void {
+    // Generate and download invoice
+    const invoiceData = {
+      orderNumber: this.orderDetails._id,
+      date: this.orderDetails.createdAt,
+      items: this.orderDetails.orderItems,
+      total: this.orderDetails.totalAmount
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     };
     
     // Create downloadable content
@@ -162,6 +243,7 @@ export class CheckoutCompleteComponent implements OnInit {
     }
   }
 
+<<<<<<< HEAD
   addToCart(product: any): void {
     this.cartService.addToCart({
       productId: product.id,
@@ -173,3 +255,22 @@ export class CheckoutCompleteComponent implements OnInit {
     alert(`${product.name} added to cart!`);
   }
 }
+=======
+  viewOrderDetails(): void {
+    this.router.navigate(['/account/orders', this.orderDetails?.orderNumber || '']);
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  continueShopping(): void {
+    this.router.navigate(['/product']);
+  }
+
+  addToCart(product: any): void {
+    // Add product to cart logic
+    alert(`Added "${product.name}" to cart.`);
+  }
+}
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2

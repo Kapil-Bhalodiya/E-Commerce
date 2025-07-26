@@ -47,6 +47,13 @@ export class CartStepComponent implements FormStepComponent, OnInit{
     }));
   }
 
+<<<<<<< HEAD
+=======
+  updateQuantity(event: {productId: string, quantity: number}) {
+    this.cartService.updateQuantity(event.productId, event.quantity);
+  }
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   removeItem(productId: string) {
     this.cartService.removeFromCart(productId);
   }

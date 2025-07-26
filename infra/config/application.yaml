@@ -12,13 +12,21 @@ spec:
         generators:
           - git:
               pathParamPrefix: target
+<<<<<<< HEAD
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+=======
+              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
               revision: main
               files:
                 - path: infra/config/*/values.yaml
           - git:
               pathParamPrefix: app
+<<<<<<< HEAD
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+=======
+              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
               revision: main
               directories:
                 - path: infra/config/{{target.path.basename}}/*/*
@@ -34,7 +42,11 @@ spec:
     spec:
       project: default
       source:
+<<<<<<< HEAD
         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce-Platform.git
+=======
+        repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         targetRevision: main
         path: 'infra/addons/{{app.path.basename}}'
         helm:

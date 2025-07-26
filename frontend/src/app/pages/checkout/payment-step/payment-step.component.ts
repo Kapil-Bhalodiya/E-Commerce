@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Component, Input, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -16,6 +17,24 @@ import { ToastComponent } from '../../../shared/components/toast/toast.component
   styleUrls: ['./payment-step.component.scss']
 })
 export class PaymentStepComponent implements OnInit {
+=======
+import { Component, Input, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
+import { STRIPE_PK } from '../../../../environments/environment';
+import { loadStripe, Stripe, StripeElements, StripeElementsOptions } from '@stripe/stripe-js';
+import { PaymentService } from '../../../services/payment.service';
+import { SpinnerComponent } from "../../../components/spinner/spinner.component";
+@Component({
+  selector: 'app-payment-step',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, SpinnerComponent],
+  templateUrl: './payment-step.component.html',
+  styleUrls: ['./payment-step.component.scss']
+})
+export class PaymentStepComponent implements OnInit, OnDestroy {
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   private fb = inject(FormBuilder);
   
   @Input() formGroup!: FormGroup;
@@ -29,16 +48,35 @@ export class PaymentStepComponent implements OnInit {
   elements: StripeElements | null = null;
   paymentElement: any = null;
   clientSecret: string | null = null;
+<<<<<<< HEAD
+=======
+  private isInitialized = false;
+  private static paymentIntentCreated = false;
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
   constructor(
     private paymentService: PaymentService
   ){}
 
   async ngOnInit() {
+<<<<<<< HEAD
     await this.loadStripe();
   }
 
   async loadStripe() {
+=======
+    if (!this.isInitialized) {
+      this.isInitialized = true;
+      await this.loadStripe();
+    }
+  }
+
+  async loadStripe() {
+    if (this.stripe) {
+      return; // Already loaded
+    }
+    
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     this.loading.set(true)
     try {
       this.stripe = await loadStripe(STRIPE_PK);
@@ -56,6 +94,7 @@ export class PaymentStepComponent implements OnInit {
   }
 
   async createPaymentIntentAndInitializeElements() {
+<<<<<<< HEAD
     try {
       this.loading.set(true);
       
@@ -92,6 +131,35 @@ export class PaymentStepComponent implements OnInit {
       console.error('Error creating payment intent:', error);
       this.paymentError.set('Failed to prepare payment. Please try again later.');
     } finally {
+=======
+    if (this.clientSecret || PaymentStepComponent.paymentIntentCreated) {
+      return;
+    }
+    
+    PaymentStepComponent.paymentIntentCreated = true;
+    
+    try {
+      this.loading.set(true);
+      
+      const itemsString = localStorage.getItem('cart');
+      const items = itemsString ? JSON.parse(itemsString) : [];
+
+      const amount = items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0);
+      
+      const res = await firstValueFrom(this.paymentService.createPaymentIntent(amount));
+      
+      this.clientSecret = res;
+      this.formGroup.get('stripePaymentIntentId')?.setValue(res);
+      
+      await this.initializeStripeElements();
+      this.loading.set(false);
+      
+    } catch (error) {
+      PaymentStepComponent.paymentIntentCreated = false;
+      this.loading.set(false);
+      console.error('Error creating payment intent:', error);
+      this.paymentError.set('Failed to prepare payment. Please try again later.');
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
     }
   }
 
@@ -217,4 +285,13 @@ export class PaymentStepComponent implements OnInit {
       this.loading.set(false);
     }
   }
+<<<<<<< HEAD
+=======
+
+  ngOnDestroy() {
+    if (this.paymentElement) {
+      this.paymentElement.unmount();
+    }
+  }
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 }

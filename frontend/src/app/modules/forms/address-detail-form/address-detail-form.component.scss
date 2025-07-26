@@ -45,13 +45,29 @@
 	border-color: var(--secondary-color)
 }
 
+<<<<<<< HEAD
+=======
+.checkout__input--field.error,
+.checkout__input--select__field.error {
+	border-color: #dc3545 !important;
+	box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 .checkout__input--list{
 	margin-bottom: 10px;
 }
 
 .checkout__input--list .form-error{
+<<<<<<< HEAD
 	color: red;
 	font-size: small;
+=======
+	color: #dc3545;
+	font-size: 0.875rem;
+	margin-top: 0.25rem;
+	display: block;
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 }
 
 .checkout__select--label {

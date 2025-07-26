@@ -37,6 +37,10 @@ export class StepperComponent implements OnInit, AfterViewInit {
   currentFormGroup!: FormGroup;
   componentRefs: ComponentRef<FormStepComponent>[] = [];
   animationDirection: 'slide-left' | 'slide-right' = 'slide-left';
+<<<<<<< HEAD
+=======
+  visitedSteps: Set<number> = new Set([0]); // First step is always visited
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 
   constructor(private fb: FormBuilder) {}
 
@@ -83,6 +87,10 @@ export class StepperComponent implements OnInit, AfterViewInit {
       this.animationDirection = 'slide-left';
       if (this.currentFormGroup.valid) {
         this.currentIndex++;
+<<<<<<< HEAD
+=======
+        this.visitedSteps.add(this.currentIndex);
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
         this.initializeStepComponent(this.currentIndex);
         this.onSelectedIndexChanged.emit(this.currentIndex);
         this.onTransitionComplete.emit(this.currentFormGroup);
@@ -103,16 +111,34 @@ export class StepperComponent implements OnInit, AfterViewInit {
   }
 
   goToStep(index: number): void {
+<<<<<<< HEAD
     if (index >= 0 && index < this.steps.length) {
+=======
+    if (index >= 0 && index < this.steps.length && this.canAccessStep(index)) {
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
       this.animationDirection = index > this.currentIndex ? 'slide-left' : 'slide-right';
       this.currentIndex = index;
       this.initializeStepComponent(index);
       this.onSelectedIndexChanged.emit(index);
+<<<<<<< HEAD
     } else {
       console.warn(`Index ${index} is out of bounds for the stepper.`);
     }
   }
 
+=======
+    }
+  }
+
+  canAccessStep(index: number): boolean {
+    return this.visitedSteps.has(index) || index === this.currentIndex;
+  }
+
+  isStepClickable(index: number): boolean {
+    return this.visitedSteps.has(index) && index !== this.currentIndex;
+  }
+
+>>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
   getProgressPercentage(): number {
     return ((this.currentIndex + 1) / this.steps.length) * 100;
   }
