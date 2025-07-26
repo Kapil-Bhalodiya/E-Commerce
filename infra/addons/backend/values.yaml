@@ -5,6 +5,7 @@ replicaCount: 1
 image:
   repository: kapilbhalodiya/ecom-backend
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< HEAD
   tag: "58-latest"
 =======
@@ -12,6 +13,9 @@ image:
 >>>>>>> 10efdd97221964535597c2e8cecef16614e283e2
 =======
   tag: "61-latest"
+>>>>>>> Stashed changes
+=======
+  tag: "65-latest"
 >>>>>>> Stashed changes
   pullPolicy: IfNotPresent
 
