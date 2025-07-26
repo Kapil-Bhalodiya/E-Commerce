@@ -4,11 +4,7 @@ replicaCount: 1
 
 image:
   repository: kapilbhalodiya/ecom-backend
-<<<<<<< Updated upstream
   tag: "3-latest"
-=======
-  tag: "3-latest"
->>>>>>> Stashed changes
 
 env:
   NODE_ENV: "development"
