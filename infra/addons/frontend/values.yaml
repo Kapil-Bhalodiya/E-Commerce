@@ -1,46 +1,34 @@
-# Frontend base configuration - minimal defaults only
-
+---
 replicaCount: 1
-
 image:
   repository: kapilbhalodiya/ecom-frontend
-  tag: "36-latest"
+  tag: 36-latest
   pullPolicy: IfNotPresent
-
 service:
   type: ClusterIP
   port: 80
-
-# Minimal base resources
 resources:
   requests:
-    cpu: "50m"
-    memory: "64Mi"
+    cpu: 50m
+    memory: 64Mi
   limits:
-    cpu: "200m"
-    memory: "128Mi"
-
-# Health checks
+    cpu: 200m
+    memory: 128Mi
 livenessProbe:
   httpGet:
     path: /
     port: 80
   initialDelaySeconds: 30
   periodSeconds: 10
-
 readinessProbe:
   httpGet:
     path: /
     port: 80
   initialDelaySeconds: 5
   periodSeconds: 5
-
-# Monitoring
 metrics:
   enabled: true
   path: /metrics
   port: 80
-
-# API configuration
 api:
-  baseUrl: "http://backend:8000"
+  baseUrl: http://backend:8000
