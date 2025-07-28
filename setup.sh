@@ -73,7 +73,7 @@ echo -e "${GREEN}   Access Information                    ${NC}"
 echo -e "${GREEN}=========================================${NC}"
 
 # Get Grafana URL
-GRAFANA_URL=$(kubectl get ingress -n dev grafana-dev -o jsonpath='{.spec.rules[0].host}' 2>/dev/null || echo "dev-grafana.local")
+GRAFANA_URL=$(kubectl get ingress -n dev grafana-dev -o jsonpath='{.spec.rules[0].host}' 2>/dev/null || echo "dev.grafana.local")
 echo -e "${YELLOW}Grafana URL:${NC} http://$GRAFANA_URL"
 echo -e "${YELLOW}Grafana Credentials:${NC} admin / devadmin123"
 

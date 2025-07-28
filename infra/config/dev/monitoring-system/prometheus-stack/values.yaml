@@ -8,8 +8,8 @@ kube-prometheus-stack:
     adminPassword: "devadmin123"
     grafana.ini:
       server:
-        domain: "dev-grafana.local"
-        root_url: "http://dev-grafana.local/"
+        domain: "dev.grafana.local"
+        root_url: "http://dev.grafana.local/"
     # Add Loki datasource
     additionalDataSources:
       - name: Loki
