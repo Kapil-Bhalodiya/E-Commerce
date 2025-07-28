@@ -3,16 +3,12 @@ namespace: prod
 grafanaHost: "prod.grafana.local"
 
 kube-prometheus-stack:
-  # Grafana settings for PROD
   grafana:
     ingress:
       enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /
       hosts:
         - prod.grafana.local
-      paths:
-        - /
+      path: /
       pathType: Prefix
     resources:
       requests:

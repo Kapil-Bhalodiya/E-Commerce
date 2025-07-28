@@ -1,18 +1,14 @@
 # DEV Environment Configuration for Prometheus Stack
 namespace: dev
-grafanaHost: "dev.grafana.local"
+grafanaHost: dev.grafana.local
 
 kube-prometheus-stack:
-  # Grafana settings for DEV
   grafana:
     ingress:
       enabled: true
-      annotations:
-        nginx.ingress.kubernetes.io/rewrite-target: /
       hosts:
         - dev.grafana.local
-      paths:
-        - /
+      path: /
       pathType: Prefix
     # Add Loki datasource
     additionalDataSources:
