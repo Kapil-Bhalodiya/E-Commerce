@@ -1,4 +1,4 @@
-{{- if .Values.kube-prometheus-stack.grafana.ingress.enabled }}
+{{- if (index .Values "kube-prometheus-stack").grafana.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -7,14 +7,14 @@ metadata:
     app: grafana
 spec:
   rules:
-    - host: {{ .Values.kube-prometheus-stack.grafana.ingress.hosts | first }}
+    - host: {{ (index .Values "kube-prometheus-stack").grafana.ingress.hosts | first }}
       http:
         paths:
-          - path: {{ .Values.kube-prometheus-stack.grafana.ingress.path | default "/" }}
-            pathType: {{ .Values.kube-prometheus-stack.grafana.ingress.pathType | default "Prefix" }}
+          - path: {{ (index .Values "kube-prometheus-stack").grafana.ingress.path | default "/" }}
+            pathType: {{ (index .Values "kube-prometheus-stack").grafana.ingress.pathType | default "Prefix" }}
             backend:
               service:
-                name: {{ .Values.kube-prometheus-stack.grafana.service.name | default "prometheus-stack-grafana" }}
+                name: {{ (index .Values "kube-prometheus-stack").grafana.service.name | default "prometheus-stack-grafana" }}
                 port:
                   number: 80
 {{- end }}
