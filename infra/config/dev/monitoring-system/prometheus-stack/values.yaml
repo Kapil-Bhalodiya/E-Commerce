@@ -5,11 +5,15 @@ grafanaHost: "dev.grafana.local"
 kube-prometheus-stack:
   # Grafana settings for DEV
   grafana:
-    adminPassword: "devadmin123"
-    grafana.ini:
-      server:
-        domain: "dev.grafana.local"
-        root_url: "http://dev.grafana.local/"
+    ingress:
+      enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+      hosts:
+        - dev.grafana.local
+      paths:
+        - /
+      pathType: Prefix
     # Add Loki datasource
     additionalDataSources:
       - name: Loki

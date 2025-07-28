@@ -5,13 +5,15 @@ grafanaHost: "prod.grafana.local"
 kube-prometheus-stack:
   # Grafana settings for PROD
   grafana:
-    adminPassword: "SecurePassword123!"
-    persistence:
-      enabled: false
-    grafana.ini:
-      server:
-        domain: "prod.grafana.local"
-        root_url: "http://prod.grafana.local/"
+    ingress:
+      enabled: true
+      annotations:
+        nginx.ingress.kubernetes.io/rewrite-target: /
+      hosts:
+        - prod.grafana.local
+      paths:
+        - /
+      pathType: Prefix
     resources:
       requests:
         cpu: "200m"
