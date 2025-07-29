@@ -31,3 +31,16 @@ kube-prometheus-stack:
           memory: "4Gi"
       # Disable persistent storage
       storageSpec: {}
+
+app:
+  serviceMonitors:
+    - name: node-exporter
+      namespaceSelector:
+        matchNames:
+          - monitoring
+      selector:
+        matchLabels:
+          app: node-exporter
+      endpoints:
+        - port: http
+          interval: 30s

@@ -19,23 +19,6 @@ tls:
   issuer: letsencrypt-prod
   secretName: grafana-tls
 
-# kube-prometheus-stack:
-#   grafana:
-#     enabled: true
-#     ingress:
-#       enabled: true
-#       ingressClassName: nginx
-#       hosts:
-#         - dev.grafana.local
-#       paths:
-#         - /
-#       pathType: Prefix
-#       tls:
-#         - hosts:
-#             - dev.grafana.local
-#           secretName: grafana-tls
-
-
 kube-prometheus-stack:
   grafana:
     enabled: true
@@ -77,3 +60,16 @@ kube-prometheus-stack:
           memory: "1Gi"
       # Disable persistent storage
       storageSpec: {}
+
+app:
+  serviceMonitors:
+    - name: node-exporter
+      namespaceSelector:
+        matchNames:
+          - monitoring
+      selector:
+        matchLabels:
+          app: node-exporter
+      endpoints:
+        - port: http
+          interval: 30s
