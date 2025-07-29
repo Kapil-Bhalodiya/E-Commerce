@@ -19,11 +19,38 @@ tls:
   issuer: letsencrypt-prod
   secretName: grafana-tls
 
+# kube-prometheus-stack:
+#   grafana:
+#     enabled: true
+#     ingress:
+#       enabled: true
+#       ingressClassName: nginx
+#       hosts:
+#         - dev.grafana.local
+#       paths:
+#         - /
+#       pathType: Prefix
+#       tls:
+#         - hosts:
+#             - dev.grafana.local
+#           secretName: grafana-tls
+
+
 kube-prometheus-stack:
   grafana:
     enabled: true
     ingress:
       enabled: true
+      ingressClassName: nginx
+      hosts:
+        - dev.grafana.local
+      paths:
+        - /
+      pathType: Prefix
+      tls:
+        - hosts:
+            - dev.grafana.local
+          secretName: grafana-tls
     additionalDataSources:
       - name: Loki
         type: loki
