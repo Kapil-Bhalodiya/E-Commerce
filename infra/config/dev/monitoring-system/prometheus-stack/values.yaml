@@ -16,7 +16,7 @@ services:
 
 tls:
   enabled: false   # or true if using cert-manager
-  issuer: letsencrypt-prod
+  issuer: letsencrypt-dev
   secretName: grafana-tls
 
 kube-prometheus-stack:
@@ -67,7 +67,7 @@ app:
       namespace: dev
       namespaceSelector:
         matchNames:
-          - {{ .Values.namespace }}
+          - dev
       selector:
         matchLabels:
           app: node-exporter
