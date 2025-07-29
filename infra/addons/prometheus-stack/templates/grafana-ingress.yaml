@@ -5,7 +5,7 @@ metadata:
   labels:
     app: grafana
 spec:
-  ingressClassName: {{ .Values.kube-prometheus-stack.grafana.ingress.ingressClassName | default "nginx" }}
+  ingressClassName: "nginx"
   rules:
     - host: {{ .Values.kube-prometheus-stack.grafana.ingress.hosts | first }}
       http:
