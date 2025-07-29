@@ -1,8 +1,7 @@
-{{- if .Values.kube-prometheus-stack.grafana.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: grafana-ingress
+  name: grafana-ingress-{{ .Values.namespace }}
   labels:
     app: grafana
 spec:
@@ -18,8 +17,3 @@ spec:
                 name: {{ .Values.kube-prometheus-stack.grafana.service.name | default "prometheus-stack-grafana" }}
                 port:
                   number: 80
-  {{- if .Values.kube-prometheus-stack.grafana.ingress.tls }}
-  tls:
-    {{- toYaml .Values.kube-prometheus-stack.grafana.ingress.tls | nindent 4 }}
-  {{- end }}
-{{- end }}
