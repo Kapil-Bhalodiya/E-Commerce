@@ -35,6 +35,7 @@ kube-prometheus-stack:
 app:
   serviceMonitors:
     - name: node-exporter
+      namespace: prod
       namespaceSelector:
         matchNames:
           - monitoring

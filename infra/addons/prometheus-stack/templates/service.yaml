@@ -1,9 +1,8 @@
-# Service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   name: node-exporter
-  namespace: monitoring
+  namespace: {{ .Values.namespace }}
   labels:
     app: node-exporter
 spec:
