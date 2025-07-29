@@ -1,16 +1,29 @@
-# DEV Environment Configuration for Prometheus Stack
 namespace: dev
 grafanaHost: dev.grafana.local
 
+annotations:
+  kubernetes.io/ingress.class: "nginx"
+
+ingressClassName: "nginx"
+
+domain: dev.grafana.local
+
+services:
+  - path: /
+    pathType: Prefix
+    serviceName: prometheus-stack-grafana
+    servicePort: 80
+
+tls:
+  enabled: false   # or true if using cert-manager
+  issuer: letsencrypt-prod
+  secretName: grafana-tls
+
 kube-prometheus-stack:
   grafana:
+    enabled: true
     ingress:
       enabled: true
-      hosts:
-        - dev.grafana.local
-      path: /
-      pathType: Prefix
-    # Add Loki datasource
     additionalDataSources:
       - name: Loki
         type: loki
