@@ -20,6 +20,10 @@ tls:
   secretName: grafana-tls
 
 kube-prometheus-stack:
+
+  prometheus-node-exporter:
+    enabled: false
+
   grafana:
     enabled: true
     ingress:
