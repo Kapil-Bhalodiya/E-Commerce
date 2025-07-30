@@ -1,23 +1,18 @@
-{{- range .Values.app.serviceMonitors }}
+# node-exporter-servicemonitor.yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: prometheus-stack-dev
-  namespace: dev
+  name: node-exporter
+  namespace: monitoring
   labels:
-    release: prometheus-stack-dev
+    app.kubernetes.io/name: prometheus-node-exporter
 spec:
   selector:
-    {{- toYaml .selector | nindent 4 }}
-  # endpoints:
-  # - port: metrics
-  #   path: /metrics
-  #   interval: 15s
-  #   relabelings:
-  #   - sourceLabels: [__meta_kubernetes_pod_namespace]
-  #     targetLabel: namespace
-  #     action: replace  
+    matchLabels:
+      app.kubernetes.io/name: prometheus-node-exporter
   endpoints:
-    {{- toYaml .endpoints | nindent 4 }}
----
-{{- end }}
+    - port: metrics
+      interval: 15s
+  namespaceSelector:
+    matchNames:
+      - monitoring
