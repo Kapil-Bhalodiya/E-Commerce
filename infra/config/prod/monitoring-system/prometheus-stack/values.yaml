@@ -29,19 +29,12 @@ kube-prometheus-stack:
         limits:
           cpu: "2000m"
           memory: "4Gi"
-      # Disable persistent storage
       storageSpec: {}
-
-app:
-  serviceMonitors:
-    - name: node-exporter
-      namespace: prod
-      namespaceSelector:
+      serviceMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelector:
+        matchLabels:
+          app.kubernetes.io/name: prometheus-node-exporter
+      serviceMonitorNamespaceSelector:
         matchNames:
           - monitoring
-      selector:
-        matchLabels:
-          app: node-exporter
-      endpoints:
-        - port: http
-          interval: 30s
+
