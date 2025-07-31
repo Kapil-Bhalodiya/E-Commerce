@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: node-exporter
-  namespace: monitoring
+  namespace: {{ .Values.namespace}}
   labels:
     app.kubernetes.io/name: prometheus-node-exporter
 spec:
@@ -15,4 +15,4 @@ spec:
       interval: 15s
   namespaceSelector:
     matchNames:
-      - monitoring
+      - {{ .Values.namespace}}

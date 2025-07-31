@@ -3,6 +3,12 @@ namespace: prod
 grafanaHost: "prod.grafana.local"
 
 kube-prometheus-stack:
+# Enable node metrics collection
+  prometheus-node-exporter:
+    enabled: false
+    hostNetwork: false
+    hostPort: false
+
   grafana:
     ingress:
       enabled: true
@@ -21,6 +27,13 @@ kube-prometheus-stack:
   # Prometheus settings for PROD (larger resources)
   prometheus:
     prometheusSpec:
+      storageSpec: {}
+      serviceMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelector: {}
+      serviceMonitorNamespaceSelector:
+        namespaceSelector:
+          matchNames:
+            - prod
       retention: "30d"
       resources:
         requests:
@@ -29,12 +42,4 @@ kube-prometheus-stack:
         limits:
           cpu: "2000m"
           memory: "4Gi"
-      storageSpec: {}
-      serviceMonitorSelectorNilUsesHelmValues: false
-      serviceMonitorSelector:
-        matchLabels:
-          app.kubernetes.io/name: prometheus-node-exporter
-      serviceMonitorNamespaceSelector:
-        matchNames:
-          - monitoring
 

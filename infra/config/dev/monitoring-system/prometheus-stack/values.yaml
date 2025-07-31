@@ -20,10 +20,13 @@ tls:
   secretName: grafana-tls
 
 kube-prometheus-stack:
-
+# Enable node metrics collection
   prometheus-node-exporter:
-    enabled: false
-
+    enabled: true
+    tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
   grafana:
     enabled: true
     ingress:
@@ -55,6 +58,12 @@ kube-prometheus-stack:
   # Prometheus settings for DEV (smaller resources)
   prometheus:
     prometheusSpec:
+      serviceMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelector: {}
+      serviceMonitorNamespaceSelector:
+        namespaceSelector:
+          matchNames:
+            - dev
       resources:
         requests:
           cpu: "100m"
@@ -62,11 +71,11 @@ kube-prometheus-stack:
         limits:
           cpu: "500m"
           memory: "1Gi"
-      storageSpec: {}
-      serviceMonitorSelectorNilUsesHelmValues: false
-      serviceMonitorSelector:
-        matchLabels:
-          app.kubernetes.io/name: prometheus-node-exporter
-      serviceMonitorNamespaceSelector:
-        matchNames:
-          - monitoring
+      # storageSpec: {}
+      # serviceMonitorSelectorNilUsesHelmValues: false
+      # serviceMonitorSelector:
+      #   matchLabels:
+      #     app.kubernetes.io/name: prometheus-node-exporter
+      # serviceMonitorNamespaceSelector:
+      #   matchNames:
+      #     - monitoring

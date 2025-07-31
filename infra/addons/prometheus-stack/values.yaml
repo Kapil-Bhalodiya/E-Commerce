@@ -40,8 +40,8 @@ kube-prometheus-stack:
     enabled: false
   
   # Enable node metrics collection
-  prometheus-node-exporter:
-    enabled: false
+  # prometheus-node-exporter:
+    # enabled: false
   
   # Enable Kubernetes state metrics
   kube-state-metrics:
