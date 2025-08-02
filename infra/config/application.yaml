@@ -1,96 +1,138 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: ecommerce-applications
-  namespace: argocd
-  labels:
-    app.kubernetes.io/name: ecommerce
-    app.kubernetes.io/part-of: ecommerce-platform
-spec:
-  goTemplate: true
-  goTemplateOptions:
-    - missingkey=error
-    - allowUnresolved=true
-  generators:
-    - matrix:
-        generators:
-          - git:
-              pathParamPrefix: target
-              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
-              revision: main
-              files:
-                - path: infra/config/*/values.yaml
-          - git:
-              pathParamPrefix: app
-              repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
-              revision: main
-              directories:
-                - path: infra/config/{{target.path.basename}}/*/*
-  # template:
-  #   metadata:
-  #     name: '{{app.path.basename}}-{{target.path.basename}}'
-  #     labels:
-  #       environment: '{{target.path.basename}}'
-  #       service: '{{app.path.basename}}'
-  #       app.kubernetes.io/name: '{{app.path.basename}}'
-  #       app.kubernetes.io/instance: '{{app.path.basename}}-{{target.path.basename}}'
-  #       app.kubernetes.io/part-of: ecommerce-platform
-  #   spec:
-  #     project: default
-  #     source:
-  #       repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
-  #       targetRevision: main
-  #       path: 'infra/addons/{{app.path.basename}}'
-  #       helm:
-  #         ignoreMissingValueFiles: true
-  #         valueFiles:
-  #           - values.yaml  # Base chart values
-  #           - '../../config/{{target.path.basename}}/values.yaml'  # Environment config
-  #           - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'  # Service-specific
-  #         values: |-
-  #           global:
-  #             environment: {{target.path.basename}}
-  #             service: {{app.path.basename}}
-  #           namespace: {{target.path.basename}}
-  template:
-    metadata:
-      name: '{{app.path.basename}}-{{target.path.basename}}'
-      labels:
-        environment: '{{target.path.basename}}'
-        service: '{{app.path.basename}}'
-    spec:
-      when: '{{ index .target "services" | index .app.path.basename "enabled" }}'
-      source:
-        repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
-        targetRevision: main
-        path: 'infra/addons/{{app.path.basename}}'
-        helm:
-          ignoreMissingValueFiles: true
-          valueFiles:
-            - values.yaml
-            - '../../config/{{target.path.basename}}/values.yaml'
-            - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'
-          values: |-
-            global:
-              environment: {{target.path.basename}}
-              service: {{app.path.basename}}
-              enabled: {{ index .target "services" | index .app.path.basename "enabled" | default true }}
-            namespace: {{target.path.basename}}
-      destination:
-        server: '{{target.address}}'
-        namespace: '{{target.path.basename}}'
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
-          - RespectIgnoreDifferences=true
-          - ServerSideApply=true
-        retry:
-          limit: 5
-          backoff:
-            duration: 5s
-            factor: 2
-            maxDuration: 3m
-      revisionHistoryLimit: 10
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: ecommerce-application
+#   namespace: argocd
+#   labels:
+#     app.kubernetes.io/name: ecommerce
+#     app.kubernetes.io/part-of: ecommerce-platform
+# spec:
+#   goTemplate: true
+#   goTemplateOptions:
+#     - missingkey=error
+#     - allowUnresolved=true
+#   generators:
+#     - matrix:
+#         generators:
+#           - git:
+#               pathParamPrefix: target
+#               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+#               revision: main
+#               files:
+#                 - path: infra/config/*/values.yaml
+#           - git:
+#               pathParamPrefix: app
+#               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+#               revision: main
+#               directories:
+#                 - path: infra/config/{{target.path.basename}}/*/*
+#   template:
+#     metadata:
+#       name: '{{app.path.basename}}-{{target.path.basename}}'
+#       labels:
+#         environment: '{{target.path.basename}}'
+#         service: '{{app.path.basename}}'
+#         app.kubernetes.io/name: '{{app.path.basename}}'
+#         app.kubernetes.io/instance: '{{app.path.basename}}-{{target.path.basename}}'
+#         app.kubernetes.io/part-of: ecommerce-platform
+#     spec:
+#       project: default
+#       source:
+#         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+#         targetRevision: main
+#         path: 'infra/addons/{{app.path.basename}}'
+#         helm:
+#           ignoreMissingValueFiles: true
+#           valueFiles:
+#             - values.yaml  # Base chart values
+#             - '../../config/{{target.path.basename}}/values.yaml'  # Environment config
+#             - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'  # Service-specific
+#           values: |-
+#             global:
+#               environment: {{target.path.basename}}
+#               service: {{app.path.basename}}
+#             namespace: {{target.path.basename}}
+#       destination:
+#         server: '{{target.address}}'
+#         namespace: '{{target.path.basename}}'
+#       syncPolicy:
+#         automated:
+#           prune: true
+#           selfHeal: true
+#         syncOptions:
+#           - CreateNamespace=true
+#           - RespectIgnoreDifferences=true
+#           - ServerSideApply=true
+#         retry:
+#           limit: 5
+#           backoff:
+#             duration: 5s
+#             factor: 2
+#             maxDuration: 3m
+#       revisionHistoryLimit: 10
+
+
+  # Single ApplicationSet for all environments
+  apiVersion: argoproj.io/v1alpha1
+  kind: ApplicationSet
+  metadata:
+    name: ecommerce-applications
+    namespace: argocd
+    labels:
+      app.kubernetes.io/name: ecommerce
+      app.kubernetes.io/part-of: ecommerce-platform
+  spec:
+    goTemplate: true
+    goTemplateOptions: ["missingkey=error"]
+    generators:
+      - git:
+          repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+          revision: main
+          directories:
+            - path: "infra/config/*/services/*"
+    template:
+      metadata:
+        name: '{{.path.basename}}-{{.path.segments | index 2}}'
+        labels:
+          environment: '{{.path.segments | index 2}}'
+          service: '{{.path.basename}}'
+          app.kubernetes.io/name: '{{.path.basename}}'
+          app.kubernetes.io/instance: '{{.path.basename}}-{{.path.segments | index 2}}'
+          app.kubernetes.io/part-of: ecommerce-platform
+        annotations:
+          argocd.argoproj.io/sync-wave: "1"
+      spec:
+        project: default
+        source:
+          repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+          targetRevision: main
+          path: 'infra/addons/{{.path.basename}}'
+          helm:
+            ignoreMissingValueFiles: true
+            valueFiles:
+              - values.yaml
+              - '../../config/{{.path.segments | index 2}}/values.yaml'
+              - '../../config/{{.path.segments | index 2}}/{{.path.basename}}/values.yaml'
+            values: |
+              global:
+                environment: {{.path.segments | index 2}}
+                service: {{.path.basename}}
+              namespace: {{.path.segments | index 2}}-{{.path.basename}}
+        destination:
+          server: https://kubernetes.default.svc
+          namespace: '{{.path.segments | index 2}}-{{.path.basename}}'
+        syncPolicy:
+          automated:
+            prune: true
+            selfHeal: true
+          syncOptions:
+            - CreateNamespace=true
+            - RespectIgnoreDifferences=true
+            - ServerSideApply=true
+          retry:
+            limit: 5
+            backoff:
+              duration: 5s
+              factor: 2
+              maxDuration: 3m
+        revisionHistoryLimit: 10

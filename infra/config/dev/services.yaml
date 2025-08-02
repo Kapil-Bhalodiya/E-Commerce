@@ -1,0 +1,9 @@
+services:
+  prometheus-stack:
+    enabled: false
+  loki:
+    enabled: true
+  backend:
+    enabled: true
+  frontend:
+    enabled: true
