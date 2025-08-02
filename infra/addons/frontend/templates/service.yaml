@@ -1,4 +1,4 @@
-{{- if .Values.global.services.frontend.enabled | default true }}
+# {{- if .Values.global.services.frontend.enabled | default true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,4 +19,4 @@ spec:
       name: http
   selector:
     {{- include "frontend.selectorLabels" . | nindent 4 }}
-{{- end }}
+# {{- end }}
