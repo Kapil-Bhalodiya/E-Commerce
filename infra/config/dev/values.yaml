@@ -4,6 +4,16 @@ global:
   env: dev
   imagePullPolicy: "Always"
 
+  services:
+    prometheus-stack:
+      enabled: false
+    loki:
+      enabled: true
+    backend:
+      enabled: true
+    frontend:
+      enabled: true
+
 target:
   address: https://kubernetes.default.svc
   namespace: dev
@@ -23,3 +33,5 @@ database:
 
 # Dev ingress domain override
 domain: "dev.sharkapp.local"
+
+

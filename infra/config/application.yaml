@@ -7,6 +7,10 @@ metadata:
     app.kubernetes.io/name: ecommerce
     app.kubernetes.io/part-of: ecommerce-platform
 spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+    - allowUnresolved=true
   generators:
     - matrix:
         generators:
@@ -22,17 +26,40 @@ spec:
               revision: main
               directories:
                 - path: infra/config/{{target.path.basename}}/*/*
+  # template:
+  #   metadata:
+  #     name: '{{app.path.basename}}-{{target.path.basename}}'
+  #     labels:
+  #       environment: '{{target.path.basename}}'
+  #       service: '{{app.path.basename}}'
+  #       app.kubernetes.io/name: '{{app.path.basename}}'
+  #       app.kubernetes.io/instance: '{{app.path.basename}}-{{target.path.basename}}'
+  #       app.kubernetes.io/part-of: ecommerce-platform
+  #   spec:
+  #     project: default
+  #     source:
+  #       repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+  #       targetRevision: main
+  #       path: 'infra/addons/{{app.path.basename}}'
+  #       helm:
+  #         ignoreMissingValueFiles: true
+  #         valueFiles:
+  #           - values.yaml  # Base chart values
+  #           - '../../config/{{target.path.basename}}/values.yaml'  # Environment config
+  #           - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'  # Service-specific
+  #         values: |-
+  #           global:
+  #             environment: {{target.path.basename}}
+  #             service: {{app.path.basename}}
+  #           namespace: {{target.path.basename}}
   template:
     metadata:
       name: '{{app.path.basename}}-{{target.path.basename}}'
       labels:
         environment: '{{target.path.basename}}'
         service: '{{app.path.basename}}'
-        app.kubernetes.io/name: '{{app.path.basename}}'
-        app.kubernetes.io/instance: '{{app.path.basename}}-{{target.path.basename}}'
-        app.kubernetes.io/part-of: ecommerce-platform
     spec:
-      project: default
+      when: '{{ index .target "services" | index .app.path.basename "enabled" }}'
       source:
         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
         targetRevision: main
@@ -40,16 +67,17 @@ spec:
         helm:
           ignoreMissingValueFiles: true
           valueFiles:
-            - values.yaml  # Base chart values
-            - '../../config/{{target.path.basename}}/values.yaml'  # Environment config
-            - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'  # Service-specific
+            - values.yaml
+            - '../../config/{{target.path.basename}}/values.yaml'
+            - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'
           values: |-
             global:
               environment: {{target.path.basename}}
               service: {{app.path.basename}}
+              enabled: {{ index .target "services" | index .app.path.basename "enabled" | default true }}
             namespace: {{target.path.basename}}
       destination:
-        server: 'https://kubernetes.default.svc'
+        server: '{{target.address}}'
         namespace: '{{target.path.basename}}'
       syncPolicy:
         automated:

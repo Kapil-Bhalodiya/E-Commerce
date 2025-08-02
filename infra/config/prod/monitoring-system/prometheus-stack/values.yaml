@@ -1,45 +1,39 @@
-# PROD Environment Configuration for Prometheus Stack
-namespace: prod
-grafanaHost: "prod.grafana.local"
+namespaceOverride: prod
 
-kube-prometheus-stack:
-# Enable node metrics collection
-  prometheus-node-exporter:
-    enabled: false
-    hostNetwork: false
-    hostPort: false
+prometheus-node-exporter:
+  hostPort: false
+  service:
+    port: 9100
+  serviceMonitor:
+    enabled: true
+    namespace: prod
 
-  grafana:
-    ingress:
-      enabled: true
-      hosts:
-        - prod.grafana.local
-      path: /
-      pathType: Prefix
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelector:
+      matchLabels:
+        release: prometheus-stack-prod
+    retention: "30d"
     resources:
       requests:
-        cpu: "200m"
-        memory: "256Mi"
-      limits:
         cpu: "500m"
-        memory: "512Mi"
-  
-  # Prometheus settings for PROD (larger resources)
-  prometheus:
-    prometheusSpec:
-      storageSpec: {}
-      serviceMonitorSelectorNilUsesHelmValues: false
-      serviceMonitorSelector: {}
-      serviceMonitorNamespaceSelector:
-        namespaceSelector:
-          matchNames:
-            - prod
-      retention: "30d"
-      resources:
-        requests:
-          cpu: "500m"
-          memory: "2Gi"
-        limits:
-          cpu: "2000m"
-          memory: "4Gi"
+        memory: "2Gi"
+      limits:
+        cpu: "2000m"
+        memory: "4Gi"
 
+grafana:
+  enabled: true
+  ingress:
+    enabled: true
+    hosts:
+      - prod.grafana.local
+    path: /
+    pathType: Prefix
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"

@@ -4,6 +4,18 @@ global:
   env: prod
   imagePullPolicy: "IfNotPresent"
 
+  services:
+    prometheus-stack:
+      enabled: false
+    loki:
+      enabled: true
+    backend:
+      enabled: true
+    frontend:
+      enabled: true
+    ingress:
+      enabled: true
+
 target:
   address: https://kubernetes.default.svc
   namespace: prod
