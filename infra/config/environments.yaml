@@ -1,0 +1,14 @@
+# infra/config/environments.yaml
+- env: dev
+  services:
+    - service: backend
+    - service: frontend
+    - service: ingress
+    - service: loki
+
+- env: prod
+  services:
+    - service: backend
+    - service: frontend
+    - service: ingress
+    - service: loki
