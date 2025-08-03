@@ -1,9 +1,6 @@
-services:
-  prometheus-stack:
-    enabled: false
-  loki:
-    enabled: true
-  backend:
-    enabled: true
-  frontend:
-    enabled: true
+# infra/config/prod/services.yaml
+- service: backend
+- service: frontend
+- service: ingress
+- service: loki
+# - service: prometheus-stack

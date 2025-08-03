@@ -2,3 +2,4 @@
 - service: backend
 - service: frontend
 - service: ingress
+- service: loki
