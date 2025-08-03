@@ -1,4 +1,4 @@
-services:
-  - backend
-  - frontend
-  - ingress
+# infra/config/dev/services.yaml
+- service: backend
+- service: frontend
+- service: ingress
