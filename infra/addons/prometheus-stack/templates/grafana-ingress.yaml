@@ -1,4 +1,3 @@
-{{- if .Values.global.services.prometheus-stack.enabled | default true }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -18,4 +17,3 @@ spec:
                 name: prometheus-stack-grafana
                 port:
                   number: 80
-{{- end }}

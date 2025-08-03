@@ -1,4 +1,3 @@
-{{- if .Values.global.services.backend.enabled | default true }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -96,4 +95,3 @@ spec:
             - name: uploads-storage
               mountPath: /app/public/uploads
           {{- end }}
-{{- end }}
