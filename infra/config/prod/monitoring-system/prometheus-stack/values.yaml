@@ -3,7 +3,7 @@ namespaceOverride: prod
 prometheus-node-exporter:
   hostPort: false
   service:
-    port: 9100
+    port: 9200
   serviceMonitor:
     enabled: true
     namespace: prod
