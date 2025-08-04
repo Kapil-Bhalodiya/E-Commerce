@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ecommerce-app
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+        revision: main
+        files:
+          - path: infra/config/environments.yaml
+  template:
+    metadata:
+      name: '{{ .service }}-{{ .env }}'
+      labels:
+        environment: '{{ .env }}'
+        service: '{{ .service }}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+        targetRevision: main
+        path: infra/addons/{{ .service }}
+        helm:
+          valueFiles:
+            - values.yaml
+            - ../../config/{{ .env }}/values.yaml
+            - ../../config/{{ .env }}/{{ .group}}/{{ .service }}/values.yaml
+          values: |
+            global:
+              environment: {{ .env }}
+              service: {{ .service }}
+            namespace: {{ .env }}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ .env }}'
+      syncPolicy:
+        automated:
+          prune: false
+          # selfHeal: false
+        syncOptions:
+          - CreateNamespace=true
+          # - ServerSideApply=true
