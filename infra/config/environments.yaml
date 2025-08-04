@@ -1,37 +1,45 @@
-- env: dev
-  service: backend
-  group: app
-
-- env: dev
-  service: frontend
-  group: app
-
-- env: dev
-  service: loki
-  group: monitoring-system
-
-- env: dev
-  service: ingress
-  group: app
+# - env: dev
+#   service: backend
+#   group: app
 
 # - env: dev
-  # service: prometheus-stack
+#   service: frontend
+#   group: app
 
+# - env: dev
+#   service: loki
+#   group: monitoring-system
 
-- env: prod
-  service: backend
-  group: app
+# - env: dev
+#   service: ingress
+#   group: app
 
-- env: prod
-  service: frontend
-  group: app
-
-- env: prod
-  service: loki
+- env: monitoring
+  service: prometheus-stack
   group: monitoring-system
-  
-- env: prod
-  service: ingress
-  group: app
+
+
+# 1. monitoring - node-exporter - daemonset - 9100: -80 - node-exporter.monitoring.svc.cluster.local
+
+# 2. Dev - 9200: -70  - dev.grafana.com
+# 3. prod - 9100: -50 - prod.grafana.com
+
 # - env: prod
- # service: prometheus-stack
+#   service: backend
+#   group: app
+
+# - env: prod
+#   service: frontend
+#   group: app
+
+# - env: prod
+#   service: loki
+#   group: monitoring-system
+
+# - env: prod
+#   service: ingress
+#   group: app
+
+- env: prod
+  group: monitoring-system
+  service: prometheus-stack
