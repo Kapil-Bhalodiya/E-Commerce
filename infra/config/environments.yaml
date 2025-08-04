@@ -43,3 +43,8 @@
 - env: prod
   group: monitoring-system
   service: prometheus-stack
+
+
+- env: ingress-controller
+  group: monitoring-system
+  service: ingress-controller
