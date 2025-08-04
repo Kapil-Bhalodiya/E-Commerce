@@ -3,8 +3,8 @@
 namespace: prod
 replicaCount: 3
 
-image:
-  tag: "prod-stable"
+# image:
+#   tag: "prod-stable"
 
 # Production resources
 resources:

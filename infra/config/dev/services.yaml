@@ -1,5 +1,0 @@
-# infra/config/dev/services.yaml
-- service: backend
-- service: frontend
-- service: ingress
-- service: loki

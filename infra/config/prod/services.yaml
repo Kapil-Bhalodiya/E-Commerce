@@ -1,6 +1,0 @@
-# infra/config/prod/services.yaml
-- service: backend
-- service: frontend
-- service: ingress
-- service: loki
-# - service: prometheus-stack
