@@ -14,7 +14,7 @@
 #   service: ingress
 #   group: app
 
-- env: monitoring
+- env: dev
   service: prometheus-stack
   group: monitoring-system
 
