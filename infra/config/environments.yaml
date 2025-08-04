@@ -47,4 +47,4 @@
 
 - env: ingress-controller
   group: monitoring-system
-  service: ingress-controller
+  service: nginx-ingress
