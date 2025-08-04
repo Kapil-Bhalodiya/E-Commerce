@@ -46,5 +46,5 @@
 
 
 - env: ingress-controller
-  group: ingress-controller
+  group: nginx-controller
   service: nginx-ingress
