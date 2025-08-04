@@ -1,18 +1,18 @@
-# - env: dev
-#   service: backend
-#   group: app
+- env: dev
+  service: backend
+  group: app
 
-# - env: dev
-#   service: frontend
-#   group: app
+- env: dev
+  service: frontend
+  group: app
 
-# - env: dev
-#   service: loki
-#   group: monitoring-system
+- env: dev
+  service: loki
+  group: monitoring-system
 
-# - env: dev
-#   service: ingress
-#   group: app
+- env: dev
+  service: ingress
+  group: app
 
 - env: dev
   service: prometheus-stack
@@ -24,21 +24,21 @@
 # 2. Dev - 9200: -70  - dev.grafana.com
 # 3. prod - 9100: -50 - prod.grafana.com
 
-# - env: prod
-#   service: backend
-#   group: app
+- env: prod
+  service: backend
+  group: app
 
-# - env: prod
-#   service: frontend
-#   group: app
+- env: prod
+  service: frontend
+  group: app
 
-# - env: prod
-#   service: loki
-#   group: monitoring-system
+- env: prod
+  service: loki
+  group: monitoring-system
 
-# - env: prod
-#   service: ingress
-#   group: app
+- env: prod
+  service: ingress
+  group: app
 
 - env: prod
   group: monitoring-system
