@@ -27,15 +27,15 @@ autoscaling:
   targetCPUUtilizationPercentage: 70
 
 # Production database
-database:
-  host: mongodb.prod.svc.cluster.local
+# database:
+#   host: mongodb.prod.svc.cluster.local
 
 # Enable external services in prod
 external:
   stripe:
     enabled: true
   cloudinary:
-    enabled: true
+    enabled: false
 
 # Production security
 securityContext:
