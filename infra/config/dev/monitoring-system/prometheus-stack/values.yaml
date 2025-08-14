@@ -52,10 +52,10 @@ kube-prometheus-stack:
       paths:
         - /
       pathType: Prefix
-      tls:
-        - hosts:
-            - dev.grafana.local
-          secretName: grafana-tls
+      # tls:
+      #   - hosts:
+      #       - dev.grafana.local
+      #     secretName: grafana-tls
     additionalDataSources:
       - name: Loki
         type: loki
