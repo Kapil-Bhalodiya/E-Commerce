@@ -18,8 +18,6 @@ spec:
       labels:
         environment: '{{ .env }}'
         service: '{{ .service }}'
-      annotations:
-        argocd.argoproj.io/sync-wave: "{{ if .enabled }}0{{ else }}-1{{ end }}"
     spec:
       project: default
       source:
@@ -36,15 +34,13 @@ spec:
               environment: {{ .env }}
               service: {{ .service }}
             namespace: {{ .env }}
+            enabled: {{ index .services .service "enabled" | default true }}
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{ .env }}'
       syncPolicy:
         automated:
-          prune: {{ .enabled }}
-          selfHeal: {{ .enabled }}
+          prune: true
+          selfHeal: true
         syncOptions:
           - CreateNamespace=true
-          {{ if not .enabled }}
-          - SkipDryRunOnMissingResource=true
-          {{ end }}

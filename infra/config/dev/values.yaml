@@ -1,5 +1,18 @@
 # Development environment - only dev-specific settings
 
+# Service enable/disable configuration
+services:
+  backend:
+    enabled: true
+  frontend:
+    enabled: true
+  ingress:
+    enabled: true
+  loki:
+    enabled: true
+  prometheus-stack:
+    enabled: true
+
 global:
   env: dev
   imagePullPolicy: "Always"

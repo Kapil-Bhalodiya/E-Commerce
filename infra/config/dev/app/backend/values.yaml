@@ -1,5 +1,6 @@
 # Dev backend - only dev-specific overrides
 
+enabled: true
 namespace: dev
 
 env:

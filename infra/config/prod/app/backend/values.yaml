@@ -1,5 +1,6 @@
 # Prod backend - production overrides only
 
+enabled: false
 namespace: prod
 replicaCount: 3
 

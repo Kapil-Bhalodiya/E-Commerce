@@ -1,5 +1,6 @@
 # Backend base configuration - minimal defaults only
 
+enabled: true
 replicaCount: 1
 
 image:

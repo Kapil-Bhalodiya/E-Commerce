@@ -1,5 +1,18 @@
 # Production environment - prod-specific settings
 
+# Service enable/disable configuration
+services:
+  backend:
+    enabled: false
+  frontend:
+    enabled: false
+  ingress:
+    enabled: false
+  loki:
+    enabled: false
+  prometheus-stack:
+    enabled: false
+
 global:
   env: prod
   imagePullPolicy: "IfNotPresent"
