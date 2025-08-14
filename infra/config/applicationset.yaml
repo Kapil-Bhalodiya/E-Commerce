@@ -4,15 +4,19 @@ metadata:
   name: ecommerce-app
   namespace: argocd
 spec:
-  goTemplate: true
   generators:
-    - git:
-        repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
-        revision: main
-        files:
-          - path: "infra/config/dev/values.yaml"
-          - path: "infra/config/prod/values.yaml"
-          - path: "infra/config/ingress-controller/values.yaml"
+    - list:
+        elements:
+        # Dev services (all enabled)
+        - {env: dev, service: backend}
+        - {env: dev, service: frontend}
+        - {env: dev, service: ingress}
+        - {env: dev, service: loki}
+        - {env: dev, service: prometheus-stack}
+        # Prod services (only enabled ones)
+        - {env: prod, service: frontend}
+        # Infrastructure
+        - {env: ingress-controller, service: nginx-ingress}
   template:
     metadata:
       name: '{{ .service }}-{{ .env }}'
@@ -30,8 +34,5 @@ spec:
         server: https://kubernetes.default.svc
         namespace: '{{ .env }}'
       syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-        syncOptions:
-          - CreateNamespace=true
+        automated: {prune: true, selfHeal: true}
+        syncOptions: [CreateNamespace=true]
