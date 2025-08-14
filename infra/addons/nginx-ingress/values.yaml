@@ -10,7 +10,7 @@ ingress-nginx:
         http: 80
         https: 443
       nodePorts:
-        http: 30931
+        http: 30080
         https: 30443
       externalTrafficPolicy: Local
     resources:
