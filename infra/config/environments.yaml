@@ -1,50 +1,58 @@
+# Application Services
 - env: dev
   service: backend
   group: app
+  enabled: true
 
 - env: dev
   service: frontend
   group: app
-
-- env: dev
-  service: loki
-  group: monitoring-system
+  enabled: true
 
 - env: dev
   service: ingress
   group: app
+  enabled: true
+
+# Monitoring Stack
+- env: dev
+  service: loki
+  group: monitoring-system
+  enabled: true
 
 - env: dev
   service: prometheus-stack
   group: monitoring-system
+  enabled: true
 
-
-# 1. monitoring - node-exporter - daemonset - 9100: -80 - node-exporter.monitoring.svc.cluster.local
-
-# 2. Dev - 9200: -70  - dev.grafana.com
-# 3. prod - 9100: -50 - prod.grafana.com
-
+# Production Services
 - env: prod
   service: backend
   group: app
+  enabled: false
 
 - env: prod
   service: frontend
   group: app
-
-- env: prod
-  service: loki
-  group: monitoring-system
+  enabled: false
 
 - env: prod
   service: ingress
   group: app
+  enabled: false
 
 - env: prod
+  service: loki
   group: monitoring-system
+  enabled: false
+
+- env: prod
   service: prometheus-stack
+  group: monitoring-system
+  enabled: false
 
-
+# Infrastructure Services
 - env: ingress-controller
   group: nginx-controller
   service: nginx-ingress
+  enabled: true

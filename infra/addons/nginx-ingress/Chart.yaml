@@ -1,5 +1,5 @@
 apiVersion: v2
-name: nginx-ingress-controller
+name: nginx-ingress
 description: A Helm chart to deploy the Nginx Ingress Controller
 version: 0.1.0
 dependencies:

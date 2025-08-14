@@ -18,6 +18,8 @@ spec:
       labels:
         environment: '{{ .env }}'
         service: '{{ .service }}'
+      annotations:
+        argocd.argoproj.io/sync-wave: "{{ if .enabled }}0{{ else }}-1{{ end }}"
     spec:
       project: default
       source:
@@ -39,8 +41,10 @@ spec:
         namespace: '{{ .env }}'
       syncPolicy:
         automated:
-          prune: false
-          # selfHeal: false
+          prune: {{ .enabled }}
+          selfHeal: {{ .enabled }}
         syncOptions:
           - CreateNamespace=true
-          # - ServerSideApply=true
+          {{ if not .enabled }}
+          - SkipDryRunOnMissingResource=true
+          {{ end }}

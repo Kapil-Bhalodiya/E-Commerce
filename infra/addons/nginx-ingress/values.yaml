@@ -1,4 +1,6 @@
 ingress-nginx:
+  nameOverride: "nginx"
+  fullnameOverride: "nginx-controller"
   controller:
     enabled: true
     replicaCount: 2
