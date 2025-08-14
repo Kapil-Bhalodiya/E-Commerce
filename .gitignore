@@ -50,6 +50,7 @@ docker-compose.override.yml
 # Kubernetes secrets
 kustomization.yaml
 infra/addons/*/templates/secret.yaml
+infra/addons/*/*/charts/*
 
 # Database
 *.db
