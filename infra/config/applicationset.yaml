@@ -5,19 +5,17 @@ metadata:
   namespace: argocd
 spec:
   goTemplate: true
-  goTemplateOptions: ["missingkey=error"]
   generators:
     - git:
         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
         revision: main
         files:
-          - path: infra/config/environments.yaml
+          - path: "infra/config/dev/values.yaml"
+          - path: "infra/config/prod/values.yaml"
+          - path: "infra/config/ingress-controller/values.yaml"
   template:
     metadata:
       name: '{{ .service }}-{{ .env }}'
-      labels:
-        environment: '{{ .env }}'
-        service: '{{ .service }}'
     spec:
       project: default
       source:
@@ -28,13 +26,6 @@ spec:
           valueFiles:
             - values.yaml
             - ../../config/{{ .env }}/values.yaml
-            - ../../config/{{ .env }}/{{ .group}}/{{ .service }}/values.yaml
-          values: |
-            global:
-              environment: {{ .env }}
-              service: {{ .service }}
-            namespace: {{ .env }}
-            enabled: {{ index .services .service "enabled" | default true }}
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{ .env }}'
