@@ -28,6 +28,7 @@ kube-prometheus-stack:
     enabled: true
     ingress:
       enabled: true
+      ingressClassName: nginx
       hosts:
         - prod.grafana.local
       path: /
