@@ -29,6 +29,8 @@ kube-prometheus-stack:
     service:
       type: ClusterIP
       port: 80
+    ingress:
+      enabled: false  # Will be overridden per environment
     grafana.ini:
       server:
         domain: "localhost"
