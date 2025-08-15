@@ -35,6 +35,6 @@ database:
     size: "5Gi"
 
 # Dev ingress domain override
-domain: "dev.sharkapp.local"
+# domain: "dev.sharkapp.local"
 
 
