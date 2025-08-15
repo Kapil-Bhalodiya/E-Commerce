@@ -17,10 +17,9 @@ kube-prometheus-stack:
       retention: "15d"  # Keep metrics for 15 days
       resources:
         requests:
-          cpu: "100m"
-          memory: "512Mi"
+          cpu: "50m"
+          memory: "500Mi"
         limits:
-          cpu: "500m"
           memory: "1Gi"
   
   # Grafana dashboard configuration
@@ -38,10 +37,6 @@ kube-prometheus-stack:
   # Disable alertmanager for simplicity
   alertmanager:
     enabled: false
-  
-  # Enable node metrics collection
-  # prometheus-node-exporter:
-    # enabled: false
   
   # Enable Kubernetes state metrics
   kube-state-metrics:
