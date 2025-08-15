@@ -1,17 +1,17 @@
 # Production environment - prod-specific settings
 
 # Service enable/disable configuration
-services:
-  backend:
-    enabled: false
-  frontend:
-    enabled: true
-  ingress:
-    enabled: false
-  loki:
-    enabled: false
-  prometheus-stack:
-    enabled: true
+# services:
+#   backend:
+#     enabled: false
+#   frontend:
+#     enabled: true
+#   ingress:
+#     enabled: true
+#   loki:
+#     enabled: false
+#   prometheus-stack:
+#     enabled: true
 
 global:
   env: prod
@@ -44,43 +44,3 @@ security:
     enabled: true
   podSecurityPolicy:
     enabled: true
-
-# Prometheus stack configuration for prod
-kube-prometheus-stack:
-  prometheus-node-exporter:
-    hostPort: false
-    service:
-      port: 9200
-    serviceMonitor:
-      enabled: true
-      namespace: prod
-
-  prometheus:
-    prometheusSpec:
-      serviceMonitorSelector:
-        matchLabels:
-          release: prometheus-stack-prod
-      retention: "30d"
-      resources:
-        requests:
-          cpu: "500m"
-          memory: "2Gi"
-        limits:
-          cpu: "2000m"
-          memory: "4Gi"
-
-  grafana:
-    enabled: true
-    ingress:
-      enabled: true
-      hosts:
-        - prod.grafana.local
-      path: /
-      pathType: Prefix
-    resources:
-      requests:
-        cpu: "200m"
-        memory: "256Mi"
-      limits:
-        cpu: "500m"
-        memory: "512Mi"
