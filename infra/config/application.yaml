@@ -40,9 +40,9 @@ spec:
         helm:
           ignoreMissingValueFiles: true
           valueFiles:
-            - values.yaml  # Base chart values
-            - '../../config/{{target.path.basename}}/values.yaml'  # Environment config
-            - '../../config/{{target.path.basename}}/{{app.path.dirname}}/{{app.path.basename}}/values.yaml'  # Service-specific
+            - values.yaml
+            - '../../config/{{target.path.basename}}/values.yaml'
+            - '../../config/{{target.path.basename}}/{{app.path[3]}}/{{app.path.basename}}/values.yaml'
           values: |-
             global:
               environment: {{target.path.basename}}

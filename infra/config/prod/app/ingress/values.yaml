@@ -2,7 +2,7 @@ domain: "prod.sharkapp.local"
 namespace: prod
 
 tls:
-  enabled: true
+  enabled: false
   secretName: "sharkapp-prod-tls"
   issuer: "letsencrypt-prod"
 
