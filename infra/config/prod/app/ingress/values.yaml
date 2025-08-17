@@ -26,6 +26,7 @@ services:
 
 annotations:
   nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
   nginx.ingress.kubernetes.io/limit-rps: "50"
   nginx.ingress.kubernetes.io/proxy-body-size: "50m"
   nginx.ingress.kubernetes.io/limit-connections: "10"
