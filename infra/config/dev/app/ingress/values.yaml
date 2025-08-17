@@ -1,5 +1,6 @@
 domain: "dev.sharkapp.local"
 namespace: dev
+ingressClassName: "nginx"
 
 tls:
   enabled: false

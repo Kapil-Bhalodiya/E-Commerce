@@ -1,5 +1,6 @@
 domain: "prod.sharkapp.local"
 namespace: prod
+ingressClassName: "nginx"
 
 tls:
   enabled: false

@@ -44,3 +44,24 @@ security:
     enabled: true
   podSecurityPolicy:
     enabled: true
+
+# Grafana configuration for prod
+kube-prometheus-stack:
+  grafana:
+    enabled: true
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      hosts:
+        - prod.grafana.local
+      path: /
+      pathType: Prefix
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    resources:
+      requests:
+        cpu: "200m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
