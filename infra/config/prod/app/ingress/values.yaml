@@ -24,8 +24,7 @@ services:
     pathType: Prefix
 
 annotations:
-  nginx.ingress.kubernetes.io/ssl-redirect: "true"
-  nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  nginx.ingress.kubernetes.io/ssl-redirect: "false"
   nginx.ingress.kubernetes.io/limit-rps: "50"
   nginx.ingress.kubernetes.io/proxy-body-size: "50m"
   nginx.ingress.kubernetes.io/limit-connections: "10"

@@ -47,6 +47,14 @@ kube-prometheus-stack:
       ingressClassName: nginx
       hosts:
         - dev.grafana.local
+      path: /
+      pathType: Prefix
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "250Mi"
+      limits:
+        memory: "512Mi"
       # tls:
       #   - hosts:
       #       - dev.grafana.local
