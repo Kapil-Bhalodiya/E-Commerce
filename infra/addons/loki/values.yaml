@@ -38,7 +38,7 @@ loki:
       memory: 128Mi
 
 promtail:
-  enabled: true
+  enabled: false
   resources:
     limits:
       cpu: 100m
@@ -90,3 +90,24 @@ promtail:
               namespace: dev
               app: grafana
               __path__: /var/log/pods/dev_*grafana*/*grafana*/0.log
+
+alloy:
+  controller:
+    type: daemonset   # same as promtail, one per node
+  config: |
+    loki.write "default" {
+      endpoint {
+        url = "http://loki:3100/loki/api/v1/push"
+      }
+    }
+
+    local.file_match "varlogs" {
+      path_targets = [
+        "/var/log/containers/*.log",
+      ]
+    }
+
+    loki.source.file "varlogs" {
+      targets    = local.file_match.varlogs.targets
+      forward_to = [loki.write.default.receiver]
+    }
