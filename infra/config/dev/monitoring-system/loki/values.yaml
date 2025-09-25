@@ -3,25 +3,25 @@ namespace: dev
 
 loki:
   enabled: true
-#   deploymentMode: SingleBinary
-#   loki:
-#     auth_enabled: false
-#     useTestSchema: true
-#   singleBinary:
-#     replicas: 1
-#     persistence:
-#       enabled: false
-#     resources:
-#       requests:
-#         cpu: 100m
-#         memory: 128Mi
-#       limits:
-#         cpu: 500m
-#         memory: 512Mi
+  deploymentMode: SingleBinary
+  loki:
+    auth_enabled: false
+    useTestSchema: true
+  singleBinary:
+    replicas: 1
+    persistence:
+      enabled: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
 
 # Promtail configuration for Kubernetes log collection
 promtail:
-  enabled: false
+  enabled: true
   config:
     clients:
       - url: http://loki:3100/loki/api/v1/push
@@ -66,42 +66,3 @@ promtail:
     limits:
       cpu: 100m
       memory: 128Mi
-
-alloy:
-  enabled: true
-  alloy:
-    configMap:
-      create: true
-      content: |
-        logging {
-          level  = "info"
-          format = "logfmt"
-        }
-
-        loki.write "to_dev_loki" {
-          endpoint {
-            url = "http://loki-dev-gateway/loki/api/v1/push"
-          }
-          external_labels = { job = "alloy" }
-        }
-
-        loki.source.file "containers" {
-          targets = [
-            { __path__ = "/var/log/containers/*.log" }
-          ]
-          forward_to = [loki.write.to_dev_loki.receiver]
-        }
-
-        loki.source.file "syslogs" {
-          targets = [
-            { __path__ = "/var/log/*log" }
-          ]
-          forward_to = [loki.write.to_dev_loki.receiver]
-        }
-  resources:
-    limits:
-      cpu: "300m"
-      memory: "500Mi"
-    requests:
-      cpu: "100m"
-      memory: "128Mi"

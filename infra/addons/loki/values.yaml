@@ -1,54 +1,44 @@
 namespace: dev
 
 loki:
-  storage:
-    bucketNames:
-      chunks: loki-chunks
-      ruler: loki-ruler
-      admin: loki-admin
-    type: filesystem
-    filesystem:
-      directory: /data/loki
+  enabled: true
+  config:
+    commonConfig:
+      path_prefix: /tmp/loki
+    storage_config:
+      boltdb_shipper:
+        active_index_directory: /tmp/loki/index
+        cache_location: /tmp/loki/boltdb-cache
+        shared_store: filesystem
+      filesystem:
+        directory: /tmp/loki/chunks
+    schema_config:
+      configs:
+        - from: "2022-01-01"
+          store: boltdb-shipper
+          object_store: filesystem
+          schema: v11
+          index:
+            prefix: index_
+            period: 24h
 
-# loki:
-#   enabled: true
-#   config:
-#     commonConfig:
-#       path_prefix: /tmp/loki
-#     storage_config:
-#       boltdb_shipper:
-#         active_index_directory: /tmp/loki/index
-#         cache_location: /tmp/loki/boltdb-cache
-#         shared_store: filesystem
-#       filesystem:
-#         directory: /tmp/loki/chunks
-#     schema_config:
-#       configs:
-#         - from: "2022-01-01"
-#           store: boltdb-shipper
-#           object_store: filesystem
-#           schema: v11
-#           index:
-#             prefix: index_
-#             period: 24h
+  persistence:
+    enabled: false
 
-#   persistence:
-#     enabled: false
+  service:
+    type: ClusterIP
+    port: 3100
 
-#   service:
-#     type: ClusterIP
-#     port: 3100
-
-#   resources:
-#     limits:
-#       cpu: 200m
-#       memory: 256Mi
-#     requests:
-#       cpu: 100m
-#       memory: 128Mi
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 
 promtail:
-  enabled: false
+  enabled: true
   resources:
     limits:
       cpu: 100m
@@ -100,24 +90,3 @@ promtail:
               namespace: dev
               app: grafana
               __path__: /var/log/pods/dev_*grafana*/*grafana*/0.log
-
-alloy:
-  controller:
-    type: daemonset   # same as promtail, one per node
-  config: |
-    loki.write "default" {
-      endpoint {
-        url = "http://loki:3100/loki/api/v1/push"
-      }
-    }
-
-    local.file_match "varlogs" {
-      path_targets = [
-        "/var/log/containers/*.log",
-      ]
-    }
-
-    loki.source.file "varlogs" {
-      targets    = local.file_match.varlogs.targets
-      forward_to = [loki.write.default.receiver]
-    }
