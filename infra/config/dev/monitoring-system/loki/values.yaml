@@ -3,21 +3,21 @@ namespace: dev
 
 loki:
   enabled: true
-  deploymentMode: SingleBinary
-  loki:
-    auth_enabled: false
-    useTestSchema: true
-  singleBinary:
-    replicas: 1
-    persistence:
-      enabled: false
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
+#   deploymentMode: SingleBinary
+#   loki:
+#     auth_enabled: false
+#     useTestSchema: true
+#   singleBinary:
+#     replicas: 1
+#     persistence:
+#       enabled: false
+#     resources:
+#       requests:
+#         cpu: 100m
+#         memory: 128Mi
+#       limits:
+#         cpu: 500m
+#         memory: 512Mi
 
 # Promtail configuration for Kubernetes log collection
 promtail:
