@@ -15,13 +15,13 @@ spec:
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
               revision: main
               files:
-                - path: infra/config/*/values.yaml
+                - path: config/*/values.yaml
           - git:
               pathParamPrefix: app
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
               revision: main
               directories:
-                - path: infra/config/{{target.path.basename}}/*/*
+                - path: config/{{target.path.basename}}/*/*
   template:
     metadata:
       name: '{{app.path.basename}}-{{target.path.basename}}'
@@ -47,7 +47,7 @@ spec:
             global:
               environment: {{target.path.basename}}
               service: {{app.path.basename}}
-            namespace: {{target.path.basename}}
+              namespace: {{target.path.basename}}
       destination:
         server: '{{target.address}}'
         namespace: '{{target.path.basename}}'

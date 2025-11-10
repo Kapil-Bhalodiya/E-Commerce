@@ -1,27 +1,6 @@
-# Production environment - prod-specific settings
-
-# Service enable/disable configuration
-# services:
-#   backend:
-#     enabled: false
-#   frontend:
-#     enabled: true
-#   ingress:
-#     enabled: true
-#   loki:
-#     enabled: false
-#   prometheus-stack:
-#     enabled: true
-
 global:
   env: prod
   imagePullPolicy: "IfNotPresent"
-
-target:
-  address: https://kubernetes.default.svc
-  namespace: prod
-  project: default
-  branch: main
 
 # Prod-specific features
 features:
