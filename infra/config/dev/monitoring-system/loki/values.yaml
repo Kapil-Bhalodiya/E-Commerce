@@ -1,68 +1,174 @@
-# DEV Environment Configuration for Loki Stack
-namespace: dev
+# # DEV Environment Configuration for Loki Stack
+# namespace: dev
+
+# loki:
+#   enabled: true
+#   deploymentMode: SingleBinary
+#   storage:
+#     bucketNames:
+#       chunks: /tmp/loki/chunks  # Dummy for filesystem; chart requires it
+#       ruler: /tmp/loki/ruler
+#       admin: /tmp/loki/admin
+#     type: filesystem
+#     filesystem:
+#       directory: /tmp/loki/chunks
+#   auth_enabled: false
+#   useTestSchema: true
+#   config:
+#     commonConfig:
+#       path_prefix: /tmp/loki
+#     storage_config:
+#       boltdb_shipper:
+#         active_index_directory: /tmp/loki/index
+#         cache_location: /tmp/loki/boltdb-cache
+#         shared_store: filesystem
+#       filesystem:
+#         directory: /tmp/loki/chunks
+#     schema_config:
+#       configs:
+#         - from: "2022-01-01"
+#           store: boltdb-shipper
+#           object_store: filesystem
+#           schema: v11
+#           index:
+#             prefix: index_
+#             period: 24h
+#   singleBinary:
+#     replicas: 1
+#     persistence:
+#       enabled: false
+#     resources:
+#       requests:
+#         cpu: 100m
+#         memory: 128Mi
+#       limits:
+#         cpu: 500m
+#         memory: 512Mi
+#   service:
+#     type: ClusterIP
+#     port: 3100
+
+# # Promtail configuration for Kubernetes log collection
+# promtail:
+#   enabled: false
+
+#   alloy:
+#   enabled: true
+#   alloy:
+#     configMap:
+#       create: true
+#       content: |
+#         logging {
+#           level  = "info"
+#           format = "logfmt"
+#         }
+#         loki.write "to_loki" {
+#           endpoint {
+#             url = "http://loki:3100/loki/api/v1/push"
+#           }
+#           external_labels = {
+#             namespace = "dev",
+#             cluster = "dev-cluster"
+#           }
+#         }
+#         loki.source.kubernetes "pods" {
+#           role = "pod"
+#           namespace = "dev"
+#           selectors = []
+#           relabel {
+#             rule {
+#               source_labels = ["__meta_kubernetes_pod_phase"]
+#               regex = "Running"
+#               action = "keep"
+#             }
+#             rule {
+#               source_labels = ["__meta_kubernetes_namespace"]
+#               target_label = "namespace"
+#             }
+#             rule {
+#               source_labels = ["__meta_kubernetes_pod_name"]
+#               target_label = "pod"
+#             }
+#             rule {
+#               source_labels = ["__meta_kubernetes_pod_container_name"]
+#               target_label = "container"
+#             }
+#             rule {
+#               source_labels = ["__meta_kubernetes_pod_label_app"]
+#               target_label = "app"
+#             }
+#             rule {
+#               source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+#               separator = "/"
+#               target_label = "__path__"
+#               replacement = "/var/log/pods/*$1/*.log"
+#             }
+#           }
+#           pipeline {
+#             stage.cri {}
+#           }
+#           forward_to = [loki.write.to_loki.receiver]
+#         }
+#   resources:
+#     requests:
+#       cpu: 50m
+#       memory: 64Mi
+#     limits:
+#       cpu: 100m
+#       memory: 128Mi
+
+
 
 loki:
-  enabled: true
-  deploymentMode: SingleBinary
+  # global:
+  #   image:
+  #       registry: 397926938435.dkr.ecr.eu-west-1.amazonaws.com/eks-addons
   loki:
-    auth_enabled: false
-    useTestSchema: true
-  singleBinary:
-    replicas: 1
-    persistence:
-      enabled: false
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
+    fullnameOverride: loki-dev
 
-# Promtail configuration for Kubernetes log collection
-promtail:
-  enabled: true
-  config:
-    clients:
-      - url: http://loki:3100/loki/api/v1/push
-    scrape_configs:
-      # Kubernetes pod logs
-      - job_name: kubernetes-pods
-        kubernetes_sd_configs:
-          - role: pod
-        pipeline_stages:
-          - cri: {}
-        relabel_configs:
-          # Only scrape pods that are running
-          - source_labels: [__meta_kubernetes_pod_phase]
-            action: keep
-            regex: Running
-          # Add namespace label
-          - source_labels: [__meta_kubernetes_namespace]
-            action: replace
-            target_label: namespace
-          # Add pod label
-          - source_labels: [__meta_kubernetes_pod_name]
-            action: replace
-            target_label: pod
-          # Add container label
-          - source_labels: [__meta_kubernetes_pod_container_name]
-            action: replace
-            target_label: container
-          # Add app label from pod labels
-          - source_labels: [__meta_kubernetes_pod_label_app]
-            action: replace
-            target_label: app
-          # Set the log path
-          - source_labels: [__meta_kubernetes_pod_uid, __meta_kubernetes_pod_container_name]
-            action: replace
-            separator: /
-            target_label: __path__
-            replacement: /var/log/pods/*$1/*.log
-  resources:
-    requests:
-      cpu: 50m
-      memory: 64Mi
-    limits:
-      cpu: 100m
-      memory: 128Mi
+
+    storage:
+      bucketNames:
+        chunks: loki-chunks-DEV
+        ruler: loki-ruler-dev
+      # type: s3
+      # s3:
+      #   s3: s3://eu-west-1
+      #   endpoint: null
+      #   region: eu-west-1
+      #   access_key_id: null
+      #   secret_access_key: null
+
+  backend:
+    resources:
+      limits:
+        memory: "300Mi"
+      requests:
+        cpu: "20m"
+        memory: "200Mi"
+  read:
+    resources:
+      limits:
+        memory: "1Gi"
+      requests:
+        cpu: "16m"
+        memory: "195Mi"
+  write:
+    resources:
+      limits:
+        memory: "1Gi"
+      requests:
+        cpu: "41m"
+        memory: "804Mi"
+  gateway:
+    resources:
+      limits:
+        memory: "250Mi"
+      requests:
+        cpu: "10m"
+        memory: "100Mi"
+
+  # serviceAccount:
+  #   name: loki-dev
+  #   annotations:
+  #     eks.amazonaws.com/role-arn: arn:aws:iam::397926938435:role/Bounded-eks-loki-role-dev

@@ -1,5 +1,3 @@
-namespace: dev
-
 loki:
   enabled: true
   config:
@@ -37,56 +35,260 @@ loki:
       cpu: 100m
       memory: 128Mi
 
-promtail:
-  enabled: true
-  resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 50m
-      memory: 64Mi
-  config:
-    clients:
-      - url: http://loki:3100/loki/api/v1/push
-    scrape_configs:
-      # Backend logs
-      - job_name: backend-logs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: backend
-              namespace: dev
-              app: backend
-              __path__: /var/log/pods/dev_backend-dev-*/*backend*/0.log
-      # Frontend logs
-      - job_name: frontend-logs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: frontend
-              namespace: dev
-              app: frontend
-              __path__: /var/log/pods/dev_frontend-dev-*/*frontend*/0.log
-      # Prometheus logs
-      - job_name: prometheus-logs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: prometheus
-              namespace: dev
-              app: prometheus
-              __path__: /var/log/pods/dev_prometheus-*/*prometheus*/0.log
-      # Grafana logs
-      - job_name: grafana-logs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: grafana
-              namespace: dev
-              app: grafana
-              __path__: /var/log/pods/dev_*grafana*/*grafana*/0.log
+# promtail:
+#   enabled: true
+#   resources:
+#     limits:
+#       cpu: 100m
+#       memory: 128Mi
+#     requests:
+#       cpu: 50m
+#       memory: 64Mi
+#   config:
+#     clients:
+#       - url: http://loki:3100/loki/api/v1/push
+#     scrape_configs:
+#       # Backend logs
+#       - job_name: backend-logs
+#         static_configs:
+#           - targets:
+#               - localhost
+#             labels:
+#               job: backend
+#               namespace: dev
+#               app: backend
+#               __path__: /var/log/pods/dev_backend-dev-*/*backend*/0.log
+#       # Frontend logs
+#       - job_name: frontend-logs
+#         static_configs:
+#           - targets:
+#               - localhost
+#             labels:
+#               job: frontend
+#               namespace: dev
+#               app: frontend
+#               __path__: /var/log/pods/dev_frontend-dev-*/*frontend*/0.log
+#       # Prometheus logs
+#       - job_name: prometheus-logs
+#         static_configs:
+#           - targets:
+#               - localhost
+#             labels:
+#               job: prometheus
+#               namespace: dev
+#               app: prometheus
+#               __path__: /var/log/pods/dev_prometheus-*/*prometheus*/0.log
+#       # Grafana logs
+#       - job_name: grafana-logs
+#         static_configs:
+#           - targets:
+#               - localhost
+#             labels:
+#               job: grafana
+#               namespace: dev
+#               app: grafana
+#               __path__: /var/log/pods/dev_*grafana*/*grafana*/0.log
+
+# promtail:
+#   enabled: false
+
+
+
+loki:
+  deploymentMode: SimpleScalable
+
+  minio:
+    enabled: false
+  lokiCanary:
+    enabled: false
+  ruler:
+    enabled: false
+  memcachedExporter:
+    # -- Whether memcached metrics should be exported
+    enabled: false
+  chunksCache:
+    enabled: false
+  resultsCache:
+    enabled: false
+    
+  # Zero out replica counts of other deployment modes
+  singleBinary:
+    replicas: 0
+
+  backend:
+    replicas: 2
+    topologySpreadConstraints:
+      - maxSkew: 1  
+        topologyKey: topology.kubernetes.io/zone  
+        whenUnsatisfiable: DoNotSchedule  
+        labelSelector:    
+          matchLabels:
+            app.kubernetes.io/component: backend
+            app.kubernetes.io/name: loki
+        matchLabelKeys:    
+          - pod-template-hash
+      - maxSkew: 1  
+        topologyKey: kubernetes.io/hostname  
+        whenUnsatisfiable: ScheduleAnyway  
+        labelSelector:    
+          matchLabels:
+            app.kubernetes.io/component: backend
+            app.kubernetes.io/name: loki
+        matchLabelKeys:    
+          - pod-template-hash
+  read:
+    replicas: 2
+    topologySpreadConstraints:
+      - maxSkew: 1  
+        topologyKey: topology.kubernetes.io/zone  
+        whenUnsatisfiable: DoNotSchedule  
+        labelSelector:    
+          matchLabels:
+            app.kubernetes.io/component: read
+            app.kubernetes.io/name: loki
+        matchLabelKeys:    
+          - pod-template-hash
+      - maxSkew: 1  
+        topologyKey: kubernetes.io/hostname  
+        whenUnsatisfiable: ScheduleAnyway  
+        labelSelector:    
+          matchLabels:
+            app.kubernetes.io/component: read
+            app.kubernetes.io/name: loki
+        matchLabelKeys:    
+          - pod-template-hash
+  write:
+    replicas: 2
+    # topologySpreadConstraints:
+    #   - maxSkew: 1  
+    #     topologyKey: topology.kubernetes.io/zone  
+    #     whenUnsatisfiable: DoNotSchedule  
+    #     labelSelector:    
+    #       matchLabels:      
+    #         app: loki
+    #     matchLabelKeys:    
+    #       - pod-template-hash
+    #   - maxSkew: 1  
+    #     topologyKey: kubernetes.io/hostname  
+    #     whenUnsatisfiable: ScheduleAnyway  
+    #     labelSelector:    
+    #       matchLabels:      
+    #         app: loki
+    #     matchLabelKeys:    
+    #       - pod-template-hash
+
+  ingester:
+    replicas: 0
+  querier:
+    replicas: 0
+  queryFrontend:
+    replicas: 0
+  queryScheduler:
+    replicas: 0
+  distributor:
+    replicas: 0
+  compactor:
+    replicas: 0
+  indexGateway:
+    replicas: 0
+  bloomCompactor:
+    replicas: 0
+  bloomGateway:
+    replicas: 0
+
+  test:
+    enabled: false
+
+
+  gateway:
+    replicas: 2
+    topologySpreadConstraints:
+      - maxSkew: 1  
+        topologyKey: topology.kubernetes.io/zone  
+        whenUnsatisfiable: DoNotSchedule  
+        labelSelector:    
+          matchLabels:
+            app.kubernetes.io/component: gateway
+            app.kubernetes.io/name: loki
+        matchLabelKeys:    
+          - pod-template-hash
+      - maxSkew: 1  
+        topologyKey: kubernetes.io/hostname  
+        whenUnsatisfiable: ScheduleAnyway  
+        labelSelector:    
+          matchLabels:
+            app.kubernetes.io/component: gateway
+            app.kubernetes.io/name: loki
+        matchLabelKeys:    
+          - pod-template-hash
+
+
+
+  loki:
+    memcached:
+      chunk_cache:
+        enabled: false
+      results_cache:
+        enabled: false
+    auth_enabled: false
+    enabled: true
+    rbac:
+      pspEnabled: false
+    isDefault: true
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: http-metrics
+      initialDelaySeconds: 45
+    livenessProbe:
+      httpGet:
+        path: /ready
+        port: http-metrics
+      initialDelaySeconds: 45
+    resources:
+      limits:
+        memory: "500Mi"
+      requests:
+        cpu: "50m"
+        memory: "256Mi"
+
+
+    structuredConfig:
+      limits_config:
+        allow_structured_metadata: false
+      ingester:
+        chunk_idle_period: 30m
+        chunk_block_size: 1000000
+        chunk_retain_period: 5m
+        chunk_encoding: snappy
+
+      schema_config:
+        configs:
+          - from: 2020-07-01
+            store: boltdb-shipper
+            object_store: s3
+            schema: v11
+            index:
+              prefix: index_
+              period: 24h
+          - from: 2024-08-22
+            object_store: s3
+            schema: v13
+            store: tsdb
+            index:
+              period: 24h
+              prefix: index_
+
+
+      compactor:
+        retention_enabled: false
+
+
+      storage_config:
+        boltdb_shipper:
+          active_index_directory: /var/loki/data/boltdb-index
+          cache_location: /var/loki/data/boltdb-cache
+        tsdb_shipper:
+          active_index_directory: /var/loki/data/tsdb-index
+          cache_location: /var/loki/data/tsdb-cache
+

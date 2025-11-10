@@ -1,83 +1,148 @@
-# PROD Environment Configuration for Loki Stack
-namespace: prod
+#  loki:
+#   loki:
+#     storage:
+#       bucketNames:
+#         chunks: loki-chunks-prod
+#         ruler: loki-ruler-prod
+#         admin: loki-admin-prod
+#     limits_config:
+#       retention_period: 30d
+#       ingestion_rate_mb: 16
+#       ingestion_burst_size_mb: 32
+#   singleBinary:
+#     replicas: 1
+#     resources:
+#       requests:
+#         cpu: 500m
+#         memory: 1Gi
+#       limits:
+#         cpu: 1000m
+#         memory: 2Gi
+#     persistence:
+#       enabled: false
+#   monitoring:
+#     serviceMonitor:
+#       enabled: true
+#       labels:
+#         release: prometheus-stack
+
+# promtail:
+#   resources:
+#     requests:
+#       cpu: 100m
+#       memory: 128Mi
+#     limits:
+#       cpu: 200m
+#       memory: 256Mi
+#   config:
+#     clients:
+#       - url: http://loki:3100/loki/api/v1/push
+#     scrape_configs:
+#       # Backend logs
+#       - job_name: backend-logs
+#         static_configs:
+#           - targets:
+#               - localhost
+#             labels:
+#               job: backend
+#               namespace: prod
+#               app: backend
+#               __path__: /var/log/pods/prod_backend-prod-*/*backend*/0.log
+#       # Frontend logs
+#       - job_name: frontend-logs
+#         static_configs:
+#           - targets:
+#               - localhost
+#             labels:
+#               job: frontend
+#               namespace: prod
+#               app: frontend
+#               __path__: /var/log/pods/prod_frontend-prod-*/*frontend*/0.log
+#       # Prometheus logs
+#       - job_name: prometheus-logs
+#         static_configs:
+#           - targets:
+#               - localhost
+#             labels:
+#               job: prometheus
+#               namespace: prod
+#               app: prometheus
+#               __path__: /var/log/pods/prod_prometheus-*/*prometheus*/0.log
+#       # Grafana logs
+#       - job_name: grafana-logs
+#         static_configs:
+#           - targets:
+#               - localhost
+#             labels:
+#               job: grafana
+#               namespace: prod
+#               app: grafana
+#               __path__: /var/log/pods/prod_*grafana*/*grafana*/0.log
+          
+
 
 loki:
+  # global:
+  #   image:
+  #     registry: 206802406579.dkr.ecr.eu-west-1.amazonaws.com/eks-addons
   loki:
+    fullnameOverride: loki-prod
+
     storage:
       bucketNames:
         chunks: loki-chunks-prod
         ruler: loki-ruler-prod
         admin: loki-admin-prod
+      # type: s3
+      # s3:
+      #   # s3 URL can be used to specify the endpoint, access key, secret key, and bucket name
+      #   s3: s3://eu-west-1
+      #   endpoint: null
+      #   region: eu-west-1
+      #   access_key_id: null
+      #   secret_access_key: null
+
     limits_config:
       retention_period: 30d
       ingestion_rate_mb: 16
       ingestion_burst_size_mb: 32
-  singleBinary:
-    replicas: 1
+    # structuredConfig:
+      storage_config:
+        aws:
+          bucketnames: mvno-loki-prod
+          sse:
+            type: SSE-KMS
+            kms_key_id: arn:aws:kms:eu-west-1:656581615771:key/48da66d1-ff88-4af3-a518-e520bc6fab3f
+  backend:
     resources:
-      requests:
-        cpu: 500m
-        memory: 1Gi
       limits:
-        cpu: 1000m
-        memory: 2Gi
-    persistence:
-      enabled: false
-  monitoring:
-    serviceMonitor:
-      enabled: true
-      labels:
-        release: prometheus-stack
+        memory: "300Mi"
+      requests:
+        cpu: "40m"
+        memory: "200Mi"
+  read:
+    resources:
+      limits:
+        memory: "1Gi"
+      requests:
+        cpu: "16m"
+        memory: "496Mi"
+  write:
+    resources:
+      limits:
+        memory: "2Gi"
+      requests:
+        cpu: "29m"
+        memory: "1Gi"
+  gateway:
+    resources:
+      limits:
+        memory: "300Mi"
+      requests:
+        cpu: "10m"
+        memory: "100Mi"
 
-promtail:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 200m
-      memory: 256Mi
-  config:
-    clients:
-      - url: http://loki:3100/loki/api/v1/push
-    scrape_configs:
-      # Backend logs
-      - job_name: backend-logs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: backend
-              namespace: prod
-              app: backend
-              __path__: /var/log/pods/prod_backend-prod-*/*backend*/0.log
-      # Frontend logs
-      - job_name: frontend-logs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: frontend
-              namespace: prod
-              app: frontend
-              __path__: /var/log/pods/prod_frontend-prod-*/*frontend*/0.log
-      # Prometheus logs
-      - job_name: prometheus-logs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: prometheus
-              namespace: prod
-              app: prometheus
-              __path__: /var/log/pods/prod_prometheus-*/*prometheus*/0.log
-      # Grafana logs
-      - job_name: grafana-logs
-        static_configs:
-          - targets:
-              - localhost
-            labels:
-              job: grafana
-              namespace: prod
-              app: grafana
-              __path__: /var/log/pods/prod_*grafana*/*grafana*/0.log
+  # serviceAccount:
+  #   name: loki-prod
+  #   annotations:
+  #     eks.amazonaws.com/role-arn: arn:aws:iam::206802406579:role/Bounded-eks-loki-role-prod

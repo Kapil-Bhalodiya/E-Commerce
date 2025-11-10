@@ -1,0 +1,3 @@
+target:
+  address: https://kubernetes.default.svc
+  project: cluster-addons-dev

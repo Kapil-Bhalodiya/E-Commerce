@@ -17,12 +17,6 @@ global:
   env: dev
   imagePullPolicy: "Always"
 
-target:
-  address: https://kubernetes.default.svc
-  namespace: dev
-  project: default
-  branch: main
-
 # Dev-specific features
 features:
   debug: true

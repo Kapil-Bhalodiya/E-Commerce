@@ -1,0 +1,185 @@
+alloy:
+  alloy:
+    mounts:
+      varlog: true
+    resources:
+      limits:
+        memory: "100Mi"
+      requests:
+        cpu: "5m"
+        memory: "70Mi"
+
+    configMap:
+      create: true
+      content: |-
+        discovery.kubernetes "kubernetes_pods" {
+          role = "pod"
+          selectors {
+              role = "pod"
+              field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
+          }
+        }
+
+        discovery.relabel "kubernetes_pods" {
+          targets = discovery.kubernetes.kubernetes_pods.targets
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_controller_name"]
+            regex         = "([0-9a-z-.]+?)(-[0-9a-f]{8,10})?"
+            target_label  = "__tmp_controller_name"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name", "__meta_kubernetes_pod_label_app", "__tmp_controller_name", "__meta_kubernetes_pod_name"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "app"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_instance", "__meta_kubernetes_pod_label_instance"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "instance"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_component", "__meta_kubernetes_pod_label_component"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "component"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_node_name"]
+            target_label  = "node_name"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_namespace"]
+            target_label  = "namespace"
+          }
+
+          rule {
+            source_labels = ["namespace", "app"]
+            separator     = "/"
+            target_label  = "job"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_name"]
+            target_label  = "pod"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_container_name"]
+            target_label  = "container"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+            separator     = "/"
+            target_label  = "__path__"
+            replacement   = "/var/log/pods/*$1/*.log"
+          }
+
+          rule {
+            source_labels = ["__meta_kubernetes_pod_annotationpresent_kubernetes_io_config_hash", "__meta_kubernetes_pod_annotation_kubernetes_io_config_hash", "__meta_kubernetes_pod_container_name"]
+            separator     = "/"
+            regex         = "true/(.*)"
+            target_label  = "__path__"
+            replacement   = "/var/log/pods/*$1/*.log"
+          }
+        }
+
+        local.file_match "kubernetes_pods" {
+          path_targets = discovery.relabel.kubernetes_pods.output
+        }
+
+        loki.process "kubernetes_pods" {
+         	stage.cri {}
+            stage.match {
+              selector = "{container=\"otc-container\"}"
+              action  = "drop"
+            }
+            forward_to = [loki.write.default.receiver]
+        }
+
+        loki.source.file "kubernetes_pods" {
+          targets               = local.file_match.kubernetes_pods.targets
+          forward_to            = [loki.process.kubernetes_pods.receiver]
+          legacy_positions_file = "/run/promtail/positions.yaml"
+        }
+
+        loki.write "default" {
+          endpoint {
+            url = "http://loki-{{ .Values.alloy.loki.env }}-gateway/loki/api/v1/push"
+          }
+          external_labels = {job = "alloy"}
+        }
+
+
+
+# alloy:
+  enabled: true
+  alloy:
+    configMap:
+      create: true
+      content: |
+        logging {
+          level  = "info"
+          format = "logfmt"
+        }
+        loki.write "to_loki" {
+          endpoint {
+            url = "http://loki:3100/loki/api/v1/push"
+          }
+          external_labels = {
+            namespace = "dev",
+            cluster = "dev-cluster"
+          }
+        }
+        loki.source.file "backend_logs" {
+          targets = [
+            { __path__ = "/var/log/pods/dev_backend-dev-*/*backend*/0.log" }
+          ]
+          forward_to = [loki.write.to_loki.receiver]
+          external_labels = {
+            job = "backend",
+            app = "backend"
+          }
+        }
+        loki.source.file "frontend_logs" {
+          targets = [
+            { __path__ = "/var/log/pods/dev_frontend-dev-*/*frontend*/0.log" }
+          ]
+          forward_to = [loki.write.to_loki.receiver]
+          external_labels = {
+            job = "frontend",
+            app = "frontend"
+          }
+        }
+        loki.source.file "prometheus_logs" {
+          targets = [
+            { __path__ = "/var/log/pods/dev_prometheus-*/*prometheus*/0.log" }
+          ]
+          forward_to = [loki.write.to_loki.receiver]
+          external_labels = {
+            job = "prometheus",
+            app = "prometheus"
+          }
+        }
+        loki.source.file "grafana_logs" {
+          targets = [
+            { __path__ = "/var/log/pods/dev_*grafana*/*grafana*/0.log" }
+          ]
+          forward_to = [loki.write.to_loki.receiver]
+          external_labels = {
+            job = "grafana",
+            app = "grafana"
+          }
+        }
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi

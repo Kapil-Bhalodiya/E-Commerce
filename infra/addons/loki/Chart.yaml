@@ -4,3 +4,7 @@ description: Loki log aggregation
 type: application
 version: 0.1.0
 appVersion: "2.9.0"
+dependencies:
+  - name: loki
+    version: 6.7.4
+    repository: https://grafana.github.io/helm-charts

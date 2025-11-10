@@ -1,38 +1,38 @@
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: ecommerce-app
-  namespace: argocd
-spec:
-  generators:
-    - list:
-        elements:
-        # Dev services (all enabled)
-        - {env: dev, service: backend}
-        - {env: dev, service: frontend}
-        - {env: dev, service: ingress}
-        - {env: dev, service: loki}
-        - {env: dev, service: prometheus-stack}
-        # Prod services (only enabled ones)
-        - {env: prod, service: frontend}
-        # Infrastructure
-        - {env: ingress-controller, service: nginx-ingress}
-  template:
-    metadata:
-      name: '{{ .service }}-{{ .env }}'
-    spec:
-      project: default
-      source:
-        repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
-        targetRevision: main
-        path: infra/addons/{{ .service }}
-        helm:
-          valueFiles:
-            - values.yaml
-            - ../../config/{{ .env }}/values.yaml
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: '{{ .env }}'
-      syncPolicy:
-        automated: {prune: true, selfHeal: true}
-        syncOptions: [CreateNamespace=true]
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: ecommerce-app
+#   namespace: argocd
+# spec:
+#   generators:
+#     - list:
+#         elements:
+#         # Dev services (all enabled)
+#         - {env: dev, service: backend}
+#         - {env: dev, service: frontend}
+#         - {env: dev, service: ingress}
+#         - {env: dev, service: loki}
+#         - {env: dev, service: prometheus-stack}
+#         # Prod services (only enabled ones)
+#         - {env: prod, service: frontend}
+#         # Infrastructure
+#         - {env: ingress-controller, service: nginx-ingress}
+#   template:
+#     metadata:
+#       name: '{{ .service }}-{{ .env }}'
+#     spec:
+#       project: default
+#       source:
+#         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
+#         targetRevision: main
+#         path: infra/addons/{{ .service }}
+#         helm:
+#           valueFiles:
+#             - values.yaml
+#             - ../../config/{{ .env }}/values.yaml
+#       destination:
+#         server: https://kubernetes.default.svc
+#         namespace: '{{ .env }}'
+#       syncPolicy:
+#         automated: {prune: true, selfHeal: true}
+#         syncOptions: [CreateNamespace=true]
