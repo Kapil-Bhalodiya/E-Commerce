@@ -15,13 +15,13 @@ spec:
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
               revision: main
               files:
-                - path: config/*/values.yaml
+                - path: infra/config/*/values.yaml
           - git:
               pathParamPrefix: app
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
               revision: main
               directories:
-                - path: config/{{target.path.basename}}/*/*
+                - path: infra/config/{{target.path.basename}}/*/*
   template:
     metadata:
       name: '{{app.path.basename}}-{{target.path.basename}}'
@@ -47,10 +47,10 @@ spec:
             global:
               environment: {{target.path.basename}}
               service: {{app.path.basename}}
-              namespace: {{target.path.basename}}
+              namespace: {{app.path[2]}}
       destination:
-        server: '{{target.address}}'
-        namespace: '{{target.path.basename}}'
+        server: https://kubernetes.default.svc
+        namespace: '{{app.path[2]}}'
       syncPolicy:
         automated:
           prune: true
