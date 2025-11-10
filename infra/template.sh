@@ -14,7 +14,6 @@ ENV="$3"
 helm dependency update addons/${ADDON}
 helm template \
     --values config/${ENV}/values.yaml \
-    --values config/${ENV}/${NAMESPACE}/values.yaml \
     --values config/${ENV}/${NAMESPACE}/${ADDON}/values.yaml \
     --set "global.environment=${ENV},global.nameOverride=${ADDON},global.namespace=${NAMESPACE}" \
     --release-name ${ADDON}-${ENV} addons/${ADDON} \

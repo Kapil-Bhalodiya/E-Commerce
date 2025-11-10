@@ -2,6 +2,10 @@ global:
   env: dev
   imagePullPolicy: "Always"
 
+target:
+  namespace: dev
+  branch: main
+
 # Dev-specific features
 features:
   debug: true
@@ -12,6 +16,9 @@ features:
 database:
   persistence:
     size: "5Gi"
+
+# Dev ingress domain override
+# domain: "dev.sharkapp.local"
 
 # Grafana configuration for dev
 kube-prometheus-stack:

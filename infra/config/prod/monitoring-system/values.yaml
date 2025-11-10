@@ -1,4 +1,0 @@
-target:
-  # address: https://6A9CD753E4D815D0A19E85D4D0353077.yl4.eu-west-1.eks.amazonaws.com
-  address: https://kubernetes.default.svc
-  project: cluster-addons-prod
