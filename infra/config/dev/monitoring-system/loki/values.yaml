@@ -1,174 +1,110 @@
-# # DEV Environment Configuration for Loki Stack
-# namespace: dev
+# Development Loki Configuration
+# This file contains development-specific Loki settings for log aggregation
+# Configured for SimpleScalable deployment mode with reduced resources
 
-# loki:
-#   enabled: true
-#   deploymentMode: SingleBinary
-#   storage:
-#     bucketNames:
-#       chunks: /tmp/loki/chunks  # Dummy for filesystem; chart requires it
-#       ruler: /tmp/loki/ruler
-#       admin: /tmp/loki/admin
-#     type: filesystem
-#     filesystem:
-#       directory: /tmp/loki/chunks
-#   auth_enabled: false
-#   useTestSchema: true
-#   config:
-#     commonConfig:
-#       path_prefix: /tmp/loki
-#     storage_config:
-#       boltdb_shipper:
-#         active_index_directory: /tmp/loki/index
-#         cache_location: /tmp/loki/boltdb-cache
-#         shared_store: filesystem
-#       filesystem:
-#         directory: /tmp/loki/chunks
-#     schema_config:
-#       configs:
-#         - from: "2022-01-01"
-#           store: boltdb-shipper
-#           object_store: filesystem
-#           schema: v11
-#           index:
-#             prefix: index_
-#             period: 24h
-#   singleBinary:
-#     replicas: 1
-#     persistence:
-#       enabled: false
-#     resources:
-#       requests:
-#         cpu: 100m
-#         memory: 128Mi
-#       limits:
-#         cpu: 500m
-#         memory: 512Mi
-#   service:
-#     type: ClusterIP
-#     port: 3100
-
-# # Promtail configuration for Kubernetes log collection
-# promtail:
-#   enabled: false
-
-#   alloy:
-#   enabled: true
-#   alloy:
-#     configMap:
-#       create: true
-#       content: |
-#         logging {
-#           level  = "info"
-#           format = "logfmt"
-#         }
-#         loki.write "to_loki" {
-#           endpoint {
-#             url = "http://loki:3100/loki/api/v1/push"
-#           }
-#           external_labels = {
-#             namespace = "dev",
-#             cluster = "dev-cluster"
-#           }
-#         }
-#         loki.source.kubernetes "pods" {
-#           role = "pod"
-#           namespace = "dev"
-#           selectors = []
-#           relabel {
-#             rule {
-#               source_labels = ["__meta_kubernetes_pod_phase"]
-#               regex = "Running"
-#               action = "keep"
-#             }
-#             rule {
-#               source_labels = ["__meta_kubernetes_namespace"]
-#               target_label = "namespace"
-#             }
-#             rule {
-#               source_labels = ["__meta_kubernetes_pod_name"]
-#               target_label = "pod"
-#             }
-#             rule {
-#               source_labels = ["__meta_kubernetes_pod_container_name"]
-#               target_label = "container"
-#             }
-#             rule {
-#               source_labels = ["__meta_kubernetes_pod_label_app"]
-#               target_label = "app"
-#             }
-#             rule {
-#               source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
-#               separator = "/"
-#               target_label = "__path__"
-#               replacement = "/var/log/pods/*$1/*.log"
-#             }
-#           }
-#           pipeline {
-#             stage.cri {}
-#           }
-#           forward_to = [loki.write.to_loki.receiver]
-#         }
-#   resources:
-#     requests:
-#       cpu: 50m
-#       memory: 64Mi
-#     limits:
-#       cpu: 100m
-#       memory: 128Mi
-
-
-
+# Loki log aggregation system configuration
 loki:
-  # global:
-  #   image:
-  #       registry: 397926938435.dkr.ecr.eu-west-1.amazonaws.com/eks-addons
+  # Use SimpleScalable deployment mode for development
+  # This separates components but with minimal resources for testing
+  deploymentMode: SimpleScalable
+  
+  # Loki core configuration
   loki:
-    fullnameOverride: loki-dev
-
-
+    fullnameOverride: loki-dev   # Override name for development instance
+    
+    # Authentication and security
+    auth_enabled: false          # Disable authentication for development
+    
+    # Storage configuration using filesystem (not cloud storage)
     storage:
+      type: filesystem           # Use local filesystem storage
       bucketNames:
-        chunks: loki-chunks-DEV
-        ruler: loki-ruler-dev
-      # type: s3
-      # s3:
-      #   s3: s3://eu-west-1
-      #   endpoint: null
-      #   region: eu-west-1
-      #   access_key_id: null
-      #   secret_access_key: null
-
+        chunks: loki-chunks-dev  # Chunk storage bucket name
+        ruler: loki-ruler-dev    # Ruler storage bucket name
+        admin: loki-admin-dev    # Admin storage bucket name
+    
+    # Development-friendly limits (more permissive)
+    limits_config:
+      retention_period: 7d       # Keep logs for 7 days (shorter for dev)
+      ingestion_rate_mb: 8       # Lower ingestion rate for dev
+      ingestion_burst_size_mb: 16 # Smaller burst size for dev
+    
+    # Storage backend configuration
+    storage_config:
+      filesystem:
+        directory: /var/loki/data # Directory for storing log data
+      boltdb_shipper:
+        active_index_directory: /var/loki/data/boltdb-index
+        cache_location: /var/loki/data/boltdb-cache
+        shared_store: filesystem
+  
+  # Backend component configuration (handles compaction, deletion, etc.)
   backend:
+    replicas: 1                  # Single replica for development
     resources:
-      limits:
-        memory: "300Mi"
       requests:
-        cpu: "20m"
-        memory: "200Mi"
+        cpu: "20m"               # Minimal CPU for development
+        memory: "200Mi"          # Minimal memory for development
+      limits:
+        cpu: "100m"              # Lower CPU limit for dev
+        memory: "300Mi"          # Lower memory limit for dev
+    persistence:
+      enabled: false             # Disable persistence for development (ephemeral)
+  
+  # Read component configuration (handles queries)
   read:
+    replicas: 1                  # Single replica for development
     resources:
-      limits:
-        memory: "1Gi"
       requests:
-        cpu: "16m"
-        memory: "195Mi"
+        cpu: "16m"               # Minimal CPU for development
+        memory: "195Mi"          # Minimal memory for development
+      limits:
+        cpu: "50m"               # Lower CPU limit for dev
+        memory: "1Gi"            # Memory limit for read operations
+    persistence:
+      enabled: false             # Disable persistence for development
+  
+  # Write component configuration (handles log ingestion)
   write:
+    replicas: 1                  # Single replica for development
     resources:
-      limits:
-        memory: "1Gi"
       requests:
-        cpu: "41m"
-        memory: "804Mi"
+        cpu: "41m"               # Minimal CPU for development
+        memory: "804Mi"          # Memory for write operations
+      limits:
+        cpu: "100m"              # Lower CPU limit for dev
+        memory: "1Gi"            # Memory limit for write operations
+    persistence:
+      enabled: false             # Disable persistence for development
+  
+  # Gateway component configuration (load balancer/proxy)
   gateway:
+    replicas: 1                  # Single replica for development
     resources:
-      limits:
-        memory: "250Mi"
       requests:
-        cpu: "10m"
-        memory: "100Mi"
-
-  # serviceAccount:
-  #   name: loki-dev
-  #   annotations:
-  #     eks.amazonaws.com/role-arn: arn:aws:iam::397926938435:role/Bounded-eks-loki-role-dev
+        cpu: "10m"               # Minimal CPU for development
+        memory: "100Mi"          # Minimal memory for development
+      limits:
+        cpu: "25m"               # Lower CPU limit for dev
+        memory: "250Mi"          # Lower memory limit for dev
+  
+  # Disable components not needed for development
+  singleBinary:
+    replicas: 0                  # Disable single binary mode
+  
+  # Monitoring configuration
+  monitoring:
+    serviceMonitor:
+      enabled: true              # Enable Prometheus monitoring
+      labels:
+        release: prometheus-stack-dev  # Label for Prometheus discovery
+  
+  # Disable optional components to reduce resource usage
+  minio:
+    enabled: false               # No MinIO object storage
+  lokiCanary:
+    enabled: false               # No canary testing in development
+  ruler:
+    enabled: false               # No alerting rules in development
+  test:
+    enabled: false               # No test pods in development

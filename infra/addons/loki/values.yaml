@@ -1,294 +1,142 @@
-# loki:
-#   enabled: true
-#   config:
-#     commonConfig:
-#       path_prefix: /tmp/loki
-#     storage_config:
-#       boltdb_shipper:
-#         active_index_directory: /tmp/loki/index
-#         cache_location: /tmp/loki/boltdb-cache
-#         shared_store: filesystem
-#       filesystem:
-#         directory: /tmp/loki/chunks
-#     schema_config:
-#       configs:
-#         - from: "2022-01-01"
-#           store: boltdb-shipper
-#           object_store: filesystem
-#           schema: v11
-#           index:
-#             prefix: index_
-#             period: 24h
-
-#   persistence:
-#     enabled: false
-
-#   service:
-#     type: ClusterIP
-#     port: 3100
-
-#   resources:
-#     limits:
-#       cpu: 200m
-#       memory: 256Mi
-#     requests:
-#       cpu: 100m
-#       memory: 128Mi
-
-# promtail:
-#   enabled: true
-#   resources:
-#     limits:
-#       cpu: 100m
-#       memory: 128Mi
-#     requests:
-#       cpu: 50m
-#       memory: 64Mi
-#   config:
-#     clients:
-#       - url: http://loki:3100/loki/api/v1/push
-#     scrape_configs:
-#       # Backend logs
-#       - job_name: backend-logs
-#         static_configs:
-#           - targets:
-#               - localhost
-#             labels:
-#               job: backend
-#               namespace: dev
-#               app: backend
-#               __path__: /var/log/pods/dev_backend-dev-*/*backend*/0.log
-#       # Frontend logs
-#       - job_name: frontend-logs
-#         static_configs:
-#           - targets:
-#               - localhost
-#             labels:
-#               job: frontend
-#               namespace: dev
-#               app: frontend
-#               __path__: /var/log/pods/dev_frontend-dev-*/*frontend*/0.log
-#       # Prometheus logs
-#       - job_name: prometheus-logs
-#         static_configs:
-#           - targets:
-#               - localhost
-#             labels:
-#               job: prometheus
-#               namespace: dev
-#               app: prometheus
-#               __path__: /var/log/pods/dev_prometheus-*/*prometheus*/0.log
-#       # Grafana logs
-#       - job_name: grafana-logs
-#         static_configs:
-#           - targets:
-#               - localhost
-#             labels:
-#               job: grafana
-#               namespace: dev
-#               app: grafana
-#               __path__: /var/log/pods/dev_*grafana*/*grafana*/0.log
-
-# promtail:
-#   enabled: false
-
-
-
+# Loki Log Aggregation System Configuration
+# Loki is a horizontally-scalable, highly-available log aggregation system
 loki:
-  deploymentMode: SimpleScalable
+  # Use SingleBinary mode for development/small deployments
+  # This runs all Loki components in a single process, reducing resource requirements
+  deploymentMode: SingleBinary
 
+  # Disable optional components to reduce resource usage
   minio:
-    enabled: false
+    enabled: false      # Disable MinIO object storage (using filesystem instead)
   lokiCanary:
-    enabled: false
+    enabled: false      # Disable canary deployment testing
   ruler:
-    enabled: false
+    enabled: false      # Disable alerting rules engine
   memcachedExporter:
-    # -- Whether memcached metrics should be exported
-    enabled: false
+    enabled: false      # Disable memcached metrics export
   chunksCache:
-    enabled: false
+    enabled: false      # Disable chunk caching (reduces memory usage)
   resultsCache:
-    enabled: false
+    enabled: false      # Disable query result caching
     
-  # Zero out replica counts of other deployment modes
+  # SingleBinary configuration - all components in one pod
   singleBinary:
-    replicas: 0
+    replicas: 1         # Single replica for development
+    resources:
+      requests:
+        cpu: "100m"      # Minimum CPU required
+        memory: "256Mi"   # Minimum memory required
+      limits:
+        cpu: "500m"      # Maximum CPU allowed
+        memory: "1Gi"     # Maximum memory allowed
 
+  # Disable multi-component deployment modes (used in production)
   backend:
-    replicas: 2
-    topologySpreadConstraints:
-      - maxSkew: 1  
-        topologyKey: topology.kubernetes.io/zone  
-        whenUnsatisfiable: DoNotSchedule  
-        labelSelector:    
-          matchLabels:
-            app.kubernetes.io/component: backend
-            app.kubernetes.io/name: loki
-        matchLabelKeys:    
-          - pod-template-hash
-      - maxSkew: 1  
-        topologyKey: kubernetes.io/hostname  
-        whenUnsatisfiable: ScheduleAnyway  
-        labelSelector:    
-          matchLabels:
-            app.kubernetes.io/component: backend
-            app.kubernetes.io/name: loki
-        matchLabelKeys:    
-          - pod-template-hash
+    replicas: 0         # Disable separate backend component
   read:
-    replicas: 2
-    topologySpreadConstraints:
-      - maxSkew: 1  
-        topologyKey: topology.kubernetes.io/zone  
-        whenUnsatisfiable: DoNotSchedule  
-        labelSelector:    
-          matchLabels:
-            app.kubernetes.io/component: read
-            app.kubernetes.io/name: loki
-        matchLabelKeys:    
-          - pod-template-hash
-      - maxSkew: 1  
-        topologyKey: kubernetes.io/hostname  
-        whenUnsatisfiable: ScheduleAnyway  
-        labelSelector:    
-          matchLabels:
-            app.kubernetes.io/component: read
-            app.kubernetes.io/name: loki
-        matchLabelKeys:    
-          - pod-template-hash
+    replicas: 0         # Disable separate read component
   write:
-    replicas: 2
-    # topologySpreadConstraints:
-    #   - maxSkew: 1  
-    #     topologyKey: topology.kubernetes.io/zone  
-    #     whenUnsatisfiable: DoNotSchedule  
-    #     labelSelector:    
-    #       matchLabels:      
-    #         app: loki
-    #     matchLabelKeys:    
-    #       - pod-template-hash
-    #   - maxSkew: 1  
-    #     topologyKey: kubernetes.io/hostname  
-    #     whenUnsatisfiable: ScheduleAnyway  
-    #     labelSelector:    
-    #       matchLabels:      
-    #         app: loki
-    #     matchLabelKeys:    
-    #       - pod-template-hash
+    replicas: 0         # Disable separate write component
 
+  # Disable all individual microservice components (used in microservices mode)
   ingester:
-    replicas: 0
+    replicas: 0         # Disable log ingestion service
   querier:
-    replicas: 0
+    replicas: 0         # Disable query service
   queryFrontend:
-    replicas: 0
+    replicas: 0         # Disable query frontend
   queryScheduler:
-    replicas: 0
+    replicas: 0         # Disable query scheduler
   distributor:
-    replicas: 0
+    replicas: 0         # Disable log distribution service
   compactor:
-    replicas: 0
+    replicas: 0         # Disable log compaction service
   indexGateway:
-    replicas: 0
+    replicas: 0         # Disable index gateway
   bloomCompactor:
-    replicas: 0
+    replicas: 0         # Disable bloom filter compactor
   bloomGateway:
-    replicas: 0
+    replicas: 0         # Disable bloom filter gateway
 
+  # Disable test pods
   test:
     enabled: false
 
-
+  # Disable gateway (not needed in SingleBinary mode)
   gateway:
-    replicas: 2
-    topologySpreadConstraints:
-      - maxSkew: 1  
-        topologyKey: topology.kubernetes.io/zone  
-        whenUnsatisfiable: DoNotSchedule  
-        labelSelector:    
-          matchLabels:
-            app.kubernetes.io/component: gateway
-            app.kubernetes.io/name: loki
-        matchLabelKeys:    
-          - pod-template-hash
-      - maxSkew: 1  
-        topologyKey: kubernetes.io/hostname  
-        whenUnsatisfiable: ScheduleAnyway  
-        labelSelector:    
-          matchLabels:
-            app.kubernetes.io/component: gateway
-            app.kubernetes.io/name: loki
-        matchLabelKeys:    
-          - pod-template-hash
+    replicas: 0         # Gateway handles load balancing in multi-component mode
 
-
-
+  # Loki core configuration
   loki:
+    # Disable caching to reduce memory usage in development
     memcached:
       chunk_cache:
-        enabled: false
+        enabled: false    # Disable chunk caching
       results_cache:
-        enabled: false
-    auth_enabled: false
-    enabled: true
+        enabled: false    # Disable query result caching
+    
+    # Security and RBAC settings
+    auth_enabled: false   # Disable authentication for development
+    enabled: true         # Enable Loki service
     rbac:
-      pspEnabled: false
-    isDefault: true
+      pspEnabled: false   # Disable Pod Security Policies (deprecated)
+    isDefault: true       # Set as default log aggregation system
+    
+    # Health check configuration
     readinessProbe:
       httpGet:
-        path: /ready
+        path: /ready      # Readiness endpoint
         port: http-metrics
-      initialDelaySeconds: 45
+      initialDelaySeconds: 45  # Wait 45s before first check
     livenessProbe:
       httpGet:
-        path: /ready
+        path: /ready      # Liveness endpoint
         port: http-metrics
-      initialDelaySeconds: 45
+      initialDelaySeconds: 45  # Wait 45s before first check
+    
+    # Resource limits for development environment
     resources:
       limits:
-        memory: "500Mi"
+        memory: "500Mi"   # Maximum memory usage
       requests:
-        cpu: "50m"
-        memory: "256Mi"
+        cpu: "50m"        # Minimum CPU required
+        memory: "256Mi"   # Minimum memory required
 
-
+    # Loki internal configuration
     structuredConfig:
+      # Rate limiting and resource limits
       limits_config:
-        allow_structured_metadata: false
+        allow_structured_metadata: false  # Disable structured metadata for simplicity
+      
+      # Log ingestion configuration
       ingester:
-        chunk_idle_period: 30m
-        chunk_block_size: 1000000
-        chunk_retain_period: 5m
-        chunk_encoding: snappy
+        chunk_idle_period: 30m    # How long to wait before flushing idle chunks
+        chunk_block_size: 1000000 # Size of each chunk block
+        chunk_retain_period: 5m   # How long to retain chunks in memory
+        chunk_encoding: snappy    # Compression algorithm for chunks
 
+      # Schema configuration defines how logs are stored and indexed
       schema_config:
         configs:
+          # Simple schema for development using filesystem storage
           - from: 2020-07-01
-            store: boltdb-shipper
-            object_store: s3
-            schema: v11
+            store: boltdb-shipper   # Use BoltDB for index storage
+            object_store: filesystem # Use filesystem for chunk storage
+            schema: v11             # Schema version
             index:
-              prefix: index_
-              period: 24h
-          - from: 2024-08-22
-            object_store: s3
-            schema: v13
-            store: tsdb
-            index:
-              period: 24h
-              prefix: index_
+              prefix: index_          # Index prefix
+              period: 24h            # Index rotation period
 
-
+      # Log compaction and retention
       compactor:
-        retention_enabled: false
+        retention_enabled: false   # Disable automatic log retention
 
-
+      # Storage backend configuration
       storage_config:
+        # Filesystem storage configuration (instead of cloud storage)
+        filesystem:
+          directory: /var/loki/data/chunks  # Directory for log chunks
         boltdb_shipper:
-          active_index_directory: /var/loki/data/boltdb-index
-          cache_location: /var/loki/data/boltdb-cache
-        tsdb_shipper:
-          active_index_directory: /var/loki/data/tsdb-index
-          cache_location: /var/loki/data/tsdb-cache
-
+          active_index_directory: /var/loki/data/boltdb-index  # BoltDB index location
+          cache_location: /var/loki/data/boltdb-cache         # BoltDB cache location
+          shared_store: filesystem                            # Use filesystem as shared store
