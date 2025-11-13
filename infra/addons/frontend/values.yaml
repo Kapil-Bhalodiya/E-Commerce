@@ -1,34 +1,109 @@
----
-replicaCount: 1
+
+api:
+  baseUrl: http://backend:8000
+
+
+# CONTAINER IMAGE CONFIGURATION
 image:
   repository: kapilbhalodiya/ecom-frontend
   tag: "2-latest"
   pullPolicy: IfNotPresent
+
+# DEPLOYMENT CONFIGURATION
+deployment:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  restartPolicy: Always
+
+# SERVICE CONFIGURATION
 service:
   type: ClusterIP
   port: 80
+  targetPort: 80
+  protocol: TCP
+
+# RESOURCE ALLOCATION
 resources:
   requests:
     cpu: 50m
-    memory: 64Mi
+    memory: 128Mi
   limits:
     cpu: 200m
-    memory: 128Mi
-livenessProbe:
-  httpGet:
-    path: /
-    port: 80
-  initialDelaySeconds: 30
-  periodSeconds: 10
-readinessProbe:
-  httpGet:
-    path: /
-    port: 80
-  initialDelaySeconds: 5
-  periodSeconds: 5
-metrics:
-  enabled: true
-  path: /metrics
-  port: 80
-api:
-  baseUrl: http://backend:8000
+    memory: 256Mi
+
+# ENVIRONMENT VARIABLES
+env:
+  NODE_ENV: "development"
+  API_BASE_URL: "http://backend:3000"
+  API_VERSION: "v1"
+  APP_NAME: "E-Commerce"
+  ENABLE_DEBUG: "true"
+
+# HEALTH CHECKS
+healthChecks:
+  livenessProbe:
+    httpGet:
+      path: /
+      port: 80
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 80
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+# VOLUME MOUNTS
+volumes:
+  cache:
+    type: emptyDir
+    mountPath: /var/cache/nginx
+  run:
+    type: emptyDir
+    mountPath: /var/run
+
+# SECURITY CONTEXT
+# Pod security context
+  runAsNonRoot: true      # Don't run as root user
+  runAsUser: 101         # Run as nginx user (101)
+  runAsGroup: 101        # Run as nginx group (101)
+  fsGroup: 101           # File system group ID
+# Container security context
+containerSecurityContext:
+  allowPrivilegeEscalation: false  # Prevent privilege escalation
+  readOnlyRootFilesystem: false    # Allow writes for nginx temp files
+  capabilities:
+    drop:
+      - ALL              # Drop all capabilities
+    add: []              # Don't add any capabilities
+
+# New structure
+monitoring:
+  metrics:
+    enabled: false
+    port: 9113
+    path: /metrics
+  
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    labels:
+      app: frontend
+
+# AUTOSCALING CONFIGURATION
+# Horizontal Pod Autoscaler settings (disabled in dev)
+autoscaling:
+  enabled: false         # Disable autoscaling in development
+  minReplicas: 1        # Minimum number of replicas
+  maxReplicas: 3        # Maximum number of replicas
+  targetCPUUtilizationPercentage: 80  # CPU threshold for scaling

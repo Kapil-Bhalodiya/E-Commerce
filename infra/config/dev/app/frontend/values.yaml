@@ -1,12 +1,87 @@
-# Dev frontend - only dev-specific overrides
+# Angular frontend service configuration for e-commerce platform
 
-namespace: dev
+# Basic application information and labels
+app:
+  name: frontend           # Application name
+  version: "1.0.0"        # Application version
+  component: web          # Component type (web, api, database, etc.)
+  tier: frontend          # Application tier
 
-# API configuration for dev
-api:
-  baseUrl: "http://backend.dev.svc.cluster.local:8000"
 
-# Development features
-features:
-  hotReload: true
-  sourceMap: true
+# NGINX CONFIGURATION
+# Nginx web server configuration for serving Angular application
+nginx:
+  # Server configuration
+  serverName: "dev.frontend.local"  # Server name for development
+  
+  # Gzip compression
+  gzip:
+    enabled: true        # Enable gzip compression
+    types:              # File types to compress
+      - "text/plain"
+      - "text/css"
+      - "application/json"
+      - "application/javascript"
+      - "text/xml"
+      - "application/xml"
+      - "application/xml+rss"
+      - "text/javascript"
+  
+  # Client configuration
+  client:
+    maxBodySize: "10m"   # Maximum request body size
+    timeout: "60s"       # Client timeout
+  
+  # Proxy configuration for API calls
+  proxy:
+    # Backend API proxy configuration
+    backend:
+      enabled: true      # Enable backend proxy
+      path: "/api"       # API path prefix
+      target: "http://backend-dev.dev.svc.cluster.local:3000"  # Backend service
+      timeout: "30s"     # Proxy timeout
+      headers:
+        - "Host $host"
+        - "X-Real-IP $remote_addr"
+        - "X-Forwarded-For $proxy_add_x_forwarded_for"
+        - "X-Forwarded-Proto $scheme"
+
+# ENVIRONMENT VARIABLES
+# Application environment configuration (injected into Angular build)
+env:
+  # Angular environment
+  NODE_ENV: "development"  # Node.js environment mode
+  
+  # API configuration
+  API_BASE_URL: "http://dev.backend.local/api"  # Backend API base URL
+  API_VERSION: "v1"        # API version
+  
+  # Application configuration
+  APP_NAME: "E-Commerce Dev"  # Application display name
+  APP_VERSION: "1.0.0-dev"   # Application version with dev suffix
+  
+  # Feature flags for development
+  ENABLE_DEBUG: "true"     # Enable debug mode
+  ENABLE_MOCK_DATA: "false" # Disable mock data (use real API)
+  ENABLE_ANALYTICS: "false" # Disable analytics in development
+  
+  # Third-party service configuration
+  STRIPE_PUBLISHABLE_KEY: "pk_test_dev_key"  # Stripe test publishable key
+  GOOGLE_ANALYTICS_ID: ""  # Empty in development
+  
+  # Development tools
+  ENABLE_REDUX_DEVTOOLS: "true"  # Enable Redux DevTools
+  ENABLE_CONSOLE_LOGS: "true"    # Enable console logging
+
+angular:
+  # Build configuration
+  build:
+    configuration: "development"  # Angular build configuration
+    outputPath: "dist"           # Build output directory
+    baseHref: "/"               # Base href for the application
+  
+  # Runtime configuration
+  runtime:
+    enableProdMode: false       # Disable production mode optimizations
+    enableServiceWorker: false  # Disable service worker in development
+    enableI18n: false          # Disable internationalization

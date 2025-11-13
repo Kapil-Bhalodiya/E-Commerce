@@ -6,7 +6,11 @@ metadata:
   labels:
     {{- include "frontend.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.deployment.replicas | default 1 }}
+  {{- if .Values.deployment.strategy }}
+  strategy:
+    {{- toYaml .Values.deployment.strategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "frontend.selectorLabels" . | nindent 6 }}
@@ -15,24 +19,51 @@ spec:
       labels:
         {{- include "frontend.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if .Values.securityContext }}
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
+              containerPort: {{ .Values.service.targetPort | default 80 }}
+              protocol: {{ .Values.service.protocol | default "TCP" }}
+          {{- if .Values.env }}
           env:
-            - name: API_BASE_URL
-              value: "{{ .Values.api.baseUrl }}"
-          {{- if .Values.livenessProbe }}
-          livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
           {{- end }}
-          {{- if .Values.readinessProbe }}
+          {{- if .Values.healthChecks.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.healthChecks.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.healthChecks.readinessProbe }}
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            {{- toYaml .Values.healthChecks.readinessProbe | nindent 12 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.volumes }}
+          volumeMounts:
+            {{- range $name, $config := .Values.volumes }}
+            - name: {{ $name }}
+              mountPath: {{ $config.mountPath }}
+            {{- end }}
+          {{- end }}
+      {{- if .Values.volumes }}
+      volumes:
+        {{- range $name, $config := .Values.volumes }}
+        - name: {{ $name }}
+          {{- if eq $config.type "emptyDir" }}
+          emptyDir: {}
+          {{- end }}
+        {{- end }}
+      {{- end }}

@@ -3,7 +3,7 @@
 # Docker image settings for the backend application
 image:
   repository: docker.io/kapilbhalodiya/ecom-backend  # Docker image repository
-  tag: ""                   # Image tag (empty = use appVersion from Chart.yaml)
+  tag: "3-latest"                   # Image tag (empty = use appVersion from Chart.yaml)
   pullPolicy: Always       # Always pull latest image in development
   pullSecrets: []          # Image pull secrets (if using private registry)
 
