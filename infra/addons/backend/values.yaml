@@ -20,8 +20,8 @@ deployment:
 # SERVICE CONFIGURATION
 service:
   type: ClusterIP
-  port: 3000
-  targetPort: 3000
+  port: 8000
+  targetPort: 8000
   protocol: TCP
 
 # RESOURCE ALLOCATION
@@ -36,7 +36,7 @@ resources:
 # ENVIRONMENT VARIABLES
 env:
   NODE_ENV: "development"
-  PORT: "3000"
+  PORT: "8000"
   API_VERSION: "v1"
   LOG_LEVEL: "debug"      # Verbose logging for development
   LOG_FORMAT: "combined"  # Express.js log format
@@ -62,7 +62,7 @@ healthChecks:
   livenessProbe:
     httpGet:
       path: /health
-      port: 3000
+      port: 8000
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -71,7 +71,7 @@ healthChecks:
   # readinessProbe:
   #   httpGet:
   #     path: /health
-  #     port: 3000
+  #     port: 8000
   #   initialDelaySeconds: 10
   #   periodSeconds: 5
   #   timeoutSeconds: 3

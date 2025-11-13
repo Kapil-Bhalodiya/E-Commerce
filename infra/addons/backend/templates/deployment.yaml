@@ -53,7 +53,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.targetPort | default .Values.service.port | default 3000 }}
+              containerPort: {{ .Values.service.targetPort | default .Values.service.port | default 8000 }}
               protocol: {{ .Values.service.protocol | default "TCP" }}
           {{- if .Values.env }}
           env:

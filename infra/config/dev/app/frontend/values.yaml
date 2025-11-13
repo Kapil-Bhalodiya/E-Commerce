@@ -38,7 +38,7 @@ nginx:
     backend:
       enabled: true      # Enable backend proxy
       path: "/api"       # API path prefix
-      target: "http://backend-dev.dev.svc.cluster.local:3000"  # Backend service
+      target: "http://backend-dev.dev.svc.cluster.local:8000"  # Backend service
       timeout: "30s"     # Proxy timeout
       headers:
         - "Host $host"

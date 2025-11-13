@@ -33,7 +33,7 @@ resources:
 # ENVIRONMENT VARIABLES
 env:
   NODE_ENV: "development"
-  API_BASE_URL: "http://backend:3000"
+  API_BASE_URL: "http://backend:8000"
   API_VERSION: "v1"
   APP_NAME: "E-Commerce"
   ENABLE_DEBUG: "true"
