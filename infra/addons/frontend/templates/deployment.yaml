@@ -65,6 +65,9 @@ spec:
         - name: {{ $name }}
           {{- if eq $config.type "emptyDir" }}
           emptyDir: {}
+          {{- else if eq $config.type "configMap" }}
+          configMap:
+            name: {{ tpl $config.configMapName $ }}
           {{- end }}
         {{- end }}
       {{- end }}

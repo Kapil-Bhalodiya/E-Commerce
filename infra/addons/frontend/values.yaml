@@ -18,7 +18,7 @@ deployment:
 service:
   type: ClusterIP
   port: 80
-  targetPort: 80
+  targetPort: 8080
   protocol: TCP
 
 # RESOURCE ALLOCATION
@@ -43,7 +43,7 @@ healthChecks:
   livenessProbe:
     httpGet:
       path: /
-      port: 80
+      port: 8080
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -52,7 +52,7 @@ healthChecks:
   readinessProbe:
     httpGet:
       path: /
-      port: 80
+      port: 8080
     initialDelaySeconds: 5
     periodSeconds: 5
     timeoutSeconds: 3
@@ -66,6 +66,10 @@ volumes:
   run:
     type: emptyDir
     mountPath: /var/run
+  nginx-config:
+    type: configMap
+    configMapName: "{{ include \"frontend.fullname\" . }}-nginx-config"
+    mountPath: /etc/nginx/conf.d
 
 # SECURITY CONTEXT
 # Pod security context

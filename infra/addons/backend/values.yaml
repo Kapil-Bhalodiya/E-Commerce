@@ -43,9 +43,9 @@ env:
 
 # SECRET CONFIGURATION
 secrets:
-  DBNAME: "dbname"
-  URI: "uri"
-  STRIPE_SECRET_KEY: "stripe-secret-key"
+  DB_NAME: "dbname"
+  MONGODB_URI: "uri"
+  STRIPE_SK: "stripe-secret-key"
   # REDIS_HOST: "redis-dev.dev.svc.cluster.local"  # Redis service
   # REDIS_PORT: "6379"      # Redis port
   # # API configuration
