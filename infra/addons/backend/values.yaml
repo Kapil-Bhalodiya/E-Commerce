@@ -94,9 +94,10 @@ securityContext:
   runAsUser: 1000         # Run as user ID 1000
   runAsGroup: 1000        # Run as group ID 1000
   fsGroup: 1000           # File system group ID
-  # Container security context
-  allowPrivilegeEscalation: false  # Prevent privilege escalation
-  readOnlyRootFilesystem: false    # Allow writes to root filesystem
+# Container security context
+containerSecurityContext:
+  allowPrivilegeEscalation: false   # Prevent privilege escalation
+  readOnlyRootFilesystem: false     # Allow writes to root filesystem
   capabilities:
     drop:
       - ALL               # Drop all capabilities
