@@ -1,25 +1,7 @@
-# Dev backend - only dev-specific overrides
-
-enabled: true
-namespace: dev
-
-env:
-  NODE_ENV: "development"
-  LOG_LEVEL: "debug"
-
-# Lower resources for dev
-resources:
-  requests:
-    cpu: "50m"
-    memory: "64Mi"
-  limits:
-    cpu: "200m"
-    memory: "256Mi"
-
-database:
-  host: mongodb.dev.svc.cluster.local
-
-# Enable persistence for uploads in dev
-# persistence:
-#   enabled: true
-#   size: 2Gi
+# APPLICATION METADATA
+# Basic application information and labels
+app:
+  name: backend             # Application name
+  version: "1.0.0"         # Application version
+  component: api           # Component type (api, frontend, database, etc.)
+  tier: backend            # Application tier

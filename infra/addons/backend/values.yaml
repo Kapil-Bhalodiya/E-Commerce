@@ -1,64 +1,138 @@
 # Backend base configuration - minimal defaults only
 
-enabled: true
-replicaCount: 1
-
+# Docker image settings for the backend application
 image:
-  repository: kapilbhalodiya/ecom-backend
-  tag: "3-latest"
+  repository: docker.io/kapilbhalodiya/ecom-backend  # Docker image repository
+  tag: ""                   # Image tag (empty = use appVersion from Chart.yaml)
+  pullPolicy: Always       # Always pull latest image in development
+  pullSecrets: []          # Image pull secrets (if using private registry)
 
-env:
-  NODE_ENV: "development"
-  PORT: "8000"
+# DEPLOYMENT CONFIGURATION
+deployment:
+  replicas: 1              # Number of pod replicas (single replica for dev)
+  strategy:
+    type: RollingUpdate    # Deployment strategy
+    rollingUpdate:
+      maxUnavailable: 0    # Ensure zero downtime during updates
+      maxSurge: 1          # Allow one extra pod during updates
+  restartPolicy: Always    # Always restart failed containers
 
+# SERVICE CONFIGURATION
 service:
   type: ClusterIP
-  port: 8000
+  port: 3000
+  targetPort: 3000
+  protocol: TCP
 
-# Minimal base resources
+# RESOURCE ALLOCATION
 resources:
   requests:
     cpu: "100m"
-    memory: "128Mi"
+    memory: "256Mi"
   limits:
     cpu: "500m"
     memory: "512Mi"
 
-# Health checks
-livenessProbe:
-  httpGet:
-    path: /health
-    port: 8000
-  initialDelaySeconds: 30
-  periodSeconds: 10
+# ENVIRONMENT VARIABLES
+env:
+  NODE_ENV: "development"
+  PORT: "3000"
+  API_VERSION: "v1"
+  LOG_LEVEL: "debug"      # Verbose logging for development
+  LOG_FORMAT: "combined"  # Express.js log format
 
-# Security
+# SECRET CONFIGURATION
+secrets:
+  DBNAME: "dbname"
+  URI: "uri"
+  STRIPE_SECRET_KEY: "stripe-secret-key"
+  # REDIS_HOST: "redis-dev.dev.svc.cluster.local"  # Redis service
+  # REDIS_PORT: "6379"      # Redis port
+  # # API configuration
+  # API_VERSION: "v1"       # API version prefix
+  # API_PREFIX: "/api"      # API route prefix
+  # # Logging configuration
+  # # File upload configuration
+  # UPLOAD_MAX_SIZE: "10mb" # Maximum file upload size
+  # UPLOAD_PATH: "/app/uploads"  # Upload directory path
+
+
+# HEALTH CHECKS
+healthChecks:
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 3000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: 3000
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+
+# Persistent and temporary storage configuration
+volumes:
+  # Temporary storage for file uploads
+  uploads:
+    type: emptyDir         # Temporary storage (lost on pod restart)
+    mountPath: /app/uploads  # Mount path in container
+  logs:
+    type: emptyDir         # Temporary log storage
+    mountPath: /app/logs   # Log directory in container
+
+# SECURITY CONTEXT
 securityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
+  # Pod security context
+  runAsNonRoot: true       # Don't run as root user
+  runAsUser: 1000         # Run as user ID 1000
+  runAsGroup: 1000        # Run as group ID 1000
+  fsGroup: 1000           # File system group ID
+  # Container security context
+  allowPrivilegeEscalation: false  # Prevent privilege escalation
+  readOnlyRootFilesystem: false    # Allow writes to root filesystem
+  capabilities:
+    drop:
+      - ALL               # Drop all capabilities
+    add: []               # Don't add any capabilities
 
-# Monitoring
-metrics:
-  enabled: true
-  path: /metrics
-  port: 8000
+# MONITORING AND OBSERVABILITY
+monitoring:
+  # Prometheus metrics
+  metrics:
+    enabled: true         # Enable metrics collection
+    port: 9090           # Metrics port
+    path: /metrics       # Metrics endpoint
+  # Service monitor for Prometheus
+  serviceMonitor:
+    enabled: true         # Create ServiceMonitor resource
+    interval: 30s        # Scrape interval
+    labels:
+      app: backend        # Labels for service discovery
 
-# Database
-database:
-  host: mongodb
-  port: 27017
-  name: e-commerce
-
-# External services
+# EXTERNAL SERVICES
 external:
   stripe:
     enabled: true
   cloudinary:
     enabled: false
 
-# Persistence for uploads
+# PERSISTENCE CONFIGURATION
 persistence:
   enabled: false
   size: 5Gi
   accessMode: ReadWriteOnce
   # storageClass: ""  # Use default
+
+# Horizontal Pod Autoscaler settings (disabled in dev)
+autoscaling:
+  enabled: false          # Disable autoscaling in development
+  minReplicas: 1         # Minimum number of replicas
+  maxReplicas: 3         # Maximum number of replicas
+  targetCPUUtilizationPercentage: 80  # CPU threshold for scaling

@@ -1,4 +1,4 @@
-{{- if .Values.enabled }}
+{{- if .Values.enabled | default true }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,7 +7,11 @@ metadata:
   labels:
     {{- include "backend.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.deployment.replicas | default .Values.replicaCount | default 1 }}
+  {{- if .Values.deployment.strategy }}
+  strategy:
+    {{- toYaml .Values.deployment.strategy | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "backend.selectorLabels" . | nindent 6 }}
@@ -16,14 +20,14 @@ spec:
       labels:
         {{- include "backend.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.securityContext }}
+      {{- if .Values.securityContext }}
       securityContext:
-        {{- toYaml . | nindent 8 }}
+        {{- toYaml .Values.securityContext | nindent 8 }}
       {{- end }}
       {{- if .Values.persistence.enabled }}
       initContainers:
         - name: copy-uploads
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           command: ['sh', '-c']
           args:
             - |
@@ -38,62 +42,70 @@ spec:
           volumeMounts:
             - name: uploads-storage
               mountPath: /persistent-uploads
-      volumes:
-        - name: uploads-storage
-          persistentVolumeClaim:
-            claimName: {{ include "backend.fullname" . }}-uploads
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
+              containerPort: {{ .Values.service.targetPort | default .Values.service.port | default 3000 }}
+              protocol: {{ .Values.service.protocol | default "TCP" }}
+          {{- if .Values.env }}
           env:
-            - name: NODE_ENV
-              value: "{{ .Values.env.NODE_ENV }}"
-            - name: PORT
-              value: "{{ .Values.env.PORT }}"
-            - name: MONGODB_URI
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: uri
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: dbname
-            {{- if .Values.external.stripe.enabled }}
-            - name: STRIPE_SK
-              valueFrom:
-                secretKeyRef:
-                  name: backend-secrets
-                  key: stripe-secret-key
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
             {{- end }}
-            {{- if .Values.external.cloudinary.enabled }}
-            - name: CLOUDINARY_CLOUD_NAME
-              value: "dummy"
-            - name: CLOUDINARY_API_KEY
-              value: "dummy"
-            - name: CLOUDINARY_API_SECRET
-              value: "dummy"
+            {{- if .Values.secrets }}
+            {{- range $key, $value := .Values.secrets }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: {{ $key | lower | replace "_" "-" }}
             {{- end }}
-          {{- if .Values.livenessProbe }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.healthChecks.livenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.healthChecks.livenessProbe | nindent 12 }}
+          {{- else if .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           {{- end }}
-          {{- if .Values.readinessProbe }}
+          {{- if .Values.healthChecks.readinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.healthChecks.readinessProbe | nindent 12 }}
+          {{- else if .Values.readinessProbe }}
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- if .Values.persistence.enabled }}
+          {{- if or .Values.persistence.enabled .Values.volumes }}
           volumeMounts:
+            {{- if .Values.persistence.enabled }}
             - name: uploads-storage
               mountPath: /app/public/uploads
+            {{- end }}
+            {{- range $name, $config := .Values.volumes }}
+            - name: {{ $name }}
+              mountPath: {{ $config.mountPath }}
+            {{- end }}
           {{- end }}
+      {{- if or .Values.persistence.enabled .Values.volumes }}
+      volumes:
+        {{- if .Values.persistence.enabled }}
+        - name: uploads-storage
+          persistentVolumeClaim:
+            claimName: {{ include "backend.fullname" . }}-uploads
+        {{- end }}
+        {{- range $name, $config := .Values.volumes }}
+        - name: {{ $name }}
+          {{- if eq $config.type "emptyDir" }}
+          emptyDir: {}
+          {{- end }}
+        {{- end }}
+      {{- end }}
 {{- end }}

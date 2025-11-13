@@ -1,4 +1,4 @@
-{{- if .Values.enabled }}
+{{- if .Values.enabled | default true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,12 +6,16 @@ metadata:
   name: backend-{{ .Release.Namespace }}
   labels:
     {{- include "backend.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
+      targetPort: {{ .Values.service.targetPort | default "http" }}
+      protocol: {{ .Values.service.protocol | default "TCP" }}
       name: http
   selector:
     {{- include "backend.selectorLabels" . | nindent 4 }}
