@@ -5,3 +5,22 @@ app:
   version: "1.0.0"         # Application version
   component: api           # Component type (api, frontend, database, etc.)
   tier: backend            # Application tier
+
+# INGRESS CONFIGURATION
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+  hosts:
+    - host: dev.sharkapp.local
+      paths:
+        - path: /api
+          pathType: Prefix
+        - path: /uploads
+          pathType: Prefix
+  tls: []

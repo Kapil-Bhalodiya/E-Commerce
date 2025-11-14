@@ -85,3 +85,19 @@ angular:
     enableProdMode: false       # Disable production mode optimizations
     enableServiceWorker: false  # Disable service worker in development
     enableI18n: false          # Disable internationalization
+
+# INGRESS CONFIGURATION
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+  hosts:
+    - host: dev.sharkapp.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
