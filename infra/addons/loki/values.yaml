@@ -4,10 +4,10 @@ loki:
   loki:
     auth_enabled: false
     commonConfig:
-      path_prefix: /var/loki
+      path_prefix: /tmp/loki   # FIXED
       replication_factor: 1
     storage:
-      type: 'filesystem'
+      type: filesystem
     schemaConfig:
       configs:
         - from: "2024-01-01"
@@ -20,15 +20,8 @@ loki:
   
   singleBinary:
     replicas: 1
-    resources:
-      requests:
-        cpu: 100m
-        memory: 256Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
     persistence:
-      enabled: false
+      enabled: false   # no PVC
     containerSecurityContext:
       readOnlyRootFilesystem: false
     extraVolumes:
@@ -36,7 +29,7 @@ loki:
         emptyDir: {}
     extraVolumeMounts:
       - name: loki-data
-        mountPath: /tmp/loki
+        mountPath: /tmp/loki   # writable
   
   chunksCache:
     enabled: false
