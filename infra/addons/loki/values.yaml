@@ -10,28 +10,34 @@ loki:
 
     server:
       http_listen_port: 3100
-
-    common:
-      ring:
-        instance_addr: 127.0.0.1
-        kvstore:
-          store: inmemory
-      replication_factor: 1
-      path_prefix: /tmp/loki
-
-    schema_config:
-      configs:
-      - from: 2020-05-15
-        store: tsdb
-        object_store: filesystem
-        schema: v13
-        index:
-          prefix: index_
-          period: 24h
-
-    storage_config:
-      filesystem:
-        directory: /tmp/loki/chunks
+      storage:
+        bucketNames:
+          chunks: /tmp/loki/chunks  # Dummy for filesystem; chart requires it
+          ruler: /tmp/loki/ruler
+          admin: /tmp/loki/admin
+        type: filesystem
+        filesystem:
+          directory: /tmp/loki/chunks
+    useTestSchema: true
+    config:
+      commonConfig:
+        path_prefix: /tmp/loki
+      storage_config:
+        boltdb_shipper:
+          active_index_directory: /tmp/loki/index
+          cache_location: /tmp/loki/boltdb-cache
+          shared_store: filesystem
+        filesystem:
+          directory: /tmp/loki/chunks
+        schema_config:
+          configs:
+            - from: "2022-01-01"
+              store: boltdb-shipper
+              object_store: filesystem
+              schema: v11
+              index:
+                prefix: index_
+                period: 24h
   
   singleBinary:
     replicas: 1
