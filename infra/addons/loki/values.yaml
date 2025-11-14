@@ -1,5 +1,5 @@
-loki:
-  deploymentMode: SingleBinary
+# loki:
+#   deploymentMode: SingleBinary
   
   loki:
     
