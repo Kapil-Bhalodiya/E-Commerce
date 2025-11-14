@@ -1,28 +1,194 @@
-domain: "dev.sharkapp.local"
-namespace: dev
-ingressClassName: "nginx"
+# # =============================================================================
+# # INGRESS CONFIGURATION - DEVELOPMENT ENVIRONMENT
+# # Kubernetes Ingress configuration for routing external traffic to services
+# # Handles HTTP/HTTPS traffic routing for the e-commerce platform
+# # =============================================================================
 
-tls:
-  enabled: false
+# # INGRESS CONTROLLER CONFIGURATION
 
-services:
-  - name: frontend
-    serviceName: frontend-dev
-    servicePort: 80
-    path: /
-    pathType: Prefix
-  - name: backend-api
-    serviceName: backend-dev
-    servicePort: 8000
-    path: /api
-    pathType: Prefix
-  - name: backend-uploads
-    serviceName: backend-dev
-    servicePort: 8000
-    path: /uploads
-    pathType: Prefix
+# # =============================================================================
+# # HOST ROUTING CONFIGURATION
+# # =============================================================================
+# # Define how different hostnames route to different services
+# hosts:
+#   # =============================================================================
+#   # FRONTEND APPLICATION ROUTING
+#   # =============================================================================
+#   # Main e-commerce frontend application
+#   - host: dev.sharkapp.local   # Development frontend hostname
+#     service:
+#       name: frontend-dev         # Frontend service name
+#       port: 80                  # Frontend service port
+#     paths:
+#       - path: /                 # Root path
+#         pathType: Prefix        # Match all paths starting with /
+#         backend:
+#           service:
+#             name: frontend-dev   # Service name
+#             port:
+#               number: 80        # Service port number
+  
+#   # =============================================================================
+#   # API BACKEND ROUTING
+#   # =============================================================================
+#   # Backend API routing (can be separate subdomain or path-based)
+#   - host: dev.sharkapp.local  # Development API hostname
+#     service:
+#       name: backend-dev           # Backend service name
+#       port: 8000                 # Backend service port
+#     paths:
+#       - path: /api               # API path prefix
+#         pathType: Prefix         # Match all paths starting with /api
+#         backend:
+#           service:
+#             name: backend-dev     # Service name
+#             port:
+#               number: 8000       # Service port number
+  
+#   # Alternative: Path-based routing (API under main domain)
+#   # - host: dev.ecommerce.local
+#   #   paths:
+#   #     - path: /api
+#   #       pathType: Prefix
+#   #       backend:
+#   #         service:
+#   #           name: backend-dev
+#   #           port:
+#   #             number: 8000
+  
+#   # =============================================================================
+#   # MONITORING AND ADMIN INTERFACES
+#   # =============================================================================
+#   # Grafana dashboard access
+#   - host: dev.grafana.local      # Grafana hostname
+#     service:
+#       name: prometheus-stack-dev-grafana  # Grafana service name
+#       port: 80                   # Grafana service port
+#     paths:
+#       - path: /                  # Root path
+#         pathType: Prefix         # Match all paths
+#         backend:
+#           service:
+#             name: prometheus-stack-dev-grafana
+#             port:
+#               number: 80
+  
+#   # Prometheus metrics access (optional, usually internal)
+#   # - host: dev.prometheus.local
+#   #   service:
+#   #     name: prometheus-stack-dev-kube-prometheus
+#   #     port: 9090
+#   #   paths:
+#   #     - path: /
+#   #       pathType: Prefix
+#   #       backend:
+#   #         service:
+#   #           name: prometheus-stack-dev-kube-prometheus
+#   #           port:
+#   #             number: 9090
 
-annotations:
-  nginx.ingress.kubernetes.io/ssl-redirect: "false"
-  nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-  nginx.ingress.kubernetes.io/limit-rps: "100"
+# # =============================================================================
+# # TLS/SSL CONFIGURATION
+# # =============================================================================
+# # HTTPS configuration (disabled in development for simplicity)
+# tls:
+#   enabled: false             # Disable TLS in development
+#   # When enabled in production, configure like this:
+#   # certificates:
+#   #   - secretName: ecommerce-tls-secret  # TLS certificate secret
+#   #     hosts:
+#   #       - ecommerce.local
+#   #       - api.ecommerce.local
+#   #       - grafana.ecommerce.local
+
+# # =============================================================================
+# # LOAD BALANCING CONFIGURATION
+# # =============================================================================
+# # Load balancing settings for the ingress
+# loadBalancing:
+#   # Session affinity (sticky sessions)
+#   sessionAffinity:
+#     enabled: false           # Disable session affinity in dev
+#     cookieName: "INGRESSCOOKIE"  # Cookie name for session affinity
+#     cookieDuration: "86400"  # Cookie duration in seconds (24 hours)
+  
+#   # Load balancing algorithm
+#   algorithm: "round_robin"   # Load balancing algorithm (round_robin, least_conn, ip_hash)
+
+# # =============================================================================
+# # SECURITY CONFIGURATION
+# # =============================================================================
+# # Security settings for the ingress
+# security:
+#   # IP whitelisting (disabled in development)
+#   ipWhitelist:
+#     enabled: false           # Disable IP restrictions in dev
+#     allowedIPs: []          # List of allowed IP addresses/ranges
+  
+#   # Basic authentication (disabled in development)
+#   basicAuth:
+#     enabled: false           # Disable basic auth in dev
+#     secretName: ""          # Secret containing auth credentials
+  
+#   # Request filtering
+#   requestFiltering:
+#     # Block common attack patterns
+#     blockUserAgents: []      # User agents to block
+#     blockPaths: []          # Paths to block
+    
+#     # Request size limits
+#     maxRequestSize: "50m"    # Maximum request size
+#     maxHeaderSize: "8k"      # Maximum header size
+
+# # =============================================================================
+# # MONITORING AND LOGGING
+# # =============================================================================
+# # Observability configuration for ingress
+# monitoring:
+#   # Access logging
+#   accessLog:
+#     enabled: true            # Enable access logging
+#     format: "json"          # Log format (json, combined, etc.)
+#     destination: "stdout"    # Log destination
+  
+#   # Metrics collection
+#   metrics:
+#     enabled: true            # Enable metrics collection
+#     serviceMonitor:
+#       enabled: true          # Create ServiceMonitor for Prometheus
+#       interval: "30s"        # Metrics scrape interval
+#       labels:
+#         app: ingress         # Labels for service discovery
+  
+#   # Error pages
+#   errorPages:
+#     enabled: true            # Enable custom error pages
+#     codes:
+#       - 404                 # Not found
+#       - 500                 # Internal server error
+#       - 502                 # Bad gateway
+#       - 503                 # Service unavailable
+
+# # =============================================================================
+# # DEVELOPMENT-SPECIFIC SETTINGS
+# # =============================================================================
+# # Settings specific to development environment
+# development:
+#   # Debug settings
+#   debug:
+#     enabled: true            # Enable debug mode
+#     logLevel: "debug"        # Log level for debugging
+#     showErrors: true         # Show detailed error messages
+  
+#   # Hot reload support
+#   hotReload:
+#     enabled: true            # Enable hot reload for development
+#     websocket: true          # Enable WebSocket support for hot reload
+  
+#   # Development tools
+#   tools:
+#     # Enable development headers
+#     headers:
+#       - "X-Environment: development"
+#       - "X-Debug-Mode: enabled"
+#       - "X-Hot-Reload: enabled"
