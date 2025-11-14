@@ -25,10 +25,10 @@ loki:
     resources:
       requests:
         cpu: "100m"      # Minimum CPU required
-        memory: "256Mi"   # Minimum memory required
+        memory: "128Mi"   # Minimum memory required
       limits:
-        cpu: "500m"      # Maximum CPU allowed
-        memory: "1Gi"     # Maximum memory allowed
+        cpu: "200m"      # Maximum CPU allowed
+        memory: "256Mi"     # Maximum memory allowed
 
   # Disable multi-component deployment modes (used in production)
   backend:
@@ -140,3 +140,7 @@ loki:
           active_index_directory: /var/loki/data/boltdb-index  # BoltDB index location
           cache_location: /var/loki/data/boltdb-cache         # BoltDB cache location
           shared_store: filesystem                            # Use filesystem as shared store
+        tsdb_shipper:
+          active_index_directory: /var/loki/data/tsdb-index
+          cache_location: /var/loki/data/tsdb-cache
+          shared_store: filesystem
