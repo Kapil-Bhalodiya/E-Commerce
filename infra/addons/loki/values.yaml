@@ -4,7 +4,7 @@ loki:
   loki:
     auth_enabled: false
     commonConfig:
-      path_prefix: /tmp/loki
+      path_prefix: /var/loki
       replication_factor: 1
     storage:
       type: 'filesystem'
@@ -27,6 +27,10 @@ loki:
       limits:
         cpu: 500m
         memory: 512Mi
+    persistence:
+      enabled: false
+    containerSecurityContext:
+      readOnlyRootFilesystem: false
     extraVolumes:
       - name: loki-data
         emptyDir: {}
