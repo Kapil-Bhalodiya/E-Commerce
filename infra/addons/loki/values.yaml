@@ -1,14 +1,18 @@
 loki:
   deploymentMode: SingleBinary
-  
-  loki:
-    auth_enabled: false
-    commonConfig:
-      path_prefix: /tmp/loki   # FIXED
-      replication_factor: 1
-    storage:
-      type: filesystem
-    schemaConfig:
+
+  config:
+    common:
+      path_prefix: /tmp/loki
+
+    storage_config:
+      tsdb_shards: 1
+      tsdb:
+        directory: /tmp/loki/tsdb
+      filesystem:
+        directory: /tmp/loki/chunks
+
+    schema_config:
       configs:
         - from: "2024-01-01"
           store: tsdb
@@ -17,6 +21,7 @@ loki:
           index:
             prefix: loki_index_
             period: 24h
+
   
   singleBinary:
     replicas: 1
