@@ -1,48 +1,30 @@
-# loki:
-#   deploymentMode: SingleBinary
+loki:
+  deploymentMode: SingleBinary
   
   loki:
-    
-    # This is a complete configuration to deploy Loki backed by the filesystem.
-    # The index will be shipped to the storage via tsdb-shipper.
-
     auth_enabled: false
-
-    server:
-      http_listen_port: 3100
-      storage:
-        bucketNames:
-          chunks: /tmp/loki/chunks  # Dummy for filesystem; chart requires it
-          ruler: /tmp/loki/ruler
-          admin: /tmp/loki/admin
-        type: filesystem
-        filesystem:
-          directory: /tmp/loki/chunks
-    useTestSchema: true
-    config:
-      commonConfig:
-        path_prefix: /tmp/loki
-      storage_config:
-        boltdb_shipper:
-          active_index_directory: /tmp/loki/index
-          cache_location: /tmp/loki/boltdb-cache
-          shared_store: filesystem
-        filesystem:
-          directory: /tmp/loki/chunks
-        schema_config:
-          configs:
-            - from: "2022-01-01"
-              store: boltdb-shipper
-              object_store: filesystem
-              schema: v11
-              index:
-                prefix: index_
-                period: 24h
+    
+    commonConfig:
+      path_prefix: /tmp/loki
+      replication_factor: 1
+    
+    storage:
+      type: filesystem
+    
+    schemaConfig:
+      configs:
+        - from: "2024-01-01"
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
   
   singleBinary:
     replicas: 1
     persistence:
-      enabled: false   # no PVC
+      enabled: false
     containerSecurityContext:
       readOnlyRootFilesystem: false
     extraVolumes:
@@ -50,7 +32,7 @@
         emptyDir: {}
     extraVolumeMounts:
       - name: loki-data
-        mountPath: /tmp/loki   # writable
+        mountPath: /tmp/loki
   
   chunksCache:
     enabled: false
