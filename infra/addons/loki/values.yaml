@@ -7,6 +7,10 @@ loki:
       replication_factor: 1
     storage:
       type: 'filesystem'
+      bucketNames:
+        chunks: ""
+        ruler: ""
+        index: ""
     schemaConfig:
       configs:
         - from: "2024-01-01"
