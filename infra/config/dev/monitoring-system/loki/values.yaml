@@ -1,8 +1,16 @@
-# Loki log aggregation system configuration for development
-# SingleBinary deployment for local development and testing
-
 loki:
-  # Disable distributed components
+  deploymentMode: SingleBinary
+  
+  singleBinary:
+    podSecurityContext:
+      runAsNonRoot: false
+      runAsUser: 0
+      fsGroup: 0
+    containerSecurityContext:
+      readOnlyRootFilesystem: false
+      runAsNonRoot: false
+      runAsUser: 0
+  
   backend:
     replicas: 0
   read:
