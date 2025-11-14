@@ -1,106 +1,56 @@
 # Loki log aggregation system configuration for development
-# Simplified single-binary deployment for local development and testing
+# SingleBinary deployment for local development and testing
 
-# LOKI DEPLOYMENT CONFIGURATION
 loki:
-  # Storage configuration (no persistence in dev)
-    persistence:
-      enabled: false        # Disable persistent storage for development
-      # Use emptyDir for temporary storage (data lost on pod restart)
-    
-  # Additional volumes for development
-    extraVolumes:
-      - name: loki-data     # Temporary storage volume
-        emptyDir: {}        # EmptyDir volume (ephemeral)
-    
-  # Volume mounts for Loki container
-    extraVolumeMounts:
-      - name: loki-data     # Mount temporary storage
-        mountPath: /loki    # Loki data directory
+  # Use SingleBinary deployment mode
+  deploymentMode: SingleBinary
   
-# DISTRIBUTED COMPONENTS (DISABLED FOR DEV)
-# Disable distributed components for single-node development
-# Backend component configuration (handles compaction, deletion, etc.)
-    backend:
-      replicas: 1                  # Single replica for development
-      resources:
-        requests:
-          cpu: "20m"               # Minimal CPU for development
-          memory: "200Mi"          # Minimal memory for development
-        limits:
-          cpu: "100m"              # Lower CPU limit for dev
-          memory: "300Mi"          # Lower memory limit for dev
-      persistence:
-        enabled: false             # Disable persistence for development (ephemeral)
-    
-    # Read component configuration (handles queries)
-    read:
-      replicas: 1                  # Single replica for development
-      resources:
-        requests:
-          cpu: "16m"               # Minimal CPU for development
-          memory: "195Mi"          # Minimal memory for development
-        limits:
-          cpu: "50m"               # Lower CPU limit for dev
-          memory: "1Gi"            # Memory limit for read operations
-      persistence:
-        enabled: false             # Disable persistence for development
-    
-    # Write component configuration (handles log ingestion)
-    write:
-      replicas: 1                  # Single replica for development
-      resources:
-        requests:
-          cpu: "41m"               # Minimal CPU for development
-          memory: "804Mi"          # Memory for write operations
-        limits:
-          cpu: "100m"              # Lower CPU limit for dev
-          memory: "1Gi"            # Memory limit for write operations
-      persistence:
-        enabled: false             # Disable persistence for development
-
-# GATEWAY CONFIGURATION
-# Loki gateway for load balancing and authentication
-    gateway:
-      enabled: true           # Enable gateway for consistent API
-      replicas: 1             # Single gateway replica for dev
-      
-      # Resource allocation for gateway
-      resources:
-        requests:
-          cpu: "50m"          # Minimum CPU for gateway
-          memory: "64Mi"      # Minimum memory for gateway
-        limits:
-          cpu: "100m"         # Maximum CPU for gateway
-          memory: "128Mi"     # Maximum memory for gateway
-    
-# LOKI SERVER CONFIGURATION
-# Core Loki server settings
-    loki:     
-      # Server configuration
-      server:
-        http_listen_port: 3100  # HTTP API port
-        grpc_listen_port: 9095  # gRPC port for internal communication
-      
-      # Common configuration for all components
-      common:
-        path_prefix: /loki    # Base path for Loki data
-        storage:
-          filesystem:         # Use filesystem storage for development
-            chunks_directory: /loki/chunks    # Directory for log chunks
-            rules_directory: /loki/rules      # Directory for alerting rules
-        replication_factor: 1 # Single replica (no replication in dev)
-        ring:
-          kvstore:
-            store: inmemory   # Use in-memory key-value store
-
-# LIMITS CONFIGURATION
-# Rate limiting and resource limits for development
-    limits_config:
-      enforce_metric_name: false        # Don't enforce metric names
-      reject_old_samples: true          # Reject old log samples
-      reject_old_samples_max_age: 168h  # Maximum age for log samples (7 days)
-      ingestion_rate_mb: 16             # Ingestion rate limit (MB/s)
-      ingestion_burst_size_mb: 32       # Burst size limit (MB)
-      max_query_parallelism: 32         # Maximum parallel queries
-      max_streams_per_user: 10000       # Maximum streams per tenant
+  # SingleBinary configuration
+  singleBinary:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    persistence:
+      enabled: false
+  
+  # Disable distributed components
+  backend:
+    replicas: 0
+  read:
+    replicas: 0
+  write:
+    replicas: 0
+  
+  # Disable gateway for SingleBinary mode
+  gateway:
+    enabled: false
+  
+  # Loki configuration
+  loki:
+    auth_enabled: false
+    commonConfig:
+      replication_factor: 1
+    storage:
+      type: 'filesystem'
+    schemaConfig:
+      configs:
+        - from: "2024-01-01"
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: loki_index_
+            period: 24h
+  
+  # Disable optional components
+  chunksCache:
+    enabled: false
+  resultsCache:
+    enabled: false
+  test:
+    enabled: false
