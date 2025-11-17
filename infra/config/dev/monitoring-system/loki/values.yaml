@@ -1,4 +1,15 @@
-# Development-specific security context override
+# Development overrides - ensure all paths use /tmp/loki
+loki:
+  loki:
+    commonConfig:
+      storage:
+        filesystem:
+          chunks_directory: /tmp/loki/chunks
+          rules_directory: /tmp/loki/rules
+    ruler:
+      wal:
+        dir: /tmp/loki/ruler-wal
+
 singleBinary:
   podSecurityContext:
-    fsGroup: 0  # Additional override for dev environment
+    fsGroup: 0
