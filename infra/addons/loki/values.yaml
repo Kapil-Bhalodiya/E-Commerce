@@ -77,3 +77,11 @@ loki:
   # Disable built-in tests
   test:
     enabled: false
+
+  # Microservices components (disabled in SingleBinary mode)
+  backend:
+    replicas: 0  # Handles storage/compaction in microservices mode
+  read:
+    replicas: 0  # Handles queries in microservices mode
+  write:
+    replicas: 0  # Handles ingestion in microservices mode
