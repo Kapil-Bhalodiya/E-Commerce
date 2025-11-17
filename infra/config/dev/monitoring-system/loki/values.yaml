@@ -1,12 +1,4 @@
 # Development-specific security context override
-loki:
-  singleBinary:
-    podSecurityContext:
-      fsGroup: 0  # Additional override for dev environment
-  # Microservices components (disabled in SingleBinary mode)
-  backend:
-    replicas: 0  # Handles storage/compaction in microservices mode
-  read:
-    replicas: 0  # Handles queries in microservices mode
-  write:
-    replicas: 0  # Handles ingestion in microservices mode
+singleBinary:
+  podSecurityContext:
+    fsGroup: 0  # Additional override for dev environment
