@@ -1,28 +1,29 @@
 loki:
-  # SingleBinary: All components in one process (dev/small deployments)
-  # Alternative: SimpleScalable (separate read/write for production)
   deploymentMode: SingleBinary
-  
+
   loki:
-    # Disable auth for development (enable in production)
+    # Disable authentication (enable in production)
     auth_enabled: false
-    
+
     # Common settings shared across all Loki components
     commonConfig:
       # Base path for Loki data storage
       path_prefix: /tmp/loki
       # Replication factor: 1=no replication (dev), 3=HA (prod)
       replication_factor: 1
-      # Storage paths for log chunks and alerting rules
+      # Storage configuration - this overrides chart defaults
       storage:
         filesystem:
           chunks_directory: /tmp/loki/chunks  # Compressed log data
           rules_directory: /tmp/loki/rules    # Alerting/recording rules
-    
+
     # Storage backend: filesystem (dev) | s3/gcs/azure (prod)
     storage:
       type: filesystem
-    
+      filesystem:
+        chunks_directory: /tmp/loki/chunks
+        rules_directory: /tmp/loki/rules
+
     # Schema defines how data is stored and indexed
     schemaConfig:
       configs:
@@ -33,7 +34,7 @@ loki:
           index:
             prefix: loki_index_    # Index file prefix
             period: 24h           # Daily index rotation
-    
+
     # Ruler processes alerting and recording rules
     ruler:
       storage:
@@ -42,20 +43,20 @@ loki:
           directory: /tmp/loki/rules  # Rules storage directory
       wal:
         dir: /tmp/loki/ruler-wal     # Write-Ahead Log for durability
-  
+    
+    # Storage config overrides to ensure all paths use /tmp/loki
+    storage_config:
+      bloom_shipper:
+        working_directory: /tmp/loki/data/bloomshipper
+      tsdb_shipper:
+        active_index_directory: /tmp/loki/tsdb-index
+        cache_location: /tmp/loki/tsdb-cache
+
   # SingleBinary deployment configuration
   singleBinary:
     replicas: 1                    # Single instance (dev)
     persistence:
       enabled: false               # No persistent storage (ephemeral)
-    # Security context (relaxed for dev, harden for prod)
-    podSecurityContext:
-      runAsNonRoot: false          # Allow root (dev only)
-      runAsUser: 0                 # Root user (dev only)
-    containerSecurityContext:
-      readOnlyRootFilesystem: false # Allow writes (dev only)
-      runAsNonRoot: false          # Allow root (dev only)
-      runAsUser: 0                 # Root user (dev only)
     # Temporary storage volumes
     extraVolumes:
       - name: loki-data
@@ -63,17 +64,17 @@ loki:
     extraVolumeMounts:
       - name: loki-data
         mountPath: /tmp/loki       # Mount at data path
-  
+
   # Disable caching for development (enable for production performance)
   chunksCache:
     enabled: false
   resultsCache:
     enabled: false
-  
+
   # Disable gateway (not needed in SingleBinary mode)
   gateway:
     enabled: false
-  
+
   # Disable built-in tests
   test:
     enabled: false

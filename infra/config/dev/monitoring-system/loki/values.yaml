@@ -1,15 +1,10 @@
-# Development overrides - ensure all paths use /tmp/loki
-loki:
-  loki:
-    commonConfig:
-      storage:
-        filesystem:
-          chunks_directory: /tmp/loki/chunks
-          rules_directory: /tmp/loki/rules
-    ruler:
-      wal:
-        dir: /tmp/loki/ruler-wal
-
+# Development-specific security context overrides
 singleBinary:
   podSecurityContext:
-    fsGroup: 0
+    runAsNonRoot: false
+    runAsUser: 0
+
+  containerSecurityContext:
+    readOnlyRootFilesystem: false
+    runAsNonRoot: false
+    runAsUser: 0
