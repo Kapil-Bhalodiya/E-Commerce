@@ -1,7 +1,20 @@
+# Development environment overrides for Alloy
 alloy:
   alloy:
-    loki:
-      env: dev
-  # image:
-  #   registry: "397926938435.dkr.ecr.eu-west-1.amazonaws.com"
-  #   repository: eks-addons/grafana/alloy
+    # Additional mount for dev environment
+    mounts:
+      dockercontainers: true
+    
+    # Dev-specific configuration overrides
+    configMap:
+      content: |-
+        // Override Loki endpoint for dev environment
+        loki.write "default" {
+          endpoint {
+            url = "http://loki-dev.svc.cluster.local:3100/loki/api/v1/push"
+          }
+          external_labels = {
+            job = "alloy"
+            cluster = "dev"
+          }
+        }

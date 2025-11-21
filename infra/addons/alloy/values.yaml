@@ -1,78 +1,99 @@
+# Grafana Alloy is the successor to Promtail for log collection
+# It uses River language for configuration and runs as a DaemonSet
+
 alloy:
   alloy:
+    # Volume mounts for log collection
     mounts:
-      varlog: true
+      varlog: true              # Mount /var/log for container logs
+    
+    # Resource allocation (minimal for base config)
     resources:
-      limits:
-        memory: "100Mi"
       requests:
-        cpu: "5m"
-        memory: "70Mi"
+        cpu: "50m"
+        memory: "64Mi"
+      limits:
+        cpu: "200m"
+        memory: "256Mi"         # Minimum memory request
 
+    # ALLOY CONFIGURATION MAP (River Language)
     configMap:
-      create: true
+      create: true              # Create ConfigMap for Alloy configuration
       content: |-
+        // Kubernetes service discovery for pod logs
         discovery.kubernetes "kubernetes_pods" {
-          role = "pod"
+          role = "pod"            // Discover pods only
           selectors {
               role = "pod"
+              // Only discover pods on same node as this Alloy instance
               field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
           }
         }
 
+        // Label relabeling rules for better log organization
         discovery.relabel "kubernetes_pods" {
           targets = discovery.kubernetes.kubernetes_pods.targets
 
+          // Extract controller name (remove random suffix)
           rule {
             source_labels = ["__meta_kubernetes_pod_controller_name"]
             regex         = "([0-9a-z-.]+?)(-[0-9a-f]{8,10})?"
             target_label  = "__tmp_controller_name"
           }
 
+          // Set application name from various labels
           rule {
             source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name", "__meta_kubernetes_pod_label_app", "__tmp_controller_name", "__meta_kubernetes_pod_name"]
             regex         = "^;*([^;]+)(;.*)?$"
             target_label  = "app"
           }
 
+          // Set instance name
           rule {
             source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_instance", "__meta_kubernetes_pod_label_instance"]
             regex         = "^;*([^;]+)(;.*)?$"
             target_label  = "instance"
           }
 
+          // Set component name
           rule {
             source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_component", "__meta_kubernetes_pod_label_component"]
             regex         = "^;*([^;]+)(;.*)?$"
             target_label  = "component"
           }
 
+          // Add node name label
           rule {
             source_labels = ["__meta_kubernetes_pod_node_name"]
             target_label  = "node_name"
           }
 
+          // Add namespace label
           rule {
             source_labels = ["__meta_kubernetes_namespace"]
             target_label  = "namespace"
           }
 
+          // Create job label (namespace/app)
           rule {
             source_labels = ["namespace", "app"]
             separator     = "/"
             target_label  = "job"
           }
 
+          // Add pod name label
           rule {
             source_labels = ["__meta_kubernetes_pod_name"]
             target_label  = "pod"
           }
 
+          // Add container name label
           rule {
             source_labels = ["__meta_kubernetes_pod_container_name"]
             target_label  = "container"
           }
 
+          // Set log file path based on pod UID and container
           rule {
             source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
             separator     = "/"
@@ -80,6 +101,7 @@ alloy:
             replacement   = "/var/log/pods/*$1/*.log"
           }
 
+          // Handle pods with config hash annotations
           rule {
             source_labels = ["__meta_kubernetes_pod_annotationpresent_kubernetes_io_config_hash", "__meta_kubernetes_pod_annotation_kubernetes_io_config_hash", "__meta_kubernetes_pod_container_name"]
             separator     = "/"
@@ -89,28 +111,32 @@ alloy:
           }
         }
 
+        // Match log files based on relabeled targets
         local.file_match "kubernetes_pods" {
           path_targets = discovery.relabel.kubernetes_pods.output
         }
 
+        // Log processing pipeline
         loki.process "kubernetes_pods" {
-         	stage.cri {}
+         	stage.cri {}                    // Parse CRI log format
             stage.match {
-              selector = "{container=\"otc-container\"}"
+              selector = "{container=\"otc-container\"}"  // Drop OTC container logs
               action  = "drop"
             }
             forward_to = [loki.write.default.receiver]
         }
 
+        // Log file source configuration
         loki.source.file "kubernetes_pods" {
           targets               = local.file_match.kubernetes_pods.targets
           forward_to            = [loki.process.kubernetes_pods.receiver]
-          legacy_positions_file = "/run/promtail/positions.yaml"
+          legacy_positions_file = "/run/promtail/positions.yaml"  // Track read positions
         }
 
+        // Loki writer configuration
         loki.write "default" {
           endpoint {
-            url = "http://loki-{{ .Values.alloy.loki.env }}-gateway/loki/api/v1/push"
+            url = "http://loki.dev.svc.cluster.local:3100/loki/api/v1/push"  // Loki endpoint
           }
-          external_labels = {job = "alloy"}
+          external_labels = {job = "alloy"}  // External labels for all logs
         }

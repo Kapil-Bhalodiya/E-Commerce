@@ -34,7 +34,10 @@ loki:
           index:
             prefix: loki_index_    # Index file prefix
             period: 24h           # Daily index rotation
-
+    compactor:
+      retention_enabled: true
+      retention_delete_delay: 2m
+      working_directory: /tmp/loki/compactor  # Compaction storage
     # Ruler processes alerting and recording rules
     ruler:
       storage:
