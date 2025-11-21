@@ -38,6 +38,7 @@ loki:
       retention_enabled: true
       retention_delete_delay: 2m
       working_directory: /tmp/loki/compactor  # Compaction storage
+      delete_request_store: filesystem        # Required for retention
     # Ruler processes alerting and recording rules
     ruler:
       storage:

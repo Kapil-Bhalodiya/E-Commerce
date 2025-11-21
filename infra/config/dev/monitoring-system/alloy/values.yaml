@@ -14,7 +14,7 @@ alloy:
             url = "http://loki-dev.svc.cluster.local:3100/loki/api/v1/push"
           }
           external_labels = {
-            job = "alloy"
-            cluster = "dev"
+            job = "alloy",
+            cluster = "dev",
           }
         }
