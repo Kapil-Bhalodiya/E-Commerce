@@ -1,45 +1,132 @@
-# Default configuration for prometheus-stack
-# This will be overridden by environment-specific values
+# =============================================================================
+# KUBE-PROMETHEUS-STACK BASE CONFIGURATION
+# =============================================================================
+# Complete monitoring stack including:
+# - Prometheus (metrics collection and storage)
+# - Grafana (visualization and dashboards)
+# - Alertmanager (alert routing and management)
+# - Node Exporter (node-level metrics)
+# - Kube State Metrics (Kubernetes object metrics)
+# - Prometheus Operator (CRD management)
 
-# Grafana hostname - will be overridden per environment
-grafanaHost: "localhost"
-
-# Application monitoring (empty by default)
-app:
-  serviceMonitors: []
-
-# Configuration for the kube-prometheus-stack subchart
-kube-prometheus-stack: 
-  # Prometheus server configuration
+kube-prometheus-stack:
+  # =============================================================================
+  # PROMETHEUS SERVER CONFIGURATION
+  # =============================================================================
   prometheus:
     enabled: true
     prometheusSpec:
-      retention: "15d"  # Keep metrics for 15 days
+      retention: "15d"                    # Default metrics retention period
       resources:
         requests:
-          cpu: "50m"
-          memory: "500Mi"
+          cpu: "100m"                     # Base CPU allocation
+          memory: "400Mi"                 # Base memory allocation
         limits:
-          memory: "1Gi"
+          cpu: "300m"                     # Base CPU limit
+          memory: "800Mi"                 # Base memory limit
+      
+      # Service discovery configuration
+      serviceMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelectorNilUsesHelmValues: false
+      ruleSelectorNilUsesHelmValues: false
   
-  # Grafana dashboard configuration
+  # =============================================================================
+  # GRAFANA DASHBOARD CONFIGURATION
+  # =============================================================================
   grafana:
     enabled: true
-    adminPassword: "admin123"  # Will be overridden per environment
+    adminPassword: "admin"              # Default password, override per environment
+    
+    # Base resource allocation
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "64Mi"
+      limits:
+        cpu: "100m"
+        memory: "128Mi"
+    
+    # Service configuration
     service:
       type: ClusterIP
       port: 80
+    
+    # Ingress disabled by default
     ingress:
-      enabled: false  # Will be overridden per environment
+      enabled: false
+    
+    # Automatic dashboard and datasource provisioning
+    sidecar:
+      dashboards:
+        enabled: true
+        label: grafana_dashboard
+        labelValue: "1"
+        searchNamespace: ALL
+      datasources:
+        enabled: true
+        label: grafana_datasource
+        labelValue: "1"
+        searchNamespace: ALL
+    
+    # Base Grafana configuration
     grafana.ini:
       server:
         domain: "localhost"
         root_url: "http://localhost/"
+      auth:
+        disable_login_form: false
+      auth.anonymous:
+        enabled: false
+      security:
+        allow_embedding: true
   
-  # Disable alertmanager for simplicity
+  # =============================================================================
+  # ALERTMANAGER CONFIGURATION
+  # =============================================================================
   alertmanager:
-    enabled: false
+    enabled: false                      # Disabled by default
   
-  # Enable Kubernetes state metrics
+  # =============================================================================
+  # NODE EXPORTER CONFIGURATION
+  # =============================================================================
+  nodeExporter:
+    enabled: true
+    resources:
+      requests:
+        cpu: "10m"
+        memory: "32Mi"
+      limits:
+        cpu: "50m"
+        memory: "64Mi"
+  
+  # =============================================================================
+  # KUBE STATE METRICS CONFIGURATION
+  # =============================================================================
   kube-state-metrics:
     enabled: true
+    resources:
+      requests:
+        cpu: "10m"
+        memory: "32Mi"
+      limits:
+        cpu: "50m"
+        memory: "64Mi"
+  
+  # =============================================================================
+  # PROMETHEUS OPERATOR CONFIGURATION
+  # =============================================================================
+  prometheusOperator:
+    enabled: true
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "64Mi"
+      limits:
+        cpu: "100m"
+        memory: "128Mi"
+    
+    # Admission webhooks
+    admissionWebhooks:
+      enabled: true
+      patch:
+        enabled: true

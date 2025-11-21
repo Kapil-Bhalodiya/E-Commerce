@@ -1,99 +1,81 @@
-namespace: dev
-grafanaHost: dev.grafana.local
-
-annotations:
-  kubernetes.io/ingress.class: "nginx"
-
-ingressClassName: "nginx"
-
-domain: dev.grafana.local
-
-services:
-  - path: /
-    pathType: Prefix
-    serviceName: prometheus-stack-grafana
-    servicePort: 80
-
-tls:
-  enabled: false   # or true if using cert-manager
-  issuer: letsencrypt-dev
-  secretName: grafana-tls
-
+# Development environment overrides for Prometheus Stack
 kube-prometheus-stack:
-  prometheus-node-exporter:
-    hostPort: false
-    service:
-      port: 9100
-    serviceMonitor:
-      enabled: true
-      namespace: dev
-
+  # Prometheus dev overrides
   prometheus:
     prometheusSpec:
-      serviceMonitorSelector:
-        matchLabels:
-          release: prometheus-stack-dev
+      retention: "7d"           # Shorter retention for dev
+      retentionSize: "5GB"      # Storage limit for dev
       resources:
         requests:
-          cpu: "100m"
-          memory: "512Mi"
+          cpu: "200m"           # Higher CPU for dev workload
+          memory: "512Mi"       # More memory for dev
         limits:
+          cpu: "500m"
           memory: "1Gi"
-
+      
+      # Persistent storage for dev
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: "standard"
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: "10Gi"
+  
+  # Grafana dev overrides
   grafana:
-    enabled: true
-    ingress:
-      enabled: true
-      ingressClassName: nginx
-      hosts:
-        - dev.grafana.local
-      path: /
-      pathType: Prefix
+    adminPassword: "admin123"   # Dev admin password
+    
+    # Higher resources for dev
     resources:
       requests:
         cpu: "100m"
-        memory: "250Mi"
+        memory: "128Mi"
       limits:
-        memory: "512Mi"
-      # tls:
-      #   - hosts:
-      #       - dev.grafana.local
-      #     secretName: grafana-tls
+        cpu: "200m"
+        memory: "256Mi"
+    
+    # Enable ingress for dev access
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      hosts:
+        - dev.grafana.local
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    
+    # Add Loki datasource for dev
     additionalDataSources:
       - name: Loki
         type: loki
-        url: http://loki:3100
+        url: http://loki-dev.svc.cluster.local:3100
         access: proxy
         isDefault: false
-        jsonData:
-          maxLines: 1000
-          timeout: 60
-          httpHeaderName1: 'X-Scope-OrgID'
-        secureJsonData:
-          httpHeaderValue1: '1'
-        editable: true
+    
+    # Dev-specific Grafana config
+    grafana.ini:
+      server:
+        root_url: "http://dev.grafana.local"
+      security:
+        cookie_secure: false    # Allow HTTP cookies in dev
   
-  # Prometheus settings for DEV (smaller resources)
-  # prometheus:
-  #   prometheusSpec:
-  #     serviceMonitorSelectorNilUsesHelmValues: false
-  #     serviceMonitorSelector: {}
-  #     serviceMonitorNamespaceSelector:
-  #       namespaceSelector:
-  #         matchNames:
-  #           - dev
-  #     resources:
-  #       requests:
-  #         cpu: "100m"
-  #         memory: "512Mi"
-  #       limits:
-  #         cpu: "500m"
-  #         memory: "1Gi"
-      # storageSpec: {}
-      # serviceMonitorSelectorNilUsesHelmValues: false
-      # serviceMonitorSelector:
-      #   matchLabels:
-      #     app.kubernetes.io/name: prometheus-node-exporter
-      # serviceMonitorNamespaceSelector:
-      #   matchNames:
-      #     - monitoring
+  # Enable Alertmanager for dev
+  alertmanager:
+    enabled: true
+    alertmanagerSpec:
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "64Mi"
+        limits:
+          cpu: "100m"
+          memory: "128Mi"
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: "standard"
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: "2Gi"
