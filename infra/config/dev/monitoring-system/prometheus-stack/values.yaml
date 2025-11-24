@@ -36,9 +36,14 @@ kube-prometheus-stack:
         cpu: "200m"
         memory: "256Mi"
     
-    # Disable ingress temporarily due to webhook issues
+    # Enable ingress for dev access
     ingress:
-      enabled: false
+      enabled: true
+      ingressClassName: "nginx"
+      hosts:
+        - dev.grafana.local
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
     
     # Add Loki datasource for dev
     additionalDataSources:
