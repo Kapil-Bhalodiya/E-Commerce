@@ -127,8 +127,8 @@ kube-prometheus-stack:
         cpu: "100m"
         memory: "128Mi"
     
-    # Admission webhooks
+    # Disable admission webhooks to avoid connection issues
     admissionWebhooks:
-      enabled: true
+      enabled: false
       patch:
-        enabled: true
+        enabled: false
