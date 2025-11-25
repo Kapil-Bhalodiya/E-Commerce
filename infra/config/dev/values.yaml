@@ -1,44 +1,103 @@
+# =============================================================================
+# DEVELOPMENT ENVIRONMENT CONFIGURATION
+# =============================================================================
+# This file contains dev-specific settings that override base configurations
+# Used for local development, testing, and staging environments
+# Structure follows application.yaml ApplicationSet pattern
+
+# =============================================================================
+# GLOBAL CONFIGURATION
+# =============================================================================
+# Applied to all services deployed in dev environment
 global:
-  env: dev
-  imagePullPolicy: "Always"
+  env: dev                    # Environment identifier for service discovery
+  imagePullPolicy: "Always"   # Always pull latest images (ensures latest code in dev)
+  domain: "dev.local"         # Base domain for dev environment
 
+# =============================================================================
+# ARGOCD DEPLOYMENT TARGET
+# =============================================================================
+# Configuration for ArgoCD ApplicationSet deployment targeting
 target:
-  namespace: dev
-  branch: main
+  namespace: dev              # Target namespace for application deployments
+  branch: main               # Git branch to deploy from
+  cluster: in-cluster        # Target cluster (in-cluster = same as ArgoCD)
 
-# Dev-specific features
+# =============================================================================
+# DEVELOPMENT FEATURES
+# =============================================================================
+# Feature flags and debugging options for development
 features:
-  debug: true
+  debug: true               # Enable debug mode for detailed error messages
+  metrics: true             # Enable metrics collection
+  tracing: false            # Disable tracing in dev (resource intensive)
   logging:
-    level: "debug"
+    level: "debug"          # Verbose logging for troubleshooting
+    format: "json"          # Structured logging format
 
-# Dev database
-database:
-  persistence:
-    size: "5Gi"
+# =============================================================================
+# RESOURCE LIMITS FOR DEV
+# =============================================================================
+# Smaller resource allocations for development environment
+resources:
+  # Default resource limits for dev pods
+  limits:
+    cpu: "500m"             # Maximum CPU per container
+    memory: "512Mi"         # Maximum memory per container
+  requests:
+    cpu: "100m"             # Minimum CPU per container
+    memory: "128Mi"         # Minimum memory per container
 
-# Dev ingress domain override
-# domain: "dev.sharkapp.local"
+# =============================================================================
+# STORAGE CONFIGURATION
+# =============================================================================
+# Development storage settings (smaller sizes, no persistence requirements)
+storage:
+  # Database storage for dev environment
+  database:
+    size: "5Gi"             # Smaller storage size for dev
+    storageClass: "standard" # Use standard storage class
+    accessMode: "ReadWriteOnce"
+  
+  # Application data storage
+  uploads:
+    size: "2Gi"             # Storage for file uploads
+    storageClass: "standard"
 
-# Grafana configuration for dev
-kube-prometheus-stack:
-  grafana:
-    enabled: true
-    ingress:
-      enabled: true
-      ingressClassName: "nginx"
-      hosts:
-        - dev.grafana.local
-      path: /
-      pathType: Prefix
-      annotations:
-        nginx.ingress.kubernetes.io/ssl-redirect: "false"
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    resources:
-      requests:
-        cpu: "100m"
-        memory: "128Mi"
-      limits:
-        cpu: "200m"
-        memory: "256Mi"
+# =============================================================================
+# NETWORKING CONFIGURATION
+# =============================================================================
+# Development networking and ingress settings
+networking:
+  # Ingress configuration for dev environment
+  ingress:
+    enabled: true           # Enable ingress for external access
+    className: "nginx"      # Use nginx ingress controller
+    tls: false             # Disable TLS in dev (simplicity)
+    annotations:
+      # Development-specific ingress annotations
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/rewrite-target: /
+  
+  # Service mesh configuration (if using Istio)
+  serviceMesh:
+    enabled: false          # Disable service mesh in dev (complexity)
 
+# =============================================================================
+# SECURITY CONFIGURATION
+# =============================================================================
+# Development security settings (relaxed for ease of development)
+security:
+  # Pod security standards
+  podSecurityStandard: "baseline"  # Relaxed security for dev
+  
+  # Network policies
+  networkPolicies:
+    enabled: false          # Disable network policies in dev
+  
+  # RBAC settings
+  rbac:
+    create: true           # Create RBAC resources
+    serviceAccount:
+      create: true         # Create service accounts
+      automount: true      # Auto-mount service account tokens
