@@ -107,3 +107,20 @@ security:
     serviceAccount:
       create: true         # Create service accounts
       automount: true      # Auto-mount service account tokens
+
+# =============================================================================
+# MONITORING STACK CONFIGURATION
+# =============================================================================
+# Grafana ingress configuration for dev environment
+kube-prometheus-stack:
+  grafana:
+    enabled: true
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      hosts:
+        - dev.grafana.local
+      path: /
+      pathType: Prefix
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"

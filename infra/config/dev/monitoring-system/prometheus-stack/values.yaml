@@ -36,9 +36,7 @@ kube-prometheus-stack:
         cpu: "200m"
         memory: "256Mi"
     
-    # Disable ingress due to webhook issues - use port-forward instead
-    ingress:
-      enabled: false
+    # Ingress configured in global dev values.yaml
     
     # Add Loki datasource for dev
     additionalDataSources:
