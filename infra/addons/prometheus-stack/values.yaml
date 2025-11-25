@@ -51,9 +51,11 @@ kube-prometheus-stack:
       type: ClusterIP
       port: 80
     
-    # Ingress disabled by default
+    # Ingress configuration
     ingress:
       enabled: false
+      hosts: []
+      annotations: {}
     
     # Automatic dashboard and datasource provisioning
     sidecar:
