@@ -36,7 +36,7 @@ kube-prometheus-stack:
         cpu: "200m"
         memory: "256Mi"
     
-    # Enable ingress for dev access (no ingressClassName to bypass webhook)
+    # Enable custom ingress for domain access
     ingress:
       enabled: true
       hosts:
