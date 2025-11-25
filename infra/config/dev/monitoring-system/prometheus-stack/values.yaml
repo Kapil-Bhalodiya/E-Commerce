@@ -36,16 +36,9 @@ kube-prometheus-stack:
         cpu: "200m"
         memory: "256Mi"
     
-    # Enable ingress for domain access
+    # Disable ingress due to webhook issues - use port-forward instead
     ingress:
-      enabled: true
-      hosts:
-        - dev.grafana.local
-      path: /
-      pathType: Prefix
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      enabled: false
     
     # Add Loki datasource for dev
     additionalDataSources:
