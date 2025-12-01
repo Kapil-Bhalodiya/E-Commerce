@@ -36,14 +36,9 @@ kube-prometheus-stack:
         cpu: "200m"
         memory: "256Mi"
     
-    # Enable ingress using legacy annotation to bypass webhook
+    # Disable helm ingress - using manual ingress files
     ingress:
-      enabled: true
-      hosts:
-        - dev.grafana.local
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      enabled: false
     
     # Use NodePort for direct access
     # service:

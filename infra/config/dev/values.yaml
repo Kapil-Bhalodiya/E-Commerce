@@ -71,7 +71,7 @@ storage:
 networking:
   # Ingress configuration for dev environment
   ingress:
-    enabled: false          # Disabled due to NGINX webhook issues
+    enabled: true           # Using manual templates to bypass webhook
   
   # Grafana specific ingress (when NGINX is fixed)
   grafana:
