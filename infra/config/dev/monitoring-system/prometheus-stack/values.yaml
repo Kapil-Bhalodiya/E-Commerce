@@ -38,12 +38,12 @@ kube-prometheus-stack:
     
     # Disable ingress due to broken nginx webhook
     ingress:
-      enabled: false
+      enabled: true
     
     # Use NodePort for direct access
-    service:
-      type: NodePort
-      nodePort: 30080
+    # service:
+    #   type: NodePort
+    #   nodePort: 30080
     
     # Add Loki datasource for dev
     additionalDataSources:
