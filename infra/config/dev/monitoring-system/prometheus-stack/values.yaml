@@ -36,7 +36,14 @@ kube-prometheus-stack:
         cpu: "200m"
         memory: "256Mi"
     
-    # Ingress configured in global dev values.yaml
+    # Disable ingress due to broken nginx webhook
+    ingress:
+      enabled: false
+    
+    # Use NodePort for direct access
+    service:
+      type: NodePort
+      nodePort: 30080
     
     # Add Loki datasource for dev
     additionalDataSources:

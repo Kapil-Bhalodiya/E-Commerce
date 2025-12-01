@@ -1,46 +1,61 @@
+# Production Environment Configuration
+# This file contains prod-specific settings that override base configurations
+# Used for production deployments with higher security and resource requirements
+
+# Global configuration applied to all services in production environment
 global:
-  env: prod
-  imagePullPolicy: "IfNotPresent"
+  env: prod                   # Environment identifier for production
+  imagePullPolicy: "IfNotPresent"  # Use cached images for stability (only pull if not present)
 
-# Prod-specific features
+# Production-specific feature flags
 features:
-  debug: false
+  debug: false              # Disable debug mode for security
   logging:
-    level: "warn"
-    retention: "30d"
+    level: "warn"           # Reduced logging for performance
+    retention: "30d"        # Keep logs for 30 days
 
-# Prod database
+# Database configuration for production
 database:
   persistence:
-    size: "100Gi"
+    size: "100Gi"           # Large storage for production data
   backup:
-    enabled: true
-    schedule: "0 2 * * *"
+    enabled: true           # Enable automated backups
+    schedule: "0 2 * * *"   # Daily backup at 2 AM
 
-# Security
+# Security configuration for production
 security:
   networkPolicy:
-    enabled: true
+    enabled: true           # Enable network policies for isolation
   podSecurityPolicy:
-    enabled: true
+    enabled: true           # Enable pod security policies
 
-# Grafana configuration for prod
+# Grafana configuration for production environment
 kube-prometheus-stack:
   grafana:
-    enabled: true
+    enabled: true           # Enable Grafana dashboard service
     ingress:
-      enabled: true
-      ingressClassName: "nginx"
+      enabled: true         # Enable external access via ingress
+      ingressClassName: "nginx"  # Use nginx ingress controller
       hosts:
-        - prod.grafana.local
-      path: /
-      pathType: Prefix
+        - prod.grafana.local    # Production Grafana hostname
+      path: /               # Root path for Grafana
+      pathType: Prefix      # Match all paths starting with /
       annotations:
+        # Disable SSL redirect since TLS is not configured
         nginx.ingress.kubernetes.io/ssl-redirect: "false"
+        # Force HTTP backend protocol
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    
+    # Production Grafana persistence
+    persistence:
+      enabled: true         # Enable persistent storage for dashboards
+      size: "10Gi"         # Storage size for Grafana data
+      storageClass: ""     # Use default storage class
+    
     resources:
       requests:
-        cpu: "200m"
-        memory: "256Mi"
+        cpu: "200m"         # Minimum CPU for production Grafana
+        memory: "256Mi"     # Minimum memory for production Grafana
       limits:
-        cpu: "500m"
-        memory: "512Mi"
+        cpu: "500m"         # Maximum CPU for Grafana
+        memory: "512Mi"     # Maximum memory for Grafana
