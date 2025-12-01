@@ -6,11 +6,11 @@ app:
   component: api           # Component type (api, frontend, database, etc.)
   tier: backend            # Application tier
 
-# INGRESS CONFIGURATION
+# INGRESS CONFIGURATION - Using legacy annotation to bypass webhook
 ingress:
   enabled: true
-  className: "nginx"
   annotations:
+    kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
@@ -23,4 +23,3 @@ ingress:
           pathType: Prefix
         - path: /uploads
           pathType: Prefix
-  tls: []

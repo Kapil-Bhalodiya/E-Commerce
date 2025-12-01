@@ -72,13 +72,6 @@ networking:
   # Ingress configuration for dev environment
   ingress:
     enabled: false          # Disabled due to NGINX webhook issues
-    className: "nginx"      # Use nginx ingress controller
-    tls: false             # Disable TLS in dev (simplicity)
-    annotations:
-      # Development-specific ingress annotations
-      kubernetes.io/ingress.class: "nginx"  # Use legacy annotation to avoid webhooks
-      nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      nginx.ingress.kubernetes.io/rewrite-target: /
   
   # Grafana specific ingress (when NGINX is fixed)
   grafana:
@@ -116,11 +109,4 @@ kube-prometheus-stack:
   grafana:
     enabled: true
     ingress:
-      enabled: true
-      ingressClassName: "nginx"
-      hosts:
-        - dev.grafana.local
-      path: /
-      pathType: Prefix
-      annotations:
-        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      enabled: false          # Disabled due to NGINX webhook issues

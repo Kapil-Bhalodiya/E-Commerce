@@ -86,11 +86,11 @@ angular:
     enableServiceWorker: false  # Disable service worker in development
     enableI18n: false          # Disable internationalization
 
-# INGRESS CONFIGURATION
+# INGRESS CONFIGURATION - Using legacy annotation to bypass webhook
 ingress:
   enabled: true
-  className: "nginx"
   annotations:
+    kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
     nginx.ingress.kubernetes.io/enable-cors: "true"
@@ -100,4 +100,3 @@ ingress:
       paths:
         - path: /
           pathType: Prefix
-  tls: []
