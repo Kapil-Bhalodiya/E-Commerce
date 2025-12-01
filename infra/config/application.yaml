@@ -1,68 +1,81 @@
+# ArgoCD ApplicationSet for E-commerce Platform
+# This creates multiple ArgoCD applications dynamically based on Git repository structure
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: ecommerce-application
-  namespace: argocd
+  namespace: argocd  # ArgoCD namespace where ApplicationSet controller runs
   labels:
     app.kubernetes.io/name: ecommerce
     app.kubernetes.io/part-of: ecommerce-platform
 spec:
+  # Generators define how to create multiple applications from templates
   generators:
+    # Matrix generator combines multiple generators to create cartesian product
     - matrix:
         generators:
+          # First generator: Find environment configurations (dev, prod, etc.)
           - git:
-              pathParamPrefix: target
+              pathParamPrefix: target  # Prefix for template variables from this generator
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
               revision: main
               files:
+                # Look for values.yaml files in environment directories
                 - path: infra/config/*/values.yaml
+          # Second generator: Find service configurations within each environment
           - git:
-              pathParamPrefix: app
+              pathParamPrefix: app  # Prefix for template variables from this generator
               repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
               revision: main
               directories:
+                # Look for service directories like app/ingress, monitoring-system/prometheus-stack
                 - path: infra/config/{{target.path.basename}}/*/*
+  # Template defines the ArgoCD Application structure for each generated combination
   template:
     metadata:
+      # Application name: service-environment (e.g., ingress-dev, prometheus-stack-prod)
       name: '{{app.path.basename}}-{{target.path.basename}}'
       labels:
-        environment: '{{target.path.basename}}'
-        service: '{{app.path.basename}}'
+        environment: '{{target.path.basename}}'  # dev, prod, etc.
+        service: '{{app.path.basename}}'          # ingress, prometheus-stack, etc.
         app.kubernetes.io/name: '{{app.path.basename}}'
         app.kubernetes.io/instance: '{{app.path.basename}}-{{target.path.basename}}'
         app.kubernetes.io/part-of: ecommerce-platform
     spec:
-      project: default
+      project: default  # ArgoCD project (default allows deployment to any cluster/namespace)
       source:
         repoURL: https://github.com/Kapil-Bhalodiya/E-commerce.git
         targetRevision: main
+        # Path to Helm chart in addons directory (e.g., infra/addons/ingress)
         path: 'infra/addons/{{app.path.basename}}'
         helm:
-          ignoreMissingValueFiles: true
+          ignoreMissingValueFiles: true  # Don't fail if some value files don't exist
           valueFiles:
-            - values.yaml
-            - '../../config/{{target.path.basename}}/values.yaml'
-            - '../../config/{{target.path.basename}}/{{app.path[3]}}/{{app.path.basename}}/values.yaml'
+            # Helm values hierarchy (later files override earlier ones):
+            - values.yaml  # Base values from addon directory
+            - '../../config/{{target.path.basename}}/values.yaml'  # Environment-specific values
+            - '../../config/{{target.path.basename}}/{{app.path[3]}}/{{app.path.basename}}/values.yaml'  # Service-specific values
+          # Additional values passed directly to Helm
           values: |-
             global:
               environment: {{target.path.basename}}
               service: {{app.path.basename}}
-              namespace: {{app.path[2]}}
+              namespace: {{app.path[3]}}
       destination:
-        server: https://kubernetes.default.svc
-        namespace: '{{app.path[2]}}'
+        server: https://kubernetes.default.svc  # Deploy to same cluster as ArgoCD
+        namespace: '{{target.path.basename}}'
       syncPolicy:
         automated:
-          prune: true
-          selfHeal: true
+          prune: true     # Remove resources not defined in Git
+          selfHeal: true  # Automatically sync when drift is detected
         syncOptions:
-          - CreateNamespace=true
-          - RespectIgnoreDifferences=true
-          - ServerSideApply=true
+          - CreateNamespace=true           # Create namespace if it doesn't exist
+          - RespectIgnoreDifferences=true  # Respect ignoreDifferences configuration
+          - ServerSideApply=true          # Use server-side apply for better conflict resolution
         retry:
-          limit: 5
+          limit: 5        # Maximum retry attempts for failed syncs
           backoff:
-            duration: 5s
-            factor: 2
-            maxDuration: 3m
-      revisionHistoryLimit: 10
+            duration: 5s    # Initial retry delay
+            factor: 2       # Exponential backoff multiplier
+            maxDuration: 3m # Maximum retry delay
+      revisionHistoryLimit: 10  # Keep last 10 sync revisions for rollback

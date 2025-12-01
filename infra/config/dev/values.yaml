@@ -69,9 +69,14 @@ storage:
 # =============================================================================
 # Development networking and ingress settings
 networking:
-  # Ingress configuration for dev environment
+  # Ingress disabled - using Gateway API instead
   ingress:
-    enabled: true           # Using manual templates to bypass webhook
+    enabled: false
+  
+  # Gateway API configuration
+  gatewayAPI:
+    enabled: true
+    gatewayClassName: nginx
   
   # Grafana specific ingress (when NGINX is fixed)
   grafana:

@@ -1,0 +1,40 @@
+gateway:
+  name: e-commerce-gateway
+  gatewayClassName: nginx
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: "*.local"
+
+routes:
+  frontend:
+    enabled: true
+    hostname: dev.sharkapp.local
+    service:
+      name: frontend-dev
+      port: 80
+      namespace: app
+  
+  backend:
+    enabled: true
+    hostname: dev.sharkapp.local
+    paths:
+      - path: /api
+        service:
+          name: backend-dev
+          port: 8000
+          namespace: app
+      - path: /uploads
+        service:
+          name: backend-dev
+          port: 8000
+          namespace: app
+  
+  grafana:
+    enabled: true
+    hostname: dev.grafana.local
+    service:
+      name: prometheus-stack-dev-grafana
+      port: 80
+      namespace: monitoring-system

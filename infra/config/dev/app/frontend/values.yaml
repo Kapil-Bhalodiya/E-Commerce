@@ -86,6 +86,6 @@ angular:
     enableServiceWorker: false  # Disable service worker in development
     enableI18n: false          # Disable internationalization
 
-# INGRESS CONFIGURATION - Using manual template to bypass webhook
+# INGRESS DISABLED - Using Gateway API instead
 ingress:
-  enabled: true
+  enabled: false

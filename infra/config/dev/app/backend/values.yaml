@@ -6,6 +6,6 @@ app:
   component: api           # Component type (api, frontend, database, etc.)
   tier: backend            # Application tier
 
-# INGRESS CONFIGURATION - Using manual template to bypass webhook
+# INGRESS DISABLED - Using Gateway API instead
 ingress:
-  enabled: true
+  enabled: false
