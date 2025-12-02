@@ -1,0 +1,20 @@
+{{- if .Values.routes.grafana.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  namespace: {{ .Values.routes.grafana.service.namespace }}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: {{ .Values.routes.grafana.hostname }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.routes.grafana.service.name }}
+            port:
+              number: {{ .Values.routes.grafana.service.port }}
+{{- end }}
