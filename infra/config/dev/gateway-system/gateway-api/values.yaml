@@ -15,7 +15,7 @@ routes:
     service:
       name: frontend-dev
       port: 80
-      namespace: app
+      namespace: dev
   
   backend:
     enabled: true
@@ -25,12 +25,12 @@ routes:
         service:
           name: backend-dev
           port: 8000
-          namespace: app
+          namespace: dev
       - path: /uploads
         service:
           name: backend-dev
           port: 8000
-          namespace: app
+          namespace: dev
   
   grafana:
     enabled: true
