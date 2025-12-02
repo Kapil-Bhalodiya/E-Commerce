@@ -8,6 +8,7 @@ spec:
   parentRefs:
   - name: {{ .Values.gateway.name }}
     namespace: {{ .Release.Namespace }}
+    sectionName: http
   hostnames:
   - {{ .Values.routes.backend.hostname | quote }}
   rules:
