@@ -7,6 +7,7 @@ metadata:
 spec:
   parentRefs:
   - name: {{ .Values.gateway.name }}
+    namespace: {{ .Release.Namespace }}
   hostnames:
   - {{ .Values.routes.grafana.hostname | quote }}
   rules:
@@ -17,4 +18,5 @@ spec:
     backendRefs:
     - name: {{ .Values.routes.grafana.service.name }}
       port: {{ .Values.routes.grafana.service.port }}
+      namespace: {{ .Values.routes.grafana.service.namespace }}
 {{- end }}

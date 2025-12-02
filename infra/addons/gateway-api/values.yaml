@@ -1,6 +1,6 @@
 gateway:
   name: e-commerce-gateway
-  gatewayClassName: nginx
+  gatewayClassName: nginx-gateway
   listeners:
     - name: http
       protocol: HTTP

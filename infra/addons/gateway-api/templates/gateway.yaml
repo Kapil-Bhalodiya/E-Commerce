@@ -13,4 +13,7 @@ spec:
     {{- if .hostname }}
     hostname: {{ .hostname | quote }}
     {{- end }}
+    allowedRoutes:
+      namespaces:
+        from: All
   {{- end }}

@@ -7,6 +7,7 @@ metadata:
 spec:
   parentRefs:
   - name: {{ .Values.gateway.name }}
+    namespace: {{ .Release.Namespace }}
   hostnames:
   - {{ .Values.routes.frontend.hostname | quote }}
   rules:
@@ -17,4 +18,5 @@ spec:
     backendRefs:
     - name: {{ .Values.routes.frontend.service.name }}
       port: {{ .Values.routes.frontend.service.port }}
+      namespace: {{ .Values.routes.frontend.service.namespace }}
 {{- end }}
