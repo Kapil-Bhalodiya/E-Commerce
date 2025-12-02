@@ -37,4 +37,4 @@ routes:
     service:
       name: prometheus-stack-dev-grafana
       port: 80
-      namespace: monitoring-system
+      namespace: dev
