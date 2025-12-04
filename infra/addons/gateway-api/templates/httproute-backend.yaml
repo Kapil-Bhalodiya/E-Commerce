@@ -1,24 +1,33 @@
 {{- if .Values.routes.backend.enabled }}
+# HTTPRoute defines HTTP traffic routing rules for backend services
+# Routes traffic from Gateway listeners to backend services based on path matching
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: backend-route
+  name: backend-route  # Name of the HTTPRoute resource
+  # Deploy in the same namespace as the backend services for easier service discovery
   namespace: {{ .Values.routes.backend.paths | first | dig "service" "namespace" "dev" }}
 spec:
+  # Reference to the Gateway(s) this route should attach to
   parentRefs:
-  - name: {{ .Values.gateway.name }}
-    namespace: {{ .Release.Namespace }}
+  - name: {{ .Values.gateway.name }}  # Gateway name to attach to
+    namespace: {{ .Release.Namespace }}  # Gateway namespace (cross-namespace reference)
+  
+  # Hostnames this route should respond to (must match Gateway listener hostname)
   hostnames:
-  - {{ .Values.routes.backend.hostname | quote }}
+  - {{ .Values.routes.backend.hostname | quote }}  # e.g., "dev.sharkapp.local"
+  
+  # Routing rules - define how to match requests and where to send them
   rules:
   {{- range .Values.routes.backend.paths }}
-  - matches:
+  - matches:  # Request matching criteria
     - path:
-        type: PathPrefix
-        value: {{ .path }}
+        type: PathPrefix  # Match requests starting with this path
+        value: {{ .path }}  # Path to match (e.g., "/api", "/uploads")
+    # Backend services to route matched requests to
     backendRefs:
-    - name: {{ .service.name }}
-      port: {{ .service.port }}
-      namespace: {{ .service.namespace }}
+    - name: {{ .service.name }}  # Kubernetes service name
+      port: {{ .service.port }}  # Service port number
+      namespace: {{ .service.namespace }}  # Service namespace (cross-namespace reference)
   {{- end }}
 {{- end }}

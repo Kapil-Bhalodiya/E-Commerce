@@ -1,41 +1,38 @@
-# Gateway API configuration for dev environment
-gateway:
-  name: e-commerce-gateway
-  gatewayClassName: nginx
-  listeners:
-    - name: http
-      protocol: HTTP
-      port: 80
-      hostname: "*.local"
+# Gateway API configuration for DEV environment
+# This file only contains environment-specific overrides
+# Base configuration is inherited from addons/gateway-api/values.yaml
 
+# Gateway overrides for dev environment
+gateway:
+  # Override GatewayClass for dev (using nginx instead of eg for compatibility)
+  gatewayClassName: eg  # Use Envoy Gateway for dev
+
+# Route overrides for dev environment
+# Only specify values that differ from base template
 routes:
+  # Frontend route configuration for dev
   frontend:
-    enabled: true
-    hostname: dev.sharkapp.local
+    hostname: dev.sharkapp.local  # Dev-specific hostname
     service:
-      name: frontend-dev
-      port: 80
-      namespace: dev
+      name: frontend-dev  # Dev-specific service name
+      namespace: dev  # Dev namespace
   
+  # Backend API routes for dev
   backend:
-    enabled: true
-    hostname: dev.sharkapp.local
+    hostname: dev.sharkapp.local  # Same hostname as frontend (path-based routing)
     paths:
-      - path: /api
+      - path: /api  # API endpoint (inherited from base)
         service:
-          name: backend-dev
-          port: 8000
-          namespace: dev
-      - path: /uploads
+          name: backend-dev  # Dev-specific backend service
+          namespace: dev  # Dev namespace
+      - path: /uploads  # Upload endpoint (inherited from base)
         service:
-          name: backend-dev
-          port: 8000
-          namespace: dev
+          name: backend-dev  # Same backend service
+          namespace: dev  # Dev namespace
   
+  # Grafana monitoring for dev
   grafana:
-    enabled: true
-    hostname: dev.grafana.local
+    hostname: dev.grafana.local  # Dev-specific Grafana hostname
     service:
-      name: prometheus-stack-dev-grafana
-      port: 80
-      namespace: dev
+      name: prometheus-stack-dev-grafana  # Dev-specific Grafana service
+      namespace: dev  # Dev namespace

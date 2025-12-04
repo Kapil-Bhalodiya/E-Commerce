@@ -1,40 +1,201 @@
+# Gateway API Configuration - Base Template
+# This file contains common configuration shared across all environments
+# Environment-specific overrides should be placed in config/{env}/gateway-system/gateway-api/values.yaml
+
+# Gateway Configuration
+# Defines the main entry point for all external traffic into the cluster
 gateway:
-  name: e-commerce-gateway
-  gatewayClassName: eg
+  name: e-commerce-gateway  # Name of the Gateway resource (can be overridden per env)
+  
+  # GatewayClass reference - defines which controller manages this Gateway
+  # Available options:
+  # - eg: Envoy Gateway (recommended for production)
+  # - nginx: NGINX Gateway Fabric
+  # - istio: Istio Gateway
+  # - traefik: Traefik Gateway
+  gatewayClassName: eg  # Default controller (override in env-specific values)
+  
+  # Listeners define the network endpoints where Gateway accepts traffic
   listeners:
-    - name: http
+    - name: http  # Unique listener name within this Gateway
+      
+      # Protocol for this listener
+      # Supported values: HTTP, HTTPS, TCP, UDP, TLS
       protocol: HTTP
+      
+      # Port number to listen on (1-65535)
+      # Common ports: 80 (HTTP), 443 (HTTPS), 8080, 8443
       port: 80
-      hostname: "*.local"
+      
+      # Hostname filter - only accept requests matching this pattern
+      # Examples:
+      # - "*.local": Match any subdomain of .local (dev/staging)
+      # - "*.example.com": Match production domains
+      # - "api.example.com": Exact hostname match
+      # - Leave empty to accept all hostnames
+      hostname: "*.local"  # Default for local development
+      
+      # Optional: TLS configuration (only for HTTPS/TLS protocols)
+      # Uncomment and configure for production HTTPS:
+      # tls:
+      #   mode: Terminate  # Options: Terminate, Passthrough
+      #   certificateRefs:
+      #   - name: tls-secret
+      #     namespace: default
+      
+      # Optional: Namespace access control
+      # allowedNamespaces: All  # Options: All, Same, Selector
+
+# HTTPRoute Configuration - Base Template
+# Defines how HTTP traffic is routed from Gateway listeners to backend services
+# Environment-specific values (hostnames, service names, namespaces) should be overridden
 
 routes:
+  # Frontend Application Route
   frontend:
-    enabled: true
-    hostname: dev.sharkapp.local
+    enabled: true  # Enable/disable this route (can be overridden per env)
+    
+    # Hostname this route responds to (OVERRIDE IN ENV-SPECIFIC VALUES)
+    # Examples by environment:
+    # - dev: "dev.myapp.local"
+    # - staging: "staging.myapp.com"
+    # - prod: "myapp.com" or "www.myapp.com"
+    hostname: ""  # Must be overridden in environment values
+    
+    # Backend service configuration (OVERRIDE SERVICE DETAILS PER ENV)
     service:
-      name: frontend-dev
-      port: 80
-      namespace: dev
+      name: ""  # Override with env-specific service name (e.g., frontend-dev, frontend-prod)
+      port: 80  # Standard HTTP port (usually consistent across envs)
+      namespace: ""  # Override with target namespace (e.g., dev, staging, prod)
+      
+      # Optional: Service weight for load balancing (default: 1)
+      # weight: 1
+      
+      # Optional: Backend protocol (default: HTTP)
+      # protocol: HTTP  # Options: HTTP, HTTPS
   
+  # Backend API Routes
   backend:
-    enabled: true
-    hostname: dev.sharkapp.local
+    enabled: true  # Enable/disable this route (can be overridden per env)
+    
+    # Hostname for backend API (OVERRIDE IN ENV-SPECIFIC VALUES)
+    # Can be same as frontend for path-based routing or separate subdomain
+    hostname: ""  # Must be overridden in environment values
+    
+    # Multiple path-based routes for different API endpoints
+    # These paths are typically consistent across environments
     paths:
-      - path: /api
+      - path: /api  # API endpoint path
+        # Path matching types:
+        # - PathPrefix: Match requests starting with this path (default)
+        # - Exact: Match exact path only
+        # - RegularExpression: Use regex pattern matching
+        pathType: PathPrefix  # Optional: defaults to PathPrefix
+        
         service:
-          name: backend-dev
-          port: 8000
-          namespace: dev
-      - path: /uploads
+          name: ""  # Override with env-specific backend service name
+          port: 8000  # Backend service port (usually consistent)
+          namespace: ""  # Override with target namespace
+          
+      - path: /uploads  # File upload endpoint
         service:
-          name: backend-dev
-          port: 8000
-          namespace: dev
+          name: ""  # Override with env-specific backend service name
+          port: 8000  # Same port as API
+          namespace: ""  # Override with target namespace
+          
+        # Optional: Request/Response modifications
+        # filters:
+        # - type: RequestHeaderModifier
+        #   requestHeaderModifier:
+        #     add:
+        #     - name: X-Custom-Header
+        #       value: custom-value
+        # - type: URLRewrite
+        #   urlRewrite:
+        #     path:
+        #       type: ReplacePrefixMatch
+        #       replacePrefixMatch: /v1/uploads
   
+  # Grafana Monitoring Dashboard
   grafana:
-    enabled: true
-    hostname: dev.grafana.local
+    enabled: true  # Enable/disable Grafana access (can be disabled in prod)
+    
+    # Dedicated hostname for monitoring dashboard (OVERRIDE IN ENV-SPECIFIC VALUES)
+    # Best practice: Use separate subdomain for monitoring tools
+    # Examples:
+    # - dev: "dev.grafana.local"
+    # - staging: "grafana.staging.myapp.com"
+    # - prod: "grafana.myapp.com" (often restricted access)
+    hostname: ""  # Must be overridden in environment values
+    
     service:
-      name: prometheus-stack-dev-grafana
-      port: 80
-      namespace: dev
+      name: ""  # Override with env-specific Grafana service name
+      port: 80  # Grafana service port (usually consistent)
+      namespace: ""  # Override with target namespace
+      
+    # Optional: Authentication and authorization
+    # filters:
+    # - type: RequestHeaderModifier
+    #   requestHeaderModifier:
+    #     add:
+    #     - name: X-Forwarded-User
+    #       value: admin
+    
+    # Optional: Rate limiting (recommended for production)
+    # rateLimit:
+    #   requests: 100
+    #   period: 1m
+
+# Environment-Specific Override Examples:
+# 
+# For dev environment (config/dev/gateway-system/gateway-api/values.yaml):
+# routes:
+#   frontend:
+#     hostname: dev.sharkapp.local
+#     service:
+#       name: frontend-dev
+#       namespace: dev
+#   backend:
+#     hostname: dev.sharkapp.local
+#     paths:
+#       - path: /api
+#         service:
+#           name: backend-dev
+#           namespace: dev
+#       - path: /uploads
+#         service:
+#           name: backend-dev
+#           namespace: dev
+#   grafana:
+#     hostname: dev.grafana.local
+#     service:
+#       name: prometheus-stack-dev-grafana
+#       namespace: dev
+#
+# For prod environment (config/prod/gateway-system/gateway-api/values.yaml):
+# gateway:
+#   gatewayClassName: eg
+#   listeners:
+#     - name: https
+#       protocol: HTTPS
+#       port: 443
+#       hostname: "*.myapp.com"
+#       tls:
+#         mode: Terminate
+#         certificateRefs:
+#         - name: tls-secret
+# routes:
+#   frontend:
+#     hostname: myapp.com
+#     service:
+#       name: frontend-prod
+#       namespace: prod
+#   backend:
+#     hostname: api.myapp.com
+#     paths:
+#       - path: /api
+#         service:
+#           name: backend-prod
+#           namespace: prod
+#   grafana:
+#     enabled: false  # Disable public Grafana access in prod

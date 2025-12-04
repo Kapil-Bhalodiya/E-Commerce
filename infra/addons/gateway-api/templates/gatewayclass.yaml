@@ -1,6 +1,10 @@
+# GatewayClass defines the class of Gateway that can be instantiated
+# This is a cluster-scoped resource that defines which controller will manage Gateways of this class
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
-  name: eg
+  name: eg  # Name of the GatewayClass - referenced by Gateway resources
 spec:
+  # Controller that will manage Gateways of this class
+  # Envoy Gateway controller handles the actual traffic routing and load balancing
   controllerName: gateway.envoyproxy.io/gatewayclass-controller

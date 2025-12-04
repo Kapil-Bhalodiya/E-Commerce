@@ -1,22 +1,31 @@
 {{- if .Values.routes.frontend.enabled }}
+# HTTPRoute for frontend application - serves the main web application
+# Handles all root path traffic ("/") for the frontend hostname
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: frontend-route
+  name: frontend-route  # Name of the HTTPRoute resource
+  # Deploy in the same namespace as the frontend service
   namespace: {{ .Values.routes.frontend.service.namespace }}
 spec:
+  # Reference to the Gateway this route should attach to
   parentRefs:
-  - name: {{ .Values.gateway.name }}
-    namespace: {{ .Release.Namespace }}
+  - name: {{ .Values.gateway.name }}  # Gateway name
+    namespace: {{ .Release.Namespace }}  # Gateway namespace (cross-namespace reference)
+  
+  # Hostnames this route responds to (e.g., "dev.sharkapp.local")
   hostnames:
   - {{ .Values.routes.frontend.hostname | quote }}
+  
+  # Routing rules for frontend traffic
   rules:
-  - matches:
+  - matches:  # Match all requests to root path
     - path:
-        type: PathPrefix
-        value: /
+        type: PathPrefix  # Match requests starting with "/"
+        value: /  # Root path - catches all requests not matched by other routes
+    # Backend service for frontend application
     backendRefs:
-    - name: {{ .Values.routes.frontend.service.name }}
-      port: {{ .Values.routes.frontend.service.port }}
-      namespace: {{ .Values.routes.frontend.service.namespace }}
+    - name: {{ .Values.routes.frontend.service.name }}  # Frontend service name
+      port: {{ .Values.routes.frontend.service.port }}  # Frontend service port (usually 80)
+      namespace: {{ .Values.routes.frontend.service.namespace }}  # Service namespace
 {{- end }}
