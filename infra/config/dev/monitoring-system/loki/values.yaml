@@ -1,4 +1,35 @@
-# Development-specific security context overrides
+# Development-specific configuration with custom labels optimization
+# Custom labels: app, component, container, filename, instance, namespace, job, node_name, pod, service_name
+
+loki:
+  loki:
+    # Limits configuration for custom labels
+    limits_config:
+      # Allow more labels per stream for custom labeling
+      max_streams_per_user: 10000
+      max_line_size: 256000
+      max_entries_limit_per_query: 5000
+      # Custom label limits
+      max_label_name_length: 1024
+      max_label_value_length: 4096
+      max_label_names_per_series: 30  # Accommodate custom labels
+      
+    # Query optimization for custom labels
+    query_range:
+      # Cache results for better performance with custom labels
+      results_cache:
+        cache:
+          enable_fifocache: true
+          fifocache:
+            max_size_items: 1024
+            validity: 24h
+    
+    # Index configuration optimized for custom labels
+    table_manager:
+      retention_deletes_enabled: true
+      retention_period: 168h  # 7 days retention for dev
+
+# Security context overrides for dev
 singleBinary:
   podSecurityContext:
     runAsNonRoot: false
@@ -8,3 +39,12 @@ singleBinary:
     readOnlyRootFilesystem: false
     runAsNonRoot: false
     runAsUser: 0
+    
+  # Additional resources for handling custom labels
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"

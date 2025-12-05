@@ -1,20 +1,148 @@
 # Development environment overrides for Alloy
+# Custom labels configuration for Loki: app, component, container, filename, instance, namespace, job, node_name, pod, service_name
 alloy:
   alloy:
     # Additional mount for dev environment
     mounts:
       dockercontainers: true
     
-    # Dev-specific configuration overrides
+    # Dev-specific configuration with custom labels
     configMap:
       content: |-
-        // Override Loki endpoint for dev environment
+        // Kubernetes service discovery for pod logs
+        discovery.kubernetes "kubernetes_pods" {
+          role = "pod"
+          selectors {
+              role = "pod"
+              field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)
+          }
+        }
+
+        // Enhanced label relabeling for custom Loki labels
+        discovery.relabel "kubernetes_pods" {
+          targets = discovery.kubernetes.kubernetes_pods.targets
+
+          // Extract controller name (remove random suffix)
+          rule {
+            source_labels = ["__meta_kubernetes_pod_controller_name"]
+            regex         = "([0-9a-z-.]+?)(-[0-9a-f]{8,10})?"
+            target_label  = "__tmp_controller_name"
+          }
+
+          // CUSTOM LABEL: app - Application name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name", "__meta_kubernetes_pod_label_app", "__tmp_controller_name"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "app"
+          }
+
+          // CUSTOM LABEL: component - Component name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_component", "__meta_kubernetes_pod_label_component"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "component"
+          }
+
+          // CUSTOM LABEL: container - Container name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_container_name"]
+            target_label  = "container"
+          }
+
+          // CUSTOM LABEL: filename - Log file path
+          rule {
+            source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+            separator     = "/"
+            target_label  = "filename"
+            replacement   = "/var/log/pods/$1/$2/*.log"
+          }
+
+          // CUSTOM LABEL: instance - Instance name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_instance", "__meta_kubernetes_pod_label_instance", "__meta_kubernetes_pod_name"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "instance"
+          }
+
+          // CUSTOM LABEL: namespace - Kubernetes namespace
+          rule {
+            source_labels = ["__meta_kubernetes_namespace"]
+            target_label  = "namespace"
+          }
+
+          // CUSTOM LABEL: job - Job identifier (namespace/app format)
+          rule {
+            source_labels = ["namespace", "app"]
+            separator     = "/"
+            target_label  = "job"
+          }
+
+          // CUSTOM LABEL: node_name - Kubernetes node name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_node_name"]
+            target_label  = "node_name"
+          }
+
+          // CUSTOM LABEL: pod - Pod name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_name"]
+            target_label  = "pod"
+          }
+
+          // CUSTOM LABEL: service_name - Service name (derived from labels)
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name", "__meta_kubernetes_pod_label_app", "app"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "service_name"
+          }
+
+          // Set log file path for collection
+          rule {
+            source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+            separator     = "/"
+            target_label  = "__path__"
+            replacement   = "/var/log/pods/*$1/*.log"
+          }
+        }
+
+        // Match log files based on relabeled targets
+        local.file_match "kubernetes_pods" {
+          path_targets = discovery.relabel.kubernetes_pods.output
+        }
+
+        // Log processing pipeline with custom labels
+        loki.process "kubernetes_pods" {
+          stage.cri {}  // Parse CRI log format
+          
+          // Drop unwanted container logs
+          stage.match {
+            selector = "{container=\"otc-container\"}"
+            action  = "drop"
+          }
+          
+          // Add timestamp parsing for better log organization
+          stage.timestamp {
+            source = "timestamp"
+            format = "RFC3339"
+          }
+          
+          forward_to = [loki.write.default.receiver]
+        }
+
+        // Log file source configuration
+        loki.source.file "kubernetes_pods" {
+          targets               = local.file_match.kubernetes_pods.targets
+          forward_to            = [loki.process.kubernetes_pods.receiver]
+          legacy_positions_file = "/run/promtail/positions.yaml"
+        }
+
+        // Loki writer with dev environment endpoint
         loki.write "default" {
           endpoint {
-            url = "http://loki-dev.svc.cluster.local:3100/loki/api/v1/push"
+            url = "http://loki-dev.dev.svc.cluster.local:3100/loki/api/v1/push"
           }
           external_labels = {
-            job = "alloy",
             cluster = "dev",
+            environment = "development"
           }
         }
