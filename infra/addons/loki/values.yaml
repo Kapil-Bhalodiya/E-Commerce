@@ -4,6 +4,18 @@ loki:
   loki:
     # Disable authentication (enable in production)
     auth_enabled: false
+    
+    # Completely disable problematic cache configuration
+    query_range:
+      align_queries_with_step: true
+      cache_results: false
+      max_retries: 5
+      # Explicitly disable results cache
+      results_cache:
+        cache:
+          embedded_cache:
+            enabled: false
+            max_size_mb: 0
 
     # Common settings shared across all Loki components
     commonConfig:
