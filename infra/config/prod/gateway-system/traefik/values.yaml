@@ -1,96 +1,30 @@
-# Traefik Gateway API Controller - Production Environment
-# This file contains production-specific overrides
-# Base configuration is inherited from addons/traefik/values.yaml
+# Prod environment overrides for Traefik
+# Only contains values that differ from base
 
-traefik:
-  # Production deployment settings
-  deployment:
-    replicas: 3  # High availability with 3 replicas
-    
-    # Production pod anti-affinity
-    podAntiAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values: ["traefik"]
-          topologyKey: kubernetes.io/hostname
-  
-  # Production service configuration
-  service:
-    type: LoadBalancer  # Use LoadBalancer for production
-    annotations:
-      # Add cloud-specific annotations here
-      # service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-      # service.beta.kubernetes.io/azure-load-balancer-internal: "false"
-  
-  # Production logging (less verbose)
-  additionalArguments:
-    - --providers.kubernetesgateway
-    - --providers.kubernetescrd
-    - --providers.kubernetesingress
-    - --api.dashboard=false  # Disable dashboard in production
-    - --metrics.prometheus=true
-    - --metrics.prometheus.addEntryPointsLabels=true
-    - --metrics.prometheus.addServicesLabels=true
-    - --accesslog=true
-    - --accesslog.format=json
-    - --log.level=WARN  # Warning level for production
-    - --ping=true
-    # Production security
-    - --certificatesresolvers.letsencrypt.acme.email=admin@mycompany.com
-    - --certificatesresolvers.letsencrypt.acme.storage=/data/acme.json
-    - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
-  
-  # Production dashboard access (disabled)
-  ingressRoute:
-    dashboard:
-      enabled: false  # Disable public dashboard in production
-  
-  # Production resource allocation
-  resources:
-    requests:
-      cpu: "200m"
-      memory: "256Mi"
-    limits:
-      cpu: "1000m"
-      memory: "512Mi"
-  
-  # Production persistence for certificates
-  persistence:
-    enabled: true
-    storageClass: ""  # Use default storage class
-    accessMode: ReadWriteOnce
-    size: 1Gi
-    path: /data
-  
-  # Production security context (more restrictive)
-  securityContext:
-    runAsNonRoot: true
-    runAsUser: 65532
-    runAsGroup: 65532
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ["ALL"]
-  
-  # Production node affinity
-  affinity:
-    nodeAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        preference:
-          matchExpressions:
-          - key: node-type
-            operator: In
-            values: ["gateway"]
-  
-  # Production tolerations
-  tolerations:
-  - key: "gateway"
-    operator: "Equal"
-    value: "true"
-    effect: "NoSchedule"
+deployment:
+  replicas: 2
+
+ingressRoute:
+  dashboard:
+    matchRule: Host(`traefik-prod.local`)
+
+# Production-specific settings
+globalArguments:
+  - "--global.checknewversion=false"
+  - "--global.sendanonymoususage=false"
+  - "--providers.kubernetesgateway"
+  - "--providers.kubernetescrd"
+  - "--api.dashboard=false"
+  - "--api.insecure=false"
+  - "--metrics.prometheus=true"
+  - "--accesslog=true"
+  - "--log.level=WARN"
+  - "--ping=true"
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
