@@ -1,0 +1,10 @@
+apiVersion: v2
+name: traefik
+description: Traefik Gateway API Controller
+type: application
+version: 0.1.0
+appVersion: "1.0"
+dependencies:
+  - name: traefik
+    version: 37.3.0
+    repository: https://helm.traefik.io/traefik

@@ -1,0 +1,40 @@
+# Gateway defines the entry point for traffic into the cluster
+# This creates the actual load balancer/proxy that handles incoming requests
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ .Values.traefik.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  # Reference to the GatewayClass that defines which controller manages this Gateway
+  gatewayClassName: {{ .Values.gateway.gatewayClassName }}
+  
+  # Listeners define the ports and protocols this Gateway accepts traffic on
+  listeners:
+  {{- range .Values.gateway.listeners }}
+  - name: {{ .name }}  # Unique name for this listener
+    protocol: {{ .protocol }}  # Protocol (HTTP, HTTPS, TCP, UDP)
+    port: {{ .port }}  # Port number to listen on
+    {{- if .hostname }}
+    # Hostname filter - only accept traffic for matching hostnames
+    hostname: {{ .hostname | quote }}  # Wildcard patterns supported (e.g., *.local)
+    {{- end }}
+    # Define which namespaces can attach HTTPRoutes to this listener
+    allowedRoutes:
+      namespaces:
+        # Possible values for 'from':
+        # - All: Allow HTTPRoutes from any namespace (default)
+        # - Same: Only allow HTTPRoutes from the same namespace as Gateway
+        # - Selector: Use labelSelector to specify allowed namespaces
+        from: {{ .allowedNamespaces | default "All" }}
+        {{- if eq (.allowedNamespaces | default "All") "Selector" }}
+        # Example selector (only used when from: Selector)
+        # selector:
+        #   matchLabels:
+        #     gateway-access: "enabled"
+        #   matchExpressions:
+        #   - key: environment
+        #     operator: In
+        #     values: ["dev", "staging"]
+        {{- end }}
+  {{- end }}

@@ -1,0 +1,77 @@
+# Traefik Gateway API Controller - Development Environment
+# This file contains dev-specific overrides
+# Base configuration is inherited from addons/traefik/values.yaml
+
+traefik:
+  # Development deployment settings
+  deployment:
+    replicas: 1  # Single replica for dev
+  
+  # Development service configuration
+  service:
+    type: NodePort  # Use NodePort for local development
+    annotations: {}
+  
+  # Development logging (more verbose)
+  additionalArguments:
+    - --providers.kubernetesgateway
+    - --providers.kubernetescrd
+    - --providers.kubernetesingress
+    - --api.dashboard=true
+    - --api.insecure=true
+    - --metrics.prometheus=true
+    - --metrics.prometheus.addEntryPointsLabels=true
+    - --metrics.prometheus.addServicesLabels=true
+    - --accesslog=true
+    - --accesslog.format=json
+    - --log.level=DEBUG  # Debug logging for development
+    - --ping=true
+  
+  # Development dashboard access
+  ingressRoute:
+    dashboard:
+      enabled: true
+      matchRule: Host(`traefik.dev.local`)  # Dev-specific hostname
+      entryPoints: ["web"]
+  
+  # Development resource limits (lower for local)
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "200m"
+      memory: "128Mi"
+  
+  # Development-specific environment variables
+  env:
+    - name: TRAEFIK_LOG_LEVEL
+      value: "DEBUG"
+
+routes:
+  # Frontend route configuration for dev
+  frontend:
+    hostname: dev.sharkapp.local  # Dev-specific hostname
+    service:
+      name: frontend-dev  # Dev-specific service name
+      namespace: dev  # Dev namespace
+  
+  # Backend API routes for dev
+  backend:
+    hostname: dev.sharkapp.local  # Same hostname as frontend (path-based routing)
+    paths:
+      - path: /api  # API endpoint (inherited from base)
+        service:
+          name: backend-dev  # Dev-specific backend service
+          namespace: dev  # Dev namespace
+      - path: /uploads  # Upload endpoint (inherited from base)
+        service:
+          name: backend-dev  # Same backend service
+          namespace: dev  # Dev namespace
+  
+  # Grafana monitoring for dev
+  grafana:
+    hostname: dev.grafana.local  # Dev-specific Grafana hostname
+    service:
+      name: prometheus-stack-dev-grafana  # Dev-specific Grafana service
+      namespace: dev  # Dev namespace

@@ -1,0 +1,29 @@
+# HTTPRoute for the main e-commerce application - DEV environment
+{{- if .Values.routes.backend.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: ecommerce-backend-route
+  namespace: {{ .Values.routes.backend.paths | first | dig "service" "namespace" "dev" }}
+spec:
+  parentRefs:
+    - name: {{ .Values.gateway.name }}
+      namespace: {{ .Release.Namespace }}
+      sectionName: web
+  
+  hostnames:
+    - {{ .Values.routes.backend.hostname | quote }}
+  
+  rules:
+  {{- range .Values.routes.backend.paths }}
+  - matches:  # Request matching criteria
+    - path:
+        type: PathPrefix  # Match requests starting with this path
+        value: {{ .path }}  # Path to match (e.g., "/api", "/uploads")
+    # Backend services to route matched requests to
+    backendRefs:
+    - name: {{ .service.name }}  # Kubernetes service name
+      port: {{ .service.port }}  # Service port number
+      namespace: {{ .service.namespace }}  # Service namespace (cross-namespace reference)
+  {{- end }}
+{{- end }}

@@ -1,0 +1,196 @@
+# Traefik Gateway API Controller - Base Configuration
+# This file contains common settings shared across all environments
+# Environment-specific overrides should be placed in config/{env}/gateway-system/traefik/values.yaml
+
+traefik:
+  # Global configuration
+  name: traefik-gateway
+  gatewayClassName: traefik
+  global:
+    checkNewVersion: false      # Disable version checks
+    sendAnonymousUsage: false   # Disable telemetry
+  
+  # Deployment configuration
+  deployment:
+    enabled: true               # Use Deployment (not DaemonSet)
+    replicas: 1                 # Base replica count (override in prod)
+    
+    # Pod labels for identification
+    podLabels:
+      app.kubernetes.io/component: gateway-controller
+    
+    # Pod annotations for monitoring
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8080"
+      prometheus.io/path: "/metrics"
+  
+  # Service configuration
+  service:
+    enabled: true
+    type: LoadBalancer           # Default service type (override per env)
+    annotations: {}              # Cloud-specific annotations (override per env)
+  
+  # Core Traefik configuration
+  additionalArguments:
+    # Enable Gateway API provider (main feature)
+    - --providers.kubernetesgateway
+    # Enable Kubernetes CRD provider for middleware
+    - --providers.kubernetescrd
+    # Enable Kubernetes Ingress provider (backward compatibility)
+    - --providers.kubernetesingress
+    # API and dashboard
+    - --api.dashboard=true
+    - --api.insecure=true        # Secure in production
+    # Metrics for monitoring
+    - --metrics.prometheus=true
+    - --metrics.prometheus.addEntryPointsLabels=true
+    - --metrics.prometheus.addServicesLabels=true
+    # Logging
+    - --accesslog=true
+    - --accesslog.format=json
+    - --log.level=INFO           # Override to WARN in production
+    # Health checks
+    - --ping=true
+  
+  # Port configuration
+  ports:
+    # Traefik dashboard
+    traefik:
+      port: 9000
+      expose: true
+      exposedPort: 9000
+      protocol: TCP
+    
+    # HTTP port
+    web:
+      port: 8000
+      expose: true
+      exposedPort: 80
+      protocol: TCP
+    
+    # HTTPS port
+    websecure:
+      port: 8443
+      expose: true
+      exposedPort: 443
+      protocol: TCP
+      tls:
+        enabled: true
+  
+  # Dashboard access
+  ingressRoute:
+    dashboard:
+      enabled: true
+      matchRule: Host(`traefik.local`)  # Override per environment
+      entryPoints: ["web"]
+  
+  # RBAC configuration for Gateway API
+  rbac:
+    enabled: true
+    serviceAccount:
+      create: true
+    
+    # Gateway API permissions
+    rules:
+      - apiGroups: [""]
+        resources: ["services", "endpoints", "secrets"]
+        verbs: ["get", "list", "watch"]
+      
+      - apiGroups: ["extensions", "networking.k8s.io"]
+        resources: ["ingresses", "ingressclasses"]
+        verbs: ["get", "list", "watch"]
+      
+      - apiGroups: ["extensions", "networking.k8s.io"]
+        resources: ["ingresses/status"]
+        verbs: ["update"]
+      
+      # Gateway API resources
+      - apiGroups: ["gateway.networking.k8s.io"]
+        resources: ["gatewayclasses", "gateways", "httproutes", "tcproutes", "tlsroutes"]
+        verbs: ["get", "list", "watch"]
+      
+      - apiGroups: ["gateway.networking.k8s.io"]
+        resources: ["gatewayclasses/status", "gateways/status", "httproutes/status", "tcproutes/status", "tlsroutes/status"]
+        verbs: ["update"]
+      
+      # Traefik CRD resources
+      - apiGroups: ["traefik.io"]
+        resources: ["middlewares", "middlewaretcps", "ingressroutes", "traefikservices", "ingressroutetcps", "ingressrouteudps", "tlsoptions", "tlsstores", "serverstransports"]
+        verbs: ["get", "list", "watch"]
+  
+  # Security context (base settings)
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65532
+    runAsGroup: 65532
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop: ["ALL"]
+  
+  podSecurityContext:
+    fsGroup: 65532
+  
+  # Base resource allocation (override in production)
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "300m"
+      memory: "256Mi"
+  
+  # Health checks
+  livenessProbe:
+    httpGet:
+      path: /ping
+      port: 9000
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+  
+  readinessProbe:
+    httpGet:
+      path: /ping
+      port: 9000
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 1
+  
+  # Provider configuration
+  providers:
+    # Gateway API provider (main feature)
+    kubernetesgateway:
+      enabled: true
+      namespaces: []              # Watch all namespaces
+      throttleDuration: "0s"
+    
+    # CRD provider for middleware
+    kubernetescrd:
+      enabled: true
+      namespaces: []              # Watch all namespaces
+      allowCrossNamespace: true   # Allow cross-namespace references
+      allowExternalNameServices: false
+      throttleDuration: "0s"
+    
+    # Ingress provider (backward compatibility)
+    kubernetesingress:
+      enabled: true
+      namespaces: []              # Watch all namespaces
+      ingressClass: traefik
+      throttleDuration: "0s"
+  
+  # Experimental features
+  experimental:
+    kubernetesgateway:
+      enabled: true               # Enable Gateway API support
+    http3:
+      enabled: false              # Enable in production if needed
+    gatewayAPI:
+      enabled: true               # Enable Gateway API controller
+  
+  # Pilot (telemetry) - disabled
+  pilot:
+    enabled: false
