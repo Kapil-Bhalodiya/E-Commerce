@@ -21,7 +21,7 @@ deployment:
 # Service configuration
 service:
   enabled: true
-  type: NodePort
+  type: ClusterIP
 
 # Ports configuration
 ports:
