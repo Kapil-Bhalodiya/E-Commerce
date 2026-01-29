@@ -1,0 +1,41 @@
+# Complete Traefik service override for dev environment
+# This should force the service type to ClusterIP
+
+service:
+  enabled: true
+  type: ClusterIP
+  ports:
+    web:
+      port: 80
+      targetPort: 8000
+      protocol: TCP
+    websecure:
+      port: 443
+      targetPort: 8443
+      protocol: TCP
+    traefik:
+      port: 9000
+      targetPort: 9000
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: traefik
+    app.kubernetes.io/instance: traefik-dev
+
+deployment:
+  replicas: 1
+
+ingressRoute:
+  dashboard:
+    matchRule: Host(`traefik-dev.local`)
+
+globalArguments:
+  - "--global.checknewversion=false"
+  - "--global.sendanonymoususage=false"
+  - "--providers.kubernetesgateway"
+  - "--providers.kubernetescrd"
+  - "--api.dashboard=true"
+  - "--api.insecure=true"
+  - "--metrics.prometheus=true"
+  - "--accesslog=true"
+  - "--log.level=DEBUG"
+  - "--ping=true"
