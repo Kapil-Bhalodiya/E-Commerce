@@ -1,11 +1,24 @@
-# Dev environment overrides for Traefik
-# Only contains values that differ from base
+# Traefik dev environment overrides
+# Force service type to ClusterIP
+
+service:
+  enabled: true
+  type: ClusterIP
+  # Explicitly disable LoadBalancer annotations
+  annotations: {}
+  loadBalancerSourceRanges: []
+
+# Disable any LoadBalancer specific configurations
+ports:
+  web:
+    nodePort: null
+  websecure:
+    nodePort: null
+  traefik:
+    nodePort: null
 
 deployment:
   replicas: 1
-
-service:
-  type: ClusterIP
 
 ingressRoute:
   dashboard:
