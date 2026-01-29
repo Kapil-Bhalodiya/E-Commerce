@@ -1,30 +1,43 @@
 # Traefik dev environment overrides
-# Force service type to ClusterIP
+# Official Traefik Helm chart v38.x values structure
 
+# Service configuration for official Traefik chart
 service:
   enabled: true
   type: ClusterIP
-  # Explicitly disable LoadBalancer annotations
   annotations: {}
-  loadBalancerSourceRanges: []
+  spec: {}
 
-# Disable any LoadBalancer specific configurations
+# Ports configuration
 ports:
   web:
-    nodePort: null
+    port: 8000
+    expose: true
+    exposedPort: 80
+    protocol: TCP
   websecure:
-    nodePort: null
+    port: 8443
+    expose: true
+    exposedPort: 443
+    protocol: TCP
+    tls:
+      enabled: true
   traefik:
-    nodePort: null
+    port: 9000
+    expose: true
+    exposedPort: 9000
+    protocol: TCP
 
 deployment:
   replicas: 1
 
 ingressRoute:
   dashboard:
+    enabled: true
     matchRule: Host(`traefik-dev.local`)
+    entryPoints: ["web"]
 
-# Dev-specific logging
+# Global arguments for Traefik
 globalArguments:
   - "--global.checknewversion=false"
   - "--global.sendanonymoususage=false"
@@ -36,3 +49,8 @@ globalArguments:
   - "--accesslog=true"
   - "--log.level=DEBUG"
   - "--ping=true"
+
+# Experimental features
+experimental:
+  kubernetesGateway:
+    enabled: true
