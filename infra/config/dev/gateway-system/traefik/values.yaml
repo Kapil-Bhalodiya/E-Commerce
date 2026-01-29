@@ -4,6 +4,9 @@
 deployment:
   replicas: 1
 
+service:
+  type: NodePort
+
 ingressRoute:
   dashboard:
     matchRule: Host(`traefik-dev.local`)
