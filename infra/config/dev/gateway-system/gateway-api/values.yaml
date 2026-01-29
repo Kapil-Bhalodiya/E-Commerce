@@ -1,38 +1,38 @@
-# # Gateway API configuration for DEV environment
-# # This file only contains environment-specific overrides
-# # Base configuration is inherited from addons/gateway-api/values.yaml
+# Gateway API configuration for DEV environment
+# This file only contains environment-specific overrides
+# Base configuration is inherited from addons/gateway-api/values.yaml
 
-# # Gateway overrides for dev environment
-# gateway:
-#   # Override GatewayClass for dev (using nginx instead of eg for compatibility)
-#   gatewayClassName: eg  # Use Envoy Gateway for dev
+# Gateway overrides for dev environment
+gateway:
+  # Override GatewayClass for dev (using nginx instead of eg for compatibility)
+  gatewayClassName: eg  # Use Envoy Gateway for dev
 
-# # Route overrides for dev environment
-# # Only specify values that differ from base template
-# routes:
-#   # Frontend route configuration for dev
-#   frontend:
-#     hostname: dev.sharkapp.local  # Dev-specific hostname
-#     service:
-#       name: frontend-dev  # Dev-specific service name
-#       namespace: dev  # Dev namespace
+# Route overrides for dev environment
+# Only specify values that differ from base template
+routes:
+  # Frontend route configuration for dev
+  frontend:
+    hostname: dev.sharkapp.local  # Dev-specific hostname
+    service:
+      name: frontend-dev  # Dev-specific service name
+      namespace: dev  # Dev namespace
   
-#   # Backend API routes for dev
-#   backend:
-#     hostname: dev.sharkapp.local  # Same hostname as frontend (path-based routing)
-#     paths:
-#       - path: /api  # API endpoint (inherited from base)
-#         service:
-#           name: backend-dev  # Dev-specific backend service
-#           namespace: dev  # Dev namespace
-#       - path: /uploads  # Upload endpoint (inherited from base)
-#         service:
-#           name: backend-dev  # Same backend service
-#           namespace: dev  # Dev namespace
+  # Backend API routes for dev
+  backend:
+    hostname: dev.sharkapp.local  # Same hostname as frontend (path-based routing)
+    paths:
+      - path: /api  # API endpoint (inherited from base)
+        service:
+          name: backend-dev  # Dev-specific backend service
+          namespace: dev  # Dev namespace
+      - path: /uploads  # Upload endpoint (inherited from base)
+        service:
+          name: backend-dev  # Same backend service
+          namespace: dev  # Dev namespace
   
-#   # Grafana monitoring for dev
-#   grafana:
-#     hostname: dev.grafana.local  # Dev-specific Grafana hostname
-#     service:
-#       name: prometheus-stack-dev-grafana  # Dev-specific Grafana service
-#       namespace: dev  # Dev namespace
+  # Grafana monitoring for dev
+  grafana:
+    hostname: dev.grafana.local  # Dev-specific Grafana hostname
+    service:
+      name: prometheus-stack-dev-grafana  # Dev-specific Grafana service
+      namespace: dev  # Dev namespace
