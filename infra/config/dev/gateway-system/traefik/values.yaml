@@ -5,9 +5,7 @@ deployment:
   replicas: 1
 
 service:
-  enabled: true
-  type: NodePort
-  annotations: {}
+  type: ClusterIP
 
 ingressRoute:
   dashboard:
