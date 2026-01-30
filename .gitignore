@@ -52,6 +52,10 @@ kustomization.yaml
 infra/addons/*/templates/secret.yaml
 infra/addons/*/*/charts/*
 
+# HELM
+**/charts/*.tgz
+*Chart.lock
+
 # Database
 *.db
 *.sqlite

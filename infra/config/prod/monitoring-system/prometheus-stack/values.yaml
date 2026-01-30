@@ -1,31 +1,113 @@
+# Production Prometheus Stack Configuration
+# This file contains production-specific overrides for monitoring stack
+# Base configuration inherited from addons/prometheus-stack/values.yaml
+
 namespaceOverride: prod
 
-
 kube-prometheus-stack:
-  prometheus-node-exporter:
-    hostPort: false
-    service:
-      port: 9200
-    serviceMonitor:
-      enabled: true
-      namespace: prod
-
+  # Production Prometheus configuration
   prometheus:
     prometheusSpec:
+      # Service discovery and monitoring
       serviceMonitorSelector:
         matchLabels:
-          release: prometheus-stack-prod
-      retention: "30d"
+          release: prometheus-stack-prod  # Match production services
+      
+      # Production data retention and storage
+      retention: "30d"                   # 30-day retention for production
+      retentionSize: "50GB"              # Maximum storage size
+      
+      # Production resource allocation
       resources:
         requests:
-          cpu: "500m"
-          memory: "2Gi"
+          cpu: "1000m"     # Higher CPU for production metrics
+          memory: "4Gi"     # More memory for data processing
         limits:
-          cpu: "2000m"
-          memory: "4Gi"
-
+          cpu: "2000m"     # Allow CPU bursts
+          memory: "8Gi"     # Higher memory limit
+      
+      # Production storage configuration
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: ""  # Use default storage class
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 100Gi    # Large storage for production metrics
+      
+      # Production security context
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
+      
+      # Production node affinity
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+              - key: node-type
+                operator: In
+                values: ["monitoring"]
+      
+      # Production alerting configuration
+      alerting:
+        alertmanagers:
+        - namespace: prod
+          name: alertmanager-prometheus-stack-prod-kube-alertmanager
+          port: web
+      
+      # Production rule evaluation
+      evaluationInterval: 30s           # Evaluate rules every 30 seconds
+      scrapeInterval: 15s               # Scrape metrics every 15 seconds
+      
+      # Production external labels
+      externalLabels:
+        cluster: "production"
+        environment: "prod"
+  
+  # Production Alertmanager configuration
+  alertmanager:
+    alertmanagerSpec:
+      # Production resource allocation
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "256Mi"
+        limits:
+          cpu: "500m"
+          memory: "512Mi"
+      
+      # Production storage
+      storage:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: ""
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 10Gi
+      
+      # Production security context
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
+      
+      # Production alerting configuration
+      retention: "120h"                 # 5-day alert retention
+  
+  # Production Grafana configuration
   grafana:
     enabled: true
+    
+    # Production admin credentials (use secrets in real deployment)
+    adminPassword: "admin123"  # Change this in production!
+    
+    # Production ingress configuration
     ingress:
       enabled: true
       ingressClassName: nginx
@@ -33,9 +115,156 @@ kube-prometheus-stack:
         - prod.grafana.local
       path: /
       pathType: Prefix
+      annotations:
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    
+    # Production resource allocation
     resources:
       requests:
+        cpu: "200m"      # Higher CPU for production dashboards
+        memory: "512Mi"   # More memory for data processing
+      limits:
+        cpu: "1000m"     # Allow CPU bursts
+        memory: "1Gi"     # Higher memory limit
+    
+    # Production persistence
+    persistence:
+      enabled: true      # Enable persistent storage
+      size: 20Gi        # Storage for dashboards and data
+      storageClassName: ""  # Use default storage class
+    
+    # Production security context
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 472
+      fsGroup: 472
+    
+    # Production Grafana configuration
+    grafana.ini:
+      server:
+        root_url: "http://prod.grafana.local"
+        serve_from_sub_path: false
+      security:
+        admin_user: admin
+        admin_password: admin123  # Use secrets in production
+        disable_gravatar: true
+        cookie_secure: false     # Set to true with HTTPS
+      analytics:
+        reporting_enabled: false
+        check_for_updates: false
+      log:
+        mode: console
+        level: warn            # Reduced logging for production
+      auth:
+        disable_login_form: false
+        disable_signout_menu: false
+      users:
+        allow_sign_up: false   # Disable user registration
+        auto_assign_org: true
+        auto_assign_org_role: Viewer
+    
+    # Production data sources (Loki integration)
+    additionalDataSources:
+    - name: Loki-Prod
+      type: loki
+      url: http://loki-prod.prod.svc.cluster.local:3100
+      access: proxy
+      isDefault: false
+      jsonData:
+        maxLines: 1000
+    
+    # Production dashboards
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+        - name: 'production-dashboards'
+          orgId: 1
+          folder: 'Production'
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/production
+  
+  # Production Node Exporter configuration
+  prometheus-node-exporter:
+    hostPort: false              # Don't use host ports in production
+    service:
+      port: 9100                # Standard node exporter port
+    serviceMonitor:
+      enabled: true
+      namespace: prod
+    
+    # Production security context
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+    
+    # Production resource limits
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "64Mi"
+      limits:
+        cpu: "200m"
+        memory: "128Mi"
+  
+  # Production Kube State Metrics
+  kube-state-metrics:
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "128Mi"
+      limits:
         cpu: "200m"
         memory: "256Mi"
-      limits:
-        memory: "512Mi"
+    
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 65534
+  
+  # Production service monitors
+  kubeApiServer:
+    enabled: true              # Monitor Kubernetes API server
+  kubelet:
+    enabled: true              # Monitor kubelet metrics
+  kubeControllerManager:
+    enabled: true              # Monitor controller manager
+  coreDns:
+    enabled: true              # Monitor CoreDNS
+  kubeEtcd:
+    enabled: true              # Monitor etcd
+  kubeScheduler:
+    enabled: true              # Monitor scheduler
+  kubeProxy:
+    enabled: true              # Monitor kube-proxy
+  
+  # Production alerting rules
+  defaultRules:
+    create: true               # Create default alerting rules
+    rules:
+      alertmanager: true
+      etcd: true
+      configReloaders: true
+      general: true
+      k8s: true
+      kubeApiserverAvailability: true
+      kubeApiserverSlos: true
+      kubelet: true
+      kubeProxy: true
+      kubePrometheusGeneral: true
+      kubePrometheusNodeRecording: true
+      kubernetesApps: true
+      kubernetesResources: true
+      kubernetesStorage: true
+      kubernetesSystem: true
+      kubeScheduler: true
+      kubeStateMetrics: true
+      network: true
+      node: true
+      nodeExporterAlerting: true
+      nodeExporterRecording: true
+      prometheus: true
+      prometheusOperator: true

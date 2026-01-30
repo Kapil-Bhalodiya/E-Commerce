@@ -1,7 +1,211 @@
+# Alloy = unified Grafana Agent
+# Production Alloy Configuration with Custom Labels
+# Custom labels: app, component, container, filename, instance, namespace, job, node_name, pod, service_name
+# Optimized for production workloads with enhanced security and performance
+
 alloy:
   alloy:
-    loki:
-      env: prod
-  # image:
-  #   registry: "206802406579.dkr.ecr.eu-west-1.amazonaws.com"
-  #   repository: eks-addons/grafana/alloy
+    # Production resource allocation
+    resources:
+      requests:
+        cpu: "100m"     # Higher CPU for production log processing
+        memory: "256Mi"  # More memory for buffering
+      limits:
+        cpu: "500m"     # Allow CPU bursts
+        memory: "512Mi"  # Higher memory limit
+    
+    # Production volume mounts
+    mounts:
+      varlog: true           # Mount /var/log for container logs
+      dockercontainers: true # Mount Docker containers directory
+    
+    # Production-specific configuration with custom labels
+    configMap:
+      content: |-
+        // Kubernetes service discovery for pod logs
+        discovery.kubernetes "kubernetes_pods" {
+          role = "pod"
+          selectors {
+              role = "pod"
+              field = "spec.nodeName=" + coalesce(sys.env("HOSTNAME"), constants.hostname)    // Prevents multiple agents reading same logs
+          }
+        }
+
+        // Enhanced label relabeling for production custom Loki labels
+        // This section defines how logs are labeled in Loki.
+        discovery.relabel "kubernetes_pods" {
+          targets = discovery.kubernetes.kubernetes_pods.targets
+
+          // Extract controller name (remove random suffix)
+          rule {
+            source_labels = ["__meta_kubernetes_pod_controller_name"]
+            regex         = "([0-9a-z-.]+?)(-[0-9a-f]{8,10})?"
+            target_label  = "__tmp_controller_name"
+          }
+
+          // CUSTOM LABEL: app - Application name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name", "__meta_kubernetes_pod_label_app", "__tmp_controller_name"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "app"
+          }
+
+          // CUSTOM LABEL: component - Component name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_component", "__meta_kubernetes_pod_label_component"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "component"
+          }
+
+          // CUSTOM LABEL: container - Container name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_container_name"]
+            target_label  = "container"
+          }
+
+          // CUSTOM LABEL: filename - Log file path
+          rule {
+            source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+            separator     = "/"
+            target_label  = "filename"
+            replacement   = "/var/log/pods/$1/$2/*.log"
+          }
+
+          // CUSTOM LABEL: instance - Instance name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_instance", "__meta_kubernetes_pod_label_instance", "__meta_kubernetes_pod_name"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "instance"
+          }
+
+          // CUSTOM LABEL: namespace - Kubernetes namespace
+          rule {
+            source_labels = ["__meta_kubernetes_namespace"]
+            target_label  = "namespace"
+          }
+
+          // CUSTOM LABEL: job - Job identifier (namespace/app format)
+          rule {
+            source_labels = ["namespace", "app"]
+            separator     = "/"
+            target_label  = "job"
+          }
+
+          // CUSTOM LABEL: node_name - Kubernetes node name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_node_name"]
+            target_label  = "node_name"
+          }
+
+          // CUSTOM LABEL: pod - Pod name
+          rule {
+            source_labels = ["__meta_kubernetes_pod_name"]
+            target_label  = "pod"
+          }
+
+          // CUSTOM LABEL: service_name - Service name (derived from labels)
+          rule {
+            source_labels = ["__meta_kubernetes_pod_label_app_kubernetes_io_name", "__meta_kubernetes_pod_label_app", "app"]
+            regex         = "^;*([^;]+)(;.*)?$"
+            target_label  = "service_name"
+          }
+
+          // Set log file path for collection
+          rule {
+            source_labels = ["__meta_kubernetes_pod_uid", "__meta_kubernetes_pod_container_name"]
+            separator     = "/"
+            target_label  = "__path__"
+            replacement   = "/var/log/pods/*$1/*.log"
+          }
+        }
+
+        // Match log files based on relabeled targets
+        local.file_match "kubernetes_pods" {
+          path_targets = discovery.relabel.kubernetes_pods.output
+        }
+
+        // Production log processing pipeline with custom labels
+        loki.process "kubernetes_pods" {
+          stage.cri {}  // Parse CRI log format
+          
+          // Drop unwanted container logs for production
+          stage.match {
+            selector = "{container=\"otc-container\"}"
+            action  = "drop"
+          }
+          
+          // Drop debug logs in production
+          stage.match {
+            selector = "{} |~ \"(?i)debug\""
+            action  = "drop"
+          }
+          
+          // Add timestamp parsing for better log organization
+          stage.timestamp {
+            source = "timestamp"
+            format = "RFC3339"
+          }
+          
+          // Rate limiting for production stability
+          stage.limit {
+            rate = 1000  // Limit to 1000 lines per second per stream
+          }
+          
+          forward_to = [loki.write.default.receiver]
+        }
+
+        // Log file source configuration with production settings
+        loki.source.file "kubernetes_pods" {
+          targets               = local.file_match.kubernetes_pods.targets
+          forward_to            = [loki.process.kubernetes_pods.receiver]
+          legacy_positions_file = "/run/promtail/positions.yaml"
+          
+          // Production file watching settings
+          poll_frequency        = "1s"    // Check for new files every second
+          ignore_older_than     = "24h"   // Ignore files older than 24 hours
+        }
+
+        // Loki writer with production endpoint and reliability settings
+        loki.write "default" {
+          endpoint {
+            url = "http://loki-prod.prod.svc.cluster.local:3100/loki/api/v1/push"
+            
+            // Production reliability settings
+            batch_wait = "1s"      // Wait 1 second before sending batch
+            batch_size = 1048576    // 1MB batch size
+            
+            // Retry configuration for production
+            max_retries    = 10
+            min_backoff    = "500ms"
+            max_backoff    = "5m"
+          }
+          
+          external_labels = {
+            cluster = "prod",
+            environment = "production"
+          }
+        }
+    
+    # Production security context
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 472  # Standard Grafana agent user
+      fsGroup: 472
+    
+    # Production node affinity
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          preference:
+            matchExpressions:
+            - key: node-type
+              operator: In
+              values: ["monitoring"]
+    
+    # Production tolerations
+    tolerations:
+    - key: "monitoring"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"

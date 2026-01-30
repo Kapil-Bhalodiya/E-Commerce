@@ -1,113 +1,134 @@
-# Production Loki Configuration
-# This file contains production-specific Loki settings for log aggregation
-# Configured for SimpleScalable deployment mode with filesystem storage
+# Production Loki Configuration with Custom Labels Support
+# Custom labels: app, component, container, filename, instance, namespace, job, node_name, pod, service_name
+# Configured for SingleBinary deployment mode with enhanced performance and security
 
-# Loki log aggregation system configuration
 loki:
-  # Use SimpleScalable deployment mode for production
-  # This separates read, write, and backend components for better scalability
-  deploymentMode: SimpleScalable
+  # Use SingleBinary for production simplicity with better resource management
+  deploymentMode: SingleBinary
   
-  # Loki core configuration
   loki:
-    fullnameOverride: loki-prod  # Override name for production instance
+    # Production security settings
+    auth_enabled: false  # Internal cluster access only
     
-    # Authentication and security
-    auth_enabled: false          # Disable authentication for internal use
-    
-    # Storage configuration using filesystem (not cloud storage)
-    storage:
-      type: filesystem           # Use local filesystem storage
-      bucketNames:
-        chunks: loki-chunks-prod # Chunk storage bucket name
-        ruler: loki-ruler-prod   # Ruler storage bucket name
-        admin: loki-admin-prod   # Admin storage bucket name
-    
-    # Rate limiting and retention configuration
+    # Enhanced limits configuration for custom labels in production
     limits_config:
-      retention_period: 30d      # Keep logs for 30 days
-      ingestion_rate_mb: 16      # Maximum ingestion rate per tenant
-      ingestion_burst_size_mb: 32 # Burst size for ingestion spikes
+      # Production-grade limits for high-volume logging
+      max_streams_per_user: 50000        # Higher limit for production workloads
+      max_entries_limit_per_query: 10000  # Larger query results
+      max_label_names_per_series: 50      # Support extensive custom labels
+      max_line_size: 512000               # Larger log lines for detailed logs
+      
+      # Rate limiting for production stability - Protects Loki during spikes
+      ingestion_rate_mb: 32               # Higher ingestion rate
+      ingestion_burst_size_mb: 64         # Larger burst capacity
+      
+      # Retention and performance
+      retention_period: 30d               # 30-day retention for production
+      query_timeout: 600s                 # Longer timeout for complex queries
+      max_query_parallelism: 32           # Higher parallelism
+      
+      # Memory and performance limits
+      max_cache_freshness_per_query: 1m   # Fresh cache for production
+      split_queries_by_interval: 30m      # Optimize query splitting
     
-    # Storage backend configuration
-    storage_config:
-      filesystem:
-        directory: /var/loki/data # Directory for storing log data
-      boltdb_shipper:
-        active_index_directory: /var/loki/data/boltdb-index
-        cache_location: /var/loki/data/boltdb-cache
-        shared_store: filesystem
+    # Production compactor configuration
+    compactor:
+      retention_enabled: true
+      retention_delete_delay: 2h
+      delete_request_store: filesystem
+      working_directory: /var/loki/compactor
+    
+    # Disable problematic cache configuration for stability
+    query_range:
+      align_queries_with_step: true
+      cache_results: false
+      max_retries: 5
+      parallelise_shardable_queries: true
+# Production SingleBinary deployment configuration
+singleBinary:
+  replicas: 1  # Single instance for production
   
-  # Backend component configuration (handles compaction, deletion, etc.)
+  # Production-grade resource allocation
+  resources:
+    requests:
+      cpu: "500m"      # Higher CPU for production workload
+      memory: "2Gi"     # More memory for custom labels and caching
+    limits:
+      cpu: "1000m"     # Allow CPU bursts for query processing
+      memory: "4Gi"     # Higher memory limit for production
+  
+  # Persistent storage for production data
+  persistence:
+    enabled: true      # Enable persistent storage
+    size: "50Gi"       # Larger storage for production logs
+    storageClass: ""   # Use default storage class
+  
+  # Production security context (more restrictive than dev)
+  podSecurityContext:
+    runAsNonRoot: true   # Run as non-root for security
+    runAsUser: 10001     # Specific user ID
+    fsGroup: 10001       # File system group
+  
+  containerSecurityContext:
+    readOnlyRootFilesystem: true   # Read-only root filesystem
+    runAsNonRoot: true             # Non-root container
+    runAsUser: 10001               # Specific user ID
+    allowPrivilegeEscalation: false # No privilege escalation
+    capabilities:
+      drop:
+      - ALL                        # Drop all capabilities
+  
+  # Production node affinity and tolerations
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: node-type
+            operator: In
+            values: ["monitoring"]  # Prefer monitoring nodes
+  
+  # Disable microservices components
   backend:
-    replicas: 1                  # Single replica for production
-    resources:
-      requests:
-        cpu: "40m"               # Minimum CPU required
-        memory: "200Mi"          # Minimum memory required
-      limits:
-        cpu: "200m"              # Maximum CPU allowed
-        memory: "300Mi"          # Maximum memory allowed
-    persistence:
-      enabled: true              # Enable persistent storage
-      size: "20Gi"              # Storage size for backend data
-  
-  # Read component configuration (handles queries)
+    replicas: 0
   read:
-    replicas: 1                  # Single replica for production
-    resources:
-      requests:
-        cpu: "16m"               # Minimum CPU required
-        memory: "496Mi"          # Minimum memory required
-      limits:
-        cpu: "100m"              # Maximum CPU allowed
-        memory: "1Gi"            # Maximum memory allowed
-    persistence:
-      enabled: true              # Enable persistent storage
-      size: "10Gi"              # Storage size for read cache
-  
-  # Write component configuration (handles log ingestion)
+    replicas: 0
   write:
-    replicas: 1                  # Single replica for production
-    resources:
-      requests:
-        cpu: "29m"               # Minimum CPU required
-        memory: "1Gi"            # Minimum memory required
-      limits:
-        cpu: "200m"              # Maximum CPU allowed
-        memory: "2Gi"            # Maximum memory allowed
-    persistence:
-      enabled: true              # Enable persistent storage
-      size: "30Gi"              # Storage size for write buffer
-  
-  # Gateway component configuration (load balancer/proxy)
+    replicas: 0
   gateway:
-    replicas: 1                  # Single replica for production
-    resources:
-      requests:
-        cpu: "10m"               # Minimum CPU required
-        memory: "100Mi"          # Minimum memory required
-      limits:
-        cpu: "50m"               # Maximum CPU allowed
-        memory: "300Mi"          # Maximum memory allowed
+    enabled: false
+# Production monitoring and optional components
+monitoring:
+  serviceMonitor:
+    enabled: true                    # Enable Prometheus monitoring
+    labels:
+      release: prometheus-stack-prod # Match Prometheus operator
   
-  # Disable components not needed for this deployment
-  singleBinary:
-    replicas: 0                  # Disable single binary mode
-  
-  # Monitoring configuration
-  monitoring:
-    serviceMonitor:
-      enabled: true              # Enable Prometheus monitoring
-      labels:
-        release: prometheus-stack-prod  # Label for Prometheus discovery
-  
-  # Disable optional components to reduce resource usage
-  minio:
-    enabled: false               # No MinIO object storage
-  lokiCanary:
-    enabled: false               # No canary testing
-  ruler:
-    enabled: false               # No alerting rules
-  test:
-    enabled: false               # No test pods
+  # Production alerting rules
+  rules:
+    enabled: true                    # Enable alerting rules
+    groups:
+    - name: loki-production
+      rules:
+      - alert: LokiHighIngestionRate
+        expr: rate(loki_ingester_samples_received_total[5m]) > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High log ingestion rate detected"
+
+# Disable optional components for production stability
+minio:
+  enabled: false     # No object storage needed
+lokiCanary:
+  enabled: false     # No canary testing in production
+test:
+  enabled: false     # No test pods
+
+# Enable caching for production performance (but disable problematic cache)
+chunksCache:
+  enabled: false     # Disable to avoid configuration issues
+resultsCache:
+  enabled: false     # Disable to avoid configuration issues

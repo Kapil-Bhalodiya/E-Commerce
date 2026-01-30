@@ -1,34 +1,189 @@
-# Prod frontend - production overrides only
+# Production Frontend Configuration
+# This file contains production-specific overrides for frontend service
+# Base configuration inherited from addons/frontend/values.yaml
 
+# Production deployment settings
 namespace: prod
-replicaCount: 3
+replicaCount: 3  # High availability with 3 replicas
 
-# image:
-#   tag: "prod-stable"
+# Production image configuration
+image:
+  # tag: "prod-stable"  # Use stable production image tag
+  pullPolicy: IfNotPresent  # Cache images for stability
 
-# Production resources
+# Production resource allocation
 resources:
   requests:
-    cpu: "100m"
-    memory: "128Mi"
+    cpu: "100m"      # Minimum CPU for static content serving
+    memory: "128Mi"   # Minimum memory for nginx
   limits:
-    cpu: "500m"
-    memory: "256Mi"
+    cpu: "500m"      # Maximum CPU for peak load
+    memory: "256Mi"   # Maximum memory limit
 
-# High availability
+# High availability and scaling
 autoscaling:
+  enabled: true                           # Enable horizontal pod autoscaling
+  minReplicas: 3                         # Minimum replicas for HA
+  maxReplicas: 15                        # Higher max for frontend traffic
+  targetCPUUtilizationPercentage: 70     # Scale when CPU > 70%
+  targetMemoryUtilizationPercentage: 80  # Scale when memory > 80%
+
+# Production health checks
+livenessProbe:
   enabled: true
-  minReplicas: 3
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 70
+  initialDelaySeconds: 30    # Frontend starts faster than backend
+  periodSeconds: 30          # Check every 30 seconds
+  timeoutSeconds: 5          # 5 second timeout
+  failureThreshold: 3        # Restart after 3 failures
 
-# API configuration for prod
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 10    # Ready check after 10 seconds
+  periodSeconds: 10          # Check every 10 seconds
+  timeoutSeconds: 3          # 3 second timeout
+  successThreshold: 1        # Ready after 1 success
+
+# Production security context
+securityContext:
+  runAsNonRoot: true              # Run as non-root user
+  runAsUser: 101                  # nginx user ID
+  runAsGroup: 101                 # nginx group ID
+  readOnlyRootFilesystem: true    # Read-only root filesystem
+  allowPrivilegeEscalation: false # No privilege escalation
+  capabilities:
+    drop: ["ALL"]                 # Drop all capabilities
+
+# Production pod security context
+podSecurityContext:
+  fsGroup: 101                    # nginx file system group
+  seccompProfile:
+    type: RuntimeDefault          # Use runtime default seccomp profile
+
+# Production service configuration
+service:
+  type: ClusterIP                 # Internal service only
+  port: 80                        # Standard HTTP port
+  annotations:
+    prometheus.io/scrape: "true"  # Enable Prometheus scraping
+    prometheus.io/port: "80"      # Metrics port
+    prometheus.io/path: "/metrics" # Metrics endpoint (if available)
+
+# Production node affinity and tolerations
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      preference:
+        matchExpressions:
+        - key: node-type
+          operator: In
+          values: ["frontend"]      # Prefer frontend nodes
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values: ["frontend"]
+        topologyKey: kubernetes.io/hostname  # Spread across nodes
+
+# Production tolerations
+tolerations:
+- key: "frontend"
+  operator: "Equal"
+  value: "true"
+  effect: "NoSchedule"
+
+# Production API configuration
 api:
-  baseUrl: "http://backend.prod.svc.cluster.local:8000"
+  baseUrl: "http://backend-prod.prod.svc.cluster.local:8000"  # Production backend URL
+  timeout: 30000                  # 30 second timeout
+  retries: 3                      # Retry failed requests
 
-# Production features
+# Production features and optimizations
 features:
-  hotReload: false
-  sourceMap: false
-  gzip: true
-  caching: true
+  hotReload: false                # Disable hot reload in production
+  sourceMap: false                # Disable source maps for security
+  gzip: true                      # Enable gzip compression
+  caching: true                   # Enable browser caching
+  minification: true              # Enable code minification
+  bundleAnalyzer: false           # Disable bundle analyzer
+
+# Production nginx configuration
+nginx:
+  # Custom nginx.conf for production optimizations
+  config: |
+    worker_processes auto;
+    error_log /var/log/nginx/error.log warn;
+    pid /tmp/nginx.pid;
+    
+    events {
+        worker_connections 1024;
+        use epoll;
+        multi_accept on;
+    }
+    
+    http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+        
+        # Performance optimizations
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max_size 2048;
+        
+        # Gzip compression
+        gzip on;
+        gzip_vary on;
+        gzip_min_length 1024;
+        gzip_types text/plain text/css application/json application/javascript text/xml application/xml;
+        
+        # Security headers
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        
+        server {
+            listen 80;
+            server_name _;
+            root /usr/share/nginx/html;
+            index index.html;
+            
+            # Cache static assets
+            location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+                expires 1y;
+                add_header Cache-Control "public, immutable";
+            }
+            
+            # SPA routing
+            location / {
+                try_files $uri $uri/ /index.html;
+            }
+            
+            # Health check endpoint
+            location /health {
+                access_log off;
+                return 200 "healthy\n";
+                add_header Content-Type text/plain;
+            }
+        }
+    }
+
+# Production monitoring
+serviceMonitor:
+  enabled: true                    # Enable Prometheus monitoring
+  labels:
+    release: prometheus-stack-prod # Match Prometheus operator
+  interval: 30s                    # Scrape every 30 seconds
+
+# Production environment variables
+env:
+  NODE_ENV: "production"           # Production mode
+  API_URL: "http://backend-prod.prod.svc.cluster.local:8000"  # Backend URL
+  ENABLE_ANALYTICS: "true"         # Enable production analytics
+  LOG_LEVEL: "warn"                # Reduced logging

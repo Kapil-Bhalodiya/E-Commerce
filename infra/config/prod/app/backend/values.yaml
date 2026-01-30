@@ -1,47 +1,138 @@
-# Prod backend - production overrides only
+# Production Backend Configuration
+# This file contains production-specific overrides for backend service
+# Base configuration inherited from addons/backend/values.yaml
 
-enabled: false
+# Production deployment settings
+enabled: true  # Enable backend in production
 namespace: prod
-replicaCount: 3
+replicaCount: 3  # High availability with 3 replicas
 
-# image:
-#   tag: "prod-stable"
+# Production image configuration
+image:
+  tag: "3-latest"  # Use stable production image tag
+  pullPolicy: IfNotPresent  # Cache images for stability
 
+# Production environment variables
 env:
-  NODE_ENV: "production"
-  LOG_LEVEL: "warn"
-
-# Production resources
+  NODE_ENV: "production"     # Production mode
+  LOG_LEVEL: "warn"          # Reduced logging for performance
+  PORT: "8000"               # Application port
+  # Database connection will use sealed secrets
+  
+# Production resource allocation
 resources:
   requests:
-    cpu: "500m"
-    memory: "512Mi"
+    cpu: "500m"      # Minimum CPU for production load
+    memory: "1Gi"     # Sufficient memory for production
   limits:
-    cpu: "2000m"
-    memory: "2Gi"
+    cpu: "2000m"     # Allow CPU bursts for peak load
+    memory: "2Gi"     # Maximum memory limit
 
-# High availability
+# High availability and scaling
 autoscaling:
+  enabled: true                           # Enable horizontal pod autoscaling
+  minReplicas: 3                         # Minimum replicas for HA
+  maxReplicas: 10                        # Maximum replicas for scaling
+  targetCPUUtilizationPercentage: 70     # Scale when CPU > 70%
+  targetMemoryUtilizationPercentage: 80  # Scale when memory > 80%
+
+# Production health checks
+livenessProbe:
   enabled: true
-  minReplicas: 3
-  maxReplicas: 10
-  targetCPUUtilizationPercentage: 70
+  initialDelaySeconds: 60    # Wait longer for production startup
+  periodSeconds: 30          # Check every 30 seconds
+  timeoutSeconds: 10         # 10 second timeout
+  failureThreshold: 3        # Restart after 3 failures
 
-# Production database
-# database:
-#   host: mongodb.prod.svc.cluster.local
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 30    # Ready check after 30 seconds
+  periodSeconds: 10          # Check every 10 seconds
+  timeoutSeconds: 5          # 5 second timeout
+  successThreshold: 1        # Ready after 1 success
 
-# Enable external services in prod
+# Production security context
+securityContext:
+  runAsNonRoot: true              # Run as non-root user
+  runAsUser: 1000                 # Specific user ID
+  runAsGroup: 1000                # Specific group ID
+  readOnlyRootFilesystem: true    # Read-only root filesystem
+  allowPrivilegeEscalation: false # No privilege escalation
+  capabilities:
+    drop: ["ALL"]                 # Drop all capabilities
+
+# Production pod security context
+podSecurityContext:
+  fsGroup: 1000                   # File system group
+  seccompProfile:
+    type: RuntimeDefault          # Use runtime default seccomp profile
+
+# Production service configuration
+service:
+  type: ClusterIP                 # Internal service only
+  port: 8000                      # Service port
+  annotations:
+    prometheus.io/scrape: "true"  # Enable Prometheus scraping
+    prometheus.io/port: "8000"    # Metrics port
+    prometheus.io/path: "/metrics" # Metrics endpoint
+
+# Production node affinity and tolerations
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      preference:
+        matchExpressions:
+        - key: node-type
+          operator: In
+          values: ["application"]   # Prefer application nodes
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values: ["backend"]
+        topologyKey: kubernetes.io/hostname  # Spread across nodes
+
+# Production tolerations
+tolerations:
+- key: "application"
+  operator: "Equal"
+  value: "true"
+  effect: "NoSchedule"
+
+# Production monitoring
+serviceMonitor:
+  enabled: true                    # Enable Prometheus monitoring
+  labels:
+    release: prometheus-stack-prod # Match Prometheus operator
+  interval: 30s                    # Scrape every 30 seconds
+  path: /metrics                   # Metrics endpoint
+
+# Production persistence (if needed for uploads/cache)
+persistence:
+  enabled: true                    # Enable persistent storage
+  size: "10Gi"                    # Storage size
+  storageClass: ""                # Use default storage class
+  accessMode: ReadWriteOnce        # Single node access
+
+# Production external services
 external:
   stripe:
-    enabled: true
+    enabled: true                  # Enable Stripe payments
   cloudinary:
-    enabled: false
+    enabled: false                 # Disable Cloudinary (use S3/similar)
+  redis:
+    enabled: true                  # Enable Redis for caching
+    host: "redis.prod.svc.cluster.local"
+    port: 6379
 
-# Production security
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
-  readOnlyRootFilesystem: true
-  capabilities:
-    drop: ["ALL"]
+# Production database configuration (uses sealed secrets)
+database:
+  # Connection details are in sealed secrets
+  ssl: true                        # Use SSL for database connections
+  poolSize: 20                     # Connection pool size
+  timeout: 30000                   # Connection timeout (30s)
