@@ -91,16 +91,9 @@ routes:
         # - Exact: Match exact path only
         # - RegularExpression: Use regex pattern matching
         pathType: PathPrefix  # Optional: defaults to PathPrefix
-        
-        service:
-          name: ""  # Override with env-specific backend service name
-          port: 8000  # Backend service port (usually consistent)
-          namespace: ""  # Override with target namespace
-          
       - path: /uploads  # File upload endpoint
         service:
           name: ""  # Override with env-specific backend service name
-          port: 8000  # Same port as API
           namespace: ""  # Override with target namespace
           
         # Optional: Request/Response modifications

@@ -23,12 +23,14 @@ routes:
     paths:
       - path: /api  # API endpoint (inherited from base)
         service:
-          name: backend-dev  # Dev-specific backend service
+          name: backend-dev  # Override with env-specific backend service name
           namespace: dev  # Dev namespace
+          port: 8000  # Backend service port (usually consistent)
       - path: /uploads  # Upload endpoint (inherited from base)
         service:
           name: backend-dev  # Same backend service
           namespace: dev  # Dev namespace
+          port: 8000  # Same port as API
   
   # Grafana monitoring for dev
   grafana:
