@@ -1,0 +1,11 @@
+**/.DS_Store
+**/.terraform
+**/.vscode
+**/.idea
+.terraform/
+.terraform/**
+**/.terragrunt-cache/
+**/.terragrunt-cache/**
+**/build/**
+samlresponse.log
+**.auto.tfvars
