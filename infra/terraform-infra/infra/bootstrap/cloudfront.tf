@@ -3,7 +3,7 @@ locals {
 }
 
 resource "aws_cloudfront_origin_access_control" "frontend" {
-  count = var.enable_frontend ? 1 : 0
+  count = var.enable_frontend && var.enable_cloudfront ? 1 : 0
 
   name                              = "${var.project}-oac-${var.environment}"
   description                       = "OAC for S3 frontend bucket"
@@ -13,7 +13,7 @@ resource "aws_cloudfront_origin_access_control" "frontend" {
 }
 
 resource "aws_cloudfront_distribution" "frontend" {
-  count = var.enable_frontend ? 1 : 0
+  count = var.enable_frontend && var.enable_cloudfront ? 1 : 0
 
   enabled             = true
   is_ipv6_enabled     = true

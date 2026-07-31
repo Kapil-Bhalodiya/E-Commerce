@@ -47,7 +47,7 @@ resource "aws_s3_bucket_public_access_block" "frontend" {
 }
 
 resource "aws_s3_bucket_policy" "frontend_cloudfront" {
-  count  = var.enable_frontend && var.enable_kms ? 1 : 0
+  count  = var.enable_frontend && var.enable_kms && var.enable_cloudfront ? 1 : 0
   bucket = aws_s3_bucket.frontend[0].id
 
   policy = jsonencode({

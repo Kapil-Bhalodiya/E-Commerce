@@ -12,6 +12,7 @@ inputs = {
   domain_name   = local.environment == "prod" ? "ecommerce.example.com" : "ecommerce-dev.example.com"
 
   enable_frontend = true
+  enable_cloudfront = false
   enable_ecr      = true
   enable_cognito  = true
   enable_kms      = true

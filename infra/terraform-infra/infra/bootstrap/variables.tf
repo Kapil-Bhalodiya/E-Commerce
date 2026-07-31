@@ -27,13 +27,13 @@ variable "domain_name" {
 variable "enable_frontend" {
   type        = bool
   default     = true
-  description = "Whether to create S3 + CloudFront frontend"
+  description = "Whether to create S3 bucket for frontend"
 }
 
 variable "enable_cloudfront" {
   type        = bool
   default     = true
-  description = "Whether to create CloudFront distribution"
+  description = "Whether to create CloudFront distribution and OAC"
 }
 
 variable "enable_ecr" {
