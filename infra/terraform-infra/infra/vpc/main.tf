@@ -43,7 +43,7 @@ resource "aws_subnet" "private" {
 
 resource "aws_eip" "nat" {
   count  = var.enable_nat_gateway ? 1 : 0
-  domain = "vpc"
+  vpc    = true
 
   tags = merge(var.tags, {
     Name = "${var.project}-${var.environment}-eip"
@@ -99,22 +99,12 @@ resource "aws_route_table_association" "public" {
   count          = length(aws_subnet.public)
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
-
-  timeouts {
-    create = "2m"
-    delete = "2m"
-  }
 }
 
 resource "aws_route_table_association" "private" {
   count          = length(aws_subnet.private)
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
-
-  timeouts {
-    create = "2m"
-    delete = "2m"
-  }
 }
 
 resource "aws_security_group" "allow_all_internal" {

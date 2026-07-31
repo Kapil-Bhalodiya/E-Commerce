@@ -51,6 +51,7 @@ docker-compose.override.yml
 kustomization.yaml
 infra/addons/*/templates/secret.yaml
 infra/addons/*/*/charts/*
+docs/*
 
 # HELM
 **/charts/*.tgz
@@ -67,3 +68,10 @@ service-account.json
 aws-credentials
 .aws/
 .kube/config
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+.terragrunt-cache/
+*.tfstate
+*.tfstate.backup

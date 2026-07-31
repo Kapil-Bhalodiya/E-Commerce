@@ -3,10 +3,10 @@ locals {
   region_vars      = read_terragrunt_config(find_in_parent_folders("region.hcl"))
   environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
-  account_name       = local.account_vars.locals.account_name
-  account_id         = local.account_vars.locals.aws_account_id
-  aws_primary_region = local.region_vars.locals.aws_region
-  aws_profile        = local.account_vars.locals.aws_profile
+  account_id          = local.account_vars.locals.aws_account_id
+  aws_region          = local.region_vars.locals.aws_region
+  aws_profile         = local.account_vars.locals.aws_profile
+  environment         = local.environment_vars.locals.environment
   ams_environment_tag = local.environment_vars.locals.ams_environment_tag
 }
 
@@ -29,13 +29,13 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "4.39.0"
+      version = "~> 4.39"
     }
   }
 }
 
 provider "aws" {
-  region                      = "${local.aws_primary_region}"
+  region                      = "${local.aws_region}"
   profile                     = "${local.aws_profile}"
 
   skip_credentials_validation = true
@@ -58,9 +58,6 @@ provider "aws" {
     secretsmanager   = "http://localhost:4566"
     cognitoidp       = "http://localhost:4566"
     cognitoidentity  = "http://localhost:4566"
-    cloudfront       = "http://localhost:4566"
-    ecr              = "http://localhost:4566"
-    wafv2            = "http://localhost:4566"
   }
 }
 EOF
